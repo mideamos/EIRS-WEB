@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{79C4121E-BBD4-4B29-9DBD-E71733228E39}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EIRS.BLL</RootNamespace>
+    <AssemblyName>EIRS.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLAddressType.cs" />
+    <Compile Include="BLAgency.cs" />
+    <Compile Include="BLAgencyType.cs" />
+    <Compile Include="BLAPI.cs" />
+    <Compile Include="BLAssessment.cs" />
+    <Compile Include="BLAuditLog.cs" />
+    <Compile Include="BLCertificate.cs" />
+    <Compile Include="BLCertificateType.cs" />
+    <Compile Include="BLSFTPDataSubmission.cs" />
+    <Compile Include="BLEMDataImport.cs" />
+    <Compile Include="BLEMIGRClassification.cs" />
+    <Compile Include="BLEMBank.cs" />
+    <Compile Include="BLLateCharge.cs" />
+    <Compile Include="BLAssessmentGroup.cs" />
+    <Compile Include="BLAssessmentItem.cs" />
+    <Compile Include="BLAssessmentItemCategory.cs" />
+    <Compile Include="BLAssessmentItemSubCategory.cs" />
+    <Compile Include="BLAssessmentRule.cs" />
+    <Compile Include="BLAssessmentSubGroup.cs" />
+    <Compile Include="BLAssetType.cs" />
+    <Compile Include="BLAwarenessCategory.cs" />
+    <Compile Include="BLBuilding.cs" />
+    <Compile Include="BLBuildingCompletion.cs" />
+    <Compile Include="BLBuildingOwnership.cs" />
+    <Compile Include="BLBuildingPurpose.cs" />
+    <Compile Include="BLBuildingType.cs" />
+    <Compile Include="BLBuildingUnit.cs" />
+    <Compile Include="BLBusiness.cs" />
+    <Compile Include="BLBusinessCategory.cs" />
+    <Compile Include="BLBusinessOperation.cs" />
+    <Compile Include="BLBusinessSector.cs" />
+    <Compile Include="BLBusinessStructure.cs" />
+    <Compile Include="BLBusinessSubSector.cs" />
+    <Compile Include="BLBusinessType.cs" />
+    <Compile Include="BLClaimBusiness.cs" />
+    <Compile Include="BLCommon.cs" />
+    <Compile Include="BLCompany.cs" />
+    <Compile Include="BLDAInput.cs" />
+    <Compile Include="BLDAOutput.cs" />
+    <Compile Include="BLDashboard.cs" />
+    <Compile Include="BLDataControl.cs" />
+    <Compile Include="BLDirectorate.cs" />
+    <Compile Include="BLEconomicActivities.cs" />
+    <Compile Include="BLEmailHandler.cs" />
+    <Compile Include="BLExceptionType.cs" />
+    <Compile Include="BLFAQ.cs" />
+    <Compile Include="BLGovernment.cs" />
+    <Compile Include="BLGovernmentType.cs" />
+    <Compile Include="BLIndividual.cs" />
+    <Compile Include="BLJTB.cs" />
+    <Compile Include="BLLand.cs" />
+    <Compile Include="BLLandDevelopment.cs" />
+    <Compile Include="BLLandFunction.cs" />
+    <Compile Include="BLLandOwnership.cs" />
+    <Compile Include="BLLandPurpose.cs" />
+    <Compile Include="BLLandStreetCondition.cs" />
+    <Compile Include="BLLGA.cs" />
+    <Compile Include="BLMDAService.cs" />
+    <Compile Include="BLMDAServiceItem.cs" />
+    <Compile Include="BLCentralMenu.cs" />
+    <Compile Include="BLMenu.cs" />
+    <Compile Include="BLNotification.cs" />
+    <Compile Include="BLNotificationMethod.cs" />
+    <Compile Include="BLNotificationType.cs" />
+    <Compile Include="BLOperationManager.cs" />
+    <Compile Include="BLPages.cs" />
+    <Compile Include="BLPAYEInput.cs" />
+    <Compile Include="BLPAYEOutput.cs" />
+    <Compile Include="BLPaymentAccount.cs" />
+    <Compile Include="BLPaymentFrequency.cs" />
+    <Compile Include="BLPaymentOption.cs" />
+    <Compile Include="BLProfile.cs" />
+    <Compile Include="BLReport.cs" />
+    <Compile Include="BLEMCategory.cs" />
+    <Compile Include="BLRevenueStream.cs" />
+    <Compile Include="BLEMRevenueHead.cs" />
+    <Compile Include="BLRevenueSubStream.cs" />
+    <Compile Include="BLReview.cs" />
+    <Compile Include="BLScratchCardDealer.cs" />
+    <Compile Include="BLScratchCardPrinter.cs" />
+    <Compile Include="BLScreen.cs" />
+    <Compile Include="BLServiceBill.cs" />
+    <Compile Include="BLSettlement.cs" />
+    <Compile Include="BLSettlementMethod.cs" />
+    <Compile Include="BLSettlementStatus.cs" />
+    <Compile Include="BLSFTPDataSubmitter.cs" />
+    <Compile Include="BLSFTPDataSubmissionType.cs" />
+    <Compile Include="BLSize.cs" />
+    <Compile Include="BLSMSHandler.cs" />
+    <Compile Include="BLSpecial.cs" />
+    <Compile Include="BLSystemUser.cs" />
+    <Compile Include="BLTaxOffice.cs" />
+    <Compile Include="BLTaxPayerDocument.cs" />
+    <Compile Include="BLTaxPayerAsset.cs" />
+    <Compile Include="BLTaxPayerMessage.cs" />
+    <Compile Include="BLTaxPayerRole.cs" />
+    <Compile Include="BLTaxPayerType.cs" />
+    <Compile Include="BLTCC.cs" />
+    <Compile Include="BLTitle.cs" />
+    <Compile Include="BLTown.cs" />
+    <Compile Include="BLTreasuryReceipt.cs" />
+    <Compile Include="BLUnitFunction.cs" />
+    <Compile Include="BLUnitOccupancy.cs" />
+    <Compile Include="BLUnitPurpose.cs" />
+    <Compile Include="BLUser.cs" />
+    <Compile Include="BLVehicle.cs" />
+    <Compile Include="BLVehicleFunction.cs" />
+    <Compile Include="BLVehicleInsurance.cs" />
+    <Compile Include="BLVehicleLicense.cs" />
+    <Compile Include="BLVehicleOwnership.cs" />
+    <Compile Include="BLVehiclePurpose.cs" />
+    <Compile Include="BLVehicleSubType.cs" />
+    <Compile Include="BLVehicleType.cs" />
+    <Compile Include="BLWard.cs" />
+    <Compile Include="BLZone.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EIRS.BOL\EIRS.BOL.csproj">
+      <Project>{5569601a-967b-4823-a3c4-f564de25c72e}</Project>
+      <Name>EIRS.BOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EIRS.Common\EIRS.Common.csproj">
+      <Project>{b0f1f33b-6b48-434c-ae15-ebce1c1d9135}</Project>
+      <Name>EIRS.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EIRS.Repository\EIRS.Repository.csproj">
+      <Project>{80fbe8c3-f1aa-4118-9e4d-045aec6eceaf}</Project>
+      <Name>EIRS.Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

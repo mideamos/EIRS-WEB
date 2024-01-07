@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{80FBE8C3-F1AA-4118-9E4D-045AEC6ECEAF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EIRS.Repository</RootNamespace>
+    <AssemblyName>EIRS.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddressTypeRepository.cs" />
+    <Compile Include="AdjustmentRepository.cs" />
+    <Compile Include="AgencyRepository.cs" />
+    <Compile Include="AgencyTypeRepository.cs" />
+    <Compile Include="APIRepository.cs" />
+    <Compile Include="AuditLogRepository.cs" />
+    <Compile Include="CertificateRepository.cs" />
+    <Compile Include="CertificateTypeRepository.cs" />
+    <Compile Include="EM_BankRepository.cs" />
+    <Compile Include="IAdjustmentRepository.cs" />
+    <Compile Include="IAuditLogRepository.cs" />
+    <Compile Include="ICertificateRepository.cs" />
+    <Compile Include="ISFTP_DataSubmissionTypeRepository.cs" />
+    <Compile Include="ISFTP_DataSubmitterRepository.cs" />
+    <Compile Include="IUtility.cs" />
+    <Compile Include="SFTP_DataSubmissionRepository.cs" />
+    <Compile Include="SFTP_DataSubmitterRepository.cs" />
+    <Compile Include="SFTP_DataSubmissionTypeRepository.cs" />
+    <Compile Include="EM_DataImportRepository.cs" />
+    <Compile Include="EM_IGRClassificationRepository.cs" />
+    <Compile Include="IEM_BankRepository.cs" />
+    <Compile Include="IEM_CategoryRepository.cs" />
+    <Compile Include="IEM_IGRClassificationRepository.cs" />
+    <Compile Include="IEM_RevenueHeadRepository.cs" />
+    <Compile Include="ILateChargeRepository.cs" />
+    <Compile Include="ITCCRepository.cs" />
+    <Compile Include="ITreasuryReceiptRepository.cs" />
+    <Compile Include="LateChargeRepository.cs" />
+    <Compile Include="AssessmentGroupRepository.cs" />
+    <Compile Include="AssessmentItemCategoryRepository.cs" />
+    <Compile Include="AssessmentItemRepository.cs" />
+    <Compile Include="AssessmentItemSubCategoryRepository.cs" />
+    <Compile Include="AssessmentRepository.cs" />
+    <Compile Include="AssessmentRuleRepository.cs" />
+    <Compile Include="AssessmentSubGroupRepository.cs" />
+    <Compile Include="AssetTypeRepository.cs" />
+    <Compile Include="AwarenessCategoryRepository.cs" />
+    <Compile Include="BuildingCompletionRepository.cs" />
+    <Compile Include="BuildingOwnershipRepository.cs" />
+    <Compile Include="BuildingPurposeRepository.cs" />
+    <Compile Include="BuildingRepository.cs" />
+    <Compile Include="BuildingTypeRepository.cs" />
+    <Compile Include="BuildingUnitRepository.cs" />
+    <Compile Include="BusinessCategoryRepository.cs" />
+    <Compile Include="BusinessOperationRepository.cs" />
+    <Compile Include="BusinessRepository.cs" />
+    <Compile Include="BusinessSectorRepository.cs" />
+    <Compile Include="BusinessStructureRepository.cs" />
+    <Compile Include="BusinessSubSectorRepository.cs" />
+    <Compile Include="BusinessTypeRepository.cs" />
+    <Compile Include="ClaimBusinessRepository.cs" />
+    <Compile Include="CommonRepository.cs" />
+    <Compile Include="CompanyRepository.cs" />
+    <Compile Include="DAInputRepository.cs" />
+    <Compile Include="DAOutputRepository.cs" />
+    <Compile Include="DashboardRepository.cs" />
+    <Compile Include="DataControlRepository.cs" />
+    <Compile Include="DirectorateRepository.cs" />
+    <Compile Include="EconomicActivitiesRepository.cs" />
+    <Compile Include="ExceptionTypeRepository.cs" />
+    <Compile Include="FAQRepository.cs" />
+    <Compile Include="GovernmentRepository.cs" />
+    <Compile Include="GovernmentTypeRepository.cs" />
+    <Compile Include="IAddressTypeRepository.cs" />
+    <Compile Include="IAgencyRepository.cs" />
+    <Compile Include="IAgencyTypeRepository.cs" />
+    <Compile Include="IAPIRepository.cs" />
+    <Compile Include="IAssessmentGroupRepository.cs" />
+    <Compile Include="IAssessmentItemCategoryRepository.cs" />
+    <Compile Include="IAssessmentItemRepository.cs" />
+    <Compile Include="IAssessmentItemSubCategoryRepository.cs" />
+    <Compile Include="IAssessmentRepository.cs" />
+    <Compile Include="IAssessmentRuleRepository.cs" />
+    <Compile Include="IAssessmentSubGroupRepository.cs" />
+    <Compile Include="IAssetTypeRepository.cs" />
+    <Compile Include="IAwarenessCategoryRepository.cs" />
+    <Compile Include="IBuildingCompletionRepository.cs" />
+    <Compile Include="IBuildingOwnershipRepository.cs" />
+    <Compile Include="IBuildingPurposeRepository.cs" />
+    <Compile Include="IBuildingRepository.cs" />
+    <Compile Include="IBuildingTypeRepository.cs" />
+    <Compile Include="IBuildingUnitRepository.cs" />
+    <Compile Include="IBusinessCategoryRepository.cs" />
+    <Compile Include="IBusinessOperationRepository.cs" />
+    <Compile Include="IBusinessRepository.cs" />
+    <Compile Include="IBusinessSectorRepository.cs" />
+    <Compile Include="IBusinessStructureRepository.cs" />
+    <Compile Include="IBusinessSubSectorRepository.cs" />
+    <Compile Include="IBusinessTypeRepository.cs" />
+    <Compile Include="ICentralMenuRepository.cs" />
+    <Compile Include="IClaimBusinessRepository.cs" />
+    <Compile Include="ICommonRepository.cs" />
+    <Compile Include="ICompanyRepository.cs" />
+    <Compile Include="IDAInputRepository.cs" />
+    <Compile Include="IDAOutputRepository.cs" />
+    <Compile Include="IDashboardRepository.cs" />
+    <Compile Include="IDataControlRepository.cs" />
+    <Compile Include="IDirectorateRepository.cs" />
+    <Compile Include="IEconomicActivitiesRepository.cs" />
+    <Compile Include="IExceptionTypeRepository.cs" />
+    <Compile Include="IFAQRepository.cs" />
+    <Compile Include="IGovernmentRepository.cs" />
+    <Compile Include="IGovernmentTypeRepository.cs" />
+    <Compile Include="IIndividualRepository.cs" />
+    <Compile Include="IJTBRepository.cs" />
+    <Compile Include="ILandDevelopmentRepository.cs" />
+    <Compile Include="ILandFunctionRepository.cs" />
+    <Compile Include="ILandOwnershipRepository.cs" />
+    <Compile Include="ILandPurposeRepository.cs" />
+    <Compile Include="ILandRepository.cs" />
+    <Compile Include="ILandStreetConditionRepository.cs" />
+    <Compile Include="ILGARepository.cs" />
+    <Compile Include="IMDAServiceItemRepository.cs" />
+    <Compile Include="IMDAServiceRepository.cs" />
+    <Compile Include="IMenuRepository.cs" />
+    <Compile Include="IndividualRepository.cs" />
+    <Compile Include="INotificationMethodRepository.cs" />
+    <Compile Include="INotificationRepository.cs" />
+    <Compile Include="INotificationTypeRepository.cs" />
+    <Compile Include="IOperationManagerRepository.cs" />
+    <Compile Include="IPagesRepository.cs" />
+    <Compile Include="IPAYEInputRepository.cs" />
+    <Compile Include="IPAYEOutputRepository.cs" />
+    <Compile Include="IPaymentAccountRepository.cs" />
+    <Compile Include="IPaymentFrequencyRepository.cs" />
+    <Compile Include="IPaymentOptionRepository.cs" />
+    <Compile Include="IProfileRepository.cs" />
+    <Compile Include="IReportRepository.cs" />
+    <Compile Include="IRevenueStreamRepository.cs" />
+    <Compile Include="IRevenueSubStreamRepository.cs" />
+    <Compile Include="IReviewRepository.cs" />
+    <Compile Include="IScratchCardDealerRespository.cs" />
+    <Compile Include="IScratchCardPrinterRepository.cs" />
+    <Compile Include="IScreenRepository.cs" />
+    <Compile Include="IServiceBillRepository.cs" />
+    <Compile Include="ISettlementMethodRepository.cs" />
+    <Compile Include="ISettlementRepository.cs" />
+    <Compile Include="ISettlementStatusRepository.cs" />
+    <Compile Include="ISizeRepository.cs" />
+    <Compile Include="ISpecialRepository.cs" />
+    <Compile Include="ISystemUserRepository.cs" />
+    <Compile Include="ITaxOfficeRepository.cs" />
+    <Compile Include="ITaxPayerAssetRespoistory.cs" />
+    <Compile Include="ITaxPayerRoleRepository.cs" />
+    <Compile Include="ITaxPayerTypeRepository.cs" />
+    <Compile Include="ITitleRepository.cs" />
+    <Compile Include="ITownRepository.cs" />
+    <Compile Include="IUnitFunctionRepository.cs" />
+    <Compile Include="IUnitOccupancyRepository.cs" />
+    <Compile Include="IUnitPurposeRepository.cs" />
+    <Compile Include="IUserRepository.cs" />
+    <Compile Include="IVehicleFunctionRepository.cs" />
+    <Compile Include="IVehicleInsuranceRepository.cs" />
+    <Compile Include="IVehicleLicenseRepository.cs" />
+    <Compile Include="IVehicleOwnershipRepository.cs" />
+    <Compile Include="IVehiclePurposeRepository.cs" />
+    <Compile Include="IVehicleRepository.cs" />
+    <Compile Include="IVehicleSubTypeRepository.cs" />
+    <Compile Include="IVehicleTypeRepository.cs" />
+    <Compile Include="IWardRepository.cs" />
+    <Compile Include="JTBRepository.cs" />
+    <Compile Include="LandDevelopmentRepository.cs" />
+    <Compile Include="LandFunctionRepository.cs" />
+    <Compile Include="LandOwnershipRepository.cs" />
+    <Compile Include="LandPurposeRepository.cs" />
+    <Compile Include="LandRepository.cs" />
+    <Compile Include="LandStreetConditionRepository.cs" />
+    <Compile Include="LGARepository.cs" />
+    <Compile Include="MDAServiceItemRepository.cs" />
+    <Compile Include="MDAServiceRepository.cs" />
+    <Compile Include="CentralMenuRepository.cs" />
+    <Compile Include="MenuRepository.cs" />
+    <Compile Include="NotificationMethodRepository.cs" />
+    <Compile Include="NotificationRepository.cs" />
+    <Compile Include="NotificationTypeRepository.cs" />
+    <Compile Include="OperationManagerRepository.cs" />
+    <Compile Include="PagesRepository.cs" />
+    <Compile Include="PAYEInputRepository.cs" />
+    <Compile Include="PAYEOutputRepository.cs" />
+    <Compile Include="PaymentAccountRepository.cs" />
+    <Compile Include="PaymentFrequencyRepository.cs" />
+    <Compile Include="PaymentOptionRepository.cs" />
+    <Compile Include="ProfileRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportRepository.cs" />
+    <Compile Include="EM_CategoryRepository.cs" />
+    <Compile Include="RevenueStreamRepository.cs" />
+    <Compile Include="EM_RevenueHeadRepository.cs" />
+    <Compile Include="RevenueSubStreamRepository.cs" />
+    <Compile Include="ReviewRepository.cs" />
+    <Compile Include="ScratchCardDealerRespository.cs" />
+    <Compile Include="ScratchCardPrinterRepository.cs" />
+    <Compile Include="ScreenRepository.cs" />
+    <Compile Include="ServiceBillRepository.cs" />
+    <Compile Include="SettlementMethodRepository.cs" />
+    <Compile Include="TaxPayerDocumentRepository.cs" />
+    <Compile Include="TaxPayerMessageRespository.cs" />
+    <Compile Include="TCCDetailRepository.cs" />
+    <Compile Include="TCCRepository.cs" />
+    <Compile Include="TreasuryReceiptRepository.cs" />
+    <Compile Include="SettlementRepository.cs" />
+    <Compile Include="SettlementStatusRepository.cs" />
+    <Compile Include="SizeRepository.cs" />
+    <Compile Include="SpecialRepository.cs" />
+    <Compile Include="SystemUserRepository.cs" />
+    <Compile Include="TaxOfficeRepository.cs" />
+    <Compile Include="TaxPayerAssetRespoistory.cs" />
+    <Compile Include="TaxPayerRoleRepository.cs" />
+    <Compile Include="TaxPayerTypeRepository.cs" />
+    <Compile Include="TitleRepository.cs" />
+    <Compile Include="TownRepository.cs" />
+    <Compile Include="UnitFunctionRepository.cs" />
+    <Compile Include="UnitOccupancyRepository.cs" />
+    <Compile Include="UnitPurposeRepository.cs" />
+    <Compile Include="UserRepository.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="VehicleFunctionRepository.cs" />
+    <Compile Include="VehicleInsuranceRepository.cs" />
+    <Compile Include="VehicleLicenseRepository.cs" />
+    <Compile Include="VehicleOwnershipRepository.cs" />
+    <Compile Include="VehiclePurposeRepository.cs" />
+    <Compile Include="VehicleRepository.cs" />
+    <Compile Include="VehicleSubTypeRepository.cs" />
+    <Compile Include="VehicleTypeRepository.cs" />
+    <Compile Include="WardRepository.cs" />
+    <Compile Include="ZoneRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EIRS.BOL\EIRS.BOL.csproj">
+      <Project>{5569601a-967b-4823-a3c4-f564de25c72e}</Project>
+      <Name>EIRS.BOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EIRS.Common\EIRS.Common.csproj">
+      <Project>{b0f1f33b-6b48-434c-ae15-ebce1c1d9135}</Project>
+      <Name>EIRS.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

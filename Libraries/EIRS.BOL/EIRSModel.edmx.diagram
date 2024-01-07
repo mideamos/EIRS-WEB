@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="16af8c9999464a8b95765d9f16c708e8" Name="Diagram1" ZoomLevel="46">
+        <EntityTypeShape EntityType="EIRSModel.Address_Types" Width="1.5" PointX="15" PointY="69.875" />
+        <EntityTypeShape EntityType="EIRSModel.Agency" Width="1.5" PointX="5.25" PointY="91.125" />
+        <EntityTypeShape EntityType="EIRSModel.Agency_Types" Width="1.5" PointX="3" PointY="91.5" />
+        <EntityTypeShape EntityType="EIRSModel.Assessment_Group" Width="1.5" PointX="3" PointY="97.25" />
+        <EntityTypeShape EntityType="EIRSModel.Assessment_Item_Category" Width="1.5" PointX="5.25" PointY="149.875" />
+        <EntityTypeShape EntityType="EIRSModel.Assessment_Item_SubCategory" Width="1.5" PointX="5.25" PointY="31" />
+        <EntityTypeShape EntityType="EIRSModel.Assessment_Items" Width="1.5" PointX="7.5" PointY="86.75" />
+        <EntityTypeShape EntityType="EIRSModel.Assessment_Rules" Width="1.5" PointX="8.25" PointY="123.875" />
+        <EntityTypeShape EntityType="EIRSModel.Assessment_SubGroup" Width="1.5" PointX="5.25" PointY="105.125" />
+        <EntityTypeShape EntityType="EIRSModel.Asset_Types" Width="1.5" PointX="0.75" PointY="72.5" />
+        <EntityTypeShape EntityType="EIRSModel.Building" Width="1.5" PointX="9" PointY="77.125" />
+        <EntityTypeShape EntityType="EIRSModel.Building_Completion" Width="1.5" PointX="6.75" PointY="119.875" />
+        <EntityTypeShape EntityType="EIRSModel.Building_Ownership" Width="1.5" PointX="6.75" PointY="35.25" />
+        <EntityTypeShape EntityType="EIRSModel.Building_Purpose" Width="1.5" PointX="6.75" PointY="38.625" />
+        <EntityTypeShape EntityType="EIRSModel.Building_Types" Width="1.5" PointX="6.75" PointY="42.25" />
+        <EntityTypeShape EntityType="EIRSModel.Building_Unit" Width="1.5" PointX="12" PointY="111.375" />
+        <EntityTypeShape EntityType="EIRSModel.Business" Width="1.5" PointX="9" PointY="65.125" />
+        <EntityTypeShape EntityType="EIRSModel.Business_Category" Width="1.5" PointX="6.75" PointY="64.875" />
+        <EntityTypeShape EntityType="EIRSModel.Business_Operation" Width="1.5" PointX="6.75" PointY="95.375" />
+        <EntityTypeShape EntityType="EIRSModel.Business_Sector" Width="1.5" PointX="6.75" PointY="78.375" />
+        <EntityTypeShape EntityType="EIRSModel.Business_Structure" Width="1.5" PointX="6.75" PointY="83" />
+        <EntityTypeShape EntityType="EIRSModel.Business_SubSector" Width="1.5" PointX="6.75" PointY="55.125" />
+        <EntityTypeShape EntityType="EIRSModel.Business_Types" Width="1.5" PointX="4.5" PointY="64.875" />
+        <EntityTypeShape EntityType="EIRSModel.Dealer_Types" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="EIRSModel.Directorate" Width="1.5" PointX="12.25" PointY="95.5" />
+        <EntityTypeShape EntityType="EIRSModel.Economic_Activities" Width="1.5" PointX="20.25" PointY="89" />
+        <EntityTypeShape EntityType="EIRSModel.ELMAH_Error" Width="1.5" PointX="2.75" PointY="5.75" />
+        <EntityTypeShape EntityType="EIRSModel.Exception_Type" Width="1.5" PointX="4.75" PointY="5.75" />
+        <EntityTypeShape EntityType="EIRSModel.Gender" Width="1.5" PointX="23.25" PointY="85.375" />
+        <EntityTypeShape EntityType="EIRSModel.Government" Width="1.5" PointX="19.5" PointY="72.875" />
+        <EntityTypeShape EntityType="EIRSModel.Government_Types" Width="1.5" PointX="17.25" PointY="71.25" />
+        <EntityTypeShape EntityType="EIRSModel.Individual" Width="1.5" PointX="25.5" PointY="77.625" />
+        <EntityTypeShape EntityType="EIRSModel.Land" Width="1.5" PointX="3" PointY="70.625" />
+        <EntityTypeShape EntityType="EIRSModel.Land_Development" Width="1.5" PointX="0.75" PointY="92.25" />
+        <EntityTypeShape EntityType="EIRSModel.Land_Function" Width="1.5" PointX="0.75" PointY="81.25" />
+        <EntityTypeShape EntityType="EIRSModel.Land_Ownership" Width="1.5" PointX="0.75" PointY="78" />
+        <EntityTypeShape EntityType="EIRSModel.Land_Purpose" Width="1.5" PointX="1.5" PointY="85.375" />
+        <EntityTypeShape EntityType="EIRSModel.Land_StreetCondition" Width="1.5" PointX="0.75" PointY="89" />
+        <EntityTypeShape EntityType="EIRSModel.LGA" Width="1.5" PointX="6.75" PointY="45.625" />
+        <EntityTypeShape EntityType="EIRSModel.LGAClass" Width="1.5" PointX="4.5" PointY="46.875" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Assessment_AssessmentItem" Width="1.5" PointX="9.75" PointY="90.25" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_AssessmentRule_AssessmentItem" Width="1.5" PointX="10.5" PointY="106.5" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_AssessmentRule_SettlementMethod" Width="1.5" PointX="10.5" PointY="125.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Building_BuildingUnit" Width="1.5" PointX="14.25" PointY="84.375" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Building_Land" Width="1.5" PointX="11.25" PointY="78.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Business_Building" Width="1.5" PointX="14.25" PointY="74.25" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Company_AddressInformation" Width="1.5" PointX="17.25" PointY="75.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Directorates_RevenueStream" Width="1.5" PointX="14.5" PointY="87.625" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Government_AddressInformation" Width="1.5" PointX="14.25" PointY="80.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Individual_AddressInformation" Width="1.5" PointX="11.25" PointY="86.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_MDAService_MDAServiceItem" Width="1.5" PointX="9.75" PointY="7.625" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_MDAService_SettlementMethod" Width="1.5" PointX="13.75" PointY="65.875" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_ServiceBill_MDAServiceItem" Width="1.5" PointX="9.75" PointY="11.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Settlement_SettlementItem" Width="1.5" PointX="12" PointY="90.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Special_AddressInformation" Width="1.5" PointX="11.25" PointY="82.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TaxPayer_Asset" Width="1.5" PointX="11.25" PointY="72.5" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TaxPayer_Asset_Profile" Width="1.5" PointX="13.5" PointY="99.375" />
+        <EntityTypeShape EntityType="EIRSModel.MaritalStatu" Width="1.5" PointX="23.25" PointY="73" />
+        <EntityTypeShape EntityType="EIRSModel.MDA_Service_Items" Width="1.5" PointX="7.5" PointY="2.875" />
+        <EntityTypeShape EntityType="EIRSModel.MDA_Services" Width="1.5" PointX="5.25" PointY="12.125" />
+        <EntityTypeShape EntityType="EIRSModel.MST_Computation" Width="1.5" PointX="5.25" PointY="157.5" />
+        <EntityTypeShape EntityType="EIRSModel.MST_LastNumber" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EIRSModel.MST_PaymentStatus" Width="1.5" PointX="7.5" PointY="104.875" />
+        <EntityTypeShape EntityType="EIRSModel.MST_RuleRun" Width="1.5" PointX="3" PointY="13.125" />
+        <EntityTypeShape EntityType="EIRSModel.Nationality" Width="1.5" PointX="23.25" PointY="75.625" />
+        <EntityTypeShape EntityType="EIRSModel.Notification_Method" Width="1.5" PointX="20.25" PointY="85" />
+        <EntityTypeShape EntityType="EIRSModel.Notification_Mode" Width="1.5" PointX="23.25" PointY="92" />
+        <EntityTypeShape EntityType="EIRSModel.Notification_Type" Width="1.5" PointX="23.25" PointY="94.375" />
+        <EntityTypeShape EntityType="EIRSModel.Notification" Width="1.5" PointX="25.5" PointY="86.5" />
+        <EntityTypeShape EntityType="EIRSModel.Payment_Account" Width="1.5" PointX="9.75" PointY="117.5" />
+        <EntityTypeShape EntityType="EIRSModel.Payment_Frequency" Width="1.5" PointX="3" PointY="9.625" />
+        <EntityTypeShape EntityType="EIRSModel.Payment_Options" Width="1.5" PointX="3" PointY="16.625" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileAttribute" Width="1.5" PointX="5.25" PointY="146.25" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileGroup" Width="1.5" PointX="5.25" PointY="142.75" />
+        <EntityTypeShape EntityType="EIRSModel.Profile" Width="1.5" PointX="3" PointY="123.5" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileSector" Width="1.5" PointX="5.25" PointY="128.75" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileSectorElement" Width="1.5" PointX="5.25" PointY="135.75" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileSectorSubElement" Width="1.5" PointX="5.25" PointY="139.25" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileSubAttribute" Width="1.5" PointX="5.25" PointY="109.125" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileSubGroup" Width="1.5" PointX="5.25" PointY="116.125" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileSubSector" Width="1.5" PointX="5.25" PointY="125.25" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileTaxPayerRole" Width="1.5" PointX="5.25" PointY="112.625" />
+        <EntityTypeShape EntityType="EIRSModel.ProfileTaxPayerType" Width="1.5" PointX="5.25" PointY="132.25" />
+        <EntityTypeShape EntityType="EIRSModel.Revenue_Stream" Width="1.5" PointX="5.25" PointY="87.25" />
+        <EntityTypeShape EntityType="EIRSModel.Revenue_SubStream" Width="1.5" PointX="5.25" PointY="153.625" />
+        <EntityTypeShape EntityType="EIRSModel.Scratch_Card_Dealers" Width="1.5" PointX="9.75" PointY="3.75" />
+        <EntityTypeShape EntityType="EIRSModel.Scratch_Card_Printer" Width="1.5" PointX="11.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EIRSModel.ScratchCard_PurchaseRequest" Width="1.5" PointX="11.75" PointY="4.75" />
+        <EntityTypeShape EntityType="EIRSModel.Settlement_Method" Width="1.5" PointX="7.5" PointY="130.875" />
+        <EntityTypeShape EntityType="EIRSModel.Settlement_Status" Width="1.5" PointX="7.5" PointY="135.375" />
+        <EntityTypeShape EntityType="EIRSModel.Size" Width="1.5" PointX="6.75" PointY="50.875" />
+        <EntityTypeShape EntityType="EIRSModel.Special" Width="1.5" PointX="19.5" PointY="79.125" />
+        <EntityTypeShape EntityType="EIRSModel.SystemRole" Width="1.5" PointX="0.75" PointY="1.5" />
+        <EntityTypeShape EntityType="EIRSModel.SystemUser" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="EIRSModel.TaxPayer_Roles" Width="1.5" PointX="9" PointY="72.75" />
+        <EntityTypeShape EntityType="EIRSModel.TaxPayer_Types" Width="1.5" PointX="6.75" PointY="99.625" />
+        <EntityTypeShape EntityType="EIRSModel.TaxPayerPayment" Width="1.5" PointX="11.75" PointY="9.75" />
+        <EntityTypeShape EntityType="EIRSModel.Title" Width="1.5" PointX="23.25" PointY="87.75" />
+        <EntityTypeShape EntityType="EIRSModel.Town" Width="1.5" PointX="0.75" PointY="64.25" />
+        <EntityTypeShape EntityType="EIRSModel.Unit_Function" Width="1.5" PointX="9.75" PointY="113.75" />
+        <EntityTypeShape EntityType="EIRSModel.Unit_Occupancy" Width="1.5" PointX="9.75" PointY="110.375" />
+        <EntityTypeShape EntityType="EIRSModel.Unit_Purpose" Width="1.5" PointX="7.5" PointY="113.875" />
+        <EntityTypeShape EntityType="EIRSModel.Vehicle" Width="1.5" PointX="6" PointY="71.5" />
+        <EntityTypeShape EntityType="EIRSModel.Vehicle_Function" Width="1.5" PointX="3.75" PointY="55.25" />
+        <EntityTypeShape EntityType="EIRSModel.Vehicle_Insurance" Width="1.5" PointX="8.25" PointY="59.375" />
+        <EntityTypeShape EntityType="EIRSModel.Vehicle_Licenses" Width="1.5" PointX="11.5" PointY="66.625" />
+        <EntityTypeShape EntityType="EIRSModel.Vehicle_Ownership" Width="1.5" PointX="3.75" PointY="80" />
+        <EntityTypeShape EntityType="EIRSModel.Vehicle_Purpose" Width="1.5" PointX="1.5" PointY="55.375" />
+        <EntityTypeShape EntityType="EIRSModel.Vehicle_SubTypes" Width="1.5" PointX="3.75" PointY="59.625" />
+        <EntityTypeShape EntityType="EIRSModel.Vehicle_Types" Width="1.5" PointX="1.5" PointY="59.625" />
+        <EntityTypeShape EntityType="EIRSModel.Ward" Width="1.5" PointX="0.75" PointY="68.125" />
+        <EntityTypeShape EntityType="EIRSModel.vw_AssessmentRule" Width="1.5" PointX="13.75" PointY="3.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Building" Width="1.5" PointX="13.75" PointY="6.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Business" Width="1.5" PointX="13.75" PointY="9.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Land" Width="1.5" PointX="15.75" PointY="6.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_MDAServices" Width="1.5" PointX="15.75" PointY="9.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Notifications" Width="1.5" PointX="11.75" PointY="15.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Vehicle" Width="1.5" PointX="17.75" PointY="0.75" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Company_AddressInformation_Address_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Government_AddressInformation_Address_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Individual_AddressInformation_Address_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Special_AddressInformation_Address_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Agencies_Agency_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_Agencies" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Service_Items_Agencies" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Group_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_Assessment_Group" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_SubGroup_Assessment_Group" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Item_SubCategory_Assessment_Item_Category" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_Assessment_Item_Category" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Service_Items_Assessment_Item_Category" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_Assessment_Item_SubCategory" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Service_Items_Assessment_Item_SubCategory" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_Assessment_SubGroup" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_MST_Computation" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_Revenue_Stream" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Items_Revenue_SubStream" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Assessment_AssessmentItem_Assessment_Items" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_AssessmentRule_AssessmentItem_Assessment_Items" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Rules_MST_RuleRun" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Rules_Payment_Frequency" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Rules_Payment_Options" />
+        <AssociationConnector Association="EIRSModel.FK_Assessment_Rules_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_AssessmentRule_AssessmentItem_Assessment_Rules" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_AssessmentRule_SettlementMethod_Assessment_Rules" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxPayer_Asset_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Profiles_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_TaxPayer_Roles_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Asset_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Building_Completion" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Building_Ownership" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Building_Purpose" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Building_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Building_LGA" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Town" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Ward" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Building_BuildingUnit_Building" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Building_Land_Building" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Business_Building_Building" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Company_AddressInformation_Building" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Government_AddressInformation_Building" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Individual_AddressInformation_Building" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Special_AddressInformation_Building" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Unit_Sizes" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Unit_Unit_Function" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Unit_Unit_Occupancy" />
+        <AssociationConnector Association="EIRSModel.FK_Building_Unit_Unit_Purpose" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Building_BuildingUnit_Building_Unit" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Business_Category" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Business_Operation" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Business_Sector" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Business_Structure" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Business_SubSector" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Business_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Business_LGA" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Sizes" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Business_Building_Business" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Category_Business_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Sector_Business_Category" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Operation_Business_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Sector_Business_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Business_SubSector_Business_Sector" />
+        <AssociationConnector Association="EIRSModel.FK_Business_Structure_Business_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Directorates_RevenueStream_Directorates" />
+        <AssociationConnector Association="EIRSModel.FK_Economic_Activities_TaxPayer_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_Economic_Activities" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_Gender" />
+        <AssociationConnector Association="EIRSModel.FK_Government_Government_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Government_Notification_Method" />
+        <AssociationConnector Association="EIRSModel.FK_Government_TaxPayer_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Government_AddressInformation_Government" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_MaritalStatus" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_Nationality" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_Notification_Method" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_TaxPayer_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_Titles" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Individual_AddressInformation_Individual" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Land_Development" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Land_Function" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Land_Ownership" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Land_Purpose" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Land_StreetCondition" />
+        <AssociationConnector Association="EIRSModel.FK_Land_LGA" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Town" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Ward" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Building_Land_Land" />
+        <AssociationConnector Association="EIRSModel.FK_Land_Function_Land_Purpose" />
+        <AssociationConnector Association="EIRSModel.FK_LGA_LGAClass" />
+        <AssociationConnector Association="EIRSModel.FK_Town_LGA" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_LGA" />
+        <AssociationConnector Association="EIRSModel.FK_Ward_LGA" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Assessment_AssessmentItem_MST_PaymentStatus" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Settlement_SettlementItem_MAP_Assessment_AssessmentItem" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_AssessmentRule_SettlementMethod_Settlement_Method" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Directorates_RevenueStream_Revenue_Stream" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_MDAService_MDAServiceItem_MDA_Services" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_MDAService_MDAServiceItem_MDAService_Items" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_MDAService_SettlementMethod_MDA_Services" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_MDAService_SettlementMethod_Settlement_Method" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_ServiceBill_MDAServiceItem_MDA_Service_Items" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_ServiceBill_MDAServiceItem_MDA_Service_Items1" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Settlement_SettlementItem_MAP_ServiceBill_MDAServiceItem" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Special_AddressInformation_Special" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxPayer_Asset_Profile_MAP_TaxPayer_Asset" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxPayer_Asset_TaxPayer_Roles" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxPayer_Asset_TaxPayer_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxPayer_Asset_Profile_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Service_Items_MST_Computation" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Service_Items_Revenue_Stream" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Service_Items_Revenue_SubStream" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Services_MST_RuleRun" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Services_Payment_Frequency" />
+        <AssociationConnector Association="EIRSModel.FK_MDA_Services_Payment_Options" />
+        <AssociationConnector Association="EIRSModel.FK_Notifications_Notification_Method" />
+        <AssociationConnector Association="EIRSModel.FK_Special_Notification_Method" />
+        <AssociationConnector Association="EIRSModel.FK_Notifications_Notification_Mode" />
+        <AssociationConnector Association="EIRSModel.FK_Notifications_Notification_Type" />
+        <AssociationConnector Association="EIRSModel.FK_Payment_Account_Settlement_Method" />
+        <AssociationConnector Association="EIRSModel.FK_Payment_Account_Settlement_Status" />
+        <AssociationConnector Association="EIRSModel.FK_Payment_Account_TaxPayer_Types" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileAttribute_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileGroup_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileSector_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileSectorElement_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileSectorSubElement_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileSubAttribute_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileSubGroup_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileSubSector_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileTaxPayerRole_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_ProfileTaxPayerType_Profiles" />
+        <AssociationConnector Association="EIRSModel.FK_Revenue_SubStream_Revenue_Stream" />
+        <AssociationConnector Association="EIRSModel.FK_Special_TaxPayer_Types" />
+        <AssociationConnector Association="EIRSModel.FK_SystemUser_SystemRole" />
+        <AssociationConnector Association="EIRSModel.FK_TaxPayer_Roles_TaxPayer_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Unit_Function_Unit_Purpose" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Insurance_Vehicle" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Licenses_Vehicle" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Vehicle_Function" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Vehicle_Ownership" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Vehicle_Purpose" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Vehicle_SubTypes" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Vehicle_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Function_Vehicle_Purpose" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_Licenses_Vehicle_Insurance" />
+        <AssociationConnector Association="EIRSModel.FK_Vehicle_SubTypes_Vehicle_Types" />
+        <EntityTypeShape EntityType="EIRSModel.PayDirect_Notifications" Width="1.5" PointX="18.375" PointY="6.75" />
+        <AssociationConnector Association="EIRSModel.FK_Payment_Account_Revenue_Stream" />
+        <EntityTypeShape EntityType="EIRSModel.MST_RegisterationStatus" Width="1.5" PointX="18.375" PointY="9.875" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_MST_RegisterationStatus" />
+        <AssociationConnector Association="EIRSModel.FK_Government_MST_RegisterationStatus" />
+        <AssociationConnector Association="EIRSModel.FK_Payment_Account_Revenue_SubStream" />
+        <EntityTypeShape EntityType="EIRSModel.vw_PaymentAccountOperation" Width="1.5" PointX="18.375" PointY="13.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_PaymentAccount" Width="1.5" PointX="16.375" PointY="18.75" />
+        <EntityTypeShape EntityType="EIRSModel.Review_Status" Width="1.5" PointX="20.375" PointY="0.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TaxPayer_Review" Width="1.5" PointX="7.375" PointY="19.75" />
+        <EntityTypeShape EntityType="EIRSModel.JTB_NonIndividual" Width="1.5" PointX="2.75" PointY="20.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TaxOffice_Target" Width="1.5" PointX="25.5" PointY="91.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TaxOfficer_Target" Width="1.5" PointX="28.5" PointY="83.625" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxOffice_Target_Revenue_Stream" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxOfficer_Target_Revenue_Stream" />
+        <EntityTypeShape EntityType="EIRSModel.Late_Charges" Width="1.5" PointX="20.375" PointY="4.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Assessment_LateCharge" Width="1.5" PointX="12" PointY="120.875" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Assessment_LateCharge_MAP_Assessment_AssessmentItem" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Assessment_Adjustment" Width="1.5" PointX="12" PointY="116.875" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Assessment_Adjustment_MAP_Assessment_AssessmentItem" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_ServiceBill_Adjustment" Width="1.5" PointX="12" PointY="24.375" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_ServiceBill_LateCharge" Width="1.5" PointX="12" PointY="28.25" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_ServiceBill_Adjustment_MAP_ServiceBill_MDAServiceItem" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_ServiceBill_LateCharge_MAP_ServiceBill_MDAServiceItem" />
+        <EntityTypeShape EntityType="EIRSModel.Receipt_Status" Width="1.5" PointX="20.375" PointY="12.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_Bank" Width="1.5" PointX="22.375" PointY="0.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_Category" Width="1.5" PointX="20.375" PointY="22" />
+        <EntityTypeShape EntityType="EIRSModel.EM_DataSource" Width="1.5" PointX="22.375" PointY="8.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_IGRClassification" Width="1.5" PointX="22.375" PointY="12.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_ImportLog" Width="1.5" PointX="22.375" PointY="16.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_RevenueHead" Width="1.5" PointX="22.625" PointY="22" />
+        <EntityTypeShape EntityType="EIRSModel.Operation_Types" Width="1.5" PointX="5.375" PointY="9.75" />
+        <AssociationConnector Association="EIRSModel.FK_EM_RevenueHead_EM_Category" />
+        <EntityTypeShape EntityType="EIRSModel.EM_MAP_IGRClassification_Entry" Width="1.5" PointX="26.375" PointY="0.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_BankStatement" Width="1.5" PointX="14.375" PointY="23.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_PD_Main_Authorized" Width="1.5" PointX="16.375" PointY="23.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_PD_Main_Pending" Width="1.5" PointX="24.375" PointY="3.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_PD_MVA_Pending" Width="1.5" PointX="25.375" PointY="17.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_EM_BankStatement" Width="1.5" PointX="18.375" PointY="25.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_EM_PD_Main_Authorized" Width="1.5" PointX="20.375" PointY="25.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_EM_PD_Main_Pending" Width="1.5" PointX="22.375" PointY="25.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_EM_PD_MVA_Pending" Width="1.5" PointX="26.375" PointY="3.75" />
+        <EntityTypeShape EntityType="EIRSModel.EM_PD_MVA_Authorized" Width="1.5" PointX="24.375" PointY="10.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_EM_PD_MVA_Authorized" Width="1.5" PointX="25.375" PointY="24.75" />
+        <EntityTypeShape EntityType="EIRSModel.TCCDetail" Width="1.5" PointX="26.375" PointY="7.75" />
+        <EntityTypeShape EntityType="EIRSModel.Tax_Offices" Width="1.5" PointX="21.25" PointY="66.5" />
+        <AssociationConnector Association="EIRSModel.FK_Tax_Offices_Address_Types" />
+        <AssociationConnector Association="EIRSModel.FK_Tax_Offices_Building" />
+        <AssociationConnector Association="EIRSModel.FK_Government_Tax_Offices" />
+        <AssociationConnector Association="EIRSModel.FK_Individual_Tax_Offices" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxOffice_Target_Tax_Offices" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxOfficer_Target_Tax_Offices" />
+        <AssociationConnector Association="EIRSModel.FK_Special_Tax_Offices" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Generate" Width="1.5" PointX="30" PointY="15.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_GenerateTCCDetail" Width="1.5" PointX="30" PointY="9.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_PrepareTCCDraft" Width="1.5" PointX="30" PointY="12.375" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Seal" Width="1.5" PointX="30" PointY="29.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Stages" Width="1.5" PointX="28.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Validate" Width="1.5" PointX="30" PointY="19.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_ValidateTaxPayerIncome" Width="1.5" PointX="30" PointY="23.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_ValidateTaxPayerInformation" Width="1.5" PointX="30" PointY="26.375" />
+        <EntityTypeShape EntityType="EIRSModel.MST_TCCRequestStatus" Width="1.5" PointX="7.75" PointY="23.75" />
+        <EntityTypeShape EntityType="EIRSModel.MST_TCCStage" Width="1.5" PointX="0.75" PointY="28.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Generate_Field" Width="1.5" PointX="32.25" PointY="16" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_Generate_Field_MAP_TCCRequest_Generate" />
+        <EntityTypeShape EntityType="EIRSModel.vw_TCCRequestList" Width="1.5" PointX="28.375" PointY="3.75" />
+        <EntityTypeShape EntityType="EIRSModel.MST_TCCStatus" Width="1.5" PointX="24.375" PointY="28.75" />
+        <EntityTypeShape EntityType="EIRSModel.TaxClearanceCertificate" Width="1.5" PointX="26.375" PointY="28.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_SignVisible" Width="1.5" PointX="18.375" PointY="29.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_SignDigital" Width="1.5" PointX="30" PointY="33.5" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Issue" Width="1.5" PointX="30" PointY="37.625" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_ServiceBill_MDAService" Width="1.5" PointX="7.5" PointY="13.25" />
+        <EntityTypeShape EntityType="EIRSModel.ServiceBill" Width="1.5" PointX="5.25" PointY="0.75" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_ServiceBill_MDAService_MDA_Services" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_ServiceBill_MDAService_ServiceBill" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_ServiceBill_MDAServiceItem_MAP_ServiceBill_MDAService" />
+        <EntityTypeShape EntityType="EIRSModel.Settlement" Width="1.5" PointX="13.75" PointY="60.125" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Settlement_SettlementItem_Settlement" />
+        <AssociationConnector Association="EIRSModel.FK_Settlement_ServiceBill" />
+        <AssociationConnector Association="EIRSModel.FK_Settlement_Settlement_Method" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Assessment_AssessmentRule" Width="1.5" PointX="33.625" PointY="1.375" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Assessment_AssessmentItem_MAP_Assessment_AssessmentRule" />
+        <EntityTypeShape EntityType="EIRSModel.TCC_Request" Width="1.5" PointX="27.75" PointY="20.25" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_Generate_TCC_Request" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_GenerateTCCDetail_TCC_Request" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_Issue_TCC_Request" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_PrepareTCCDraft_TCC_Request" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_Seal_TCC_Request" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_SignDigital_TCC_Request" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_Validate_TCC_Request" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_ValidateTaxPayerIncome_TCC_Request" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_ValidateTaxPayerInformation_TCC_Request" />
+        <EntityTypeShape EntityType="EIRSModel.Company" Width="1.5" PointX="28.5" PointY="87.75" />
+        <AssociationConnector Association="EIRSModel.FK_Company_Economic_Activities" />
+        <AssociationConnector Association="EIRSModel.FK_Company_Notification_Method" />
+        <AssociationConnector Association="EIRSModel.FK_Company_Tax_Offices" />
+        <AssociationConnector Association="EIRSModel.FK_Company_TaxPayer_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Company_AddressInformation_Company" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TreasuryReceipt_Settlement" Width="1.5" PointX="16" PointY="44.375" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TreasuryReceipt_Settlement_Settlement" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Company" Width="1.5" PointX="14.375" PointY="0.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Government" Width="1.5" PointX="14.375" PointY="12.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Individual" Width="1.5" PointX="14.375" PointY="15.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_Special" Width="1.5" PointX="16.375" PointY="3.75" />
+        <EntityTypeShape EntityType="EIRSModel.SFTP_DataSubmissionType" Width="1.5" PointX="20.375" PointY="37.75" />
+        <EntityTypeShape EntityType="EIRSModel.SFTP_DataSubmitter" Width="1.5" PointX="20.375" PointY="33.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_BillForPoASettlement" Width="1.5" PointX="20.375" PointY="29.75" />
+        <EntityTypeShape EntityType="EIRSModel.Certificate_Types" Width="1.5" PointX="32.75" PointY="11.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_CertificateType_Field" Width="1.5" PointX="35" PointY="7" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_CertificateType_Items" Width="1.5" PointX="14.75" PointY="30.75" />
+        <EntityTypeShape EntityType="EIRSModel.MST_FieldType" Width="1.5" PointX="32.75" PointY="8" />
+        <EntityTypeShape EntityType="EIRSModel.Profile_Types" Width="1.5" PointX="0.75" PointY="31.75" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_CertificateType_Field_Certificate_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_CertificateType_Field_MST_FieldType" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_CustomField" Width="1.5" PointX="34.625" PointY="22.25" />
+        <EntityTypeShape EntityType="EIRSModel.MST_CertificateStatus" Width="1.5" PointX="7.375" PointY="31.75" />
+        <EntityTypeShape EntityType="EIRSModel.vw_CertificateList" Width="1.5" PointX="9.375" PointY="32.75" />
+        <EntityTypeShape EntityType="EIRSModel.Certificate" Width="1.5" PointX="35" PointY="11.5" />
+        <AssociationConnector Association="EIRSModel.FK_Certificates_Certificate_Types" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_CustomField_Certificates" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_CustomField_MAP_CertificateType_Field" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_IncomeStream" Width="1.5" PointX="11.375" PointY="32.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_Generate" Width="1.5" PointX="37.25" PointY="19.25" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_Generate_Field" Width="1.5" PointX="39.5" PointY="19.5" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_Seal" Width="1.5" PointX="37.25" PointY="16" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_Validate" Width="1.5" PointX="37.25" PointY="8.375" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_Generate_Certificate" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_Seal_Certificates" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_Validate_Certificates" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_Generate_Field_MAP_Certificate_Generate" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_Issue" Width="1.5" PointX="37.25" PointY="1.25" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_SignDigital" Width="1.5" PointX="37.25" PointY="4.875" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_SignVisible" Width="1.5" PointX="26.375" PointY="12.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_Stages" Width="1.5" PointX="32.375" PointY="26.75" />
+        <EntityTypeShape EntityType="EIRSModel.MST_CertificateStage" Width="1.5" PointX="32.375" PointY="29.75" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_Issue_Certificates" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_SignDigital_Certificates" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_Stages_Certificates" />
+        <EntityTypeShape EntityType="EIRSModel.SFTP_MAP_DataSubmitter_DataSubmissionType" Width="1.5" PointX="22.625" PointY="38" />
+        <AssociationConnector Association="EIRSModel.FK_SFTP_MAP_DataSubmitter_DataSubmissionType_SFTP_DataSubmissionType" />
+        <AssociationConnector Association="EIRSModel.FK_SFTP_MAP_DataSubmitter_DataSubmissionType_SFTP_DataSubmitter" />
+        <EntityTypeShape EntityType="EIRSModel.SFTP_DataSubmission" Width="1.5" PointX="22.625" PointY="33.625" />
+        <AssociationConnector Association="EIRSModel.FK_SFTP_DataSubmission_SFTP_DataSubmissionType" />
+        <AssociationConnector Association="EIRSModel.FK_SFTP_DataSubmission_SFTP_DataSubmitter" />
+        <AssociationConnector Association="EIRSModel.FK_Company_MST_RegisterationStatus" />
+        <EntityTypeShape EntityType="EIRSModel.vw_AssessmentBill" Width="1.5" PointX="11.375" PointY="18.75" />
+        <EntityTypeShape EntityType="EIRSModel.JTB_Individual" PointX="25.375" PointY="33.75" Width="1.5" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_PaymentAccount_Operation" Width="1.5" PointX="32.375" PointY="32.75" />
+        <EntityTypeShape EntityType="EIRSModel.AL_Screen" Width="1.5" PointX="34.375" PointY="32.375" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Notes_Document" Width="1.5" PointX="7.625" PointY="27.125" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TaxPayer_Document" Width="1.5" PointX="15.375" PointY="34.75" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TaxPayer_Message" Width="1.5" PointX="34.375" PointY="27" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TaxPayer_Message_Document" Width="1.5" PointX="36.625" PointY="27.5" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TaxPayer_Message_Document_MAP_TaxPayer_Message" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Notes" Width="1.5" PointX="5.375" PointY="26.875" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_Notes_Document_MAP_TCCRequest_Notes" />
+        <EntityTypeShape EntityType="EIRSModel.Assessment" Width="1.5" PointX="4.5" PointY="35" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Assessment_AssessmentRule_Assessment" />
+        <AssociationConnector Association="EIRSModel.FK_Settlement_Assessment" />
+        <EntityTypeShape EntityType="EIRSModel.Audit_Log" Width="1.5" PointX="36.625" PointY="32" />
+        <AssociationConnector Association="EIRSModel.FK_Audit_Log_AL_Screen" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_TCCRequest_Revoke" Width="1.5" PointX="30" PointY="41.625" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TCCRequest_Revoke_TCC_Request" />
+        <EntityTypeShape EntityType="EIRSModel.MAP_Certificate_Revoke" Width="1.5" PointX="37.25" PointY="12.75" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_Certificate_Revoke_Certificates" />
+        <EntityTypeShape EntityType="EIRSModel.Treasury_Receipt" Width="1.5" PointX="17.375" PointY="35.125" />
+        <AssociationConnector Association="EIRSModel.FK_MAP_TreasuryReceipt_Settlement_Treasury_Receipt" />
+        <!--<EntityTypeShape EntityType="EIRSModel.TestingNEWTAB" Width="1.5" PointX="18.375" PointY="17.75" />-->
+        <EntityTypeShape EntityType="EIRSModel.vw_ServiceBillNew" Width="2.875" PointX="30.375" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EIRSModel.PayeTccHolder" Width="1.5" PointX="13.375" PointY="18.75" />
+        <EntityTypeShape EntityType="EIRSModel.NewERASTccHolder" Width="1.5" PointX="0.75" PointY="35.75" />
+        <EntityTypeShape EntityType="EIRSModel.TccRefHolder" Width="1.5" PointX="18.375" PointY="17.75" />
+        <EntityTypeShape EntityType="EIRSModel.Zone" Width="1.5" PointX="34.375" PointY="35.75" />
+        <EntityTypeShape EntityType="EIRSModel.ZoneLGA" Width="1.5" PointX="36.375" PointY="35.75" />
+        <EntityTypeShape EntityType="EIRSModel.ValidateTcc" Width="1.5" PointX="37.375" PointY="23.75" />
+        <EntityTypeShape EntityType="EIRSModel.NatureOfBusiness" Width="1.5" PointX="9.375" PointY="38.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,1885 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ERASModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MAP_API_Users_Rights">
+          <Key>
+            <PropertyRef Name="UAID" />
+          </Key>
+          <Property Name="UAID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="APIID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="APIAccess" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MAP_CentralMenu_Screen">
+          <Key>
+            <PropertyRef Name="CMSID" />
+          </Key>
+          <Property Name="CMSID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CentralMenuID" Type="int" />
+          <Property Name="ScreenID" Type="int" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="isMainScreen" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MAP_User_Screen">
+          <Key>
+            <PropertyRef Name="USID" />
+          </Key>
+          <Property Name="USID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="ScreenID" Type="int" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_API">
+          <Key>
+            <PropertyRef Name="APIID" />
+          </Key>
+          <Property Name="APIID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="APIName" Type="varchar" MaxLength="500" />
+          <Property Name="ControllerName" Type="varchar" MaxLength="500" />
+          <Property Name="ActionName" Type="varchar" MaxLength="500" />
+          <Property Name="APIDescription" Type="varchar" MaxLength="5000" />
+          <Property Name="DocumentPath" Type="varchar" MaxLength="5000" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_AwarenessCategory">
+          <Key>
+            <PropertyRef Name="AwarenessCategoryID" />
+          </Key>
+          <Property Name="AwarenessCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AwarenessCategoryName" Type="varchar" MaxLength="500" />
+          <Property Name="SectionDescription" Type="varchar" MaxLength="500" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_Business">
+          <Key>
+            <PropertyRef Name="BusinessID" />
+          </Key>
+          <Property Name="BusinessID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BusinessName" Type="varchar" MaxLength="500" />
+          <Property Name="BusinessAddress" Type="varchar" MaxLength="500" />
+          <Property Name="BusinessSector" Type="varchar" MaxLength="500" />
+          <Property Name="BusinessSubSector" Type="varchar" MaxLength="500" />
+          <Property Name="BusinessType" Type="varchar" MaxLength="500" />
+          <Property Name="BusinessCategory" Type="varchar" MaxLength="500" />
+          <Property Name="AssetType" Type="varchar" MaxLength="500" />
+          <Property Name="BusinessStructure" Type="varchar" MaxLength="500" />
+          <Property Name="BusinessOperation" Type="varchar" MaxLength="500" />
+          <Property Name="Size" Type="varchar" MaxLength="500" />
+          <Property Name="LGA" Type="varchar" MaxLength="500" />
+          <Property Name="TIN" Type="varchar" MaxLength="500" />
+          <Property Name="TaxOffice" Type="varchar" MaxLength="500" />
+          <Property Name="ContactName" Type="varchar" MaxLength="500" />
+          <Property Name="Phone" Type="varchar" MaxLength="500" />
+          <Property Name="EmailAddress" Type="varchar" MaxLength="500" />
+          <Property Name="PAYE" Type="bit" />
+          <Property Name="DirectAssessment" Type="bit" />
+          <Property Name="PresumptiveTax" Type="bit" />
+          <Property Name="BusinessPremises" Type="bit" />
+          <Property Name="ConsumtpionTaxes" Type="bit" />
+          <Property Name="MDAServices" Type="bit" />
+          <Property Name="Source" Type="varchar" MaxLength="500" />
+          <Property Name="BuildingTag" Type="varchar" MaxLength="500" />
+          <Property Name="Latitude" Type="varchar" MaxLength="500" />
+          <Property Name="Longitude" Type="varchar" MaxLength="500" />
+          <Property Name="PhoneVerified" Type="bit" />
+          <Property Name="Claimed" Type="bit" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="MST_CentralMenu">
+          <Key>
+            <PropertyRef Name="CentralMenuID" />
+          </Key>
+          <Property Name="CentralMenuID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CentralMenuName" Type="varchar" MaxLength="500" />
+          <Property Name="ParentCentralMenuID" Type="int" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="SortOrder" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="MenuType" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_FAQ">
+          <Key>
+            <PropertyRef Name="FAQID" />
+          </Key>
+          <Property Name="FAQID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AwarenessCategoryID" Type="int" />
+          <Property Name="FAQTitle" Type="varchar(max)" />
+          <Property Name="FAQText" Type="varchar(max)" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_Menu">
+          <Key>
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="MenuID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuName" Type="varchar" MaxLength="500" />
+          <Property Name="ParentMenuID" Type="int" />
+          <Property Name="MenuURL" Type="varchar" MaxLength="500" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="SortOrder" Type="int" />
+          <Property Name="PageHeader" Type="varchar" MaxLength="500" />
+          <Property Name="ShortDesc" Type="varchar" MaxLength="500" />
+          <Property Name="PageContent" Type="varchar(max)" />
+          <Property Name="PageTitle" Type="varchar" MaxLength="500" />
+          <Property Name="MetaTitle" Type="varchar" MaxLength="500" />
+          <Property Name="MetaKeywords" Type="varchar" MaxLength="5000" />
+          <Property Name="MetaDescription" Type="varchar" MaxLength="5000" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_Pages">
+          <Key>
+            <PropertyRef Name="PageID" />
+          </Key>
+          <Property Name="PageID" Type="int" Nullable="false" />
+          <Property Name="PageName" Type="varchar" MaxLength="500" />
+          <Property Name="PageHeader" Type="varchar" MaxLength="500" />
+          <Property Name="ShortDesc" Type="varchar" MaxLength="500" />
+          <Property Name="PageContent" Type="varchar(max)" />
+          <Property Name="PageTitle" Type="varchar" MaxLength="500" />
+          <Property Name="MetaTitle" Type="varchar" MaxLength="500" />
+          <Property Name="MetaKeywords" Type="varchar" MaxLength="5000" />
+          <Property Name="MetaDescription" Type="varchar" MaxLength="5000" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_Screen">
+          <Key>
+            <PropertyRef Name="ScreenID" />
+          </Key>
+          <Property Name="ScreenID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScreenName" Type="varchar" MaxLength="500" />
+          <Property Name="ControllerName" Type="varchar" MaxLength="500" />
+          <Property Name="ActionName" Type="varchar" MaxLength="500" />
+          <Property Name="ViewName" Type="varchar" MaxLength="500" />
+          <Property Name="ScreenUrl" Type="varchar" MaxLength="500" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserTypeID" Type="int" />
+          <Property Name="UserName" Type="varchar" MaxLength="500" />
+          <Property Name="Password" Type="varchar" MaxLength="500" />
+          <Property Name="ContactName" Type="varchar" MaxLength="500" />
+          <Property Name="EmailAddress" Type="varchar" MaxLength="500" />
+          <Property Name="ContactNumber" Type="varchar" MaxLength="500" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="LastLogin" Type="datetime" />
+          <Property Name="FailedLoginCount" Type="int" />
+          <Property Name="IsTOManager" Type="bit" />
+          <Property Name="TaxOfficeID" Type="int" />
+          <Property Name="TOManagerID" Type="int" />
+          <Property Name="SignaturePath" Type="varchar" MaxLength="500" />
+          <Property Name="IsDirector" Type="bit" />
+          <Property Name="AgencyID" Type="int" />
+          <Property Name="Title" Type="varchar" MaxLength="1000" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_UserToken">
+          <Key>
+            <PropertyRef Name="TokenID" />
+          </Key>
+          <Property Name="TokenID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Token" Type="varchar" MaxLength="5000" />
+          <Property Name="TokenIssuedDate" Type="datetime" />
+          <Property Name="TokenExpiresDate" Type="datetime" />
+          <Property Name="IPAddresss" Type="varchar" MaxLength="500" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MST_UserType">
+          <Key>
+            <PropertyRef Name="UserTypeID" />
+          </Key>
+          <Property Name="UserTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserTypeName" Type="varchar" MaxLength="500" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SystemRole">
+          <Key>
+            <PropertyRef Name="SystemRoleID" />
+          </Key>
+          <Property Name="SystemRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SystemRoleName" Type="varchar" MaxLength="500" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="SystemUserID" />
+          </Key>
+          <Property Name="SystemUserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SystemUserName" Type="varchar" MaxLength="50" />
+          <Property Name="UserLogin" Type="varchar" MaxLength="100" />
+          <Property Name="UserPassword" Type="varchar" MaxLength="50" />
+          <Property Name="SystemRoleID" Type="int" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="LastLogin" Type="datetime" />
+          <Property Name="FailedLoginCount" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_MAP_API_Users_Rights_MST_API">
+          <End Role="MST_API" Type="Self.MST_API" Multiplicity="0..1" />
+          <End Role="MAP_API_Users_Rights" Type="Self.MAP_API_Users_Rights" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_API">
+              <PropertyRef Name="APIID" />
+            </Principal>
+            <Dependent Role="MAP_API_Users_Rights">
+              <PropertyRef Name="APIID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MAP_API_Users_Rights_MST_Users">
+          <End Role="MST_Users" Type="Self.MST_Users" Multiplicity="0..1" />
+          <End Role="MAP_API_Users_Rights" Type="Self.MAP_API_Users_Rights" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="MAP_API_Users_Rights">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MAP_CentralMenu_Screen_MST_CentralMenu">
+          <End Role="MST_CentralMenu" Type="Self.MST_CentralMenu" Multiplicity="0..1" />
+          <End Role="MAP_CentralMenu_Screen" Type="Self.MAP_CentralMenu_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_CentralMenu">
+              <PropertyRef Name="CentralMenuID" />
+            </Principal>
+            <Dependent Role="MAP_CentralMenu_Screen">
+              <PropertyRef Name="CentralMenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MAP_CentralMenu_Screen_MST_Screen">
+          <End Role="MST_Screen" Type="Self.MST_Screen" Multiplicity="0..1" />
+          <End Role="MAP_CentralMenu_Screen" Type="Self.MAP_CentralMenu_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Screen">
+              <PropertyRef Name="ScreenID" />
+            </Principal>
+            <Dependent Role="MAP_CentralMenu_Screen">
+              <PropertyRef Name="ScreenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MAP_User_Screen_MST_Screen">
+          <End Role="MST_Screen" Type="Self.MST_Screen" Multiplicity="0..1" />
+          <End Role="MAP_User_Screen" Type="Self.MAP_User_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Screen">
+              <PropertyRef Name="ScreenID" />
+            </Principal>
+            <Dependent Role="MAP_User_Screen">
+              <PropertyRef Name="ScreenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MAP_User_Screen_MST_Users">
+          <End Role="MST_Users" Type="Self.MST_Users" Multiplicity="0..1" />
+          <End Role="MAP_User_Screen" Type="Self.MAP_User_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="MAP_User_Screen">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_CentralMenu_MST_CentralMenu1">
+          <End Role="MST_CentralMenu" Type="Self.MST_CentralMenu" Multiplicity="0..1" />
+          <End Role="MST_CentralMenu1" Type="Self.MST_CentralMenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_CentralMenu">
+              <PropertyRef Name="CentralMenuID" />
+            </Principal>
+            <Dependent Role="MST_CentralMenu1">
+              <PropertyRef Name="ParentCentralMenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_FAQ_MST_AwarenessCategory">
+          <End Role="MST_AwarenessCategory" Type="Self.MST_AwarenessCategory" Multiplicity="0..1" />
+          <End Role="MST_FAQ" Type="Self.MST_FAQ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_AwarenessCategory">
+              <PropertyRef Name="AwarenessCategoryID" />
+            </Principal>
+            <Dependent Role="MST_FAQ">
+              <PropertyRef Name="AwarenessCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_Menu_MST_Menu1">
+          <End Role="MST_Menu" Type="Self.MST_Menu" Multiplicity="0..1" />
+          <End Role="MST_Menu1" Type="Self.MST_Menu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Menu">
+              <PropertyRef Name="MenuID" />
+            </Principal>
+            <Dependent Role="MST_Menu1">
+              <PropertyRef Name="ParentMenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_Users_MST_UserType">
+          <End Role="MST_UserType" Type="Self.MST_UserType" Multiplicity="0..1" />
+          <End Role="MST_Users" Type="Self.MST_Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_UserType">
+              <PropertyRef Name="UserTypeID" />
+            </Principal>
+            <Dependent Role="MST_Users">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_UserToken_MST_User">
+          <End Role="MST_Users" Type="Self.MST_Users" Multiplicity="0..1" />
+          <End Role="MST_UserToken" Type="Self.MST_UserToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="MST_UserToken">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemUser_SystemRole">
+          <End Role="SystemRole" Type="Self.SystemRole" Multiplicity="0..1" />
+          <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemRole">
+              <PropertyRef Name="SystemRoleID" />
+            </Principal>
+            <Dependent Role="SystemUser">
+              <PropertyRef Name="SystemRoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddUserToken" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CreatedBy" Type="int" Mode="In" />
+          <Parameter Name="Createddate" Type="datetime" Mode="In" />
+          <Parameter Name="userId" Type="int" Mode="In" />
+          <Parameter Name="token" Type="varchar(max)" Mode="In" />
+          <Parameter Name="tokenExpiresDate" Type="datetime" Mode="In" />
+          <Parameter Name="tokenIssuedDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="usp_GetAPIList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="APIName" Type="varchar" Mode="In" />
+          <Parameter Name="APIID" Type="int" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetAPIUserRightList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="APIID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetAwarenessCategoryList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AwarenessCategoryName" Type="nvarchar" Mode="In" />
+          <Parameter Name="AwarenessCategoryID" Type="int" Mode="In" />
+          <Parameter Name="AwarenessCategoryIds" Type="nvarchar" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+          <Parameter Name="IncludeAwarenessCategoryIds" Type="nvarchar" Mode="In" />
+          <Parameter Name="ExcludeAwarenessCategoryIds" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="usp_GetCentralMenuList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CentralMenuID" Type="int" Mode="In" />
+          <Parameter Name="ParentCentralMenuID" Type="int" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+          <Parameter Name="intMenuType" Type="int" Mode="In" />
+          <Parameter Name="CentralMenuName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="usp_GetCentralMenuUserBased" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="ParentMenuID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetClaimBusinessList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BusinessID" Type="bigint" Mode="In" />
+          <Parameter Name="BusinessName" Type="varchar" Mode="In" />
+          <Parameter Name="intClaimed" Type="int" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetFAQList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FAQTitle" Type="nvarchar" Mode="In" />
+          <Parameter Name="FAQID" Type="int" Mode="In" />
+          <Parameter Name="FAQIds" Type="nvarchar" Mode="In" />
+          <Parameter Name="AwarenessCategoryIds" Type="nvarchar" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+          <Parameter Name="IncludeFAQIds" Type="nvarchar" Mode="In" />
+          <Parameter Name="ExcludeFAQIds" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="usp_GetMenuList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MenuID" Type="int" Mode="In" />
+          <Parameter Name="ParentMenuID" Type="int" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+          <Parameter Name="MenuName" Type="varchar" Mode="In" />
+          <Parameter Name="MenuUrl" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="usp_GetPageList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PageID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetScreenList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ScreenName" Type="varchar" Mode="In" />
+          <Parameter Name="ScreenID" Type="int" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetScreenMenuList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ScreenID" Type="int" Mode="In" />
+          <Parameter Name="CentralMenuID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetScreenUserList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ScreenID" Type="int" Mode="In" />
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetSystemUserList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SystemUserName" Type="varchar" Mode="In" />
+          <Parameter Name="SystemUserID" Type="int" Mode="In" />
+          <Parameter Name="SystemUserIds" Type="varchar" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+          <Parameter Name="IncludeSystemUserIds" Type="varchar" Mode="In" />
+          <Parameter Name="ExcludeSystemUserIds" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="usp_GetUserList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="UserTypeID" Type="int" Mode="In" />
+          <Parameter Name="intStatus" Type="int" Mode="In" />
+          <Parameter Name="ManagerID" Type="int" Mode="In" />
+          <Parameter Name="TaxOfficeID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ERASModelStoreContainer">
+          <EntitySet Name="MAP_API_Users_Rights" EntityType="Self.MAP_API_Users_Rights" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MAP_CentralMenu_Screen" EntityType="Self.MAP_CentralMenu_Screen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MAP_User_Screen" EntityType="Self.MAP_User_Screen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_API" EntityType="Self.MST_API" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_AwarenessCategory" EntityType="Self.MST_AwarenessCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_Business" EntityType="Self.MST_Business" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_CentralMenu" EntityType="Self.MST_CentralMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_FAQ" EntityType="Self.MST_FAQ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_Menu" EntityType="Self.MST_Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_Pages" EntityType="Self.MST_Pages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_Screen" EntityType="Self.MST_Screen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_Users" EntityType="Self.MST_Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_UserToken" EntityType="Self.MST_UserToken" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MST_UserType" EntityType="Self.MST_UserType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemRole" EntityType="Self.SystemRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemUser" EntityType="Self.SystemUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_MAP_API_Users_Rights_MST_API" Association="Self.FK_MAP_API_Users_Rights_MST_API">
+            <End Role="MST_API" EntitySet="MST_API" />
+            <End Role="MAP_API_Users_Rights" EntitySet="MAP_API_Users_Rights" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MAP_API_Users_Rights_MST_Users" Association="Self.FK_MAP_API_Users_Rights_MST_Users">
+            <End Role="MST_Users" EntitySet="MST_Users" />
+            <End Role="MAP_API_Users_Rights" EntitySet="MAP_API_Users_Rights" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MAP_CentralMenu_Screen_MST_CentralMenu" Association="Self.FK_MAP_CentralMenu_Screen_MST_CentralMenu">
+            <End Role="MST_CentralMenu" EntitySet="MST_CentralMenu" />
+            <End Role="MAP_CentralMenu_Screen" EntitySet="MAP_CentralMenu_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MAP_CentralMenu_Screen_MST_Screen" Association="Self.FK_MAP_CentralMenu_Screen_MST_Screen">
+            <End Role="MST_Screen" EntitySet="MST_Screen" />
+            <End Role="MAP_CentralMenu_Screen" EntitySet="MAP_CentralMenu_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MAP_User_Screen_MST_Screen" Association="Self.FK_MAP_User_Screen_MST_Screen">
+            <End Role="MST_Screen" EntitySet="MST_Screen" />
+            <End Role="MAP_User_Screen" EntitySet="MAP_User_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MAP_User_Screen_MST_Users" Association="Self.FK_MAP_User_Screen_MST_Users">
+            <End Role="MST_Users" EntitySet="MST_Users" />
+            <End Role="MAP_User_Screen" EntitySet="MAP_User_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_CentralMenu_MST_CentralMenu1" Association="Self.FK_MST_CentralMenu_MST_CentralMenu1">
+            <End Role="MST_CentralMenu" EntitySet="MST_CentralMenu" />
+            <End Role="MST_CentralMenu1" EntitySet="MST_CentralMenu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_FAQ_MST_AwarenessCategory" Association="Self.FK_MST_FAQ_MST_AwarenessCategory">
+            <End Role="MST_AwarenessCategory" EntitySet="MST_AwarenessCategory" />
+            <End Role="MST_FAQ" EntitySet="MST_FAQ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_Menu_MST_Menu1" Association="Self.FK_MST_Menu_MST_Menu1">
+            <End Role="MST_Menu" EntitySet="MST_Menu" />
+            <End Role="MST_Menu1" EntitySet="MST_Menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_Users_MST_UserType" Association="Self.FK_MST_Users_MST_UserType">
+            <End Role="MST_UserType" EntitySet="MST_UserType" />
+            <End Role="MST_Users" EntitySet="MST_Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_UserToken_MST_User" Association="Self.FK_MST_UserToken_MST_User">
+            <End Role="MST_Users" EntitySet="MST_Users" />
+            <End Role="MST_UserToken" EntitySet="MST_UserToken" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemUser_SystemRole" Association="Self.FK_SystemUser_SystemRole">
+            <End Role="SystemRole" EntitySet="SystemRole" />
+            <End Role="SystemUser" EntitySet="SystemUser" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ERASModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="MST_AwarenessCategory">
+          <Key>
+            <PropertyRef Name="AwarenessCategoryID" />
+          </Key>
+          <Property Name="AwarenessCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AwarenessCategoryName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SectionDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MST_FAQ" Relationship="Self.FK_MST_FAQ_MST_AwarenessCategory" FromRole="MST_AwarenessCategory" ToRole="MST_FAQ" />
+        </EntityType>
+        <EntityType Name="MST_Business">
+          <Key>
+            <PropertyRef Name="BusinessID" />
+          </Key>
+          <Property Name="BusinessID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BusinessName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessSector" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessSubSector" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessType" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessCategory" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AssetType" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessStructure" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessOperation" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Size" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="LGA" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="TIN" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="TaxOffice" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ContactName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PAYE" Type="Boolean" />
+          <Property Name="DirectAssessment" Type="Boolean" />
+          <Property Name="PresumptiveTax" Type="Boolean" />
+          <Property Name="BusinessPremises" Type="Boolean" />
+          <Property Name="ConsumtpionTaxes" Type="Boolean" />
+          <Property Name="MDAServices" Type="Boolean" />
+          <Property Name="Source" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BuildingTag" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Latitude" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Longitude" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneVerified" Type="Boolean" />
+          <Property Name="Claimed" Type="Boolean" />
+          <Property Name="Active" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="MST_FAQ">
+          <Key>
+            <PropertyRef Name="FAQID" />
+          </Key>
+          <Property Name="FAQID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AwarenessCategoryID" Type="Int32" />
+          <Property Name="FAQTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FAQText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MST_AwarenessCategory" Relationship="Self.FK_MST_FAQ_MST_AwarenessCategory" FromRole="MST_FAQ" ToRole="MST_AwarenessCategory" />
+        </EntityType>
+        <EntityType Name="MST_Menu">
+          <Key>
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="MenuID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ParentMenuID" Type="Int32" />
+          <Property Name="MenuURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="SortOrder" Type="Int32" />
+          <Property Name="PageHeader" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ShortDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PageTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="MetaTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="MetaKeywords" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="MetaDescription" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MST_Menu1" Relationship="Self.FK_MST_Menu_MST_Menu1" FromRole="MST_Menu" ToRole="MST_Menu1" />
+          <NavigationProperty Name="MST_Menu2" Relationship="Self.FK_MST_Menu_MST_Menu1" FromRole="MST_Menu1" ToRole="MST_Menu" />
+        </EntityType>
+        <EntityType Name="MST_Pages">
+          <Key>
+            <PropertyRef Name="PageID" />
+          </Key>
+          <Property Name="PageID" Type="Int32" Nullable="false" />
+          <Property Name="PageName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PageHeader" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ShortDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PageTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="MetaTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="MetaKeywords" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="MetaDescription" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SystemRole">
+          <Key>
+            <PropertyRef Name="SystemRoleID" />
+          </Key>
+          <Property Name="SystemRoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SystemRoleName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SystemUsers" Relationship="Self.FK_SystemUser_SystemRole" FromRole="SystemRole" ToRole="SystemUser" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="SystemUserID" />
+          </Key>
+          <Property Name="SystemUserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SystemUserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserLogin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UserPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SystemRoleID" Type="Int32" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <Property Name="FailedLoginCount" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SystemRole" Relationship="Self.FK_SystemUser_SystemRole" FromRole="SystemUser" ToRole="SystemRole" />
+        </EntityType>
+        <Association Name="FK_MST_FAQ_MST_AwarenessCategory">
+          <End Role="MST_AwarenessCategory" Type="Self.MST_AwarenessCategory" Multiplicity="0..1" />
+          <End Role="MST_FAQ" Type="Self.MST_FAQ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_AwarenessCategory">
+              <PropertyRef Name="AwarenessCategoryID" />
+            </Principal>
+            <Dependent Role="MST_FAQ">
+              <PropertyRef Name="AwarenessCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_Menu_MST_Menu1">
+          <End Role="MST_Menu" Type="Self.MST_Menu" Multiplicity="0..1" />
+          <End Role="MST_Menu1" Type="Self.MST_Menu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Menu">
+              <PropertyRef Name="MenuID" />
+            </Principal>
+            <Dependent Role="MST_Menu1">
+              <PropertyRef Name="ParentMenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemUser_SystemRole">
+          <End Role="SystemRole" Type="Self.SystemRole" Multiplicity="0..1" />
+          <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemRole">
+              <PropertyRef Name="SystemRoleID" />
+            </Principal>
+            <Dependent Role="SystemUser">
+              <PropertyRef Name="SystemRoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ERASEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MST_AwarenessCategory" EntityType="Self.MST_AwarenessCategory" />
+          <EntitySet Name="MST_Business" EntityType="Self.MST_Business" />
+          <EntitySet Name="MST_FAQ" EntityType="Self.MST_FAQ" />
+          <EntitySet Name="MST_Menu" EntityType="Self.MST_Menu" />
+          <EntitySet Name="MST_Pages" EntityType="Self.MST_Pages" />
+          <EntitySet Name="SystemRoles" EntityType="Self.SystemRole" />
+          <EntitySet Name="SystemUsers" EntityType="Self.SystemUser" />
+          <AssociationSet Name="FK_MST_FAQ_MST_AwarenessCategory" Association="Self.FK_MST_FAQ_MST_AwarenessCategory">
+            <End Role="MST_AwarenessCategory" EntitySet="MST_AwarenessCategory" />
+            <End Role="MST_FAQ" EntitySet="MST_FAQ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_Menu_MST_Menu1" Association="Self.FK_MST_Menu_MST_Menu1">
+            <End Role="MST_Menu" EntitySet="MST_Menu" />
+            <End Role="MST_Menu1" EntitySet="MST_Menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemUser_SystemRole" Association="Self.FK_SystemUser_SystemRole">
+            <End Role="SystemRole" EntitySet="SystemRoles" />
+            <End Role="SystemUser" EntitySet="SystemUsers" />
+          </AssociationSet>
+          <FunctionImport Name="usp_GetAwarenessCategoryList" ReturnType="Collection(ERASModel.usp_GetAwarenessCategoryList_Result)">
+            <Parameter Name="AwarenessCategoryName" Mode="In" Type="String" />
+            <Parameter Name="AwarenessCategoryID" Mode="In" Type="Int32" />
+            <Parameter Name="AwarenessCategoryIds" Mode="In" Type="String" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+            <Parameter Name="IncludeAwarenessCategoryIds" Mode="In" Type="String" />
+            <Parameter Name="ExcludeAwarenessCategoryIds" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetFAQList" ReturnType="Collection(ERASModel.usp_GetFAQList_Result)">
+            <Parameter Name="FAQTitle" Mode="In" Type="String" />
+            <Parameter Name="FAQID" Mode="In" Type="Int32" />
+            <Parameter Name="FAQIds" Mode="In" Type="String" />
+            <Parameter Name="AwarenessCategoryIds" Mode="In" Type="String" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+            <Parameter Name="IncludeFAQIds" Mode="In" Type="String" />
+            <Parameter Name="ExcludeFAQIds" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetMenuList" ReturnType="Collection(ERASModel.usp_GetMenuList_Result)">
+            <Parameter Name="MenuID" Mode="In" Type="Int32" />
+            <Parameter Name="ParentMenuID" Mode="In" Type="Int32" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+            <Parameter Name="MenuName" Mode="In" Type="String" />
+            <Parameter Name="MenuUrl" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetPageList" ReturnType="Collection(ERASModel.usp_GetPageList_Result)">
+          <Parameter Name="PageID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetSystemUserList" ReturnType="Collection(ERASModel.usp_GetSystemUserList_Result)">
+            <Parameter Name="SystemUserName" Mode="In" Type="String" />
+            <Parameter Name="SystemUserID" Mode="In" Type="Int32" />
+            <Parameter Name="SystemUserIds" Mode="In" Type="String" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+            <Parameter Name="IncludeSystemUserIds" Mode="In" Type="String" />
+            <Parameter Name="ExcludeSystemUserIds" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetClaimBusinessList" ReturnType="Collection(ERASModel.usp_GetClaimBusinessList_Result)">
+            <Parameter Name="BusinessID" Mode="In" Type="Int64" />
+            <Parameter Name="BusinessName" Mode="In" Type="String" />
+            <Parameter Name="intClaimed" Mode="In" Type="Int32" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="MST_UserType" EntityType="ERASModel.MST_UserType" />
+          <FunctionImport Name="usp_GetUserList" ReturnType="Collection(ERASModel.usp_GetUserList_Result)">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="UserTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+            <Parameter Name="ManagerID" Mode="In" Type="Int32" />
+            <Parameter Name="TaxOfficeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="MAP_CentralMenu_Screen" EntityType="ERASModel.MAP_CentralMenu_Screen" />
+          <EntitySet Name="MAP_User_Screen" EntityType="ERASModel.MAP_User_Screen" />
+          <EntitySet Name="MST_CentralMenu" EntityType="ERASModel.MST_CentralMenu" />
+          <EntitySet Name="MST_Screen" EntityType="ERASModel.MST_Screen" />
+          <AssociationSet Name="FK_MAP_CentralMenu_Screen_MST_CentralMenu" Association="ERASModel.FK_MAP_CentralMenu_Screen_MST_CentralMenu">
+            <End Role="MST_CentralMenu" EntitySet="MST_CentralMenu" />
+            <End Role="MAP_CentralMenu_Screen" EntitySet="MAP_CentralMenu_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MAP_CentralMenu_Screen_MST_Screen" Association="ERASModel.FK_MAP_CentralMenu_Screen_MST_Screen">
+            <End Role="MST_Screen" EntitySet="MST_Screen" />
+            <End Role="MAP_CentralMenu_Screen" EntitySet="MAP_CentralMenu_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MAP_User_Screen_MST_Screen" Association="ERASModel.FK_MAP_User_Screen_MST_Screen">
+            <End Role="MST_Screen" EntitySet="MST_Screen" />
+            <End Role="MAP_User_Screen" EntitySet="MAP_User_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_CentralMenu_MST_CentralMenu1" Association="ERASModel.FK_MST_CentralMenu_MST_CentralMenu1">
+            <End Role="MST_CentralMenu" EntitySet="MST_CentralMenu" />
+            <End Role="MST_CentralMenu1" EntitySet="MST_CentralMenu" />
+          </AssociationSet>
+          <FunctionImport Name="usp_GetCentralMenuList" ReturnType="Collection(ERASModel.usp_GetCentralMenuList_Result)">
+            <Parameter Name="CentralMenuID" Mode="In" Type="Int32" />
+            <Parameter Name="ParentCentralMenuID" Mode="In" Type="Int32" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+            <Parameter Name="intMenuType" Mode="In" Type="Int32" />
+            <Parameter Name="CentralMenuName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetCentralMenuUserBased" ReturnType="Collection(ERASModel.usp_GetCentralMenuUserBased_Result)">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="ParentMenuID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetScreenList" ReturnType="Collection(ERASModel.usp_GetScreenList_Result)">
+            <Parameter Name="ScreenName" Mode="In" Type="String" />
+            <Parameter Name="ScreenID" Mode="In" Type="Int32" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetScreenMenuList" ReturnType="Collection(ERASModel.usp_GetScreenMenuList_Result)">
+            <Parameter Name="ScreenID" Mode="In" Type="Int32" />
+            <Parameter Name="CentralMenuID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetScreenUserList" ReturnType="Collection(ERASModel.usp_GetScreenUserList_Result)">
+            <Parameter Name="ScreenID" Mode="In" Type="Int32" />
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="MAP_API_Users_Rights" EntityType="ERASModel.MAP_API_Users_Rights" />
+          <FunctionImport Name="usp_GetAPIList" ReturnType="Collection(ERASModel.usp_GetAPIList_Result)">
+            <Parameter Name="APIName" Mode="In" Type="String" />
+            <Parameter Name="APIID" Mode="In" Type="Int32" />
+            <Parameter Name="intStatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetAPIUserRightList" ReturnType="Collection(ERASModel.usp_GetAPIUserRightList_Result)">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="APIID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="MST_UserToken" EntityType="ERASModel.MST_UserToken" />
+          <EntitySet Name="MST_API" EntityType="ERASModel.MST_API" />
+          <AssociationSet Name="FK_MAP_API_Users_Rights_MST_API" Association="ERASModel.FK_MAP_API_Users_Rights_MST_API">
+            <End Role="MST_API" EntitySet="MST_API" />
+            <End Role="MAP_API_Users_Rights" EntitySet="MAP_API_Users_Rights" />
+          </AssociationSet>
+          <EntitySet Name="MST_Users" EntityType="ERASModel.MST_Users" />
+          <AssociationSet Name="FK_MAP_API_Users_Rights_MST_Users" Association="ERASModel.FK_MAP_API_Users_Rights_MST_Users">
+            <End Role="MST_Users" EntitySet="MST_Users" />
+            <End Role="MAP_API_Users_Rights" EntitySet="MAP_API_Users_Rights" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MAP_User_Screen_MST_Users" Association="ERASModel.FK_MAP_User_Screen_MST_Users">
+            <End Role="MST_Users" EntitySet="MST_Users" />
+            <End Role="MAP_User_Screen" EntitySet="MAP_User_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_Users_MST_UserType" Association="ERASModel.FK_MST_Users_MST_UserType">
+            <End Role="MST_UserType" EntitySet="MST_UserType" />
+            <End Role="MST_Users" EntitySet="MST_Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MST_UserToken_MST_User" Association="ERASModel.FK_MST_UserToken_MST_User">
+            <End Role="MST_Users" EntitySet="MST_Users" />
+            <End Role="MST_UserToken" EntitySet="MST_UserToken" />
+          </AssociationSet>
+          <FunctionImport Name="AddUserToken">
+            <Parameter Name="CreatedBy" Mode="In" Type="Int32" />
+            <Parameter Name="Createddate" Mode="In" Type="DateTime" />
+            <Parameter Name="userId" Mode="In" Type="Int32" />
+            <Parameter Name="token" Mode="In" Type="String" />
+            <Parameter Name="tokenExpiresDate" Mode="In" Type="DateTime" />
+            <Parameter Name="tokenIssuedDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          </EntityContainer>
+        <ComplexType Name="usp_GetAwarenessCategoryList_Result">
+          <Property Type="Int32" Name="AwarenessCategoryID" Nullable="true" />
+          <Property Type="String" Name="AwarenessCategoryName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="SectionDescription" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="usp_GetFAQList_Result">
+          <Property Type="Int32" Name="AwarenessCategoryID" Nullable="true" />
+          <Property Type="String" Name="AwarenessCategoryName" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="FAQID" Nullable="true" />
+          <Property Type="String" Name="FAQTitle" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="FAQText" Nullable="true" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="usp_GetMenuList_Result">
+          <Property Type="Int32" Name="MenuID" Nullable="true" />
+          <Property Type="Int32" Name="ParentMenuID" Nullable="true" />
+          <Property Type="String" Name="ParentMenuName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ParentMenuUrl" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="MenuURL" Nullable="true" MaxLength="5000" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="SortOrder" Nullable="true" />
+          <Property Type="String" Name="MenuTreeName" Nullable="true" />
+          <Property Type="String" Name="MenuName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="GeneratedMenu" Nullable="true" MaxLength="5000" />
+          <Property Type="String" Name="PageHeader" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ShortDesc" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="PageContent" Nullable="true" />
+          <Property Type="String" Name="PageTitle" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="MetaTitle" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="MetaKeywords" Nullable="true" MaxLength="5000" />
+          <Property Type="String" Name="MetaDescription" Nullable="true" MaxLength="5000" />
+          <Property Type="Int32" Name="HLevel" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="usp_GetPageList_Result">
+          <Property Type="Int32" Name="PageID" Nullable="true" />
+          <Property Type="String" Name="PageName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="PageHeader" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ShortDesc" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="PageContent" Nullable="true" />
+          <Property Type="String" Name="PageTitle" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="MetaTitle" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="MetaKeywords" Nullable="true" MaxLength="5000" />
+          <Property Type="String" Name="MetaDescription" Nullable="true" MaxLength="5000" />
+        </ComplexType>
+        <ComplexType Name="usp_GetSystemUserList_Result">
+          <Property Type="Int32" Name="SystemUserID" Nullable="true" />
+          <Property Type="String" Name="SystemUserName" Nullable="true" />
+          <Property Type="String" Name="UserPassword" Nullable="true" />
+          <Property Type="String" Name="UserLogin" Nullable="true" />
+          <Property Type="Int32" Name="SystemRoleID" Nullable="true" />
+          <Property Type="String" Name="SystemRoleName" Nullable="true" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="usp_GetClaimBusinessList_Result">
+          <Property Type="Int64" Name="BusinessID" Nullable="true" />
+          <Property Type="String" Name="BusinessName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BusinessAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BusinessSector" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BusinessSubSector" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BusinessType" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BusinessCategory" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="AssetType" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BusinessStructure" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BusinessOperation" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Size" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="LGA" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="TIN" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="TaxOffice" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ContactName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="EmailAddress" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="PAYE" Nullable="true" />
+          <Property Type="Boolean" Name="DirectAssessment" Nullable="true" />
+          <Property Type="Boolean" Name="PresumptiveTax" Nullable="true" />
+          <Property Type="Boolean" Name="BusinessPremises" Nullable="true" />
+          <Property Type="Boolean" Name="ConsumtpionTaxes" Nullable="true" />
+          <Property Type="Boolean" Name="MDAServices" Nullable="true" />
+          <Property Type="String" Name="Source" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BuildingTag" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Latitude" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Longitude" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="PhoneVerified" Nullable="true" />
+          <Property Type="Boolean" Name="Claimed" Nullable="true" />
+          <Property Type="String" Name="ClaimedText" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="MST_UserType">
+          <Key>
+            <PropertyRef Name="UserTypeID" />
+          </Key>
+          <Property Name="UserTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserTypeName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MST_Users" Relationship="ERASModel.FK_MST_Users_MST_UserType" FromRole="MST_UserType" ToRole="MST_Users" />
+        </EntityType>
+        <ComplexType Name="usp_GetUserList_Result">
+          <Property Type="Int32" Name="UserID" Nullable="true" />
+          <Property Type="Int32" Name="UserTypeID" Nullable="true" />
+          <Property Type="String" Name="UserTypeName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ContactName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="EmailAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ContactNumber" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="IsTOManager" Nullable="true" />
+          <Property Type="String" Name="IsTOManagerText" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="TaxOfficeID" Nullable="true" />
+          <Property Type="String" Name="TaxOfficeName" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="TOManagerID" Nullable="true" />
+          <Property Type="String" Name="TOManagerName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="SignaturePath" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="IsDirector" Nullable="true" />
+          <Property Type="String" Name="IsDirectorText" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="MAP_CentralMenu_Screen">
+          <Key>
+            <PropertyRef Name="CMSID" />
+          </Key>
+          <Property Name="CMSID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CentralMenuID" Type="Int32" />
+          <Property Name="ScreenID" Type="Int32" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="isMainScreen" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MST_CentralMenu" Relationship="ERASModel.FK_MAP_CentralMenu_Screen_MST_CentralMenu" FromRole="MAP_CentralMenu_Screen" ToRole="MST_CentralMenu" />
+          <NavigationProperty Name="MST_Screen" Relationship="ERASModel.FK_MAP_CentralMenu_Screen_MST_Screen" FromRole="MAP_CentralMenu_Screen" ToRole="MST_Screen" />
+        </EntityType>
+        <EntityType Name="MAP_User_Screen">
+          <Key>
+            <PropertyRef Name="USID" />
+          </Key>
+          <Property Name="USID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="ScreenID" Type="Int32" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MST_Screen" Relationship="ERASModel.FK_MAP_User_Screen_MST_Screen" FromRole="MAP_User_Screen" ToRole="MST_Screen" />
+          <NavigationProperty Name="MST_Users" Relationship="ERASModel.FK_MAP_User_Screen_MST_Users" FromRole="MAP_User_Screen" ToRole="MST_Users" />
+        </EntityType>
+        <EntityType Name="MST_CentralMenu">
+          <Key>
+            <PropertyRef Name="CentralMenuID" />
+          </Key>
+          <Property Name="CentralMenuID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CentralMenuName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ParentCentralMenuID" Type="Int32" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="SortOrder" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MenuType" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MAP_CentralMenu_Screen" Relationship="ERASModel.FK_MAP_CentralMenu_Screen_MST_CentralMenu" FromRole="MST_CentralMenu" ToRole="MAP_CentralMenu_Screen" />
+          <NavigationProperty Name="MST_CentralMenu1" Relationship="ERASModel.FK_MST_CentralMenu_MST_CentralMenu1" FromRole="MST_CentralMenu" ToRole="MST_CentralMenu1" />
+          <NavigationProperty Name="MST_CentralMenu2" Relationship="ERASModel.FK_MST_CentralMenu_MST_CentralMenu1" FromRole="MST_CentralMenu1" ToRole="MST_CentralMenu" />
+        </EntityType>
+        <EntityType Name="MST_Screen">
+          <Key>
+            <PropertyRef Name="ScreenID" />
+          </Key>
+          <Property Name="ScreenID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScreenName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ControllerName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ActionName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ViewName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ScreenUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MAP_CentralMenu_Screen" Relationship="ERASModel.FK_MAP_CentralMenu_Screen_MST_Screen" FromRole="MST_Screen" ToRole="MAP_CentralMenu_Screen" />
+          <NavigationProperty Name="MAP_User_Screen" Relationship="ERASModel.FK_MAP_User_Screen_MST_Screen" FromRole="MST_Screen" ToRole="MAP_User_Screen" />
+        </EntityType>
+        <Association Name="FK_MAP_CentralMenu_Screen_MST_CentralMenu">
+          <End Type="ERASModel.MST_CentralMenu" Role="MST_CentralMenu" Multiplicity="0..1" />
+          <End Type="ERASModel.MAP_CentralMenu_Screen" Role="MAP_CentralMenu_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_CentralMenu">
+              <PropertyRef Name="CentralMenuID" />
+            </Principal>
+            <Dependent Role="MAP_CentralMenu_Screen">
+              <PropertyRef Name="CentralMenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MAP_CentralMenu_Screen_MST_Screen">
+          <End Type="ERASModel.MST_Screen" Role="MST_Screen" Multiplicity="0..1" />
+          <End Type="ERASModel.MAP_CentralMenu_Screen" Role="MAP_CentralMenu_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Screen">
+              <PropertyRef Name="ScreenID" />
+            </Principal>
+            <Dependent Role="MAP_CentralMenu_Screen">
+              <PropertyRef Name="ScreenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MAP_User_Screen_MST_Screen">
+          <End Type="ERASModel.MST_Screen" Role="MST_Screen" Multiplicity="0..1" />
+          <End Type="ERASModel.MAP_User_Screen" Role="MAP_User_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Screen">
+              <PropertyRef Name="ScreenID" />
+            </Principal>
+            <Dependent Role="MAP_User_Screen">
+              <PropertyRef Name="ScreenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_CentralMenu_MST_CentralMenu1">
+          <End Type="ERASModel.MST_CentralMenu" Role="MST_CentralMenu" Multiplicity="0..1" />
+          <End Type="ERASModel.MST_CentralMenu" Role="MST_CentralMenu1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_CentralMenu">
+              <PropertyRef Name="CentralMenuID" />
+            </Principal>
+            <Dependent Role="MST_CentralMenu1">
+              <PropertyRef Name="ParentCentralMenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="usp_GetCentralMenuList_Result">
+          <Property Type="Int32" Name="CentralMenuID" Nullable="true" />
+          <Property Type="String" Name="CentralMenuName" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="ParentCentralMenuID" Nullable="true" />
+          <Property Type="String" Name="ParentCentralMenuName" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="MenuType" Nullable="true" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="SortOrder" Nullable="true" Precision="18" Scale="5" />
+        </ComplexType>
+        <ComplexType Name="usp_GetCentralMenuUserBased_Result">
+          <Property Type="Int32" Name="CentralMenuID" Nullable="true" />
+          <Property Type="String" Name="CentralMenuName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ControllerName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ActionName" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="SortOrder" Nullable="true" Precision="18" Scale="5" />
+          <Property Type="String" Name="ParentMenuName" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="usp_GetScreenList_Result">
+          <Property Type="Int32" Name="ScreenID" Nullable="true" />
+          <Property Type="String" Name="ScreenName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ScreenUrl" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="usp_GetScreenMenuList_Result">
+          <Property Type="Int64" Name="CMSID" Nullable="false" />
+          <Property Type="Int32" Name="CentralMenuID" Nullable="false" />
+          <Property Type="String" Name="CentralMenuName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ParentCentralMenuName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ScreenName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ScreenUrl" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="isMainScreen" Nullable="true" />
+          <Property Type="String" Name="MainScreenText" Nullable="false" MaxLength="3" />
+        </ComplexType>
+        <ComplexType Name="usp_GetScreenUserList_Result">
+          <Property Type="Int64" Name="USID" Nullable="false" />
+          <Property Type="Int32" Name="UserID" Nullable="true" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ContactName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="EmailAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ScreenName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ScreenUrl" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <EntityType Name="MAP_API_Users_Rights">
+          <Key>
+            <PropertyRef Name="UAID" />
+          </Key>
+          <Property Name="UAID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="APIID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="APIAccess" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MST_API" Relationship="ERASModel.FK_MAP_API_Users_Rights_MST_API" FromRole="MAP_API_Users_Rights" ToRole="MST_API" />
+          <NavigationProperty Name="MST_Users" Relationship="ERASModel.FK_MAP_API_Users_Rights_MST_Users" FromRole="MAP_API_Users_Rights" ToRole="MST_Users" />
+        </EntityType>
+        <ComplexType Name="usp_GetAPIList_Result">
+          <Property Type="Int32" Name="APIID" Nullable="true" />
+          <Property Type="String" Name="APIName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="APIDescription" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="ActiveText" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DocumentPath" Nullable="true" MaxLength="5000" />
+        </ComplexType>
+        <ComplexType Name="usp_GetAPIUserRightList_Result">
+          <Property Type="Int64" Name="UAID" Nullable="true" />
+          <Property Type="Int32" Name="UserID" Nullable="true" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="APIID" Nullable="true" />
+          <Property Type="String" Name="APIName" Nullable="true" MaxLength="500" />
+          <Property Type="Boolean" Name="APIAccess" Nullable="true" />
+          <Property Type="String" Name="APIAccessText" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <EntityType Name="MST_UserToken">
+          <Key>
+            <PropertyRef Name="TokenID" />
+          </Key>
+          <Property Name="TokenID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Token" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="TokenIssuedDate" Type="DateTime" Precision="3" />
+          <Property Name="TokenExpiresDate" Type="DateTime" Precision="3" />
+          <Property Name="IPAddresss" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MST_Users" Relationship="ERASModel.FK_MST_UserToken_MST_User" FromRole="MST_UserToken" ToRole="MST_Users" />
+        </EntityType>
+        <EntityType Name="MST_API">
+          <Key>
+            <PropertyRef Name="APIID" />
+          </Key>
+          <Property Name="APIID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="APIName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ControllerName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ActionName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="APIDescription" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="DocumentPath" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MAP_API_Users_Rights" Relationship="ERASModel.FK_MAP_API_Users_Rights_MST_API" FromRole="MST_API" ToRole="MAP_API_Users_Rights" />
+        </EntityType>
+        <Association Name="FK_MAP_API_Users_Rights_MST_API">
+          <End Type="ERASModel.MST_API" Role="MST_API" Multiplicity="0..1" />
+          <End Type="ERASModel.MAP_API_Users_Rights" Role="MAP_API_Users_Rights" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_API">
+              <PropertyRef Name="APIID" />
+            </Principal>
+            <Dependent Role="MAP_API_Users_Rights">
+              <PropertyRef Name="APIID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MST_Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserTypeID" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ContactName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <Property Name="FailedLoginCount" Type="Int32" />
+          <Property Name="IsTOManager" Type="Boolean" />
+          <Property Name="TaxOfficeID" Type="Int32" />
+          <Property Name="TOManagerID" Type="Int32" />
+          <Property Name="SignaturePath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsDirector" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MAP_API_Users_Rights" Relationship="ERASModel.FK_MAP_API_Users_Rights_MST_Users" FromRole="MST_Users" ToRole="MAP_API_Users_Rights" />
+          <NavigationProperty Name="MAP_User_Screen" Relationship="ERASModel.FK_MAP_User_Screen_MST_Users" FromRole="MST_Users" ToRole="MAP_User_Screen" />
+          <NavigationProperty Name="MST_UserType" Relationship="ERASModel.FK_MST_Users_MST_UserType" FromRole="MST_Users" ToRole="MST_UserType" />
+          <NavigationProperty Name="MST_UserToken" Relationship="ERASModel.FK_MST_UserToken_MST_User" FromRole="MST_Users" ToRole="MST_UserToken" />
+          <Property Name="AgencyID" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_MAP_API_Users_Rights_MST_Users">
+          <End Type="ERASModel.MST_Users" Role="MST_Users" Multiplicity="0..1" />
+          <End Type="ERASModel.MAP_API_Users_Rights" Role="MAP_API_Users_Rights" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="MAP_API_Users_Rights">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MAP_User_Screen_MST_Users">
+          <End Type="ERASModel.MST_Users" Role="MST_Users" Multiplicity="0..1" />
+          <End Type="ERASModel.MAP_User_Screen" Role="MAP_User_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="MAP_User_Screen">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_Users_MST_UserType">
+          <End Type="ERASModel.MST_UserType" Role="MST_UserType" Multiplicity="0..1" />
+          <End Type="ERASModel.MST_Users" Role="MST_Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_UserType">
+              <PropertyRef Name="UserTypeID" />
+            </Principal>
+            <Dependent Role="MST_Users">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MST_UserToken_MST_User">
+          <End Type="ERASModel.MST_Users" Role="MST_Users" Multiplicity="0..1" />
+          <End Type="ERASModel.MST_UserToken" Role="MST_UserToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MST_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="MST_UserToken">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ERASModelStoreContainer" CdmEntityContainer="ERASEntities">
+          <EntitySetMapping Name="MST_AwarenessCategory">
+            <EntityTypeMapping TypeName="ERASModel.MST_AwarenessCategory">
+              <MappingFragment StoreEntitySet="MST_AwarenessCategory">
+                <ScalarProperty Name="AwarenessCategoryID" ColumnName="AwarenessCategoryID" />
+                <ScalarProperty Name="AwarenessCategoryName" ColumnName="AwarenessCategoryName" />
+                <ScalarProperty Name="SectionDescription" ColumnName="SectionDescription" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MST_Business">
+            <EntityTypeMapping TypeName="ERASModel.MST_Business">
+              <MappingFragment StoreEntitySet="MST_Business">
+                <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+                <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+                <ScalarProperty Name="BusinessAddress" ColumnName="BusinessAddress" />
+                <ScalarProperty Name="BusinessSector" ColumnName="BusinessSector" />
+                <ScalarProperty Name="BusinessSubSector" ColumnName="BusinessSubSector" />
+                <ScalarProperty Name="BusinessType" ColumnName="BusinessType" />
+                <ScalarProperty Name="BusinessCategory" ColumnName="BusinessCategory" />
+                <ScalarProperty Name="AssetType" ColumnName="AssetType" />
+                <ScalarProperty Name="BusinessStructure" ColumnName="BusinessStructure" />
+                <ScalarProperty Name="BusinessOperation" ColumnName="BusinessOperation" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="LGA" ColumnName="LGA" />
+                <ScalarProperty Name="TIN" ColumnName="TIN" />
+                <ScalarProperty Name="TaxOffice" ColumnName="TaxOffice" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="PAYE" ColumnName="PAYE" />
+                <ScalarProperty Name="DirectAssessment" ColumnName="DirectAssessment" />
+                <ScalarProperty Name="PresumptiveTax" ColumnName="PresumptiveTax" />
+                <ScalarProperty Name="BusinessPremises" ColumnName="BusinessPremises" />
+                <ScalarProperty Name="ConsumtpionTaxes" ColumnName="ConsumtpionTaxes" />
+                <ScalarProperty Name="MDAServices" ColumnName="MDAServices" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="BuildingTag" ColumnName="BuildingTag" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="PhoneVerified" ColumnName="PhoneVerified" />
+                <ScalarProperty Name="Claimed" ColumnName="Claimed" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MST_FAQ">
+            <EntityTypeMapping TypeName="ERASModel.MST_FAQ">
+              <MappingFragment StoreEntitySet="MST_FAQ">
+                <ScalarProperty Name="FAQID" ColumnName="FAQID" />
+                <ScalarProperty Name="AwarenessCategoryID" ColumnName="AwarenessCategoryID" />
+                <ScalarProperty Name="FAQTitle" ColumnName="FAQTitle" />
+                <ScalarProperty Name="FAQText" ColumnName="FAQText" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MST_Menu">
+            <EntityTypeMapping TypeName="ERASModel.MST_Menu">
+              <MappingFragment StoreEntitySet="MST_Menu">
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="ParentMenuID" ColumnName="ParentMenuID" />
+                <ScalarProperty Name="MenuURL" ColumnName="MenuURL" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="PageHeader" ColumnName="PageHeader" />
+                <ScalarProperty Name="ShortDesc" ColumnName="ShortDesc" />
+                <ScalarProperty Name="PageContent" ColumnName="PageContent" />
+                <ScalarProperty Name="PageTitle" ColumnName="PageTitle" />
+                <ScalarProperty Name="MetaTitle" ColumnName="MetaTitle" />
+                <ScalarProperty Name="MetaKeywords" ColumnName="MetaKeywords" />
+                <ScalarProperty Name="MetaDescription" ColumnName="MetaDescription" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MST_Pages">
+            <EntityTypeMapping TypeName="ERASModel.MST_Pages">
+              <MappingFragment StoreEntitySet="MST_Pages">
+                <ScalarProperty Name="PageID" ColumnName="PageID" />
+                <ScalarProperty Name="PageName" ColumnName="PageName" />
+                <ScalarProperty Name="PageHeader" ColumnName="PageHeader" />
+                <ScalarProperty Name="ShortDesc" ColumnName="ShortDesc" />
+                <ScalarProperty Name="PageContent" ColumnName="PageContent" />
+                <ScalarProperty Name="PageTitle" ColumnName="PageTitle" />
+                <ScalarProperty Name="MetaTitle" ColumnName="MetaTitle" />
+                <ScalarProperty Name="MetaKeywords" ColumnName="MetaKeywords" />
+                <ScalarProperty Name="MetaDescription" ColumnName="MetaDescription" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemRoles">
+            <EntityTypeMapping TypeName="ERASModel.SystemRole">
+              <MappingFragment StoreEntitySet="SystemRole">
+                <ScalarProperty Name="SystemRoleID" ColumnName="SystemRoleID" />
+                <ScalarProperty Name="SystemRoleName" ColumnName="SystemRoleName" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemUsers">
+            <EntityTypeMapping TypeName="ERASModel.SystemUser">
+              <MappingFragment StoreEntitySet="SystemUser">
+                <ScalarProperty Name="SystemUserID" ColumnName="SystemUserID" />
+                <ScalarProperty Name="SystemUserName" ColumnName="SystemUserName" />
+                <ScalarProperty Name="UserLogin" ColumnName="UserLogin" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="SystemRoleID" ColumnName="SystemRoleID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="FailedLoginCount" ColumnName="FailedLoginCount" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetAwarenessCategoryList" FunctionName="ERASModel.Store.usp_GetAwarenessCategoryList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetAwarenessCategoryList_Result">
+                <ScalarProperty Name="AwarenessCategoryID" ColumnName="AwarenessCategoryID" />
+                <ScalarProperty Name="AwarenessCategoryName" ColumnName="AwarenessCategoryName" />
+                <ScalarProperty Name="SectionDescription" ColumnName="SectionDescription" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetFAQList" FunctionName="ERASModel.Store.usp_GetFAQList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetFAQList_Result">
+                <ScalarProperty Name="AwarenessCategoryID" ColumnName="AwarenessCategoryID" />
+                <ScalarProperty Name="AwarenessCategoryName" ColumnName="AwarenessCategoryName" />
+                <ScalarProperty Name="FAQID" ColumnName="FAQID" />
+                <ScalarProperty Name="FAQTitle" ColumnName="FAQTitle" />
+                <ScalarProperty Name="FAQText" ColumnName="FAQText" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetMenuList" FunctionName="ERASModel.Store.usp_GetMenuList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetMenuList_Result">
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="ParentMenuID" ColumnName="ParentMenuID" />
+                <ScalarProperty Name="ParentMenuName" ColumnName="ParentMenuName" />
+                <ScalarProperty Name="ParentMenuUrl" ColumnName="ParentMenuUrl" />
+                <ScalarProperty Name="MenuURL" ColumnName="MenuURL" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="MenuTreeName" ColumnName="MenuTreeName" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="GeneratedMenu" ColumnName="GeneratedMenu" />
+                <ScalarProperty Name="PageHeader" ColumnName="PageHeader" />
+                <ScalarProperty Name="ShortDesc" ColumnName="ShortDesc" />
+                <ScalarProperty Name="PageContent" ColumnName="PageContent" />
+                <ScalarProperty Name="PageTitle" ColumnName="PageTitle" />
+                <ScalarProperty Name="MetaTitle" ColumnName="MetaTitle" />
+                <ScalarProperty Name="MetaKeywords" ColumnName="MetaKeywords" />
+                <ScalarProperty Name="MetaDescription" ColumnName="MetaDescription" />
+                <ScalarProperty Name="HLevel" ColumnName="HLevel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetPageList" FunctionName="ERASModel.Store.usp_GetPageList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetPageList_Result">
+                <ScalarProperty Name="PageID" ColumnName="PageID" />
+                <ScalarProperty Name="PageName" ColumnName="PageName" />
+                <ScalarProperty Name="PageHeader" ColumnName="PageHeader" />
+                <ScalarProperty Name="ShortDesc" ColumnName="ShortDesc" />
+                <ScalarProperty Name="PageContent" ColumnName="PageContent" />
+                <ScalarProperty Name="PageTitle" ColumnName="PageTitle" />
+                <ScalarProperty Name="MetaTitle" ColumnName="MetaTitle" />
+                <ScalarProperty Name="MetaKeywords" ColumnName="MetaKeywords" />
+                <ScalarProperty Name="MetaDescription" ColumnName="MetaDescription" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetSystemUserList" FunctionName="ERASModel.Store.usp_GetSystemUserList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetSystemUserList_Result">
+                <ScalarProperty Name="SystemUserID" ColumnName="SystemUserID" />
+                <ScalarProperty Name="SystemUserName" ColumnName="SystemUserName" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="UserLogin" ColumnName="UserLogin" />
+                <ScalarProperty Name="SystemRoleID" ColumnName="SystemRoleID" />
+                <ScalarProperty Name="SystemRoleName" ColumnName="SystemRoleName" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetClaimBusinessList" FunctionName="ERASModel.Store.usp_GetClaimBusinessList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetClaimBusinessList_Result">
+                <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+                <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+                <ScalarProperty Name="BusinessAddress" ColumnName="BusinessAddress" />
+                <ScalarProperty Name="BusinessSector" ColumnName="BusinessSector" />
+                <ScalarProperty Name="BusinessSubSector" ColumnName="BusinessSubSector" />
+                <ScalarProperty Name="BusinessType" ColumnName="BusinessType" />
+                <ScalarProperty Name="BusinessCategory" ColumnName="BusinessCategory" />
+                <ScalarProperty Name="AssetType" ColumnName="AssetType" />
+                <ScalarProperty Name="BusinessStructure" ColumnName="BusinessStructure" />
+                <ScalarProperty Name="BusinessOperation" ColumnName="BusinessOperation" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="LGA" ColumnName="LGA" />
+                <ScalarProperty Name="TIN" ColumnName="TIN" />
+                <ScalarProperty Name="TaxOffice" ColumnName="TaxOffice" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="PAYE" ColumnName="PAYE" />
+                <ScalarProperty Name="DirectAssessment" ColumnName="DirectAssessment" />
+                <ScalarProperty Name="PresumptiveTax" ColumnName="PresumptiveTax" />
+                <ScalarProperty Name="BusinessPremises" ColumnName="BusinessPremises" />
+                <ScalarProperty Name="ConsumtpionTaxes" ColumnName="ConsumtpionTaxes" />
+                <ScalarProperty Name="MDAServices" ColumnName="MDAServices" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="BuildingTag" ColumnName="BuildingTag" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="PhoneVerified" ColumnName="PhoneVerified" />
+                <ScalarProperty Name="Claimed" ColumnName="Claimed" />
+                <ScalarProperty Name="ClaimedText" ColumnName="ClaimedText" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="MST_UserType">
+            <EntityTypeMapping TypeName="ERASModel.MST_UserType">
+              <MappingFragment StoreEntitySet="MST_UserType">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="UserTypeName" ColumnName="UserTypeName" />
+                <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetUserList" FunctionName="ERASModel.Store.usp_GetUserList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetUserList_Result">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+                <ScalarProperty Name="UserTypeName" ColumnName="UserTypeName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+                <ScalarProperty Name="IsTOManager" ColumnName="IsTOManager" />
+                <ScalarProperty Name="IsTOManagerText" ColumnName="IsTOManagerText" />
+                <ScalarProperty Name="TaxOfficeID" ColumnName="TaxOfficeID" />
+                <ScalarProperty Name="TaxOfficeName" ColumnName="TaxOfficeName" />
+                <ScalarProperty Name="TOManagerID" ColumnName="TOManagerID" />
+                <ScalarProperty Name="TOManagerName" ColumnName="TOManagerName" />
+                <ScalarProperty Name="SignaturePath" ColumnName="SignaturePath" />
+                <ScalarProperty Name="IsDirector" ColumnName="IsDirector" />
+                <ScalarProperty Name="IsDirectorText" ColumnName="IsDirectorText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="MAP_CentralMenu_Screen">
+            <EntityTypeMapping TypeName="ERASModel.MAP_CentralMenu_Screen">
+              <MappingFragment StoreEntitySet="MAP_CentralMenu_Screen">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="isMainScreen" ColumnName="isMainScreen" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ScreenID" ColumnName="ScreenID" />
+                <ScalarProperty Name="CentralMenuID" ColumnName="CentralMenuID" />
+                <ScalarProperty Name="CMSID" ColumnName="CMSID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MAP_User_Screen">
+            <EntityTypeMapping TypeName="ERASModel.MAP_User_Screen">
+              <MappingFragment StoreEntitySet="MAP_User_Screen">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ScreenID" ColumnName="ScreenID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="USID" ColumnName="USID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MST_CentralMenu">
+            <EntityTypeMapping TypeName="ERASModel.MST_CentralMenu">
+              <MappingFragment StoreEntitySet="MST_CentralMenu">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="MenuType" ColumnName="MenuType" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ParentCentralMenuID" ColumnName="ParentCentralMenuID" />
+                <ScalarProperty Name="CentralMenuName" ColumnName="CentralMenuName" />
+                <ScalarProperty Name="CentralMenuID" ColumnName="CentralMenuID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MST_Screen">
+            <EntityTypeMapping TypeName="ERASModel.MST_Screen">
+              <MappingFragment StoreEntitySet="MST_Screen">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ScreenUrl" ColumnName="ScreenUrl" />
+                <ScalarProperty Name="ViewName" ColumnName="ViewName" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
+                <ScalarProperty Name="ScreenID" ColumnName="ScreenID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetCentralMenuList" FunctionName="ERASModel.Store.usp_GetCentralMenuList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetCentralMenuList_Result">
+                <ScalarProperty Name="CentralMenuID" ColumnName="CentralMenuID" />
+                <ScalarProperty Name="CentralMenuName" ColumnName="CentralMenuName" />
+                <ScalarProperty Name="ParentCentralMenuID" ColumnName="ParentCentralMenuID" />
+                <ScalarProperty Name="ParentCentralMenuName" ColumnName="ParentCentralMenuName" />
+                <ScalarProperty Name="MenuType" ColumnName="MenuType" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetCentralMenuUserBased" FunctionName="ERASModel.Store.usp_GetCentralMenuUserBased">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetCentralMenuUserBased_Result">
+                <ScalarProperty Name="CentralMenuID" ColumnName="CentralMenuID" />
+                <ScalarProperty Name="CentralMenuName" ColumnName="CentralMenuName" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="ParentMenuName" ColumnName="ParentMenuName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetScreenList" FunctionName="ERASModel.Store.usp_GetScreenList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetScreenList_Result">
+                <ScalarProperty Name="ScreenID" ColumnName="ScreenID" />
+                <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
+                <ScalarProperty Name="ScreenUrl" ColumnName="ScreenUrl" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetScreenMenuList" FunctionName="ERASModel.Store.usp_GetScreenMenuList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetScreenMenuList_Result">
+                <ScalarProperty Name="CMSID" ColumnName="CMSID" />
+                <ScalarProperty Name="CentralMenuID" ColumnName="CentralMenuID" />
+                <ScalarProperty Name="CentralMenuName" ColumnName="CentralMenuName" />
+                <ScalarProperty Name="ParentCentralMenuName" ColumnName="ParentCentralMenuName" />
+                <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
+                <ScalarProperty Name="ScreenUrl" ColumnName="ScreenUrl" />
+                <ScalarProperty Name="isMainScreen" ColumnName="isMainScreen" />
+                <ScalarProperty Name="MainScreenText" ColumnName="MainScreenText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetScreenUserList" FunctionName="ERASModel.Store.usp_GetScreenUserList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetScreenUserList_Result">
+                <ScalarProperty Name="USID" ColumnName="USID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
+                <ScalarProperty Name="ScreenUrl" ColumnName="ScreenUrl" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="MAP_API_Users_Rights">
+            <EntityTypeMapping TypeName="ERASModel.MAP_API_Users_Rights">
+              <MappingFragment StoreEntitySet="MAP_API_Users_Rights">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="APIAccess" ColumnName="APIAccess" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="APIID" ColumnName="APIID" />
+                <ScalarProperty Name="UAID" ColumnName="UAID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetAPIList" FunctionName="ERASModel.Store.usp_GetAPIList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetAPIList_Result">
+                <ScalarProperty Name="APIID" ColumnName="APIID" />
+                <ScalarProperty Name="APIName" ColumnName="APIName" />
+                <ScalarProperty Name="APIDescription" ColumnName="APIDescription" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ActiveText" ColumnName="ActiveText" />
+                <ScalarProperty Name="DocumentPath" ColumnName="DocumentPath" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetAPIUserRightList" FunctionName="ERASModel.Store.usp_GetAPIUserRightList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ERASModel.usp_GetAPIUserRightList_Result">
+                <ScalarProperty Name="UAID" ColumnName="UAID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="APIID" ColumnName="APIID" />
+                <ScalarProperty Name="APIName" ColumnName="APIName" />
+                <ScalarProperty Name="APIAccess" ColumnName="APIAccess" />
+                <ScalarProperty Name="APIAccessText" ColumnName="APIAccessText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="MST_UserToken">
+            <EntityTypeMapping TypeName="ERASModel.MST_UserToken">
+              <MappingFragment StoreEntitySet="MST_UserToken">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IPAddresss" ColumnName="IPAddresss" />
+                <ScalarProperty Name="TokenExpiresDate" ColumnName="TokenExpiresDate" />
+                <ScalarProperty Name="TokenIssuedDate" ColumnName="TokenIssuedDate" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="TokenID" ColumnName="TokenID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MST_API">
+            <EntityTypeMapping TypeName="ERASModel.MST_API">
+              <MappingFragment StoreEntitySet="MST_API">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="DocumentPath" ColumnName="DocumentPath" />
+                <ScalarProperty Name="APIDescription" ColumnName="APIDescription" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="APIName" ColumnName="APIName" />
+                <ScalarProperty Name="APIID" ColumnName="APIID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MST_Users">
+            <EntityTypeMapping TypeName="ERASModel.MST_Users">
+              <MappingFragment StoreEntitySet="MST_Users">
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="AgencyID" ColumnName="AgencyID" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDirector" ColumnName="IsDirector" />
+                <ScalarProperty Name="SignaturePath" ColumnName="SignaturePath" />
+                <ScalarProperty Name="TOManagerID" ColumnName="TOManagerID" />
+                <ScalarProperty Name="TaxOfficeID" ColumnName="TaxOfficeID" />
+                <ScalarProperty Name="IsTOManager" ColumnName="IsTOManager" />
+                <ScalarProperty Name="FailedLoginCount" ColumnName="FailedLoginCount" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddUserToken" FunctionName="ERASModel.Store.AddUserToken" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

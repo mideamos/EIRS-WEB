@@ -1,0 +1,119 @@
+﻿@model EIRS.Models.GovernmentViewModel
+
+@{
+    ViewBag.Title = "Government Details";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-archive"></i>
+                Government
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvGovernmentDetails">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
+                        <h2>Government</h2>
+                    </header>
+                    <div class="content">
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-horizontal">
+                                <fieldset>
+                                    <legend>Government Details</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Government RIN</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.GovernmentRIN
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Government Name</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.GovernmentName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">TIN</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TIN
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Goverment Type</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.GovernmentTypeName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Tax Office</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TaxOfficeName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Tax Payer Type</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TaxPayerTypeName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Contact Name</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ContactName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Contact Email</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ContactEmail
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Contact Number</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ContactNumber
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Preferred Notification</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.NotificationMethodName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Status</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ActiveText
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-default" href="@Url.Action("List","Government")">
+                                                Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

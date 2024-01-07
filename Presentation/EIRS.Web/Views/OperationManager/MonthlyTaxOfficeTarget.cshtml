@@ -1,0 +1,80 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manger - Monthly Tax Office Targets";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Monthly Tax Office Targets
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmMonthlyTaxOfficeTarget" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tax Office:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("TaxOffice", (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", new { @class = "form-control bs-select", @id = "cboTaxOffice" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Year:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("Year", (SelectList)ViewBag.YearList, "Select Year", new { @class = "form-control bs-select", @id = "cboYear" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Monthly Tax Office Targets</div>
+        <div class="form-actions text-right">
+
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblMonthlyTaxOfficeTarget">
+            <thead class="red-th">
+                <tr>
+                    <th>Month</th>
+                    <th>Target Amount</th>
+                    <th>Total Assessed</th>
+                    <th>Total Revenue</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsMonthlyTaxOfficeTarget.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

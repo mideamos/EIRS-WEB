@@ -1,0 +1,91 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Tax Payers - Government";
+    ViewBag.MetaTitle = "Tax Payers  - Government";
+    ViewBag.MetaKeywords = "Tax Payers, Government";
+    ViewBag.MetaDescription = "Government bodies and parastatals who operate from within Edo State are classified as separate tax payers";
+    ViewBag.MenuID = 2;
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Welcome to Tax Payers Section
+            </h1>
+            <hr>
+            <p>
+                This section covers information relating to tax payers, different types and importance
+            </p>
+        </div>
+
+        <div class="row custom-tabs">
+            <div class="col-sm-3">
+                <div class="portlet light compressed-menu">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Tax Payer
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <ul class="nav">
+                            <li>
+                                <a href="@Url.Action("Companies","Default")"><i class="fa fa-angle-right"></i> Companies</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Individual","Default")"><i class="fa fa-angle-right"></i> Individuals </a>
+                            </li>
+                            <li class="active">
+                                <a href="@Url.Action("Government","Default")"><i class="fa fa-angle-right"></i> Governments </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Special","Default")"><i class="fa fa-angle-right"></i> Special </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Government Tax Payers
+                        </div>
+                    </div>
+                    <div class="portlet-body text-justify">
+                        <p>
+                            Government bodies and parastatals who operate from within Edo State are classified as separate tax payers
+                        </p>
+
+                        <div class="btn-custom-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <a class="btn btn-theme btn-block btn-outline" href="@Url.Action("Paye","Default")"> PAYE <i class="icon-arrow-right"></i> </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a class="btn btn-theme btn-block btn-outline" href="@Url.Action("WitholdingTax","Default")"> WITHHOLDING TAX <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="btn-custom-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <a class="btn btn-theme btn-block"> GOVERNMENT CAPTURE <i class="icon-arrow-right"></i> </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a class="btn btn-theme btn-block"> MDA SERVICES FOR GOVERNMENTS <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+

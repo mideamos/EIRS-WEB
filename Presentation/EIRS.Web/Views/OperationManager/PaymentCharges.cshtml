@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Operation Manager - Payment Charges";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Payment Charges
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Payment Charges</div>
+        <div class="text-right">
+            <a href="@Url.Action("PaymentChargesExportToExcel","OperationManager")" target="_blank" class="btn btn-theme">Export To Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPaymentCharges">
+            <thead class="red-th">
+                <tr>
+                    <th>RIN</th>
+                    <th class="none">Tax Payer Type</th>
+                    <th class="none">Tax Payer Name</th>
+                    <th>Tax Year</th>
+                    <th>Bill Ref</th>
+                    <th>Revenue Stream</th>
+                    <th class="none">Penalty</th>
+                    <th class="none">Interest</th>
+                    <th>Total Charges</th>
+                    <th>Charge Date</th>
+                    <th class="none">Bill Status</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsPaymentCharges.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

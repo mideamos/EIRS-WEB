@@ -1,0 +1,143 @@
+﻿@model EIRS.Models.ProfileViewModel
+
+@{
+    ViewBag.Title = "Profile Details";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Profiles
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvProfileDetails">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
+                        <h2>Profile</h2>
+                    </header>
+                    <div class="content">
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-horizontal">
+                                <fieldset>
+                                    <legend>Profile Details</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Profile Reference No</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileReferenceNo
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Asset Type</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.AssetTypeName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Tax Payer Type</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TaxPayerTypeNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Tax Payer Role</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TaxPayerRoleNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Profile Description</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileDescription
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Asset Status</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.AssetTypeStatusName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Profile Sector</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileSectorNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Profile Sub Sector</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileSubSectorNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Profile Group</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileGroupNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Profile Sub Group</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileSubGroupNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Sector Element</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileSectorElementNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Sector Sub Element</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileSectorSubElementNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Profile Attribute</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileAttributeNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Profile Sub Attribute</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ProfileSubAttributeNames
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Status</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ActiveText
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-default" href="@Url.Action("List","Profile")">
+                                                Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

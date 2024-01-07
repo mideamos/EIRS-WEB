@@ -1,0 +1,90 @@
+﻿
+
+@{
+    ViewBag.Title = "Settlement List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Settlement
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("Generate","Settlement")" class="btn btn-default">
+                Add Settlement
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data- id="dvSettlementList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Settlement List </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Generate","Settlement")" class="btn btn-primary">Add Settlement </a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbSettlement" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Ref No" id="txtSettlementRefNo" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Date" id="txtSettlementDate"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Bill Ref No" id="txtAssessmentRefNo"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Bill Amount" id="txtAssessmentAmount"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Amount" id="txtSettlementAmount"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Method" id="txtSettlementMethod"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Status" id="txtSettlementStatus"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Notes" id="txtSettlementNotes"/>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Settlement Ref No</th>
+                                        <th>Settlement Date</th>
+                                        <th>Assessment / Service Bill Ref No</th>
+                                        <th>Assessment / Service Bill Amount</th>
+                                        <th>Settlement Amount</th>
+                                        <th>Settlement Method</th>
+                                        <th>Settlement Status</th>
+                                        <th>Notes</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script Function="text/javascript" src="~/Scripts/jsSettlementList.js"></script>
+}
+

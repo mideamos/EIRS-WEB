@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "PoA Operation List";
+}
+
+<div class="title">
+    <h1>
+        PoA Operations List
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">PoA Operation</div>
+        <div class="actions">
+            <a href="@Url.Action("PoATransfer","OperationManager")" class="btn btn-redtheme">
+                New Transfer
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table id="tbPoAOperation" class="dt-responsive table table-bordered v-middle" width="100%">
+            <thead class="red-th">
+                <tr>
+                    <th class="desktop">Operation Date</th>
+                    <th class="desktop">Operation Type</th>
+                    <th class="none">From Tax Payer</th>
+                    <th class="desktop">From</th>
+                    <th class="none">To Tax Payer</th>
+                    <th class="desktop">To</th>
+                    <th class="action-th all">Amount</th>
+                </tr>
+            </thead>
+
+        </table>
+    </div>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsPoAOperationList.js"></script>
+}

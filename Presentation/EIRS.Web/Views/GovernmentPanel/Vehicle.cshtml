@@ -1,0 +1,71 @@
+﻿@model IList<EIRS.BOL.usp_GetTaxPayerVehicleList_Result>
+@using EIRS.Common
+@{
+    ViewBag.Title = "Vehicle List";
+}
+
+<div class="title">
+    <h1>Vehicles</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Vehicles
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblVehicle">
+            <thead class="red-th">
+                <tr>
+                    <th>RIN</th>
+                    <th>Reg Number</th>
+                    <th>Sub Type</th>
+                    <th class="desktop">Purpose</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.VehicleRIN</td>
+                        <td>@item.VehicleRegNumber</td>
+                        <td>@item.VehicleSubTypeID</td>
+                        <td>@item.VehiclePurposeName</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action<span class="caret"></span>
+                                </button><ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_VehicleInformation(@item.VehicleID)">
+                                            Quick View
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("VehicleDetail","GovernmentPanel", new { @id=item.VehicleID, @name=item.VehicleRegNumber.ToSeoUrl() })">Asset Details</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@{Html.RenderPartial("_VehicleDetailPopup"); }
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerVehicleList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

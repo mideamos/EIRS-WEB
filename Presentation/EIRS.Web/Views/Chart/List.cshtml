@@ -1,0 +1,164 @@
+﻿@model PagedList.IPagedList<EIRS.Chart.DTOs.ChartResponse>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Charts Catalogue";
+}
+
+<section class="alternate">
+    <div class="container">
+        <div class="title">
+            <h1>
+                Chart Catalogues
+            </h1>
+            <hr>
+            <p>
+                This section covers information relating to charts
+            </p>
+        </div>
+
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    <span class="caption-subject bold font-grey-gallery uppercase"> Search Filters </span>
+                </div>
+                <div class="tools">
+                    <a href="" class="collapse" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body form" style="display: block;">
+                @using (Ajax.BeginForm("Search", "Chart", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Get", OnBegin = "jsfn_ShowLoading", OnComplete = "jsfn_HideLoading" }, new { @class = "form-horizontal", @id = "frmSearchChart" }))
+                {
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Data Segment</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control bs-select" id="cboDataSegement" name="DataSegement">
+                                            <option value="">All Data Segment</option>
+                                            <option value="Assessed">Assessed</option>
+                                            <option value="Settled Total">Settled Total</option>
+                                            <option value="Unsettled Total">Unsettled Total</option>
+                                            <option value="Total Collections">Total Collections</option>
+                                            <option value="Assets">Assets</option>
+                                            <option value="Building">Building</option>
+                                            <option value="Businesses">Businesses</option>
+                                            <option value="Companies">Companies</option>
+                                            <option value="Individuals">Individuals</option>
+                                            <option value="Land">Land</option>
+                                            <option value="Vehicles">Vehicles</option>
+                                            <option value="Target Vs Actuals">Target Vs Actuals</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Data Reference</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control bs-select" id="cboDataReference" name="DataReference">
+                                            <option value="">All Data Reference</option>
+                                            <option value="Assessment Bills">Assessment Bills</option>
+                                            <option value="Service Bills">Service Bills</option>
+                                            <option value="All Bills">All Bills</option>
+                                            <option value="Total Collections">Total Collections</option>
+                                            <option value="Business Premises">Business Premises</option>
+                                            <option value="Capital Gains Taxes">Capital Gains Taxes</option>
+                                            <option value="Consumption Tax">Consumption Tax</option>
+                                            <option value="Direct Assessment">Direct Assessment</option>
+                                            <option value="Land Use Charge">Land Use Charge</option>
+                                            <option value="Lottery & Gaming">Lottery & Gaming</option>
+                                            <option value="MDA Services">MDA Services</option>
+                                            <option value="PAYE">PAYE</option>
+                                            <option value="Stamp Duty">Stamp Duty</option>
+                                            <option value="Tax Audit">Tax Audit</option>
+                                            <option value="Vehicle License">Vehicle License</option>
+                                            <option value="Waste Management">Waste Management</option>
+                                            <option value="Withholding Tax">Withholding Tax</option>
+                                            <option value="Asset Type">Asset Type</option>
+                                            <option value="Building Completion">Building Completion</option>
+                                            <option value="Building Ownership">Building Ownership</option>
+                                            <option value="Building Purpose">Building Purpose</option>
+                                            <option value="Building Type">Building Type</option>
+                                            <option value="Business Category">Business Category</option>
+                                            <option value="Business Operations">Business Operations</option>
+                                            <option value="Business Sector">Business Sector</option>
+                                            <option value="Business Structure">Business Structure</option>
+                                            <option value="Business Sub Sector">Business Sub Sector</option>
+                                            <option value="Business Types">Business Types</option>
+                                            <option value="Economic Activity">Economic Activity</option>
+                                            <option value="Land Development">Land Development</option>
+                                            <option value="Land Function">Land Function</option>
+                                            <option value="Land Ownership">Land Ownership</option>
+                                            <option value="Land Purpose">Land Purpose</option>
+                                            <option value="Vehicle Function">Vehicle Function</option>
+                                            <option value="Vehicle Ownership">Vehicle Ownership</option>
+                                            <option value="Vehicle Purpose">Vehicle Purpose</option>
+                                            <option value="Vehicle Sub Type">Vehicle Sub Type</option>
+                                            <option value="Vehicle Type">Vehicle Type</option>
+                                            <option value="Presumptive Taxes">Presumptive Taxes</option>
+                                            <option value="Transactions">Transactions</option>
+                                            <option value="Ground Rent - Item Sub Category">Ground Rent - Item Sub Category</option>
+                                            <option value="Property Tax - Item Sub Category">Property Tax - Item Sub Category</option>
+                                            <option value="Tenement Rate - Item Sub Category">Tenement Rate - Item Sub Category</option>
+                                            <option value="Vehicle Registration - Item Category">Vehicle Registration - Item Category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">X-Axis Data</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control bs-select" id="cboXAxisData" name="XAxisData">
+                                            <option value="">All X-Axis Data</option>
+                                            <option value="Asset Type">Asset Type</option>
+                                            <option value="Directorate">Directorate</option>
+                                            <option value="LGA">LGA</option>
+                                            <option value="Revenue Agency">Revenue Agency</option>
+                                            <option value="Revenue Stream">Revenue Stream</option>
+                                            <option value="Tax Office">Tax Office</option>
+                                            <option value="Tax Payer Type">Tax Payer Type</option>
+                                            <option value="Payment Channels">Payment Channels</option>
+                                            <option value="Staff">Staff</option>
+                                            <option value="Reference Profile">Reference Profile</option>
+                                            <option value="Transaction Type">Transaction Type</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">X-Axis Base Data</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control bs-select" id="cboXAxisBaseData" name="XAxisBaseData">
+                                            <option value="">All X-Axis Base Data</option>
+                                            <option value="Dates">Dates</option>
+                                            <option value="Count">Count</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions right">
+                        <button type="submit" class="btn btn-theme">Filter</button>
+                    </div>
+
+                }
+            </div>
+        </div>
+
+        <div class="portlet light">
+            <div class="portlet-body text-justify" id="dvData">
+                @{ Html.RenderPartial("_BindList", Model); }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

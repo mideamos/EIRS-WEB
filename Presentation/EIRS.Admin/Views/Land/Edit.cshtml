@@ -1,0 +1,258 @@
+﻿@model EIRS.Models.LandViewModel
+
+@{
+    ViewBag.Title = "Edit Land";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-steam"></i>
+                Land
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditLand">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Edit Land</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Edit", "Land", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id="frmLand" }))
+                            {
+                                <header>
+                                    Land Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.LandID, htmlAttributes: new { @value = Model.LandID })
+                                @Html.HiddenFor(model => model.LandRIN, htmlAttributes: new { @value = Model.LandRIN })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+
+                                    <section>
+                                        @Html.LabelFor(model => model.LandRIN, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.LandRIN, htmlAttributes: new { @disabled="true", @readonly="true" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                 Auto numbering by system
+                                            </b>
+                                        </label>
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.PlotNumber, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.PlotNumber, htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Plot Number" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Plot Number
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.PlotNumber, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.StreetName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.StreetName, htmlAttributes: new { @tabindex = "3", @placeholder = "Enter Street Name" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter name of street which Land is located
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.StreetName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TownID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TownID, (SelectList)ViewBag.TownList, "Select Town", htmlAttributes: new { @tabindex = "5", @id = "cboTown", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TownID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LGAID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.LGAID, (SelectList)ViewBag.LGAList, "Select Local Government Area", htmlAttributes: new { @tabindex = "6", @id = "cboLGA", @class = "select2", @data_select_width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LGAID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.WardID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.WardID, (SelectList)ViewBag.WardList, "Select Ward", htmlAttributes: new { @tabindex = "7", @id = "cboWard", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.WardID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssetTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AssetTypeID, (SelectList)ViewBag.AssetTypeList, "Select Asset Type", htmlAttributes: new { @tabindex = "8", @class = "select2", @width = "100%", @disabled = "true" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssetTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LandSize_Length, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.LandSize_Length, htmlAttributes: new { @tabindex = "9", @placeholder = "Enter Land Size – Length (Sqm)" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Land Size – Length (Sqm)
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LandSize_Length, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LandSize_Width, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.LandSize_Width, htmlAttributes: new { @tabindex = "9", @placeholder = "Enter Land Size – Width (Sqm)" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Land Size – Width (Sqm)
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LandSize_Width, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.C_OF_O_Ref, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.C_OF_O_Ref, htmlAttributes: new { @tabindex = "9", @placeholder = "Enter C_OF_O_Ref" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter C_OF_O_Ref
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.C_OF_O_Ref, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LandPurposeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.LandPurposeID, (SelectList)ViewBag.LandPurposeList, "Select Land Purpose", htmlAttributes: new { @tabindex = "11", @class = "select2", @width = "100%", @id= "cboLandPurpose" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LandPurposeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LandFunctionID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.LandFunctionID, (SelectList)ViewBag.LandFunctionList, "Select Land Function", htmlAttributes: new { @tabindex = "11", @class = "select2", @width = "100%", @id = "cboLandFunction" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LandFunctionID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LandOwnershipID, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.LandOwnershipID, (SelectList)ViewBag.LandOwnershipList, "Select Land Ownership", htmlAttributes: new { @tabindex = "13", @class = "select2", @width = "100%" })
+                                        </label>
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LandDevelopmentID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.LandDevelopmentID, (SelectList)ViewBag.LandDevelopmentList, "Select Land Development", htmlAttributes: new { @tabindex = "11", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LandDevelopmentID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Latitude, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.Latitude, htmlAttributes: new { @tabindex = "16", @placeholder = "Enter Latitude" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter geo latitude
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.Latitude, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Longitude, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.Longitude, htmlAttributes: new { @tabindex = "17", @placeholder = "Enter Longitude" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter geo longitude
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.Longitude, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LandStreetConditionID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.LandStreetConditionID, (SelectList)ViewBag.LandStreetConditionList, "Select Street Condition", htmlAttributes: new { @tabindex = "11", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LandStreetConditionID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.ValueOfLand, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.ValueOfLand, htmlAttributes: new { @tabindex = "17", @placeholder = "Enter Value of Land" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter value of land
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.ValueOfLand, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Neighborhood, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.Neighborhood, htmlAttributes: new { @tabindex = "17", @placeholder = "Enter Neighborhood" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Neighborhood
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.Neighborhood, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "label" })
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @tabindex = "18" })
+                                            <i></i> Active
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnSubmit" class="btn btn-primary" tabindex="19">
+                                        Submit
+                                    </a>
+                                    <a href="@Url.Action("List","Land")" class="btn btn-default" tabindex="20">
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script Completion="text/javascript" src="~/Scripts/jsLandDetails.js"></script>
+    }

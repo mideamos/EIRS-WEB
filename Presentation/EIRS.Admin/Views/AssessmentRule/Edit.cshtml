@@ -1,0 +1,388 @@
+﻿@model EIRS.Models.AssessmentRuleViewModel
+@using EIRS.BOL
+
+@{
+    ViewBag.Title = "Edit Assessment Rule";
+    IList<AssessmentRule_Profile> lstAssessmentRuleProfile = (IList<AssessmentRule_Profile>)ViewBag.AssessmentRuleProfileList;
+    IList<AssessmentRule_AssessmentItem> lstAssessmentRuleItem = (IList<AssessmentRule_AssessmentItem>)ViewBag.AssessmentRuleItemList;
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Assessment Rule
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6" id="artAssessmentRule">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditAssessmentRule">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Edit Assessment Rule</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Edit", "AssessmentRule", FormMethod.Post, htmlAttributes: new { @id = "frmMainAssessment", @class = "smart-form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.AssessmentRuleID, htmlAttributes: new { @value = Model.AssessmentRuleID, @id= "hdnAssessmentRuleID" })
+                                @Html.HiddenFor(model => model.AssessmentRuleCode, htmlAttributes: new { @value = Model.AssessmentRuleCode })
+                                @Html.Hidden("hdnAssessmentItemIds", "")
+                                <header id="hdStep1">
+                                    Assessment Rule Details
+                                </header>
+                                <header id="hdStep2">
+                                    Record Links
+                                </header>
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset id="fsStep1">
+                                    <section>
+                                        @Html.LabelFor(model => model.AssessmentRuleCode, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.AssessmentRuleCode, htmlAttributes: new { @disabled = "true", @readonly = "true" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Auto numbering by system
+                                            </b>
+                                        </label>
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssessmentRuleName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.AssessmentRuleName, htmlAttributes: new { @tabindex = "1", @placeholder = "Enter assessment rule name" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter assessment rule name
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssessmentRuleName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.RuleRunID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.RuleRunID, (SelectList)ViewBag.RuleRunList, "Select Rule Run", htmlAttributes: new { @tabindex = "2", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.RuleRunID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.PaymentFrequencyID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.PaymentFrequencyID, (SelectList)ViewBag.PaymentFrequencyList, "Select Frequency", htmlAttributes: new { @tabindex = "3", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.PaymentFrequencyID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxYear, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TaxYear, (SelectList)ViewBag.YearList, "Select Tax Year", htmlAttributes: new { @tabindex = "4", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxYear, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.SettlementMethodIds, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.SettlementMethodIds, (SelectList)ViewBag.SettlementMethodList, htmlAttributes: new { @placeholder = "Select Settlement Method", @id = "cboSettlementMethod", @tabindex = "5", @class = "select2", @width = "100%", @multiple = "multiple", @data_initvalue = (Model != null && Model.SettlementMethodIds != null ? string.Join(",", Model.SettlementMethodIds) : "") })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.SettlementMethodIds, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.PaymentOptionID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.PaymentOptionID, (SelectList)ViewBag.PaymentOptionList, "Select Payment Options", htmlAttributes: new { @tabindex = "6", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.PaymentOptionID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "label" })
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @tabindex = "10" })
+                                            <i></i> Active
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <fieldset id="fsStep2">
+                                    <section class="dd">
+                                        <ol class="dd-list">
+                                            <li class="dd-item">
+                                                <div class="dd-handle" id="ddliProfile">
+                                                    <i class="fa fa-chevron-right"></i> <a id="aAssessmentRuleProfile">Assessment Rule Profile  - <span id="spnARPRecordCount">@SessionManager.lstAssessmentRuleProfile.Count()</span> Values</a>
+                                                </div>
+                                                <span class="help-block field-validation-error hide" id="AssessmentRuleProfile-error">Select Assessment Rule Profile</span>
+                                            </li>
+                                            <li class="dd-item">
+                                                <div class="dd-handle" id="ddliAssessmentItem">
+                                                    <i class="fa fa-chevron-right"></i> <a id="aAssessmentRuleItem">Assessment Rule Items - <span id="spnARIRecordCount">@SessionManager.lstAssessmentRuleItem.Count()</span> Values</a>
+                                                </div>
+                                                <span class="help-block field-validation-error hide" id="AssessmentRuleItem-error">Select Assessment Rule Items</span>
+                                            </li>
+                                        </ol>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" class="btn btn-primary" id="btnSave">
+                                        Submit
+                                    </button>
+                                    <a id="btnNext" class="btn btn-primary">Next</a>
+                                    <a id="btnBack" class="btn btn-default">
+                                        Back
+                                    </a>
+                                    <a id="btnMainBack" href="@Url.Action("List","Assessment")" class="btn btn-default">
+                                        Cancel
+                                    </a>
+                                </footer>
+                            }
+                            <div class="smart-form" id="dvAssessmentRuleProfileList">
+                                <header>
+                                    Record Link - Assessment Rule Profile
+                                    <button id="btnARPAdd" class="btn btn-primary pull-right">
+                                        Edit New Record
+                                    </button>
+                                </header>
+
+                                <fieldset>
+                                    <table id="tbAssessmentRuleProfile" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Profile Reference No</th>
+                                                <th>Asset Type</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyAssessmentRuleProfileList">
+                                            @{Html.RenderPartial("_BindAssessmentRuleProfile", lstAssessmentRuleProfile);}
+                                        </tbody>
+                                    </table>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnARPBack" class="btn btn-primary">
+                                        Next
+                                    </a>
+                                    <a href="@Url.Action("List", "AssessmentRule")" class="btn btn-default">
+                                        Back
+                                    </a>
+                                </footer>
+                            </div>
+                            <div class="smart-form" id="dvARAddProfile">
+                                <header>
+                                    Profile List
+                                    <button id="btnBackProfile" class="btn btn-default pull-right">
+                                        Back
+                                    </button>
+
+                                </header>
+                                <fieldset>
+                                    <table id="tbProfile" class="table table-striped table-bordered" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Profile Reference No" id="txtProfileReferenceNo" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Asset Type" id="txtAssetType" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Profile Sector" id="txtProfileSector" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Profile Sub Sector" id="txtProfileSubSector" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Profile Group" id="txtProfileGroup" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Profile Sub Group" id="txtProfileSubGroup" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Sector Element" id="txtProfileSectorElement" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Sector Sub Element" id="txtProfileSectorSubElement" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Profile Attribute" id="txtProfileAttribute" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Profile Sub Attribute" id="txtProfileSubAttribute" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Tax Payer Type" id="txtTaxPayerType" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Tax Payer Role" id="txtTaxPayerRole" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Profile Description" id="txtProfileDescription" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Status" id="txtStatus" />
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+                                                <th data-class="expand">Profile Reference No</th>
+                                                <th>Asset Type</th>
+                                                <th>Profile Sector</th>
+                                                <th>Profile Sub Sector</th>
+                                                <th>Profile Group</th>
+                                                <th>Profile Sub Group</th>
+                                                <th>Sector Element</th>
+                                                <th>Sector Sub Element</th>
+                                                <th>Profile Attribute</th>
+                                                <th>Profile Sub Attribute</th>
+                                                <th>Tax Payer Type</th>
+                                                <th>Tax Payer Role</th>
+                                                <th>Profile Description</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="smart-form" id="dvAssessmentRuleItemList">
+                                <header>
+                                    Record Link - Assessment Rule Items
+                                    <button id="btnARIAdd" class="btn btn-primary pull-right">
+                                        Edit New Record
+                                    </button>
+                                </header>
+
+                                <fieldset>
+                                    <table id="tbAssessmentRuleItem" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Assessment Item </th>
+                                                <th>Item Name</th>
+                                                <th>Tax Amount</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyAssessmentRuleItemList">
+                                            @{Html.RenderPartial("_BindAssessmentRuleItem", lstAssessmentRuleItem);}
+                                        </tbody>
+                                    </table>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnARIBack" class="btn btn-primary">
+                                        Next
+                                    </a>
+                                    <a href="@Url.Action("List", "AssessmentRule")" class="btn btn-default">
+                                        Back
+                                    </a>
+                                </footer>
+                            </div>
+                            <div class="smart-form" id="dvARAddAssessmentItem">
+                                <header>
+                                    Assessment Items List
+                                    <button id="btnAddAssessmentItems" class="btn btn-primary pull-right">
+                                        Save
+                                    </button>
+                                    <button id="btnBackAssessmentItems" class="btn btn-default pull-right margin-right-5">
+                                        Back
+                                    </button>
+                                </header>
+                                <fieldset>
+                                    <table id="tbAssessmentItem" class="table table-striped table-bordered" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Assessment Item Reference No" id="txtAssessmentItemRefNo" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Asset Type " id="txtAssetTypeName" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Assessment Group" id="txtAssessmentGroupName" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Assessment Sub Group" id="txtAssessmentSubGroupName" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Revenue Stream" id="txtRevenueStreamName" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Revenue Sub Stream " id="txtRevenueSubStreamName" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Assessment Item Category" id="txtItemCategory" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Assessment Item Sub Category " id="txtItemSubCategory" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Revenue Agency " id="txtAgencyName" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Assessment Item Name " id="txtAssessmentItemName" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Computation " id="txtComputationName" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Tax Base Amount " id="txtTaxBaseAmount" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Percentage " id="txtPercentage" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Tax Amount " id="txtTaxAmount" />
+                                                </th>
+                                                <th class="hasinput">
+                                                    <input type="text" class="form-control" placeholder="Filter Status" id="txtStatus" />
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+                                                <th data-class="expand">Assessment Item Reference No</th>
+                                                <th>Asset Type</th>
+                                                <th>Assessment Group</th>
+                                                <th>Assessment Sub Group</th>
+                                                <th>Revenue Stream</th>
+                                                <th>Revenue Sub Stream</th>
+                                                <th>Assessment Item Category</th>
+                                                <th>Assessment Item Sub Category</th>
+                                                <th>Revenue Agency</th>
+                                                <th>Assessment Item Name</th>
+                                                <th>Computation</th>
+                                                <th>Tax Base Amount</th>
+                                                <th>Percentage</th>
+                                                <th>Tax Amount</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@{ Html.RenderPartial("_ProfileDetailPopup"); Html.RenderPartial("_AssessmentItemDetailPopup"); }
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsAssessmentRuleDetails.js"></script>
+}

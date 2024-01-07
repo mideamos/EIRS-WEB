@@ -1,0 +1,55 @@
+﻿@model IList<Settlement_ASBItem>
+@using EIRS.Common
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th> Rule / Service Name </th>
+            <th>Item Name</th>
+            <th>Payment Status</th>
+            <th>Amount</th>
+            <th>Settle Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ASBName</td>
+                <td>@item.ItemName</td>
+                <td>@item.PaymentStatusName</td>
+                <td>@item.TaxAmount.ToString("N2")</td>
+                <td>@item.ToSettleAmount.ToString("N2")</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            &nbsp;&nbsp; Actions
+                            <span class="caret"></span>&nbsp;&nbsp;
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            @if ((item.PaymentStatusID == (int)EnumList.PaymentStatus.Due || item.PaymentStatusID == (int)EnumList.PaymentStatus.Partial) && item.TaxAmount > 0)
+                            {
+                                <li>
+                                    <a onclick="javascript:jsfn_EditSettlementAmount(@item.RowID,@item.UnSettledAmount,@item.ToSettleAmount)">
+                                        Edit Amount
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td align="right" colspan="3"><b>Total</b></td>
+            <td>@Model.Sum(t => t.TaxAmount).ToString("N2")</td>
+            <td>@Model.Sum(t => t.ToSettleAmount).ToString("N2")</td>
+            <td>
+                
+            </td>
+        </tr>
+    </tfoot>
+</table>

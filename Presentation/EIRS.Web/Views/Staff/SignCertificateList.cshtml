@@ -1,0 +1,41 @@
+﻿@using EIRS.Common
+@{
+    ViewBag.Title = "My Operations - Sign Certificate";
+}
+
+
+<div class="title">
+    <h1>
+        My Operations - Sign Certificate
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Sign Certificate</div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblCertificate">
+            <thead class="red-th">
+                <tr>
+                    <th>Certificate Number</th>
+                    <th>Certificate Type</th>
+                    <th>Tax Year</th>
+                    <th>Tax Payer Name</th>
+                    <th class="none">RIN</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsStaffSignCertificateList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+

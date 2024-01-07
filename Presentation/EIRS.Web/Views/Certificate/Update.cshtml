@@ -1,0 +1,279 @@
+﻿@model EIRS.Web.Models.UpdateCertificateViewModel
+@using EIRS.Common
+@{
+    ViewBag.Title = "Operation Manager - Update Certificate Details";
+    usp_GetCertificateDetails_Result mObjCertificateDetails = (usp_GetCertificateDetails_Result)ViewBag.CertificateDetails;
+    IList<usp_GetCertificateFieldList_Result> lstCertificateField = (IList<usp_GetCertificateFieldList_Result>)ViewBag.CertificateFieldList;
+    IList<usp_GetAssessmentRuleInformationForCertificate_Result> lstAssessmentRuleInformation = (IList<usp_GetAssessmentRuleInformationForCertificate_Result>)ViewBag.AssessmentRuleInformationList;
+    IList<usp_GetCertificateItemList_Result> lstCertificateItem = (IList<usp_GetCertificateItemList_Result>)ViewBag.CertificateItemList;
+    int intTabIndex = 0;
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Update Certificate Details
+    </h1>
+    <hr>
+</div>
+
+@using (Html.BeginForm("Update", "Certificate", FormMethod.Post, htmlAttributes: new { @id = "frmGenerateTCC" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.CertificateID, htmlAttributes: new { @value = Model.CertificateID })
+
+    if(ViewBag.Message != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Message
+        </div>
+    }
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">
+                Certificate Details
+            </div>
+            <div class="actions">
+                <a href="@Url.Action("List", "Certificate")" class="btn btn-theme">Cancel</a>
+            </div>
+        </div>
+        <div class="row view-form">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Certificate Type: </label>
+                    <div class="form-control-static">
+                        @mObjCertificateDetails.CertificateTypeName
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Certificate Number : </label>
+                    <div class="form-control-static">
+                        @mObjCertificateDetails.CertificateNumber
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Profile: </label>
+                    <div class="form-control-static">
+                        @mObjCertificateDetails.ProfileDescription
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Status: </label>
+                    <div class="form-control-static">
+                        @mObjCertificateDetails.CertificateStatusName
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Tax Payer Type: </label>
+                    <div class="form-control-static">
+                        @mObjCertificateDetails.TaxPayerTypeName
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Tax Payer: </label>
+                    <div class="form-control-static">
+                        @mObjCertificateDetails.TaxPayerName (@mObjCertificateDetails.TaxPayerRIN)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Asset Type: </label>
+                    <div class="form-control-static">
+                        @mObjCertificateDetails.AssetTypeName
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Asset: </label>
+                    <div class="form-control-static">
+                        @mObjCertificateDetails.AssetName
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Custom Fields</div>
+
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                @foreach (var item in lstCertificateField)
+                {
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label @(item.IsRequired.GetValueOrDefault() ? "required-star" : "")">@item.FieldName</label>
+                            @if (item.FieldTypeID == (int)EnumList.FieldType.Text)
+                            {
+                                if (item.IsRequired.GetValueOrDefault())
+                                {
+                                    @Html.TextBox("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), item.FieldValue, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control", @placeholder = "Enter " + item.FieldName, @data_val_required = "Enter " + item.FieldName, @type = "text", @data_val = "true" })
+                                    @Html.ValidationMessage("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), new { @class = "red-text" })
+                                }
+                                else
+                                {
+                                    @Html.TextBox("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), item.FieldValue, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control", @placeholder = "Enter " + item.FieldName, @type = "text" })
+                                }
+                            }
+                            else if (item.FieldTypeID == (int)EnumList.FieldType.Number)
+                            {
+                                if (item.IsRequired.GetValueOrDefault())
+                                {
+                                    @Html.TextBox("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), item.FieldValue, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control", @placeholder = "Enter " + item.FieldName, @data_val_required = "Enter " + item.FieldName, @type = "text", @data_val = "true" })
+                                    @Html.ValidationMessage("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), new { @class = "red-text" })
+                                }
+                                else
+                                {
+                                    @Html.TextBox("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), item.FieldValue, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control", @placeholder = "Enter " + item.FieldName, @type = "text" })
+                                }
+                            }
+                            else if (item.FieldTypeID == (int)EnumList.FieldType.Date)
+                            {
+                                if (item.IsRequired.GetValueOrDefault())
+                                {
+                                    @Html.TextBox("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), item.FieldValue, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control datepicker", @placeholder = "Enter " + item.FieldName, @data_val_required = "Enter " + item.FieldName, @type = "text", @data_val = "true" })
+                                    @Html.ValidationMessage("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), new { @class = "red-text" })
+                                }
+                                else
+                                {
+                                    @Html.TextBox("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), item.FieldValue, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control", @placeholder = "Enter " + item.FieldName, @type = "text" })
+                                }
+                            }
+                            else if (item.FieldTypeID == (int)EnumList.FieldType.Combo)
+                            {
+                                if (item.IsRequired.GetValueOrDefault())
+                                {
+                                    @Html.DropDownList("cbo_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), new SelectList(item.FieldComboValue.Split(new char[] { 'ψ' }), item.FieldValue), "Select " + item.FieldName, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control bs-select", @data_val_required = "Enter " + item.FieldName, @data_val = "true" })
+                                    @Html.ValidationMessage("cbo_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), new { @class = "red-text" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownList("cbo_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), new SelectList(item.FieldComboValue.Split(new char[] { 'ψ' }), item.FieldValue), "Select " + item.FieldName, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control bs-select" })
+                                }
+                            }
+                            else if (item.FieldTypeID == (int)EnumList.FieldType.Memo)
+                            {
+                                if (item.IsRequired.GetValueOrDefault())
+                                {
+                                    @Html.TextArea("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), item.FieldValue, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control", @placeholder = "Enter " + item.FieldName, @data_val_required = "Enter " + item.FieldName, @type = "text", @data_val = "true", @Rows = "5" })
+                                    @Html.ValidationMessage("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), new { @class = "red-text" })
+                                }
+                                else
+                                {
+                                    @Html.TextArea("txt_" + item.CTFID + "_" + item.FieldName.ToSeoUrl(), item.FieldValue, htmlAttributes: new { @tabindex = ++intTabIndex, @class = "form-control", @placeholder = "Enter " + item.FieldName, @type = "text", @Rows = "5" })
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Associated Rules</div>
+        </div>
+        <div class="portlet-body">
+            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblRuleServices">
+                <thead class="red-th">
+                    <tr>
+                        <th>Tax Year</th>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Billed Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var vRule in lstAssessmentRuleInformation)
+                    {
+                        <tr>
+                            <td>@vRule.TaxYear</td>
+                            <td>@vRule.AssessmentRuleName</td>
+                            <td>@CommUtil.GetFormatedCurrency(vRule.AssessmentAmount)</td>
+                            <td>@CommUtil.GetFormatedCurrency(vRule.BilledAmount)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Certificate Items</div>
+
+        </div>
+        <div class="portlet-body">
+            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblCertificateItem">
+                <thead class="purple-th">
+                    <tr>
+                        <th>Type</th>
+                        <th>Certificate Item</th>
+                        <th>Billed</th>
+                        <th>Payment</th>
+                        <th>Outstanding</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (lstCertificateItem.Any())
+                    {
+                        foreach (var item in lstCertificateItem)
+                        {
+                            <tr>
+                                <td>@item.ItemTypeName</td>
+                                <td>@item.CertificateItemName</td>
+                                <td>@CommUtil.GetFormatedCurrency(item.BilledAmount)</td>
+                                <td>@CommUtil.GetFormatedCurrency(item.PaidAmount)</td>
+                                <td>@CommUtil.GetFormatedCurrency(item.OustandingAmount)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Update Certificate</div>
+
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Notes, htmlAttributes: new { @class = "form-control", @tabindex = "5", @Rows = "6", @placeholder = "Enter Notes" })
+                        @Html.ValidationMessageFor(model => model.Notes, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OtherInformation, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.OtherInformation, htmlAttributes: new { @class = "form-control", @tabindex = "5", @Rows = "6", @placeholder = "Enter Other Information" })
+                        @Html.ValidationMessageFor(model => model.OtherInformation, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-footer text-right">
+            <button type="submit" class="btn btn-theme" tabindex="4" value="Save" name="btnAction">
+                Save
+            </button>
+            <button type="submit" class="btn btn-theme" tabindex="4" value="Submit" name="btnAction">
+                Generate
+            </button>
+        </div>
+    </div>
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsUpdateCertificate.js?v=@GlobalDefaultValues.VersionNumber"></script>
+}

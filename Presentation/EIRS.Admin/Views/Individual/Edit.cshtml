@@ -1,0 +1,269 @@
+﻿@model EIRS.Models.IndividualViewModel
+
+@{
+    ViewBag.Title = "Edit Individual";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-child"></i>
+                Individual
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditIndividual">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Edit Individual</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Edit", "Individual", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id = "frmIndividual" }))
+                            {
+                                <header>
+                                    Individual Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.IndividualID, htmlAttributes: new { @value = Model.IndividualID })
+                                @Html.HiddenFor(model => model.IndividualRIN, htmlAttributes: new { @value = Model.IndividualRIN })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.IndividualRIN, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.IndividualRIN, htmlAttributes: new { @disabled = "true", @readonly = "true" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Auto numbering by system
+                                            </b>
+                                        </label>
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.GenderID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.GenderID, (SelectList)ViewBag.GenderList, "Select Gender", htmlAttributes: new { @tabindex = "1", @id = "cboGender", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.GenderID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TitleID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TitleID, (SelectList)ViewBag.TitleList, "Select Title", htmlAttributes: new { @tabindex = "2", @id = "cboTitle", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TitleID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.FirstName, htmlAttributes: new { @tabindex = "3", @placeholder = "Enter Individual's first name" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Individual's first name
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.FirstName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.LastName, htmlAttributes: new { @tabindex = "4", @placeholder = "Enter Individual's last name" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Individual's last name
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LastName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.MiddleName, htmlAttributes: new { @tabindex = "5", @placeholder = "Enter Individual's middle name" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Individual's middle name
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.MiddleName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        <label class="label required">Date of Birth</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.DOB, htmlAttributes: new { @tabindex = "6", @data_mask = "99/99/9999", @data_mask_placeholder = "DD/MM/YYYY", @placeholder= "DD/MM/YYYY" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Individuals date of birth
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.DOB, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TIN, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.TIN, htmlAttributes: new { @tabindex = "7", @placeholder = "Enter individuals’ tax identification number from JTB if available" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter individuals’ tax identification number from JTB if available
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TIN, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.MobileNumber1, htmlAttributes: new { @class = "label required" })
+                                        <div class="input-group">
+                                            <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                                            <label class="input">
+                                                <i class="icon-append fa fa-question-circle"></i>
+                                                @Html.TextBoxFor(model => model.MobileNumber1, htmlAttributes: new { @tabindex = "8", @placeholder = "Enter mobile phone number of individual" })
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-warning txt-color-teal"></i>
+                                                    Enter mobile phone number of individual
+                                                </b>
+                                            </label>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.MobileNumber1, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.MobileNumber2, htmlAttributes: new { @class = "label" })
+                                        <div class="input-group">
+                                            <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                                            <label class="input">
+                                                <i class="icon-append fa fa-question-circle"></i>
+                                                @Html.TextBoxFor(model => model.MobileNumber2, htmlAttributes: new { @tabindex = "9", @placeholder = "Enter alternative mobile phone number of individual" })
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-warning txt-color-teal"></i>
+                                                    Enter alternative mobile phone number of individual
+                                                </b>
+                                            </label>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.MobileNumber2, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.EmailAddress1, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.EmailAddress1, htmlAttributes: new { @tabindex = "10", @placeholder = "Enter individual email address" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter individual email address
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.EmailAddress1, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.EmailAddress2, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.EmailAddress2, htmlAttributes: new { @tabindex = "11", @placeholder = "Enter individual alternative email address" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter individual alternative email address
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.EmailAddress2, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.BiometricDetails, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.BiometricDetails, htmlAttributes: new { @tabindex = "12", @placeholder = "Enter Biometric Details" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Individual's Biometric Details if available
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.BiometricDetails, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxOfficeID, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TaxOfficeID, (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", htmlAttributes: new { @tabindex = "13", @id = "cboTaxOffice", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxOfficeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.MaritalStatusID, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.MaritalStatusID, (SelectList)ViewBag.MaritalStatusList, "Select Marital Status", htmlAttributes: new { @tabindex = "14", @id = "cboMaritalStatus", @class = "select2", @data_select_width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.MaritalStatusID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.NationalityID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.NationalityID, (SelectList)ViewBag.NationalityList, "Select Nationality", htmlAttributes: new { @tabindex = "15", @id = "cboNationality", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.NationalityID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", htmlAttributes: new { @tabindex = "16", @class = "select2", @id = "cboTaxPayerTypeID", @width = "100%", @disabled = "true" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxPayerTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.EconomicActivitiesID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.EconomicActivitiesID, (SelectList)ViewBag.EconomicActivitiesList, "Select Economic Activities", htmlAttributes: new { @tabindex = "17", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.EconomicActivitiesID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.NotificationMethodID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.NotificationMethodID, (SelectList)ViewBag.NotificationMethodList, "Select Notification Method", htmlAttributes: new { @tabindex = "18", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.NotificationMethodID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "label" })
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @tabindex = "18" })
+                                            <i></i> Active
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnSubmit" class="btn btn-primary" tabindex="19">
+                                        Submit
+                                    </a>
+                                    <a href="@Url.Action("List","Individual")" class="btn btn-default" tabindex="20">
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsIndividualDetails.js"></script>
+}

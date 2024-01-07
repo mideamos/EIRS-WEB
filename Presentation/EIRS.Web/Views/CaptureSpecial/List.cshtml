@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Special Tax Payer";
+}
+
+<div class="title">
+    <h1>Special Tax Payer</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Special Tax Payers
+        </div>
+        <div class="actions">
+            
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblSpecial">
+            <thead class="red-th">
+                <tr>
+                    <th>RIN</th>
+                    <th>Special Name</th>
+                    <th>TIN</th>
+                    <th class="desktop">Contact Name</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{Html.RenderPartial("_SpecialDetailPopup"); }
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsSpecialList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

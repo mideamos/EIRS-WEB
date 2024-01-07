@@ -1,0 +1,61 @@
+﻿@model EIRS.BOL.MST_Pages
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.PageTitle;
+    ViewBag.MetaTitle = Model.MetaTitle;
+    ViewBag.MetaKeywords = Model.MetaKeywords;
+    ViewBag.MetaDescription = Model.MetaDescription;
+    ViewBag.MenuID = 1;
+
+    IList<EIRS.BOL.usp_GetMenuList_Result> lstMenuData = (IList<EIRS.BOL.usp_GetMenuList_Result>)ViewBag.MenuList;
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                @Model.PageHeader
+            </h1>
+            <hr>
+            <p>
+                @Model.ShortDesc
+            </p>
+        </div>
+
+        <div class="row custom-tabs">
+            <div class="col-sm-3">
+                <div class="portlet light compressed-menu">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            About
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <ul class="nav">
+                            @if (lstMenuData != null && lstMenuData.Count > 0)
+                            {
+                                foreach (var item in lstMenuData)
+                                {
+                                    <li>
+                                        <a href="@item.GeneratedMenu"><i class="fa fa-angle-right"></i>  @item.MenuName</a>
+                                    </li>
+
+                                }
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="portlet light">
+                    <div class="portlet-body text-justify">
+                        @Html.Raw(Model.PageContent)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

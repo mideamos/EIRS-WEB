@@ -1,0 +1,127 @@
+﻿@model EIRS.BOL.usp_GetPaymentAccountList_Result
+@using EIRS.Common
+@using EIRS.BOL
+
+@{
+    ViewBag.Title = "Payment Account Details";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Payment Account Details
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvPaymentAccountDetails">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
+                        <h2>Payment Account</h2>
+                    </header>
+                    <div class="content">
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-horizontal">
+                                <fieldset>
+                                    <legend>Payment Account Details</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Payment Ref No</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.PaymentRefNo
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Payment Date</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @CommUtil.GetFormatedDate(Model.PaymentDate)
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Tax Payer Type Name</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TaxPayerTypeName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Tax Payer Name</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TaxPayerName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Tax Payer RIN</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TaxPayerRIN
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static"> Amount</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @CommUtil.GetFormatedCurrency(Model.Amount)
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Revenue Stream</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.RevenueStreamName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Revenue Sub Stream</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.RevenueSubStreamName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Agency Name</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.AgencyName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Settlement Status</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.SettlementStatusName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Notes</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.Notes
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Transaction Ref No</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.TransactionReferenceNo
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-default" href="@Url.Action("List","PaymentAccount")">
+                                                Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,116 @@
+﻿@*@model IList < Request_IncomeStream >
+    //@using EIRS.Common
+
+    //<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblIncomeStream">
+    //    <thead class="red-th">
+    //        <tr>
+    //            <th> Tax Year </th>
+    //            <th data-hide="phone,tablet"> Role </th>
+    //            <th data-hide="phone,tablet"> Business Name </th>
+    //            <th data-hide="phone,tablet"> LGA </th>
+    //            <th data-hide="phone,tablet"> Income Amount </th>
+    //            <th class="action-th all">Action</th>
+    //        </tr>
+    //    </thead>
+
+    //    <tbody>
+    //        @if (Model != null && Model.Count() > 0)
+    //        {
+    //            foreach (var item in Model)
+    //            {
+    //                <tr>
+    //                    <td>@item.TaxYear</td>
+    //                    <td>@item.TaxPayerRoleName</td>
+    //                    <td>@item.BusinessName</td>
+    //                    <td>@item.LGAName</td>
+    //                    <td>@CommUtil.GetFormatedCurrency(@item.TotalIncomeEarned)</td>
+    //                    <td>
+    //                        <div class="btn-group">
+    //                            <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    //                                Action <span class="caret"></span>
+    //                            </button>
+    //                            <ul class="dropdown-menu">
+    //                                <li>
+    //                                    <a onclick="jsfn_EditIncomeStream(@item.RowID)">Edit</a>
+    //                                </li>
+    //                                <li>
+    //                                    <a onclick="jsfn_DeleteIncomeStream(@item.RowID)">Remove</a>
+    //                                </li>
+    //                            </ul>
+    //                        </div>
+    //                    </td>
+    //                </tr>
+    //            }
+    //        }
+    //    </tbody>
+
+    //    <tfoot>
+    //        <tr>
+    //            <td>Total</td>
+    //            <td></td>
+    //            <td></td>
+    //            <td></td>
+    //            <td>@CommUtil.GetFormatedCurrency(Model.Sum(t => t.TotalIncomeEarned))</td>
+    //            <td></td>
+    //        </tr>
+    //    </tfoot>
+    //</table>*@
+
+
+
+
+@model IList<Request_IncomeStream>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblIncomeStream">
+    <thead class="red-th">
+        <tr>
+            <th> Tax Year </th>
+            <th data-hide="phone,tablet"> Role </th>
+            <th data-hide="phone,tablet"> Business Name </th>
+            <th data-hide="phone,tablet"> LGA </th>
+            <th data-hide="phone,tablet"> Income Amount </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TaxYear</td>
+                    <td>@item.TaxPayerRoleName</td>
+                    <td>@item.BusinessName</td>
+                    <td>@item.LGAName</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.TotalIncomeEarned)</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a onclick="jsfn_EditIncomeStream(@item.RowID)">Edit</a>
+                                </li>
+                                <li>
+                                    <a onclick="jsfn_DeleteIncomeStream(@item.RowID)">Remove</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>Total</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>@CommUtil.GetFormatedCurrency(Model.Sum(t => t.TotalIncomeEarned))</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>

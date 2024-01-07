@@ -1,0 +1,139 @@
+﻿@model EIRS.Web.Models.ClaimBusinessViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "ClaimBusiness";
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Data Profiler
+            </h1>
+            <hr>
+            <p>
+                You will need to be authenticated before you can claim this business. Below displays the mobile number we have on file - kindly review if this is correct and click on "Generate OTP"; otherwise, kindly edit the number as accurate and click on "Generate OTP". You will then receive a 6 digit code via SMS which needs to be entered below
+            </p>
+        </div>
+
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    Step 2: Validate Tax Payer
+                </div>
+                <adiv class="actions">
+
+                </adiv>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @using (Html.BeginForm("ClaimBusiness", "CBS", FormMethod.Post, new { @class = "form-horizontal" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+
+                            @Html.HiddenFor(m => m.BusinessID, new { @value = Model.BusinessID })
+                            @Html.HiddenFor(m => m.BusinessName, new { @value = Model.BusinessName })
+
+                            if (ViewBag.Message != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @ViewBag.Message
+                                </div>
+                            }
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.BusinessName, new { @class = "control-label col-sm-4" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(m => m.BusinessName, new { @readonly = "true", @tabindex = "1", @placeholder = "Enter Business Name", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.MobileNumber, new { @class = "control-label col-sm-4" })
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                                        @if (ViewBag.MessageSent)
+                                        {
+
+                                            @Html.TextBoxFor(m => m.MobileNumber, new { @readonly = "true", @tabindex = "2", @placeholder = "Enter Mobile Number", @class = "form-control" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.MobileNumber, new { @tabindex = "2", @placeholder = "Enter Mobile Number", @class = "form-control" })
+                                        }
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.MobileNumber, "", htmlAttributes: new { @class = "help-block" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ContactPersonName, new { @class = "control-label col-sm-4" })
+                                <div class="col-sm-8">
+                                    @if (ViewBag.MessageSent)
+                                    {
+                                        @Html.TextBoxFor(m => m.ContactPersonName, new { @readonly = "true", @tabindex = "3", @placeholder = "Enter Contact Number", @class = "form-control" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.ContactPersonName, new { @tabindex = "3", @placeholder = "Enter Contact Number", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ContactPersonName, "", htmlAttributes: new { @class = "help-block" })
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group text-right">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-theme">Generate OTP</button>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+                    <div class="col-sm-2"></div>
+                    @if (ViewBag.MessageSent)
+                    {
+                        <div class="col-sm-4">
+                            <h4 class="redheader">
+                                Enter OTP Sent
+                            </h4>
+
+                            @using (Html.BeginForm("ValidateOTP", "CBS", FormMethod.Post, new { @id = "frmValidateOTP" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+
+                                @Html.HiddenFor(m => m.BusinessID, new { @value = Model.BusinessID })
+                                @Html.HiddenFor(m => m.BusinessName, new { @value = Model.BusinessName })
+                                @Html.HiddenFor(m => m.ContactPersonName, new { @value = Model.ContactPersonName })
+                                @Html.HiddenFor(m => m.MobileNumber, new { @value = Model.MobileNumber })
+
+
+                                if (ViewBag.OTPMessage != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    @Html.TextBox("txtOTP", "", new { @class = "form-control", @tabindex = "1", @placeholder = "Enter OTP", @maxlength = "10", @id = "txtOTP", @name = "txtOTP", @required = "required" })
+                                </div>
+                                <div class="form-group text-right">
+                                    <button type="submit" class="btn btn-theme">Validate</button>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsClaimBusiness.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

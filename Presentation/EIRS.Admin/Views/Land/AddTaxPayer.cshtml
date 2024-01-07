@@ -1,0 +1,98 @@
+﻿@model EIRS.Models.TaxPayerAssetViewModel
+
+@{
+    ViewBag.Title = "Add Tax Payers";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-th-list"></i>
+                Link New Tax Payer for @Model.AssetName
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6" id="artLandTaxPayer">
+                <div class="jarviswidget jarviswidget-color-green" id="dvAddLandTaxPayer">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Add Tax Payer</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("AddTaxPayer", "Land", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id = "frmTaxPayer" }))
+                            {
+
+                                <header>
+                                    Tax Payer Details
+                                    <button id="btnSave" class="btn btn-primary pull-right">
+                                        Save
+                                    </button>
+                                    <button id="btnBack" class="btn btn-default pull-right margin-right-5">
+                                        Back
+                                    </button>
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(m => m.AssetID, new { @value = Model.AssetID, @id = "hdnAssetID" })
+                                @Html.HiddenFor(m => m.AssetRIN, new { @value = Model.AssetRIN })
+                                @Html.HiddenFor(m => m.AssetTypeID, new { @value = Model.AssetTypeID, @id= "hdnAssetType" })
+                                @Html.HiddenFor(m => m.TaxPayerIds, new { @id = "hdnTaxPayerIds" })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset id="fsStep1">
+                                    <section>
+                                        @Html.LabelFor(model => model.AssetTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AssetTypeID, (SelectList)ViewBag.AssetTypeList, "Select Asset Type", htmlAttributes: new { @tabindex = "1", @class = "select2", @width = "100%", @disabled = "true" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssetTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", htmlAttributes: new { @tabindex = "2", @class = "select2", @width = "100%", @id = "cboTaxPayerType" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxPayerTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxPayerRoleID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TaxPayerRoleID, (SelectList)ViewBag.TaxPayerRoleList, "Select Tax Payer Role", htmlAttributes: new { @tabindex = "3", @class = "select2", @width = "100%", @id = "cboTaxPayerRole" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxPayerRoleID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                </fieldset>
+                                <fieldset id="fsStep2"></fieldset>
+                                <footer id="dvFooter">
+                                    <a id="btnNext" class="btn btn-primary">Next</a>
+                                    <a id="btnMainBack" href="@Url.Action("TaxPayerList", "Land", new { id = Model.AssetID, name = Model.AssetRIN })" class="btn btn-default">
+                                        Cancel
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer{
+    <script type="text/javascript" src="~/Scripts/jsLandTaxPayerDetails.js"></script>
+}

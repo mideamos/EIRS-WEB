@@ -1,0 +1,35 @@
+﻿@model IList<EIRS.BOL.usp_GetBuildingList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.BuildingRIN</td>
+            <td>@item.BuildingTagNumber</td>
+            <td>@item.BuildingName</td>
+            <td>@item.BuildingNumber</td>
+            <td>@item.StreetName</td>
+            <td>@item.OffStreetName</td>
+            <td>@item.TownName</td>
+            <td>@item.LGAName</td>
+            <td>@item.WardName</td>
+            <td>@item.BuildingTypeName</td>
+            <td>@item.BuildingCompletionName</td>
+            <td>@item.BuildingPurposeName</td>
+            <td>@item.BuildingOwnershipName</td>
+            <td>@item.NoOfUnits</td>
+            <td>@item.BuildingSize_Length</td>
+            <td>@item.BuildingSize_Width</td>
+            <td>@item.Latitude</td>
+            <td>@item.Longitude</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <a onclick="javascript:jsfn_AddTaxOfficeAddress(@item.BuildingID,'@item.BuildingRIN','@item.BuildingName')">
+                    Select Building
+                </a>
+            </td>
+        </tr>
+    }
+}

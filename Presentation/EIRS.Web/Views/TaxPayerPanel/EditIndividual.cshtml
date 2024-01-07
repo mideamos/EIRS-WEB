@@ -1,0 +1,54 @@
+﻿@model EIRS.Models.IndividualViewModel
+
+@{
+    Layout = "~/Views/Shared/_TaxPayerLayout.cshtml";
+    ViewBag.Title = "Edit Individual Details";
+}
+
+<div class="title">
+    <h1>
+        Individual Tax Payer
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Update Individual
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("IndividualDetails","TaxPayerPanel")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("EditIndividual", "TaxPayerPanel", FormMethod.Post, htmlAttributes: new { @id = "frmAddIndividual" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.IndividualID, htmlAttributes: new { @value = Model.IndividualID })
+            @Html.HiddenFor(model => model.IndividualRIN, htmlAttributes: new { @value = Model.IndividualRIN })
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            Html.RenderPartial("_BindIndividualForm", Model);
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="20" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsAddEditIndividual.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

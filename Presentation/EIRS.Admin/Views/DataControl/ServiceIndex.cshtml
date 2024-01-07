@@ -1,0 +1,86 @@
+﻿
+@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<EIRS.Admin.Models.ServiceBillAndItemRollOver>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "ServiceIndex";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-lg fa-fw fa-life-saver"></i>
+            Start Roll-Over
+        </h1>
+    </div>
+    <div class="col-xs-12 col-sm-5 text-right">
+
+        <a href="@Url.Action("ServiceBillRollOverStep1","DataControl")" class="btn btn-default">STEP 1 </a>
+    </div>
+</div>
+
+@using (Html.BeginForm("ServiceIndex", "DataControl", FormMethod.Get))
+{
+    <p>
+        Find by MDA SERVICE NAME: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().TaxYear)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().ServiceAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().MDAServiceCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().MDAServiceName)
+        </th>
+        @*<th>
+                @Html.ActionLink("AssessmentItemName", "Index", new { sortOrder = ViewBag.NameSortParm })
+            </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().ServiceBaseAmount)
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxYear)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceAmount)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.MDAServiceCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MDAServiceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceBaseAmount)
+            </td>
+
+        </tr>
+    }
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ServiceIndex",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

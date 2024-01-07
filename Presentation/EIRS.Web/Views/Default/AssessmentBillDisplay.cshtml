@@ -1,0 +1,389 @@
+﻿@using EIRS.BOL
+@using EIRS.Common
+@model usp_GetAssessmentList_Result
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Bill Display";
+    ViewBag.MenuID = 7;
+
+    IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = (IList<usp_GetAssessment_AssessmentRuleList_Result>)ViewBag.MAPAssessmentRules;
+    IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = (IList<usp_GetAssessmentRuleItemList_Result>)ViewBag.AssessmentItems;
+    IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = (IList<usp_GetAssessmentRuleBasedSettlement_Result>)ViewBag.AssessmentRuleSettlement;
+    IList<usp_GetSettlementList_Result> lstSettlement = (IList<usp_GetSettlementList_Result>)ViewBag.SettlementList;
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>Revenue Services Hub - Retrieve Bill Search & Display</h1>
+            <hr>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+
+                <div class="module-search">
+                    @using (Html.BeginForm("SearchBill", "Default", FormMethod.Post))
+                    {
+                        <div class="search-input-wrap">
+                            <input type="submit" value="Search" class="btn btn-theme" autocomplete="off">
+                            <div class="input-box">
+                                <input autocomplete="off" required id="txtReferenceNumber" name="txtReferenceNumber" placeholder="Enter 10 Digit Reference ID" type="text" value="">
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Reference: @Model.AssessmentRefNo &nbsp; | &nbsp; Status: @Model.SettlementStatusName
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="list-pane" id="dvRequestList">
+                            @foreach (var item in lstMAPAssessmentRules)
+                            {
+                                <div class="list-item clearfix">
+                                    <div class="col-sm-9 list-left-col">
+                                        <h3>@item.AssessmentRuleName <a data-toggle="modal" data-target="#dvViewAssessmentRuleModal_@item.AARID">[View Items]</a> </h3>
+                                        <div class="desc-row">
+                                            Amount Charged: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount) <br />
+                                            Amount Paid: @CommUtil.GetFormatedCurrency(item.SettledAmount) <a data-toggle="modal" data-target="#dvViewPaymentModal_@item.AARID">[View Payments]</a> <br />
+                                            Outstanding: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault()) <br />
+                                            Tax Year: @item.TaxYear
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 list-right-col">
+                                        <h4>Amount to Pay</h4>
+                                        <div class="count">
+                                            <div class="counter-number">@CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault())</div>
+                                            @if (item.AssessmentRuleAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault() > 0)
+                                            {
+                                                <a class="btn btn-theme btn-icon-only btnRequester" id="btnEdit" data-toggle="modal" data-target="#dvEditAmountModal_@item.AARID">
+                                                    <i class="icon-plus"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a disabled class="btn btn-theme btn-icon-only btnRequester" id="btnEdit" data-toggle="modal">
+                                                    <i class="icon-plus"></i>
+                                                </a>
+                                            }
+                                            <div class="small-font-info">
+                                                Click on plus(+) to edit amount to pay
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade custom-modal" id="dvViewAssessmentRuleModal_@item.AARID" tabindex="-1" role="dialog" aria-labelledby="dvViewAssessmentRuleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="dvViewAssessmentRuleModalLabel">View Items in @item.AssessmentRuleName</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered table-striped ">
+                                                    <thead class="thead-theme">
+                                                        <tr>
+                                                            <th>Item Ref</th>
+                                                            <th>Item Name</th>
+                                                            <th>Computation</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (lstAssessmentItems.Where(t => t.AARID == item.AARID).Count() > 0)
+                                                        {
+                                                            foreach (var aitem in lstAssessmentItems.Where(t => t.AARID == item.AARID))
+                                                            {
+                                                                <tr>
+                                                                    <td>@aitem.AssessmentItemReferenceNo</td>
+                                                                    <td>@aitem.AssessmentItemName</td>
+                                                                    <td>@aitem.ComputationName</td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td colspan="3">No Item Found</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade custom-modal" id="dvEditAmountModal_@item.AARID" tabindex="-1" role="dialog" aria-labelledby="dvEditAmountModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="dvEditAmountModalLabel">Edit Amount to Pay against @item.AssessmentRuleName</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered table-striped ">
+                                                    <thead class="thead-theme">
+                                                        <tr>
+                                                            <th>Item Ref</th>
+                                                            <th>Item Name</th>
+                                                            <th>Outstanding</th>
+                                                            <th>Amount to Pay</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (lstAssessmentItems.Where(t => t.AARID == item.AARID).Count() > 0)
+                                                        {
+                                                            foreach (var aitem in lstAssessmentItems.Where(t => t.AARID == item.AARID))
+                                                            {
+                                                                <tr>
+                                                                    <td>@aitem.AssessmentItemReferenceNo</td>
+                                                                    <td>@aitem.AssessmentItemName</td>
+                                                                    <td>@aitem.PendingAmount</td>
+                                                                    <td>
+                                                                        <input type="text" name="txtToPayAmount" class="form-control" data-maxamount="@aitem.PendingAmount" value="@aitem.PendingAmount" />
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td colspan="4">No Item Found</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-theme" data-modalId="@item.AARID" name="btnSaveAmount">Save changes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade custom-modal" id="dvViewPaymentModal_@item.AARID" tabindex="-1" role="dialog" aria-labelledby="dvViewPaymentModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="dvViewPaymentModalLabel">View Payments for @item.AssessmentRuleName</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered table-striped ">
+                                                    <thead class="thead-theme">
+                                                        <tr>
+                                                            <th>Payment Ref</th>
+                                                            <th>Payment Date</th>
+                                                            <th>Amount Paid</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (lstAssessmentRuleSettlement != null && lstAssessmentRuleSettlement.Where(t => t.AARID == item.AARID).Count() > 0)
+                                                        {
+                                                            foreach (var aitem in lstAssessmentRuleSettlement.Where(t => t.AARID == item.AARID))
+                                                            {
+                                                                <tr>
+                                                                    <td>@aitem.SettlementRefNo</td>
+                                                                    <td>@CommUtil.GetFormatedDate(aitem.SettlementDate)</td>
+                                                                    <td>@CommUtil.GetFormatedCurrency(aitem.SettlementAmount)</td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td colspan="3">No Payment Found</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+                            <div class="row info-row">
+                                <div class="col-sm-6">
+                                    Total Amount
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount)
+                                </div>
+                            </div>
+                            <hr class="margin-0" />
+                            <div class="row info-row">
+                                <div class="col-sm-6">
+                                    Total Paid <a data-toggle="modal" data-target="#dvViewSettlementModal">[View Payments]</a>
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    @CommUtil.GetFormatedCurrency(Model.SettlementAmount)
+                                </div>
+                            </div>
+                            <hr class="margin-0" />
+                            <div class="row info-row">
+                                <div class="col-sm-6">
+                                    Outstanding
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount.GetValueOrDefault() - Model.SettlementAmount.GetValueOrDefault())
+                                </div>
+                            </div>
+                            <hr class="margin-0" />
+                            <div class="row info-row font-red font-17">
+                                <div class="col-sm-6">
+                                    Amount to Pay
+                                </div>
+                                <div class="col-sm-6 text-right" id="dvAmountToPay">
+                                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount.GetValueOrDefault() - Model.SettlementAmount.GetValueOrDefault())
+                                </div>
+                            </div>
+
+                            @if (Model.SettlementStatusID < (int)EnumList.SettlementStatus.Settled)
+                            {
+                                <hr class="margin-top-0" />
+
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Settlement Method*</label>
+                                        <div class="col-sm-8">
+                                            @Html.DropDownList("cboSettlementMethod", (SelectList)ViewBag.SettlementMethodList, "Select Settlement Method", htmlAttributes: new { @tabindex = "2", @class = "form-control bs-select", @width = "100%" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Add Notes</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4"></label>
+                                        <div class="col-sm-8">
+                                            <a class="btn btn-theme btn-block"> Make Payment </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 left-bar">
+                <div class="portlet light">
+                    <div class="portlet-body link-box">
+                        <h4>Record Details</h4>
+
+                        <table class="table">
+                            <tr>
+                                <td>Template Type</td>
+                                <td>Assessment</td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td>@CommUtil.GetFormatedDate(Model.AssessmentDate)</td>
+                            </tr>
+                            <tr>
+                                <td>Tax Payer Type</td>
+                                <td>@Model.TaxPayerTypeName</td>
+                            </tr>
+                            <tr>
+                                <td>Tax Payer Name</td>
+                                <td>@Model.TaxPayerName</td>
+                            </tr>
+                            <tr>
+                                <td>Settlement Status</td>
+                                <td>@Model.SettlementStatusName</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+
+                <div class="portlet light">
+                    <div class="portlet-body link-box">
+                        <h4>Notes</h4>
+
+                        <p>@Model.AssessmentNotes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade custom-modal" id="dvViewSettlementModal" tabindex="-1" role="dialog" aria-labelledby="dvViewSettlementModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewSettlementModalLabel">View Payments for @Model.AssessmentRefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Payment Ref</th>
+                            <th>Payment Date</th>
+                            <th>Amount Paid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstSettlement != null && lstSettlement.Count() > 0)
+                        {
+                            foreach (var sitem in lstSettlement)
+                            {
+                                <tr>
+                                    <td>@sitem.SettlementRefNo</td>
+                                    <td>@CommUtil.GetFormatedDate(sitem.SettlementDate)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(sitem.SettlementAmount)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">No Payment Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="dvMessageBox" tabindex="-1" role="dialog" aria-labelledby="dvMessageBoxLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvMessageBoxLabel">Alert</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="dvMessage">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsBillDisplay.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

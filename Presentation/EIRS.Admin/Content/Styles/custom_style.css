@@ -1,0 +1,322 @@
+﻿/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+.padding-top-0 {
+    padding-top: 0 !important;
+}
+
+.padding-top-5 {
+    padding-top: 5px !important;
+}
+
+.padding-bottom-0 {
+    padding-bottom: 0 !important;
+}
+
+.padding-bottom-5 {
+    padding-bottom: 5px !important;
+}
+
+.padding-left-5 {
+    padding-left: 5px !important;
+}
+
+.padding-left-10 {
+    padding-left: 10px !important;
+}
+
+.padding-right-5 {
+    padding-right: 5px !important;
+}
+
+.padding-right-10 {
+    padding-right: 10px !important;
+}
+
+.margin-top-0 {
+    margin-top: 0 !important;
+}
+
+.margin-top-5 {
+    margin-top: 5px !important;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0 !important;
+}
+
+.margin-bottom-5 {
+    margin-bottom: 5px !important;
+}
+
+.margin-left-5 {
+    margin-left: 5px !important;
+}
+
+.margin-left-10 {
+    margin-left: 10px !important;
+}
+
+.margin-right-5 {
+    margin-right: 5px !important;
+}
+
+.margin-right-10 {
+    margin-right: 10px !important;
+}
+
+.margin-right-15 {
+    margin-right: 15px !important;
+}
+/*.smart-form {
+    .input {
+        input {
+            padding: 4px 10px !important;
+        }
+    }
+}*/
+/* SmartForm Bootstrap Validation */
+/*#extr-page h4.paragraph-header {
+    width: auto;
+}*/
+
+#extr-page .smart-form .alert {
+    margin: 4px;
+}
+
+    #extr-page .smart-form .alert li {
+        margin-left: 14px;
+        list-style: none;
+    }
+
+        #extr-page .smart-form .alert li:before {
+            content: "\f071";
+            font-family: FontAwesome;
+            position: absolute;
+            left: 14px;
+        }
+
+#extr-page .smart-form div + fieldset {
+    padding-top: 15px;
+}
+
+.login-info span {
+    padding: 0 17px;
+    line-height: 38px;
+    text-transform: capitalize;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #000;
+}
+
+.smart-style-3 #logo img {
+    padding-left: 7px;
+    margin-top: -7px;
+}
+
+.control-label-static {
+    font-weight: bold;
+}
+
+body {
+    min-height: 100vh;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+html > body:not(.menu-on-top).desktop-detected {
+    min-height: 100vh !important;
+}
+
+#main {
+    padding-bottom: 0 !important;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+html > body:not(.menu-on-top) #main {
+    min-height: calc( 100vh - 101px);
+}
+
+html > body.menu-on-top #main {
+    min-height: calc(100vh - 172px);
+}
+
+app-root, app-main-layout, app-auth-layout, app-locked, #extr-page {
+    min-height: 100vh;
+}
+
+sa-outlook,
+sa-maps,
+app-root,
+app-main-layout,
+app-auth-layout,
+app-locked,
+#inbox-content,
+#extr-page,
+#content,
+.sa-fx-col,
+sa-widgets-grid > #widgets-grid,
+sa-widget.sa-fx-col > .jarviswidget {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+#inbox-content {
+    position: relative;
+}
+
+html > body #inbox-content {
+    position: relative;
+}
+
+html > body:not(.menu-on-top) #inbox-content .sa-outlook-content {
+    min-height: calc( 100vh - (49px + 40px + 70px + 52px));
+    /* 49px header; 40px ribbon; 70px outlook header; 52px footer*/
+}
+
+html > body.menu-on-top #inbox-content .sa-outlook-content {
+    min-height: calc(100vh - (49px + 71px + 40px + 70px + 52px));
+    /* 49px header; 71px nav; 40px ribbon; 70px outlook header; 52px footer*/
+}
+
+
+
+sa-ribbon {
+    display: block;
+}
+
+.page-footer {
+    position: relative;
+}
+
+
+a:hover {
+    cursor: pointer;
+}
+
+
+#shortcut {
+    display: block;
+    overflow: hidden;
+}
+
+
+#map-canvas {
+    min-height: 300px;
+}
+
+.parent_li .sa-icon {
+    margin-left: 1rem;
+}
+
+
+.tab-container > .nav.nav-tabs {
+    display: none;
+}
+
+.inbox-body {
+    flex: 1;
+}
+
+
+
+
+.colorpicker.colorpicker-hidden {
+    display: none;
+}
+
+.colorpicker.colorpicker-visible {
+    display: block;
+}
+
+.colorpicker-inline.colorpicker-visible {
+    display: inline-block;
+}
+
+
+.ng-valid[required] {
+    /*border-left: 5px solid #42A948; !* green *!*/
+}
+
+.ng-invalid {
+    /*border-left: 5px solid #a94442; !* red *!*/
+}
+
+
+.tabbed-widget-content {
+    position: relative;
+}
+
+
+    .tabbed-widget-content .nav-tabs.pull-right > li > a {
+        padding: 6px 10px 6px;
+    }
+
+    .tabbed-widget-content .nav-tabs.pull-right {
+        position: relative;
+        top: -45px;
+        display: block;
+    }
+
+
+
+svg {
+    touch-action: none;
+}
+
+
+#calendar .fc-right, #calendar .fc-center {
+    display: none;
+}
+
+
+#sparks li h5 {
+    margin-top: -1px;
+}
+
+.select2-container-multi .select2-choices, .select2-selection--multiple {
+    border-color: transparent;
+}
+
+
+.ui-dialog .ui-dialog-titlebar-close .ui-icon-closethick {
+    display: none;
+}
+
+
+.sa-hidden {
+    opacity: 0;
+}
+
+.sa-cloak.sa-hidden {
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+.sa-cloak:not(.sa-hidden) {
+    opacity: 1;
+}
+
+.select2-hidden-accessible {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+.required::after {
+    content: ' *';
+    color: #a94442;
+    font-size: 14px;
+    font-weight: bold;
+}

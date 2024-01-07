@@ -1,0 +1,107 @@
+﻿@model EIRS.Web.Models.TCCDetailViewModel
+
+@{
+    ViewBag.Title = "Add New TCC Details";
+}
+
+@section header {
+    <link href="~/Content/Plugins/typeahead/typeahead.css" rel="stylesheet" />
+}
+
+<div class="title">
+    <h1>
+        TCC Details
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add New TCC Details
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Add", "TCCDetail", FormMethod.Post, htmlAttributes: new { @id = "frmTCCDetail" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(m => m.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", new { @class = "form-control bs-select", @tabindex = "1", @data_live_search = "true", @id = "cboTaxPayerType" })
+                        @Html.ValidationMessageFor(model => model.TaxPayerTypeID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.HiddenFor(model => model.TaxPayerID, new { @id = "hdnTaxPayerID" })
+                        @Html.LabelFor(model => model.TaxPayerID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.TaxPayerName, "", new { @class = "form-control", @id = "txtTaxPayer", @autocomplete = "off", @placeholder = "Enter Tax Payer Name" })
+                        @Html.ValidationMessageFor(model => model.TaxPayerID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxYear, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(m => m.TaxYear, (SelectList)ViewBag.YearList, "Select Tax Year", new { @class = "form-control bs-select", @tabindex = "3", @data_live_search = "true", @id = "cboTaxYear" })
+                        @Html.ValidationMessageFor(model => model.TaxYear, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AssessableIncome, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.AssessableIncome, htmlAttributes: new { @tabindex = "4", @placeholder = "Enter Assessable Income", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AssessableIncome, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TCCTaxPaid, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.TCCTaxPaid, htmlAttributes: new { @tabindex = "5", @placeholder = "Enter TCC Tax Paid", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TCCTaxPaid, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ERASTaxPaid, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.ERASTaxPaid, htmlAttributes: new { @tabindex = "6", @placeholder = "Enter ERAS Tax Paid", @class = "form-control", @readonly = "true", @id= "txtERASTaxPaid" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ERASAssessed, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.ERASAssessed, htmlAttributes: new { @tabindex = "6", @placeholder = "Enter ERAS Assessed", @class = "form-control", @readonly = "true", @id = "txtERASAssessed" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="5" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Footer {
+    <script src="~/Content/Plugins/typeahead/handlebars.min.js"></script>
+    <script src="~/Content/Plugins/typeahead/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jsAddTCCDetails.js"></script>
+}

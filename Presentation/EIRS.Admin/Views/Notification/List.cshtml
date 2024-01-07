@@ -1,0 +1,91 @@
+
+@{
+    ViewBag.Title = "Notification List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Notification
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data- id="dvNotificationList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Notification List </h2>
+                        <div class="widget-toolbar">
+                            
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbNotification" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Notification Ref No" id="txtNotificationRefNo" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Notification Date" id="txtNotificationDate" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Notification Method" id="txtNotificationMethodName" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Notification Type" id="txtNotificationTypeName" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Event Ref No" id="txtEventRefNo" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Tax Payer Type" id="txtTaxPayerTypeName" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Tax Payer" id="txtTaxPayerName" />
+                                        </th>
+                                        @*<th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Status" id="txtNotificationStatus" />
+                                        </th>*@
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Status" id="txtStatus" />
+                                        </th>
+                                        <th style="width:25%"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Notification Ref No</th>
+                                        <th>Notification Date</th>
+                                        <th>Notification Method</th>
+                                        <th>Notification Type</th>
+                                        <th>Event Ref No</th>
+                                        <th>Tax Payer Type</th>
+                                        <th>Tax Payer</th>
+                                        @*<th>NotificationStatus</th>*@
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                           
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsNotificationList.js"></script>
+}
+

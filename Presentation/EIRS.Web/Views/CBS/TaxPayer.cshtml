@@ -1,0 +1,143 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "TaxPayer";
+}
+
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Data Profiler
+            </h1>
+            <hr>
+            <p>
+                We have dumped all the business data to allow for accurate cleansing and profiling. Where you find duplicates, just select the one that best matches your business and click on proceed. Kindly use the search button below to begin
+            </p>
+        </div>
+
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    Step 4: Tax Payer Information
+                </div>
+                <adiv class="actions">
+                    <a href="@Url.Action("Home", "CBS")" class="">Return to CBS Home</a>
+                </adiv>
+            </div>
+            <div class="portlet-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="pull-left">
+                            <h4 class="redheader margin-0">Tax Payer Information</h4>
+                        </div>
+                        <div class="pull-right">
+                            <a href="@Url.Action("ViewBusinessDetail", "CBS")" class="">Back</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h4 class="redheader">Tax Payer Information</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    Tax Payer Type
+                                </td>
+                                <td>Payer Type</td>
+                            </tr>
+                            <tr>
+                                <td>Tax Payer Name</td>
+                                <td>Payer Name</td>
+                            </tr>
+                            <tr>
+                                <td>Tax Payer Number</td>
+                                <td>Payer Number</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 class="redheader">Business Information</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    Asset Type
+                                </td>
+                                <td>Asset</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 class="redheader">
+                            Derived Profile Information (Assessments Only)
+                        </h4>
+
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    Profile Description
+                                </td>
+                                <td>Profile</td>
+                            </tr>
+                            <tr>
+                                <td>Asset Type</td>
+                                <td>Asset</td>
+                            </tr>
+                            <tr>
+                                <td>Profile Sector</td>
+                                <td>Profile</td>
+                            </tr>
+                            <tr>
+                                <td>Profile Sub Sector</td>
+                                <td>Profile</td>
+                            </tr>
+                            <tr>
+                                <td>Profile Group</td>
+                                <td>Profile</td>
+                            </tr>
+                            <tr>
+                                <td>Profile Sub Group</td>
+                                <td>Profile</td>
+                            </tr>
+                            <tr>
+                                <td>Sector Element</td>
+                                <td>Sector</td>
+                            </tr>
+                            <tr>
+                                <td>Sector Sub Elements</td>
+                                <td>Sector</td>
+                            </tr>
+                            <tr>
+                                <td>Attribute</td>
+                                <td>Attribute</td>
+                            </tr>
+                            <tr>
+                                <td>Sub Attributes</td>
+                                <td>Attribute</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-footer">
+                <div class="text-right">
+                    <button class="btn btn-theme">
+                        Generate Assessment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

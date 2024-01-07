@@ -1,0 +1,43 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - Tax Payer Monthly Payments - Transaction List";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Tax Payer Monthly Payments - Transaction List
+    </h1>
+    <hr>
+</div>
+
+<input type="hidden" id="hdnTaxPayerTypeID" value="@ViewBag.TaxPayerTypeID" />
+<input type="hidden" id="hdnTaxPayerID" value="@ViewBag.TaxPayerID" />
+<input type="hidden" id="hdnTaxYear" value="@ViewBag.TaxYear" />
+<input type="hidden" id="hdnTaxMonth" value="@ViewBag.TaxMonth" />
+<input type="hidden" id="hdnRevenueStreamID" value="@ViewBag.RevenueStreamID" />
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Transaction List</div>
+        <div class="text-right">
+            <a href="@Url.Action("TaxPayerMonthlyPayment","OperationManager")" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+            <a href="@Url.Action("TaxPayerMonthlyPaymentDetailExportToExcel","OperationManager",new { TaxPayerTypeID=ViewBag.TaxPayerTypeID,TaxPayerID=ViewBag.TaxPayerID,Year= ViewBag.TaxYear,Month= ViewBag.TaxMonth,RevenueStreamID =ViewBag.RevenueStreamID})" class="btn btn-theme">Export To Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTransactionList">
+            <thead class="red-th">
+                <tr>
+                    <th>Payment Date</th>
+                    <th>Payment Type</th>
+                    <th>Ref No</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerMonthlyPaymentDetail.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

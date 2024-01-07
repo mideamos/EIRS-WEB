@@ -1,0 +1,192 @@
+﻿@model EIRS.Models.BuildingLandViewModel
+@using EIRS.BOL
+@{
+    ViewBag.Title = "Add Land Information";
+    IList<usp_GetLandList_Result> lstLand = (IList<usp_GetLandList_Result>)ViewBag.LandList;
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-th-list"></i>
+                New Land Information for @Model.BuildingName
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12" id="artBuildingLand">
+                <div class="jarviswidget jarviswidget-color-green" id="dvAddBuildingLand">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Add Land Information</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("AddLand", "Building", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id = "frmLand" }))
+                            {
+
+                                <header>
+                                    Land Details
+                                    <button id="btnSave" class="btn btn-primary pull-right">
+                                        Save
+                                    </button>
+                                    <button id="btnBack" href="@Url.Action("LandInformation", "Building", new { id = Model.BuildingID, name = Model.BuildingRIN })" class="btn btn-default pull-right margin-right-5">
+                                        Back
+                                    </button>
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(m => m.BuildingID, new { @value = Model.BuildingID, @id = "hdnBuildingId" })
+                                @Html.HiddenFor(m => m.BuildingRIN, new { @value = Model.BuildingRIN })
+                                @Html.HiddenFor(m => m.BuildingName, new { @value = Model.BuildingName })
+                                @Html.HiddenFor(m => m.LandID, new { @value = "0", @id = "hdnLandId" })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <table id="tbLand" class="table table-striped table-bordered" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Land RIN" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Plot Number" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Street Name" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Town" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter LGA" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Ward" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Land Size – Length (Sqm)" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Land Size – Width (Sqm)" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter C_OF_O_Ref" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Land Purpose" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Land Function" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Land Ownership" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Land Development" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Latitude" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Longitude" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Street Condition" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Value of Land" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Neighborhood" />
+                                                </th>
+                                                <th class="hasinput" style="width:10%">
+                                                    <input type="text" class="form-control" placeholder="Filter Status" />
+                                                </th>
+                                                <th style="width:10%"></th>
+                                            </tr>
+                                            <tr>
+                                                <th data-class="expand">Land RIN</th>
+                                                <th>Plot Number</th>
+                                                <th>Street Name</th>
+                                                <th>Town</th>
+                                                <th>LGA</th>
+                                                <th>Ward</th>
+                                                <th>Land Size – Length (Sqm) </th>
+                                                <th>Land Size – Width (Sqm) </th>
+                                                <th>C_OF_O_Ref</th>
+                                                <th>Land Purpose</th>
+                                                <th>Land Function</th>
+                                                <th>Land Ownership</th>
+                                                <th>Land Development</th>
+                                                <th>Latitutde</th>
+                                                <th>Longitude</th>
+                                                <th>Street Condition</th>
+                                                <th>Value of Land</th>
+                                                <th>Neighborhood</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+                                            @if (lstLand != null && lstLand.Count > 0)
+                                            {
+                                                foreach (var item in lstLand)
+                                                {
+                                                    <tr>
+                                                        <td>@item.LandRIN</td>
+                                                        <td>@item.PlotNumber</td>
+                                                        <td>@item.StreetName</td>
+                                                        <td>@item.TownName</td>
+                                                        <td>@item.LGAName</td>
+                                                        <td>@item.WardName</td>
+                                                        <td>@item.LandSize_Length</td>
+                                                        <td>@item.LandSize_Width</td>
+                                                        <td>@item.C_OF_O_Ref</td>
+                                                        <td>@item.LandPurposeName</td>
+                                                        <td>@item.LandFunctionName</td>
+                                                        <td>@item.LandOwnershipName</td>
+                                                        <td>@item.LandDevelopmentName</td>
+                                                        <td>@item.Latitude</td>
+                                                        <td>@item.Longitude</td>
+                                                        <td>@item.LandStreetConditionName</td>
+                                                        <td>@item.ValueOfLand.GetValueOrDefault().ToString("N2")</td>
+                                                        <td>@item.Neighborhood</td>
+                                                        <td>@item.ActiveText</td>
+                                                        <td>
+                                                            <label class="radio">
+                                                                @Html.RadioButton("rbLand", item.LandID, new { @onChange = "jsfn_SelectSingleLand(this)", @data_lndid = item.LandID, @title = "Tick To Select" })
+                                                                <i></i>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </fieldset>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer{
+    <script type="text/javascript" src="~/Scripts/jsBuildingLandDetails.js"></script>
+}

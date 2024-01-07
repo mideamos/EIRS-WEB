@@ -1,0 +1,42 @@
+﻿@model IList<EIRS.BOL.usp_GetBuildingUnitList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.UnitNumber</td>
+            <td>@item.UnitPurposeName</td>
+            <td>@item.UnitFunctionName</td>
+            <td>@item.UnitOccupancyName</td>
+            <td>@item.SizeName</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="@Url.Action("Details","BuildingUnit", new { id = item.BuildingUnitID, name=item.UnitNumber.ToSeoUrl()})">
+                                View Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Edit", "BuildingUnit", new { id = item.BuildingUnitID, name=item.UnitNumber.ToSeoUrl() })">
+                                Edit Details
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ChangeStatus(@item.BuildingUnitID)">
+                                Mark @(item.Active.GetValueOrDefault() ? "Inactive" : "Active")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}

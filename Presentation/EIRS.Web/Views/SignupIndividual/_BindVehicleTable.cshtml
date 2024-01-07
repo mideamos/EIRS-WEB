@@ -1,0 +1,48 @@
+﻿@model IList<EIRS.BOL.usp_GetVehicleList_Result>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblVehicleList">
+    <thead class="red-th">
+        <tr>
+            <th>RIN</th>
+            <th>Reg Number</th>
+            <th>Sub Type</th>
+            <th class="desktop">Purpose</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Count > 0)
+    {
+        <tbody>
+            @foreach (var vVehicle in Model)
+            {
+                <tr>
+                    <td>@vVehicle.VehicleRIN</td>
+                    <td>@vVehicle.VehicleRegNumber</td>
+                    <td>@vVehicle.VehicleSubTypeName</td>
+                    <td>@vVehicle.VehiclePurposeName</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a onclick="javascript:jsfn_VehicleDetails(@vVehicle.VehicleID)">
+                                        Quick View
+                                    </a>
+                                </li>
+                                <li>
+                                    <a onclick="javascript:jsfn_LinkVehicle(@vVehicle.VehicleID)">
+                                        Select
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>
+

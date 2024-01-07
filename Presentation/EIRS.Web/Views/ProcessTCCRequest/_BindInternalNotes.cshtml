@@ -1,0 +1,52 @@
+﻿<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Internal Notes</div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="mt-comments">
+            <div class="inbox-footer">
+                <div id="dvSNotes"></div>
+                <div class="mt-comment">
+                    <div class="mt-comment-img">
+                        <div class="profile-icon">@SessionManager.ContactName.Substring(0, 1)</div>
+                    </div>
+                    <div class="mt-comment-body">
+                        <textarea class="form-control" id="txtNotes"></textarea>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Upload Documents</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="tab_images_uploader_container" class="text-align-reverse">
+                                    <a id="tab_images_uploader_pickfiles" href="javascript:;" class="btn btn-secondary">
+                                        <i class="fa fa-plus"></i> Select Files
+                                    </a>
+                                    <a id="tab_images_uploader_uploadfiles" href="javascript:;" class="btn btn-primary hidden">
+                                        <i class="fa fa-share"></i> Upload Files
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div id="dvUDNotes"></div>
+                        <div class="form-group row">
+                            <div class="col-md-12" id="dvAttachmentDocument">
+
+                            </div>
+                        </div>
+
+
+                        <div class="text-right margin-top-10">
+                            <button class="btn btn-theme" onclick="jsfn_SendNotes();"> SEND </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

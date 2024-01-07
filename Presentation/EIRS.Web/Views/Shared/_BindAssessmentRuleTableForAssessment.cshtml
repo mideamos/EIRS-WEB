@@ -1,0 +1,31 @@
+﻿@using EIRS.Common
+@using EIRS.BOL
+@model IList<usp_GetAssessmentRuleForAssessment_Result>
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAssessmentRules">
+    <thead class="red-th">
+        <tr>
+            <th>Asset Type</th>
+            <th>Asset RIN</th>
+            <th>Rule Year</th>
+            <th>Rule Name</th>
+            <th>Rule Amount</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vRule in Model)
+        {
+            <tr>
+                <td>@vRule.AssetTypeName</td>
+                <td>@vRule.AssetRIN</td>
+                <td>@vRule.TaxYear</td>
+                <td>@vRule.AssessmentRuleName</td>
+                <td>@CommUtil.GetFormatedCurrency(vRule.AssessmentAmount)</td>
+                <td>
+                    @Html.CheckBox("chkARule_" + vRule.AssessmentRuleID, new { @class = "icheck", @data_checkbox = "icheckbox_square-green", @title = "Tick To Select" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

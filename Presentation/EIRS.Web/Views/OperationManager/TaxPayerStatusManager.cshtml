@@ -1,0 +1,65 @@
+﻿@model IList<EIRS.BOL.usp_RPT_GetTaxPayerStatusManager_Result>
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manger - Tax Payer Status Manager";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Tax Payer Status Manager
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Tax Payer Status</div>
+        <div class="form-actions text-right">
+            <a target="_blank" href="@Url.Action("TaxPayerStatusManagerExportToExcel","OperationManager")" class="btn btn-theme">Export To Excel</a>
+        </div>
+    </div>
+
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxPayerStatus">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Office</th>
+                    <th>Tax Payer Count</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.TaxOfficeName</td>
+                            <td>@item.TaxPayerCount</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="@Url.Action("TaxPayerStatusManagerTaxPayer","OperationManager",new { toid=item.TaxOfficeID})">View Details</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerStatusManager.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

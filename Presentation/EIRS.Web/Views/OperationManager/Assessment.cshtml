@@ -1,0 +1,63 @@
+﻿@model IEnumerable<EIRS.Web.GISModels.GISFileAssessment>
+
+@{
+    ViewBag.Title = "Assessment";
+}
+
+<h2> GIS FILE Assessment</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FileId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PageNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssessmentID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssessmentYear)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateSaved)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FileId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PageNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssessmentID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssessmentYear)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateSaved)
+        </td>
+        <td>
+            <div class="dropdown">
+                <a class="btn btn-primary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Actions
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="@Url.Action("GetAssessment","OperationManager", new {id=@item.Id })">View</a>
+                    </li>
+
+                </ul>
+
+            </div>
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,43 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - TCC : Monthly Revoked";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - TCC : Monthly Revoked - TCC Request List
+    </h1>
+    <hr>
+</div>
+
+<input type="hidden" id="hdnTaxYear" value="@ViewBag.TaxYear" />
+<input type="hidden" id="hdnTaxMonth" value="@ViewBag.TaxMonth" />
+<input type="hidden" id="hdnStatusID" value="@ViewBag.StatusID" />
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">TCC Request List</div>
+        <div class="text-right">
+            <a href="@Url.Action("TCCMonthlyRevoked","OperationManager")" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+            <a href="@Url.Action("TCCMonthlyRevokedDetailExportToExcel","OperationManager",new { TaxYear= ViewBag.TaxYear, TaxMonth=ViewBag.TaxMonth, StatusID =ViewBag.StatusID })" class="btn btn-theme">Export To Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblRequest">
+            <thead class="red-th">
+                <tr>
+                    <th>Request Ref</th>
+                    <th>Tax Payer Name</th>
+                    <th>RIN</th>
+                    <th>Mobile Number</th>
+                    <th>Request Date</th>
+                    <th>Request Status</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTCCMonthlyRevokedDetail.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

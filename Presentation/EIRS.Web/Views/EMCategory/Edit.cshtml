@@ -1,0 +1,63 @@
+﻿@model EIRS.Models.EMCategoryViewModel
+
+@{
+    ViewBag.Title = "Edit Classification Category";
+}
+
+<div class="title">
+    <h1>
+        Classification Categories
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Update Category
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","EMCategory")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Edit", "EMCategory", FormMethod.Post, htmlAttributes: new { @id = "frmAddCategory" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.CategoryID, htmlAttributes: new { @value = Model.CategoryID })
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.CategoryName, htmlAttributes: new { @class = "form-control", @tabindex = "1", @placeholder = "Enter Category Name" })
+                        @Html.ValidationMessageFor(model => model.CategoryName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label" })
+                        <br />
+                        @Html.CheckBoxFor(model => model.Active, new Dictionary<string, object> { { "data-checkbox", "icheckbox_square-green" }, { "class", "icheck" }, { "tabindex", "2" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="3" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

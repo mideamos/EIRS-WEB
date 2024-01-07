@@ -1,0 +1,46 @@
+﻿@model IList<EIRS.BOL.usp_GetProfileInformation_Result>
+@using EIRS.Common
+
+<table id="tbProfileInformation" class="table table-striped table-bordered" width="100%">
+    <thead>
+        <tr>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Profile Description" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Asset Type" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Asset RIN" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Asset Name" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Tax Payer Role" />
+            </th>
+        </tr>
+        <tr>
+            <th data-class="expand">Profile Description</th>
+            <th>Asset Type</th>
+            <th>Asset RIN</th>
+            <th>Asset Name</th>
+            <th>Tax Payer Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProfileDescription</td>
+                    <td>@item.AssetTypeName</td>
+                    <td>@item.AssetRIN</td>
+                    <td>@item.AssetName</td>
+                    <td>@item.TaxPayerRoleName</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

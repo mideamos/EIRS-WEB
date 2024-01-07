@@ -1,0 +1,65 @@
+@model EIRS.Models.AssessmentItemCategoryViewModel
+
+@{
+    ViewBag.Title = "Assessment Item Category Details";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Assessment Item Category
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvAssessmentItemCategoryDetails">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
+                        <h2>Assessment Item Category</h2>
+                    </header>
+                    <div class="content">
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-horizontal">
+                                <fieldset>
+                                    <legend>Assessment Item Category Details</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Assessment Item Category</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.AssessmentItemCategoryName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Status</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ActiveText
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-default" href="@Url.Action("List","AssessmentItemCategory")">
+                                                Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

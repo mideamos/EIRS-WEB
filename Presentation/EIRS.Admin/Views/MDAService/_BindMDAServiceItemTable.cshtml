@@ -1,0 +1,31 @@
+﻿@model IList<EIRS.BOL.usp_GetMDAServiceItemList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MDAServiceItemReferenceNo</td>
+            <td>@item.RevenueStreamName</td>
+            <td>@item.RevenueSubStreamName</td>
+            <td>@item.AssessmentItemCategoryName</td>
+            <td>@item.AssessmentItemSubCategoryName</td>
+            <td>@item.AgencyName</td>
+            <td>@item.MDAServiceItemName</td>
+            <td>@item.ComputationName</td>
+            <td>@item.ServiceBaseAmount.GetValueOrDefault().ToString("N2")</td>
+            <td>@item.Percentage.GetValueOrDefault().ToString("N2")</td>
+            <td>@item.ServiceAmount.GetValueOrDefault().ToString("N2")</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <label class="checkbox">
+                    @Html.CheckBox("chkMDAServiceItemChecked_" + item.MDAServiceItemID, new { @onChange = "jsfn_SelectMDAServiceItem(this)", @data_mdaserviceitemid = item.MDAServiceItemID, @title = "Tick To Select" })
+                     <i></i> 
+                </label>
+               
+            </td>
+        </tr>
+    }
+}
+

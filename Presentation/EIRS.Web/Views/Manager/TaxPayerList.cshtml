@@ -1,0 +1,55 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Manager - Allocated Tax Payers";
+}
+
+<div class="title">
+    <h1>
+        Manager - Allocated Tax Payers
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <input type="hidden" id="hdnTaxOfficerID" value="@ViewBag.TaxOfficerID" />
+    <div class="portlet-title">
+        <div class="caption">Allocated Tax Payers</div>
+        <div class="actions">
+            <a href="@Url.Action("TaxOfficerList","Manager")" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+        </div>
+    </div>
+
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxPayerList">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer RIN</th>
+                    <th class="none">Tax Payer Name</th>
+                    <th>Tax Payer Type </th>
+                    <th>Assessment</th>
+                    <th>Payment</th>
+                    <th>Outstanding</th>
+                    <th class="none">Review Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th id="thAssessmentTotal"></th>
+                    <th id="thPaymentTotal"></th>
+                    <th id="thOutstandingTotal"></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsManagerTaxPayerList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

@@ -1,0 +1,48 @@
+﻿@model IList<EIRS.BOL.usp_GetBusinessListNewTy_Result>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBusinessList">
+    <thead class="red-th">
+        <tr>
+            <th>RIN</th>
+            <th>Business Name</th>
+            <th>Address</th>
+            <th class="desktop">Sub Sector</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Count > 0)
+    {
+        <tbody>
+            @foreach (var vBusiness in Model)
+            {
+            <tr>
+                <td>@vBusiness.BusinessRIN</td>
+                <td>@vBusiness.BusinessName</td>
+                <td>@vBusiness.BusinessAddress</td>
+                <td>@vBusiness.BusinessSubSectorName</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a onclick="javascript:jsfn_BusinessInformation(@vBusiness.BusinessID)">
+                                    Quick View
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="javascript:jsfn_LinkAssetInformation(@vBusiness.BusinessID)">
+                                    Select
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    }
+</table>
+

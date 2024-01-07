@@ -1,0 +1,126 @@
+@model EIRS.Models.VehicleLicenseViewModel
+
+@{
+    ViewBag.Title = "Edit Vehicle License";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-taxi"></i>
+                Vehicle License
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditVehicleLicense">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Edit Vehicle License</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Edit", "VehicleLicense", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id="frmVehicleLicense" }))
+                            {
+                                <header>
+                                    Vehicle License Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.VehicleLicenseID, htmlAttributes: new { @value = Model.VehicleLicenseID })
+                                @Html.HiddenFor(model => model.LicenseStatusID, htmlAttributes: new { @value = Model.LicenseStatusID })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.VehicleID, (SelectList)ViewBag.VehicleList, "Select Vehicle", htmlAttributes: new { @tabindex = "1", @class = "select2", @width = "100%", @id = "cboVehicle" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LicenseNumber, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.LicenseNumber, htmlAttributes: new { @tabindex = "2", @placeholder = "Enter License Number" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter license number
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LicenseNumber, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        <label class="label required">Start Date</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.StartDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @tabindex = "3", @class = "form-control datepicker", @data_dateformat = "dd/mm/yy", @placeholder = "Enter Start Date" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Start Date
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.StartDate, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        <label class="label required">Expiry Date</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.ExpiryDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @tabindex = "4", @class = "form-control datepicker", @data_dateformat = "dd/mm/yy", @placeholder = "Enter Expiry Date" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Expiry Date
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.ExpiryDate, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleInsuranceID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.VehicleInsuranceID, (SelectList)ViewBag.VehicleInsuranceList, "Select Vehicle Insurance", htmlAttributes: new { @tabindex = "5", @class = "select2", @width = "100%", @id = "cboVehicleInsurance" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleInsuranceID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "label" })
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @tabindex = "10" })
+                                            <i></i> Active
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnSubmit" class="btn btn-primary">
+                                        Submit
+                                    </a>
+                                    <a href="@Url.Action("List","VehicleLicense")" class="btn btn-default" >
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsVehicleLicenseDetails.js"></script>
+    }

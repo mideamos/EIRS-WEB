@@ -1,0 +1,173 @@
+@model EIRS.Admin.Models.AssessmentItemViewModel
+
+@{
+    ViewBag.Title = "Add Assessment Item";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Assessment Item
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvAddAssessmentItem">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Add Assessment Item</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Add", "AssessmentItem", FormMethod.Post, htmlAttributes: new { @class = "smart-form" }))
+                            {
+                                <header>
+                                    Assessment Item Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssetTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AssetTypeID, (SelectList)ViewBag.AssetTypeList, "Select Asset Type", htmlAttributes: new { id = "cboAssetType", @tabindex = "1", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssetTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssessmentGroupID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AssessmentGroupID, (SelectList)ViewBag.AssessmentGroupList, "Select Assessment Group", htmlAttributes: new { id = "cboAssessmentGroup", @tabindex = "2", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssessmentGroupID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssessmentSubGroupID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AssessmentSubGroupID, (SelectList)ViewBag.AssessmentSubGroupList, "Select Assessment Sub Group", htmlAttributes: new { id = "cboAssessmentSubGroup", @tabindex = "3", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssessmentSubGroupID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.RevenueStreamID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.RevenueStreamID, (SelectList)ViewBag.RevenueStreamList, "Select Revenue Stream", htmlAttributes: new { id = "cboRevenueStream", @tabindex = "4", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.RevenueStreamID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.RevenueSubStreamID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.RevenueSubStreamID, (SelectList)ViewBag.RevenueSubStreamList, "Select Revenue Sub Stream", htmlAttributes: new { id = "cboRevenueSubStream", @tabindex = "5", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.RevenueSubStreamID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssessmentItemCategoryID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AssessmentItemCategoryID, (SelectList)ViewBag.AssessmentItemCategoryList, "Select Assessment Item Category", htmlAttributes: new { id = "cboAssessmentItemCategory", @tabindex = "6", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssessmentItemCategoryID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssessmentItemSubCategoryID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AssessmentItemSubCategoryID, (SelectList)ViewBag.AssessmentItemSubCategoryList, "Select Assessment Item Sub Category", htmlAttributes: new { id = "cboAssessmentItemSubCategory", @tabindex = "7", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssessmentItemSubCategoryID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AgencyID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AgencyID, (SelectList)ViewBag.AgencyList, "Select Agency", htmlAttributes: new { @tabindex = "8", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AgencyID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssessmentItemName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.AssessmentItemName, htmlAttributes: new { @tabindex = "9", @placeholder = "Enter Assessment Item" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Assessment Item
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssessmentItemName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.ComputationID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.ComputationID, (SelectList)ViewBag.ComputationList, "Select Computation", htmlAttributes: new { @id = "cboComputation", @tabindex = "10", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.ComputationID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxBaseAmount, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.TaxBaseAmount, htmlAttributes: new { @tabindex = "11", @id = "txtTaxBaseAmount", @placeholder = "Enter Tax Base Amount", @value="0.00" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Tax Base Amount
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxBaseAmount, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section id="scTaxPercentage">
+                                        @Html.LabelFor(model => model.Percentage, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.Percentage, htmlAttributes: new { @tabindex = "12", @placeholder = "Enter Percentage", @id = "txtPercentage" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Percentage
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxBaseAmount, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxAmount, htmlAttributes: new { @class = "label" })
+                                        <label class="input" id="lblTaxAmount">
+                                            0.00
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxAmount, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" class="btn btn-primary" tabindex="15">
+                                        Submit
+                                    </button>
+                                    <a href="@Url.Action("List","AssessmentItem")" class="btn btn-default">
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsAssessmentItemDetails.js"></script>
+}

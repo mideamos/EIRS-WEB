@@ -1,0 +1,543 @@
+﻿
+@model EIRS.Web.Models.ValidateTaxPayerIncomeViewModel
+@using EIRS.Common
+@{
+    ViewBag.Title = "Validate Tax Payer Income";
+    usp_GetTCCRequestDetails_Result mObjRequestData = (usp_GetTCCRequestDetails_Result)ViewBag.RequestData;
+
+    IList<PayeApiResponse> lstPayeIncomeStream = (IList<PayeApiResponse>)ViewBag.PAYEIncomeStreamList;
+    IList<Request_IncomeStream> lstIncomeStream = (IList<Request_IncomeStream>)ViewBag.IncomeStreamList;
+    IList<Request_TCCDetail> lstTCCDetail = (IList<Request_TCCDetail>)ViewBag.TCCDetailList;
+    IList<usp_GetTaxPayerAssetList_Result> lstAsset = (IList<usp_GetTaxPayerAssetList_Result>)ViewBag.AssetList;
+    IList<usp_GetTaxPayerAssetForTCC_Result> newlstAsset = (IList<usp_GetTaxPayerAssetForTCC_Result>)ViewBag.NewAssetList;
+    //IList<usp_GetTaxPayerProfileInformationForTCC_Result> lstProfileInformation = (IList<usp_GetTaxPayerProfileInformationForTCC_Result>)ViewBag.ProfileInformation;
+    IList<usp_GetProfileInformation_Result> lstProfileInformation = (IList<usp_GetProfileInformation_Result>)ViewBag.ProfileInformation;
+    IList<usp_GetAssessmentRuleInformationForTCC_Result> lstAssessmentRuleInformation = (IList<usp_GetAssessmentRuleInformationForTCC_Result>)ViewBag.AssessmentRuleInformation;
+
+    IList<usp_GetTaxPayerBillForTCC_Result> lstTaxPayerBill = (IList<usp_GetTaxPayerBillForTCC_Result>)ViewBag.TaxPayerBill;
+    IList<usp_GetTaxPayerPaymentForTCCNEW_Result> lstTaxPayerPayment = (IList<usp_GetTaxPayerPaymentForTCCNEW_Result>)ViewBag.TaxPayerPayment;
+    IList<usp_GetTaxPayerLiabilityForTCC_Result> lstTaxPayerLiability = (IList<usp_GetTaxPayerLiabilityForTCC_Result>)ViewBag.TaxPayerLiability;
+
+}
+
+<input type="hidden" id="hdnStageID" value="@((int)EnumList.TCCRequestStage.Validate_Tax_Payer_Income)" />
+
+<div class="title">
+    <h1>
+        TCC Request - Validate Tax Payer Income
+    </h1>
+    <hr>
+</div>
+
+@using (Html.BeginForm("ValidateTaxPayerIncome", "ProcessTCCRequest", FormMethod.Post, htmlAttributes: new { @id = "frmValidateTaxPayerIncome" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.VTPIncomeID, htmlAttributes: new { @value = Model.VTPIncomeID })
+    @Html.HiddenFor(model => model.TCCID, htmlAttributes: new { @value = Model.TCCID })
+    @Html.HiddenFor(model => model.RequestID, htmlAttributes: new { @value = Model.RequestID, @id = "hdnRequestID" })
+    @Html.HiddenFor(model => model.TaxPayerID, htmlAttributes: new { @value = Model.TaxPayerID, id = "hdnTaxPayerID" })
+    @Html.HiddenFor(model => model.TaxPayerTypeID, htmlAttributes: new { @value = Model.TaxPayerTypeID, @id = "hdnTaxPayerTypeID" })
+
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Message
+        </div>
+    }
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">
+                Request Information
+            </div>
+            <div class="actions">
+                <a href="@Url.Action("Details", "ProcessTCCRequest", new { reqId = Model.RequestID })" class="btn btn-theme btn-outline">
+                    Cancel
+                </a>
+            </div>
+        </div>
+        <div class="row view-form">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Request Ref No: </label>
+                    <div class="form-control-static">
+                        @mObjRequestData.RequestRefNo
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Request Date: </label>
+                    <div class="form-control-static">
+                        @CommUtil.GetFormatedDate(mObjRequestData.RequestDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Tax Year: </label>
+                    <div class="form-control-static">
+                        @mObjRequestData.TaxYear
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Tax Payer Name: </label>
+                    <div class="form-control-static">
+                        @mObjRequestData.FirstName @mObjRequestData.LastName
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Tax Payer EIN: </label>
+                    <div class="form-control-static">
+                        @mObjRequestData.IndividualRIN
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label bold">Mobile Number: </label>
+                    <div class="form-control-static">
+                        @mObjRequestData.MobileNumber1
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Associated Assets</div>
+            <div class="actions">
+
+            </div>
+        </div>
+        <div class="portlet-body">
+
+            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAssetList">
+                <thead class="red-th">
+                    <tr>
+                        <th>Asset Type</th>
+                        <th>Asset Name</th>
+                        <th>Tax Payer Role</th>
+                        <th class="action-th all">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var vAsset in lstAsset)
+                    {
+                        <tr>
+                            <td>@vAsset.AssetTypeName</td>
+                            <td>@vAsset.AssetName</td>
+                            <td>@vAsset.TaxPayerRoleName</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a onclick="javascript:jsfn_ShowAssetDetails(@vAsset.TPAID)">Quick View</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+   
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Direct Assessment Income Streams</div>
+            <div class="actions">
+                <a class="btn btn-redtheme" id="btnAddNewIncomeStream">New Direct Assessment  Income Streams</a>
+            </div>
+        </div>
+        <div class="portlet-body" id="dvIncomeStreamData">
+            @{ Html.RenderPartial("_BindIncomeStreamTable", lstIncomeStream); }
+        </div>
+    </div>
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">PAYE Income Streams</div>
+         
+        </div>
+        <div class="portlet-body" id="dvPayeIncomeStreamData">
+            @{ Html.RenderPartial("_BindPayeIncomeStreamTable", lstPayeIncomeStream); }
+        </div>
+    </div>
+
+    
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">TCC Details</div>
+            @*<div class="actions">
+
+            </div>*@
+        </div>
+        <div class="portlet-body" id="dvTCCDetailData">
+            @{ Html.RenderPartial("_BindTCCDetailTable", lstTCCDetail); }
+        </div>
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">
+                Tax Certificate Data
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxPayerTypeName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(m => m.TaxPayerTypeName, new { @class = "form-control", @tabindex = "1", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxPayerName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(m => m.TaxPayerName, new { @class = "form-control", @tabindex = "2", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxYear, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(m => m.TaxYear, new { @class = "form-control", @tabindex = "3", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RequestRefNo, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(m => m.RequestRefNo, new { @class = "form-control", @tabindex = "4", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SerialNumber, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(m => m.SerialNumber, new { @class = "form-control", @tabindex = "5", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SourceOfIncome, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.SourceOfIncome, new SelectList(ViewBag.lstresList, "Text", "Value"))
+                         @Html.ValidationMessageFor(model => model.SourceOfIncome, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                    @*<div class="form-group">
+                        <label class="control-label required-star">Nature Of Business</label>
+                        @Html.DropDownList("cboNatureOfBusiness", (SelectList)ViewBag.lstresList, "Select Nature Of Business", htmlAttributes: new { @tabindex = "1", @class = "form-control bs-select" })
+                    </div>*@
+                </div>
+                @*<div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SourceOfIncome, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(m => m.SourceOfIncome, new { @class = "form-control", @tabindex = "6", @readonly = "readonly" })
+                    </div>
+                </div>*@
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CertificateNotes, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextAreaFor(model => model.CertificateNotes, htmlAttributes: new { @tabindex = "7", @placeholder = "Enter Certificate Notes", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">
+                Business Name Confirmation
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.needBusinessName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.EditorFor(x => x.needBusinessName)
+
+                    </div>
+                </div>
+            </div> 
+        </div>  
+      
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Liability Summary</div>
+            <div class="actions">
+
+            </div>
+        </div>
+        <div class="portlet-body" id="dvTCCDetailDataII">
+            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblLiabilitySummary">
+                <thead class="red-th">
+                    <tr>
+                        <th>Tax Year</th>
+                        <th>Total Assessed</th>
+                        <th>Total Paid</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in lstTaxPayerLiability)
+                    {
+                        <tr>
+                            <td>@item.TaxYear</td>
+                            <td>@CommUtil.GetFormatedCurrency(item.AssessmentAmount)</td>
+                            <td>@CommUtil.GetFormatedCurrency(item.PaymentAmount)</td>
+                            <td>@CommUtil.GetFormatedCurrency(item.BalanceAmout)</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Totals</td>
+                        <td>@CommUtil.GetFormatedCurrency(lstTaxPayerLiability.Sum(t => t.AssessmentAmount))</td>
+                        <td>@CommUtil.GetFormatedCurrency(lstTaxPayerLiability.Sum(t => t.PaymentAmount))</td>
+                        <td>@CommUtil.GetFormatedCurrency(lstTaxPayerLiability.Sum(t => t.BalanceAmout))</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Validate Tax Payer Income</div>
+            <div class="actions">
+
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Notes, htmlAttributes: new { @class = "form-control", @tabindex = "21", @placeholder = "Enter Notes", @Rows = "3" })
+                        @Html.ValidationMessageFor(model => model.Notes, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="portlet-footer text-right">
+            <button type="submit" class="btn btn-theme" tabindex="4" value="Save" name="btnAction">
+                Save
+            </button>
+            <button type="submit" class="btn btn-theme" tabindex="4" value="Submit" id="btnApproveValidateAction" name="btnApproveValidateAction">
+           @*/ <button type="submit" class="btn btn-theme" tabindex="4" value="Submit" id="btnApproveValidateAction" name="btnApproveValidateAction">*@
+                Approve
+            </button>
+        </div>
+    </div>
+
+
+}
+
+@{ Html.RenderPartial("_BindInternalNotes"); }
+
+@{
+    Html.RenderPartial("_BusinessDetailPopup");
+    Html.RenderPartial("_AssessmentRuleDetailPopup");
+    Html.RenderPartial("_ProfileDetailPopup");
+    Html.RenderPartial("_AssessmentRuleItemPopup");
+}
+
+<div class="modal fade" id="dvIncomeStreamModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="dvIncomeStreamModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="dvIncomeStreamModalLabel">Add Income Stream</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmAddIncomeStream">
+                    <input type="hidden" id="hdnPayeISRowID" value="0" />
+                    <div id="dvAISMessage"></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Tax Year</label>
+                                @Html.DropDownList("cboTaxYear", (SelectList)ViewBag.YearList, "Select Tax Year", htmlAttributes: new { @tabindex = "1", @class = "form-control bs-select", @id = "cboTaxYear" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Total Income Earned</label>
+                                @Html.TextBox("txtTotalIncomeEarned", "", htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Total Income Earned", @class = "form-control", @id = "txtTotalIncomeEarned" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Tax Payer Business</label>
+                                @Html.DropDownList("cboBusinessID", (SelectList)ViewBag.TaxBusiness, "Select Tax Payer Business", htmlAttributes: new { @tabindex = "3", @class = "form-control bs-select", @id = "cboBusinessID" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Tax Payer Role</label>
+                                @Html.DropDownList("cboTaxPayerRoleID", (SelectList)ViewBag.TaxPayerRoleList, "Select Tax Payer Role", htmlAttributes: new { @tabindex = "4", @class = "form-control bs-select", @id = "cboTaxPayerRoleID" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Notes</label>
+                                @Html.TextArea("txtNotes", "", htmlAttributes: new { @tabindex = "5", @placeholder = "Enter Notes", @Rows = "5", @class = "form-control", @id = "txtNotes" })
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-theme" id="btSaveIncomeStream">Save</button>
+                <a data-dismiss="modal" class="btn btn-redtheme"> Close </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="dvPAYEIncomeStreamModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="dvPAYEIncomeStreamModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="dvPAYEIncomeStreamModalLabel">Edit Paye Income Stream</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmAddIncomeStream">
+                    <input type="hidden" id="hdnISRowID" value="0" />
+                    <div id="dvAISMessage"></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Receipt Ref</label>
+                                @Html.TextBox("txtPayeReceiptRef", "", htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Receipt Ref", @class = "form-control", @id = "txtPayeReceiptRef" })
+                            </div>
+                        </div> 
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Receipt Date</label>
+                                <input type="date" id="txtPayeReceiptDate" name="txtPayeReceiptDate" min="2010-01-01" value="2018-04-03">
+                               
+                                @*@Html.TextBox("txtPayeReceiptDate", "", htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Receipt Date", @class = "form-control", @id = "txtPayeReceiptDate" })*@
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label required-star">Assessable Income</label>
+                                @Html.TextBox("txtTotalpayeIncomeEarned", "", htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Total Assessable Income", @class = "form-control", @id = "txtTotalpayeIncomeEarned" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Paye Assessed Amount</label>
+                                @Html.TextBox("txtpayeAssessedIncome", "", htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Paye Assessable Income", @class = "form-control", @id = "txtpayeAssessedIncome" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Paye Tax Paid </label>
+                                @Html.TextBox("txtpayeTaxPaid", "", htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Paye Assessed Income", @class = "form-control", @id = "txtpayeTaxPaid" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-theme" id="btSavePayeIncomeStream">Save</button>
+                <a data-dismiss="modal" class="btn btn-redtheme"> Close </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="dvTCCDetailModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="dvTCCDetailModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="dvTCCDetailModalLabel">Update TCC Detail</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmAddTCCDetail">
+                    <input type="hidden" id="hdnTCDRowID" value="0" />
+                    <div id="dvTCDMessage"></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Tax Year</label>
+                                @Html.TextBox("txtTaxYear", "", htmlAttributes: new { @tabindex = "201", @placeholder = "Enter Tax Year", @class = "form-control", @id = "txtTaxYear", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Assessable Income</label>
+                                @Html.TextBox("txtAssessableIncome", "", htmlAttributes: new { @tabindex = "202", @placeholder = "Enter Assessable Income", @class = "form-control", @id = "txtAssessableIncome", @readonly = "true" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">TCC Tax Paid</label>
+                                @Html.TextBox("txtTCCTaxPaid", "", htmlAttributes: new { @tabindex = "203", @placeholder = "Enter TCC Tax Paid", @class = "form-control", @id = "txtTCCTaxPaid", })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">ERAS Assessed</label>
+                                @Html.TextBox("txtERASAssessed", "", htmlAttributes: new { @tabindex = "204", @placeholder = "Enter ERAS Assessed", @class = "form-control", @id = "txtERASAssessed", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">ERAS Tax Paid</label>
+                                @Html.TextBox("txtERASTaxPaid", "", htmlAttributes: new { @tabindex = "205", @placeholder = "Enter ERAS Tax Paid", @class = "form-control", @id = "txtERASTaxPaid", })
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-theme" id="btSaveTCCDetail">Save</button>
+                <a data-dismiss="modal" class="btn btn-redtheme"> Close </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="/Content/plugins/plupload/js/plupload.full.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jsValidateTaxPayerIncomeDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="~/Scripts/jsProcessTCCNotes.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

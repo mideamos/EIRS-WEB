@@ -1,0 +1,48 @@
+﻿@model EIRS.BOL.usp_GetTaxOfficeList_Result
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manger - Tax Payer Status Manager - " + Model.TaxOfficeName;
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Tax Payer Status Manager - @Model.TaxOfficeName
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Tax Payer List</div>
+        <div class="actions">
+            <a href="@Url.Action("TaxPayerStatusManager","OperationManager")" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+            <a href="@Url.Action("TaxPayerStatusManagerTaxPayerExportToExcel","OperationManager",new { TaxOfficeID=Model.TaxOfficeID})" class="btn btn-theme">Export To Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <input type="hidden" id="hdnTaxOfficeID" value="@Model.TaxOfficeID" />
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxPayerList">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer RIN</th>
+                    <th class="none">Tax Payer Name</th>
+                    <th>Tax Payer Type </th>
+                    <th>Assessment</th>
+                    <th>Payment</th>
+                    <th>Outstanding</th>
+                    <th class="none">Review Status</th>
+                    <th class="none">Tax Officer</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerStatusManager_TaxPayerList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

@@ -1,0 +1,43 @@
+﻿@using EIRS.Common
+@using EIRS.BOL
+
+@{
+    IList<ServiceBill_MDAService> lstMDAServices = (IList<ServiceBill_MDAService>)ViewBag.MDAServiceList;
+}
+
+@foreach (var vRule in lstMDAServices)
+{
+    <div class="list-item clearfix">
+        <div class="col-sm-9 list-left-col">
+            <h3>
+                @vRule.MDAServiceName
+                <a onclick="javascript:jsfn_ShowMDAServiceItems(@vRule.RowID)">[View Items]</a>
+            </h3>
+            <div class="desc-row">
+                Amount Charged: @CommUtil.GetFormatedCurrency(vRule.ServiceAmount) <br />
+                Tax Year: @vRule.TaxYear <a onclick="javascript:jsfn_RemoveMDAService(@vRule.RowID)">Remove</a>
+            </div>
+        </div>
+        <div class="col-sm-3 list-right-col">
+            <h4>Amount to Pay</h4>
+            <div class="count">
+                <div class="counter-number">@CommUtil.GetFormatedCurrency(vRule.ToSettleAmount)</div>
+                <a class="btn btn-theme btn-icon-only btnRequester" id="btnEdit" onclick="javascript:jsfn_EditMDAServiceItems(@vRule.RowID)">
+                    <i class="icon-plus"></i>
+                </a>
+                <div class="small-font-info">
+                    Click on plus(+) to edit amount to pay
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*<div class="row info-row">
+    <div class="col-sm-6">
+        Total Amount
+    </div>
+    <div class="col-sm-6 text-right">
+        @CommUtil.GetFormatedCurrency(lstMDAServices.Sum(t => t.ServiceAmount))
+    </div>
+</div>*@

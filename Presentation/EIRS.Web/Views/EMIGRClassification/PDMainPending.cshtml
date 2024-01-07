@@ -1,0 +1,109 @@
+﻿@model ClassificationEntryViewModel
+@using EIRS.BOL
+@using EIRS.Models
+@{
+    usp_EM_GetIGRClassificationList_Result mObjClassificationData = (usp_EM_GetIGRClassificationList_Result)ViewBag.ClassificationData;
+    ViewBag.Title = "Manage Classification : Add Entries";
+}
+
+<div class="title">
+    <h1>
+        Manage Classification : Add Entries
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Classification Details
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Details","EMIGRClassification", new { id = mObjClassificationData.IGRClassificationID })" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Category Name: </label>
+                    <div class="form-control-static">
+                        @mObjClassificationData.CategoryName
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Revenue Head: </label>
+                    <div class="form-control-static">
+                        @mObjClassificationData.RevenueHeadName
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Month: </label>
+                    <div class="form-control-static">
+                        @mObjClassificationData.TaxMonthName
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Status: </label>
+                    <div class="form-control-static">
+                        @mObjClassificationData.ActiveText
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Add Entry</div>
+        <div class="actions">
+            <button id="btnSave" class="btn btn-redtheme">Save</button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("PDMainPending", "EMIGRClassification", FormMethod.Post, htmlAttributes: new { @id = "frmEntry" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(m => m.ClassificationID, new { @value = Model.ClassificationID, @id = "hdnClassificationID" })
+            @Html.HiddenFor(m => m.EntryIds, new { @id = "hdnEntryIds" })
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblData">
+                <thead class="red-th">
+                    <tr>
+                        <th>Payment Ref No</th>
+                        <th>Payment Date</th>
+                        <th>Customer Name</th>
+                        <th class="none">RIN</th>
+                        <th class="none">Bank</th>
+                        <th>Amount</th>
+                        <th class="action-th all">Action</th>
+                    </tr>
+                </thead>
+            </table>
+
+
+        }
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsEMClassification_PDMPList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

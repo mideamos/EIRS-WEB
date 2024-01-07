@@ -1,0 +1,73 @@
+﻿@model IList<EIRS.BOL.usp_GetLandFunctionList_Result>
+
+@{
+    ViewBag.Title = "Land Function List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-taxi"></i>
+                Land Function
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("Add","LandFunction")" class="btn btn-default">
+                Add Land Function
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data- id="dvLandFunctionList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Land Function List </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Add","LandFunction")" class="btn btn-primary">Add Land Function </a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbLandFunction" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Land Function" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Land Purpose" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Status" />
+                                        </th>
+                                        <th style="width:25%"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Land Function</th>
+                                        <th>Land Purpose</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                    @{Html.RenderPartial("_BindTable", Model);}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script Function="text/javascript" src="~/Scripts/jsLandFunctionList.js"></script>
+}
+

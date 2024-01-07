@@ -1,0 +1,77 @@
+﻿@model IList<EIRS.BOL.usp_GetScratchCardPrinterList_Result>
+
+@{
+    ViewBag.Title = "Scratch Card Printer List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-th-list"></i>
+                Scratch Card Printer
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("Add","ScratchCardPrinter")" class="btn btn-default">
+                Add Scratch Card Printer
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data- id="dvScratchCardPrinterList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Scratch Card Printer List </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Add","ScratchCardPrinter")" class="btn btn-primary">Add Scratch Card Printer</a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbScratchCardPrinter" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Scratch Card Printer" />
+                                        </th>
+                                        <th style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Company" />
+                                        </th>
+                                        <th style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Agreed Unit Price" />
+                                        </th>
+                                        <th class="hasinput" style="width:25%">
+                                            <input type="text" class="form-control" placeholder="Filter Status" />
+                                        </th>
+                                        <th style="width:25%"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Scratch Card Printer</th>
+                                        <th data-class="expand">Company</th>
+                                        <th data-class="expand">Unit Price</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                    @{Html.RenderPartial("_BindTable", Model);}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsScratchCardPrinterList.js"></script>
+}
+

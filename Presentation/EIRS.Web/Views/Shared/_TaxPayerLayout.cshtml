@@ -1,0 +1,422 @@
+﻿@*@using EIRS.Common
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ERAS</title>
+    <link rel="stylesheet" type="text/css" href="/Content/Fonts/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/Fonts/simple-line-icons/simple-line-icons.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/Plugins/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Plugins/datatables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/Plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/Plugins/bootstrap-select/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/Plugins/icheck/skins/all.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/Styles/Common/components.min.css?v=@GlobalDefaultValues.VersionNumber" />
+    <link rel="stylesheet" type="text/css" href="/Content/Styles/Common/plugins.min.css?v=@GlobalDefaultValues.VersionNumber" />
+    <link rel="stylesheet" type="text/css" href="/Content/Styles/Common/layout.min.css?v=@GlobalDefaultValues.VersionNumber" />
+    <link rel="stylesheet" type="text/css" href="/Content/Styles/Common/theme.min.css?v=@GlobalDefaultValues.VersionNumber" />
+    <link rel="stylesheet" type="text/css" href="/Content/Styles/Web/custom.css?v=@GlobalDefaultValues.VersionNumber" />
+
+
+    @if (ViewBag.MetaTitle != null)
+    {
+        <meta name="title" content="@ViewBag.MetaTitle" />
+    }
+    @if (ViewBag.MetaDescription != null)
+    {
+        <meta name="description" content="@ViewBag.MetaDescription" />
+    }
+    @if (ViewBag.MetaKeywords != null)
+    {
+        <meta name="keywords" content="@ViewBag.MetaKeywords" />
+    }
+    @RenderSection("header", false)
+</head>
+<body>
+    <div id="domMessage" style="display:none;">
+        <h4>We are processing your request. Please be patient.</h4>
+    </div>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="@Url.Action("Home", "Default")" class="navbar-brand">
+                        <img src="/Content/Images/EIRS-logo.png">
+                        <img src="/Content/Images/Logo.png">
+                    </a>
+                </div>
+                <ul>
+                    <li><a>@SessionManager.UserName</a></li>
+                    <li><a href="@Url.Action("Logout", "Home")">Logout</a></li>
+                </ul>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navMainMenu" aria-expanded="false">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <div class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-collapse collapse" id="navMainMenu" aria-expanded="false">
+                    <ul class="nav navbar-nav">
+                        <li class=" switch-li no-hover">
+                            <a href="@Url.Action("Home", "Default")">
+                                <label class="switch">
+                                    <input type="checkbox" checked="checked" id="chkMenuSwitch">
+                                    <span class="slider round"></span>
+                                </label>
+                            </a>
+                        </li>
+                        <li class="search-li no-hover">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-magnifier"></i> <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <label class="dropdown-menu-item checkbox">
+                                        <input type="checkbox" />
+                                        <span class="fa fa-square-o"></span>
+                                        All
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-menu-item checkbox">
+                                        <input type="checkbox" />
+                                        <span class="fa fa-square-o"></span>
+                                        Individuals
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-menu-item checkbox">
+                                        <input type="checkbox" />
+                                        <span class="fa fa-square-o"></span>
+                                        Corporates
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-menu-item checkbox">
+                                        <input type="checkbox" />
+                                        <span class="fa fa-square-o"></span>
+                                        Buildings
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-menu-item checkbox">
+                                        <input type="checkbox" />
+                                        <span class="fa fa-square-o"></span>
+                                        Businesses
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-menu-item checkbox">
+                                        <input type="checkbox" />
+                                        <span class="fa fa-square-o"></span>
+                                        Vehicles
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-menu-item checkbox">
+                                        <input type="checkbox" />
+                                        <span class="fa fa-square-o"></span>
+                                        Lands
+                                    </label>
+                                </li>
+                            </ul>
+                            <input type="text" class="form-control" placeholder="Search">
+                        </li>
+
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Capture<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                @if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("IndividualDetails","TaxPayerPanel")">My Details</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Companies)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("CorporateDetails","TaxPayerPanel")">My Details</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Government)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("GovernmentDetails","TaxPayerPanel")">My Details</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Special)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("SpecialDetails","TaxPayerPanel")">My Details</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profile<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("BuildingDetails","TaxPayerPanel")">Buildings</a></li>
+                                <li><a href="@Url.Action("Details","TaxPayerPanel")">Businesses</a></li>
+                                <li><a href="@Url.Action("LandDetails","TaxPayerPanel")">Lands</a></li>
+                                <li><a href="@Url.Action("VehicleDetails","TaxPayerPanel")">Vehicles</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Assess<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("AssessAllBills","TaxPayerPanel")">List All Bills</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notify<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("NotficationList","TaxPayerPanel")">List Notifications</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settle<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("SettleList","TaxPayerPanel")">List All Settlement</a></li>
+                                <li><a href="@Url.Action("SettlePaymentAccount","TaxPayerPanel")">List Payments on Account</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Report<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("ReportList","TaxPayerPanel")">List Reports</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                @if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("IndividualDetails","TaxPayerPanel")">My Single View</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Companies)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("CorporateDetails","TaxPayerPanel")">My Single View</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Government)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("GovernmentDetails","TaxPayerPanel")">My Single View</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Special)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("SpecialDetails","TaxPayerPanel")">My Single View</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="no-hover hidden p0"><a>Welcome</a></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">My Profile</a></li>
+                                <li><a href="@Url.Action("ChangePassword", "Home")">Change Password</a></li>
+                                <li><a href="#">My Modules</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="alternate">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="portlet light compressed-menu">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                ERAS
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <ul class="nav">
+                                <li>
+                                    <a href="@Url.Action("Dashboard","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Dashboard</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="portlet light compressed-menu">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                Tax Payers
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <ul class="nav">
+                                @if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Individual","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Individuals</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Companies)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Corporate","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Corporates</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Government)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Government","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Governments</a>
+                                    </li>
+                                }
+                                else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Special)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Special","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Special</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="portlet light compressed-menu">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                Assets
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <ul class="nav">
+                                <li>
+                                    <a href="@Url.Action("Businesses","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Businesses</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Buildings","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Buildings</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Lands","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Lands</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Vehicle","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Vehicles</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="portlet light compressed-menu">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                Revenue Data
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <ul class="nav">
+
+                                <li>
+                                    <a href="@Url.Action("AssessmentBill","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Assessment Bills</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("MDAServiceBills","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> MDA Service Bills</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("AssessmentRule","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> Assessment Rules</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("MDAService","TaxPayerPanel")"> <i class="fa fa-angle-right"></i> MDA Services</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="content" id="dvAlertConatiner">
+                        @Html.RenderFlashMessages()
+                    </div>
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-1">
+                    <div class="navbar-brand">
+                        <img src="/Content/Images/Logo.png">
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    © Copyright ERAS - Edo State Internal Revenue Service @DateTime.Now.Year. All rights reserved
+                </div>
+                <div class="col-sm-4">
+                    <ul>
+                        <li>
+                            <a>Data Protection</a>
+                        </li>
+                        <li>
+                            <a>Terms of Use</a>
+                        </li>
+                        <li>
+                            <a>Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="dvRemoveModal" tabindex="-1" role="dialog" aria-labelledby="dvRemoveModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="dvRemoveModalLabel">Remove Record Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="hdnTBID" value="0" />
+                    <input type="hidden" id="hdnOtherID" value="0" />
+                    Removing a record will remove all related records. Do you wish to continue?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-theme" id="btnModalYes">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="/Content/Scripts/jquery.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Scripts/jquery.validate.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Scripts/jquery.unobtrusive-ajax.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Scripts/jquery.validate.unobtrusive.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Plugins/bootstrap/js/bootstrap.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Plugins/bootstrap-select/js/bootstrap-select.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="~/Scripts/datatable.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Plugins/datatables/datatables.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Plugins/datatables/plugins/bootstrap/datatables.bootstrap.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Plugins/jquery.blockui.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/Plugins/icheck/icheck.min.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="/Content/plugins/moment/moment.js"></script>
+    <script type="text/javascript" src="~/Scripts/date.format.js"></script>
+    <script type="text/javascript" src="~/Scripts/jsCommon.js?v=@GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="~/Scripts/jsCustomValidator.js?v=@GlobalDefaultValues.VersionNumber"></script>
+
+
+    @RenderSection("Footer", false)
+</body>
+</html>*@

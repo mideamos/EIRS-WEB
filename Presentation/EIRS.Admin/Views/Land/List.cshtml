@@ -1,0 +1,134 @@
+﻿@model IList<EIRS.BOL.usp_GetLandList_Result>
+
+@{
+    ViewBag.Title = "Land List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-steam"></i>
+                Land
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("Add","Land")" class="btn btn-default">
+                Add Land
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data-id="dvLandList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Land List </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Add","Land")" class="btn btn-primary">Add Land </a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbLand" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Land RIN" id="txtLandRIN"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Plot Number" id="txtPlotNumber"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Street Name" id="txtStreetName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Town" id="txtTownName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter LGA" id="txtLGAName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Ward" id="txtWardName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Land Size – Length (Sqm)" id="txtLandLength"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Land Size – Width (Sqm)" id="txtLandWidth"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter C_OF_O_Ref" id="txtC_Of_O_Ref"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Land Purpose" id="txtLandPurposeName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Land Function" id="txtLandFunctionName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Land Ownership" id="txtLandOwnershipName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Land Development" id="txtLandDevelopmentName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Latitude" id="txtLatitude"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Longitude" id="txtLongitude"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Street Condition" id="txtStreetCondition"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Value of Land" id="txtValueOfLand"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Neighborhood" id="txtNeighborhood"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Status" id="txtStatus"/>
+                                        </th>
+                                        <th style="width:10%"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Land RIN</th>
+                                        <th>Plot Number</th>
+                                        <th>Street Name</th>
+                                        <th>Town</th>
+                                        <th>LGA</th>
+                                        <th>Ward</th>
+                                        <th>Land Size – Length (Sqm) </th>
+                                        <th>Land Size – Width (Sqm) </th>
+                                        <th>C_OF_O_Ref</th>
+                                        <th>Land Purpose</th>
+                                        <th>Land Function</th>
+                                        <th>Land Ownership</th>
+                                        <th>Land Development</th>
+                                        <th>Latitutde</th>
+                                        <th>Longitude</th>
+                                        <th>Street Condition</th>
+                                        <th>Value of Land</th>
+                                        <th>Neighborhood</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script Completion="text/javascript" src="~/Scripts/jsLandList.js"></script>
+}
+

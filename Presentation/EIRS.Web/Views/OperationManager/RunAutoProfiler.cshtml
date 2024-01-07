@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "Operation Manager - Run Auto Profiler";
+}
+
+
+<div class="title">
+    <h1>
+        Operation Manager - Run Auto Profiler
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmRunAutoProfiler" class="form-horizontal">
+            <input type="hidden" id="hdnUserID" value="@SessionManager.UserID" />
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Year:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("Year", (SelectList)ViewBag.YearList, "Select Year", new { @class = "form-control bs-select", @id = "cboYear" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">From Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtFromDate", "", new { @class = "form-control", @id = "txtFromDate", @autocomplete = "off", tabindex = "2", @placeholder = "Enter From Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">To Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtToDate", "", new { @class = "form-control", @id = "txtToDate", @autocomplete = "off", tabindex = "3", @placeholder = "Enter To Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tax Payer Type:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("cboTaxPayerType", (SelectList)ViewBag.TaxPayerTypeList, "All Tax Payer Type", new { @id = "cboTaxPayerType", @class = "form-control bs-select", @tabindex = "4" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tax Office:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("cboTaxOffice", (SelectList)ViewBag.TaxOfficeList, "All Tax Offices", new { @id = "cboTaxOffice", @class = "form-control bs-select", @tabindex = "5" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnRunProfiler" type="button" tabindex="4"> Run </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="portlet light" id="dvResult">
+    <div class="portlet-title">
+        <div class="caption">Status</div>
+    </div>
+    <div class="portlet-body" id="dvData" style="height: 400px; position:relative; overflow: auto;">
+        <ul id="ulSyncResult"></ul>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsRunAutoProfiler.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

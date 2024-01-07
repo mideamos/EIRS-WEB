@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Service Bill List";
+}
+
+<div class="title">
+    <h1>
+        Service Bill
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Service Bill</div>
+        <div class="actions">
+            
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblServiceBill">
+            <thead class="red-th">
+                <tr>
+                    <th class="all">Bill Ref</th>
+                    <th>Tax payer name</th>
+                    <th class="desktop">Date</th>
+                    <th>Amount</th>
+                    <th class="desktop">Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("_ServiceBillDetailPopup");
+    Html.RenderPartial("_BillPaymentPopup");
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsServiceBillList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

@@ -1,0 +1,192 @@
+﻿@model JTB_Individual
+@{
+    ViewBag.Title = "Individual ETL Data";
+    usp_GetIndividualList_Result mObjERASIndividual = (usp_GetIndividualList_Result)ViewBag.mObjERASIndividual;
+}
+
+
+<div class="title">
+    <h1>Individual ETL Data</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            ETL Data
+        </div>
+        <div class="actions">
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblJTBIndividual">
+            <thead class="red-th">
+                <tr>
+                    <th>Column</th>
+                    <th>Individual - Incoming from JTB</th>
+                    <th>Extract (ERAS Mapping)</th>
+                    <th>Transform (Rules)</th>
+                    <th>Load (ERAS Values)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>TIN</td>
+                    <td>@Model.tin</td>
+                    <td>
+                        <input type="text" value="@Model.tin" class="form-control" />
+                    </td>
+                    <td>@Model.tin</td>
+                    <td>@(mObjERASIndividual?.TIN)</td>
+                </tr>
+                <tr>
+                    <td>BVN</td>
+                    <td>@Model.bvn</td>
+                    <td>Non ERAS Field</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>NIN</td>
+                    <td>@Model.nin</td>
+                    <td>Non ERAS Field</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td>@Model.Title</td>
+                    <td><input type="text" value="@Model.Title" class="form-control" /></td>
+                    <td>@Model.Title</td>
+                    <td>@(mObjERASIndividual?.TitleName)</td>
+                </tr>
+                <tr>
+                    <td>First Name</td>
+                    <td>@Model.SBIRt_name</td>
+                    <td><input type="text" value="@Model.SBIRt_name" class="form-control" /></td>
+                    <td>@Model.SBIRt_name</td>
+                    <td>@(mObjERASIndividual?.FirstName)</td>
+                </tr>
+                <tr>
+                    <td>Middle Name</td>
+                    <td>@Model.middle_name</td>
+                    <td><input type="text" value="@Model.middle_name" class="form-control" /></td>
+                    <td>@Model.middle_name</td>
+                    <td>@(mObjERASIndividual?.MiddleName)</td>
+                </tr>
+                <tr>
+                    <td>Last Name</td>
+                    <td>@Model.last_name</td>
+                    <td><input type="text" value="@Model.last_name" class="form-control" /></td>
+                    <td>@Model.last_name</td>
+                    <td>@(mObjERASIndividual?.LastName)</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>@Model.GenderName</td>
+                    <td><input type="text" value="@Model.GenderName" class="form-control" /></td>
+                    <td>@Model.GenderName</td>
+                    <td>@(mObjERASIndividual?.GenderName)</td>
+                </tr>
+                <tr>
+                    <td>State of Origin</td>
+                    <td>@Model.StateOfOrigin</td>
+                    <td>Non ERAS Field</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Date of Birth</td>
+                    <td>@Model.date_of_birth</td>
+                    <td><input type="text" value="@Model.date_of_birth" class="form-control" /></td>
+                    <td>@Model.date_of_birth</td>
+                    <td>@(mObjERASIndividual?.DOB)</td>
+                </tr>
+                <tr>
+                    <td>Marital Status</td>
+                    <td>@Model.MaritalStatus</td>
+                    <td><input type="text" value="@Model.MaritalStatus" class="form-control" /></td>
+                    <td>@Model.MaritalStatus</td>
+                    <td>@(mObjERASIndividual?.MaritalStatusName)</td>
+                </tr>
+                <tr>
+                    <td>Occupation</td>
+                    <td>@Model.Occupation</td>
+                    <td><input type="text" value="@Model.Occupation" class="form-control" /></td>
+                    <td>@Model.Occupation</td>
+                    <td>@(mObjERASIndividual?.EconomicActivitiesName)</td>
+                </tr>
+                <tr>
+                    <td>Nationality</td>
+                    <td>@Model.nationality_name</td>
+                    <td><input type="text" value="@Model.nationality_name" class="form-control" /></td>
+                    <td>@Model.nationality_name</td>
+                    <td>@(mObjERASIndividual?.NationalityName)</td>
+                </tr>
+                <tr>
+                    <td>Phone No 1</td>
+                    <td>@Model.phone_no_1</td>
+                    <td><input type="text" value="@(Model.phone_no_1.Trim().Length > 10 ? Model.phone_no_1.Trim().Substring(Model.phone_no_1.Trim().Length - 10, 10) : Model.phone_no_1)" class="form-control" /></td>
+                    <td>@(Model.phone_no_1.Trim().Length > 10 ? Model.phone_no_1.Trim().Substring(Model.phone_no_1.Trim().Length - 10, 10) : Model.phone_no_1)</td>
+                    <td>@(mObjERASIndividual?.MobileNumber1)</td>
+                </tr>
+                <tr>
+                    <td>Phone No 2</td>
+                    <td>@Model.phone_no_2</td>
+                    <td><input type="text" value="@Model.phone_no_2" class="form-control" /></td>
+                    <td>@Model.phone_no_2</td>
+                    <td>@(mObjERASIndividual?.MobileNumber2)</td>
+                </tr>
+                <tr>
+                    <td>Tax Payer's Photograph</td>
+                    <td>@Model.taxpayer_photo</td>
+                    <td>Non ERAS Field</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Tax Payer's Address</td>
+                    <td>@Model.house_number, @Model.street_name, @Model.city, @Model.LGAName, @Model.StateName, @Model.CountryName</td>
+                    <td><input type="text" value="@Model.house_number, @Model.street_name, @Model.city, @Model.LGAName, @Model.StateName, @Model.CountryName" class="form-control" /></td>
+                    <td>@Model.house_number, @Model.street_name, @Model.city, @Model.LGAName, @Model.StateName, @Model.CountryName</td>
+                    <td>@(mObjERASIndividual?.ContactAddress)</td>
+                </tr>
+                <tr>
+                    <td>Email Address</td>
+                    <td>@Model.email_address</td>
+                    <td><input type="text" value="@Model.email_address" class="form-control" /></td>
+                    <td>@Model.email_address</td>
+                    <td>@(mObjERASIndividual?.EmailAddress1)</td>
+                </tr>
+                <tr>
+                    <td>Tax Office</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@(mObjERASIndividual?.TaxOfficeName)</td>
+                </tr>
+                <tr>
+                    <td>Tax Authority</td>
+                    <td>@Model.TaxAuthorityName</td>
+                    <td>Non ERAS Field</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ERAS Required Field - Notification</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@(mObjERASIndividual?.NotificationMethodName)</td>
+                </tr>
+                <tr>
+                    <td>ERAS Required Field - RIN</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@(mObjERASIndividual?.IndividualRIN)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

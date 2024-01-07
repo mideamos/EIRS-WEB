@@ -1,0 +1,69 @@
+﻿<header>
+    <div class="top-bar">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="@Url.Action("Home","Default")" class="navbar-brand">
+                    <img src="~/Content/Images/EIRS-logo.png" />
+                    <img src="/Content/Images/Logo.png" />
+                </a>
+            </div>
+            @if (SessionManager.UserID > 0)
+            {
+                <ul>
+                    <li><a>@SessionManager.ContactName</a></li>
+                    <li><a href="@Url.Action("Logout", "Home")">Logout</a></li>
+                </ul>
+            }
+            else
+            {
+        <ul>
+            <li><a href="@Url.Action("SignUp", "Default")">Sign Up</a></li>
+            <li><a href="@Url.Action("Individual", "Login")">Login</a></li>
+
+            @*<li><a href="@Url.Action("About", "Default")">Test</a></li>*@
+
+        </ul>
+            }
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navMainMenu" aria-expanded="false">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+    </div>
+    <div class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-collapse collapse" id="navMainMenu" aria-expanded="false">
+                <ul class="nav navbar-nav">
+                    <li class="switch-li no-hover">
+                        @if (SessionManager.UserID > 0)
+                        {
+                            <a href="@Url.Action("Dashboard", "Home")">
+                                <label class="switch">
+                                    <input type="checkbox" id="chkMenuSwitch">
+                                    <span class="slider round"></span>
+                                </label>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Individual", "Login")">
+                                <label class="switch">
+                                    <input type="checkbox" id="chkMenuSwitch">
+                                    <span class="slider round"></span>
+                                </label>
+                            </a>
+                        }
+                    </li>
+                    <li class="@(ViewBag.MenuID == 1 ? "active" : "")"><a href="@Url.Action("About","Default")">About</a></li>
+                    <li class="@(ViewBag.MenuID == 6 ? "active" : "")"><a href="@Url.Action("Awareness","Default")">Awareness</a></li>
+                    <li class="@(ViewBag.MenuID == 2 ? "active" : "")"><a href="@Url.Action("TaxPayer","Default")">Tax Payers</a></li>
+                    <li class="@(ViewBag.MenuID == 3 ? "active" : "")"><a href="@Url.Action("TaxAsset","Default")">Tax Assets</a></li>
+                    <li class="@(ViewBag.MenuID == 8 ? "active" : "")"><a href="@Url.Action("TaxType","Default")">Tax Types</a></li>
+                    <li class="@(ViewBag.MenuID == 7 ? "active" : "")"><a href="@Url.Action("PayTaxes","CBS")">Services</a></li>
+                    <li class="@(ViewBag.MenuID == 4 ? "active" : "")"><a href="@Url.Action("Partnership","Default")">Partnership</a></li>
+                    <li class="@(ViewBag.MenuID == 9 ? "active" : "")"><a href="@Url.Action("Support","Default")">Support</a></li>
+                    <li class="@(ViewBag.MenuID == 10 ? "active" : "")"><a href="@Url.Action("DataSubmitter","Login")">Submit Data</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

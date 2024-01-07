@@ -1,0 +1,123 @@
+﻿@using EIRS.BOL
+@using EIRS.Common
+@model IList<usp_GetFAQList_Result>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IList<usp_GetAwarenessCategoryList_Result> lstAwarenessCategory = (IList<usp_GetAwarenessCategoryList_Result>)ViewBag.AwarenessCategoryList;
+    usp_GetAwarenessCategoryList_Result mObjSectionData = (usp_GetAwarenessCategoryList_Result)ViewBag.SectionData;
+    ViewBag.Title = mObjSectionData.AwarenessCategoryName;
+    ViewBag.MenuID = 5;
+    int intRowNumber = 1;
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Welcome to Tax Education & Awareness Centre
+            </h1>
+            <hr>
+            <p>
+                Gain access to education and awareness materials, interact with us, submit ideas and obtain the help and assistance you need to work with us in making Edo state greater.
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="portlet light">
+                    <div class="dvicon-box dvicon-small clearfix">
+                        <div class="col-sm-1">
+                            <div class="dvicon-block">
+                                <i class="icon-question"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <a class="dvicon-text">
+                                <div class="dvicon-text-header"> @mObjSectionData.AwarenessCategoryName</div>
+                                <div class="dvicon-text-desc">
+                                    @mObjSectionData.SectionDescription
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-2 text-right">
+                            <a href="@Url.Action("Awareness", "Default")" class="btn btn-redtheme"> Back </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row custom-tabs">
+            <div class="col-sm-5">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            FAQ's
+                        </div>
+                    </div>
+                    <p class="m10">
+
+                    </p>
+
+                    @if (Model.Count > 0)
+                    {
+                        <ul class="nav nav-tabs nav-pills nav-stacked" role="tablist">
+
+                            @foreach (var item in Model)
+                            {
+                                <li role="presentation" class="@(intRowNumber == 1 ? "active" : "")">
+                                    <a href="#@item.FAQTitle.ToSeoUrl()" aria-controls="@item.FAQTitle.ToSeoUrl()" role="tab" data-toggle="tab">
+                                        <i class="fa fa-angle-right"></i> @item.FAQTitle
+                                    </a>
+                                </li>
+                                intRowNumber = intRowNumber + 1;
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>
+                            FAQs are coming soon. <br />
+                            Please Check back later
+                        </span>
+                    }
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="tab-content">
+                    @if (Model.Count > 0)
+                    {
+                        intRowNumber = 1;
+                        foreach (var item in Model)
+                        {
+                            <div role="tabpanel" class="tab-pane @(intRowNumber == 1 ? "active" : "")" id="@item.FAQTitle.ToSeoUrl()">
+                                <div class="portlet light">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            @item.FAQTitle
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body text-justify">
+                                        @Html.Raw(item.FAQText)
+                                    </div>
+                                </div>
+                            </div>
+
+                            intRowNumber = intRowNumber + 1;
+                        }
+                    }
+                    else
+                    {
+                        <span>
+                            FAQs are coming soon. <br />
+                            Please Check back later
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

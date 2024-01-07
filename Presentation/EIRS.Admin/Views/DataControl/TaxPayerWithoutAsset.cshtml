@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Tax Payer Without Asset";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-child"></i>
+                Tax Payer Without Asset
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">   
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data-id="dvSFTPWA" id="dvSFTPWA">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Search Filter</h2>
+                        <div class="widget-toolbar">
+
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Ajax.BeginForm("SearchTaxPayerWithoutAsset", "DataControl", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Post", OnSuccess = "jsfn_BuildDataTable();", OnBegin = "jsfn_ShowLoading", OnComplete = "jsfn_HideLoading" }, htmlAttributes: new { @class = "smart-form" }))
+                            {
+                                <header>
+                                    Search Filters
+                                </header>
+                                <fieldset>
+                                    <section class="col-sm-5">
+                                        <label class="label"> Asset Type</label>
+                                        <label class="input">
+                                            @Html.DropDownList("cboAssetType", (SelectList)ViewBag.AssetTypeList, htmlAttributes: new { @tabindex = "1", @class = "select2", @width = "100%", @multiple = "multiple" })
+                                        </label>
+                                    </section>
+                                    <section class="col-sm-1"></section>
+                                    <section class="col-sm-6">
+                                        <label class="label"> Tax Payer Type</label>
+                                        <label class="input">
+                                            @Html.DropDownList("cboTaxPayerType", (SelectList)ViewBag.TaxPayerTypeList, htmlAttributes: new { @tabindex = "2", @class = "select2", @width = "100%", @multiple = "multiple" })
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" class="btn btn-primary" tabindex="18">
+                                        Search
+                                    </button>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hide" id="dvSearchResult">
+                <div class="jarviswidget jarviswidget-color-green" data-id="dvTPWA">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Tax Payer Without Asset</h2>
+                        <div class="widget-toolbar">
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding" id="dvData">
+                            
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerWithoutAsset.js"></script>
+}
+

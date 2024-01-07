@@ -1,0 +1,41 @@
+﻿@model IList<EIRS.BOL.usp_GetDailySummaryReport_Result>
+@using EIRS.Common
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblDailySummaryReport">
+    <thead class="red-th">
+        <tr>
+            <th rowspan="2">Reference</th>
+            <th colspan="2">Today</th>
+            <th colspan="2">MTD</th>
+        </tr>
+        <tr>
+            <th>Assessed</th>
+            <th>Revenue</th>
+            <th>Assessed</th>
+            <th>Revenue</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ReferenceName</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.ReportDate_AssessedAmount)</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.ReportDate_RevenueAmount)</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.MTD_AssessedAmount)</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.MTD_RevenueAmount)</td>
+                </tr>
+            }
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td>@CommUtil.GetFormatedCurrency(Model.Sum(t => t.ReportDate_AssessedAmount))</td>
+            <td>@CommUtil.GetFormatedCurrency(Model.Sum(t => t.ReportDate_RevenueAmount))</td>
+            <td>@CommUtil.GetFormatedCurrency(Model.Sum(t => t.MTD_AssessedAmount))</td>
+            <td>@CommUtil.GetFormatedCurrency(Model.Sum(t => t.MTD_RevenueAmount))</td>
+        </tr>
+    </tfoot>
+</table>

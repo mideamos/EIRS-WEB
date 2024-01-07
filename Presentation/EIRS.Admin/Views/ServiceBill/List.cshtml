@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "Service Bill List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Service Bill
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("Generate","ServiceBill")" class="btn btn-default">
+                Add Service Bill
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data- id="dvServiceBillList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Service Bill List </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Generate","ServiceBill")" class="btn btn-primary">Add Service Bill </a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbServiceBill" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Service Bill Ref No" id="txtServiceBillRefNo" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Service Bill Date" id="txtServiceBillDate" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Tax Payer Type" id="txtTaxPayerType" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Tax Payer Name" id="txtTaxPayerName" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Tax Payer RIN" id="txtTaxPayerRIN" />
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Service Bill Amount" id="txtServiceBillAmount" />
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Due Date" id="txtSettlementDueDate" />
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Status" id="txtSettlementStatus" />
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Settlement Date" id="txtSettlementDate" />
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Service Bill Notes" id="txtServiceBillNotes" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Status" id="txtStatus" />
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Service Bill Ref No</th>
+                                        <th>Service Bill Date</th>
+                                        <th>Tax Payer Type</th>
+                                        <th>Tax Payer Name</th>
+                                        <th>Tax Payer RIN</th>
+                                        <th>Service Bill Amount</th>
+                                        <th>Settlement Due Date</th>
+                                        <th>Settlement Status</th>
+                                        <th>Settlement Date</th>
+                                        <th>Service Bill Notes</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script Function="text/javascript" src="~/Scripts/jsServiceBillList.js"></script>
+}
+

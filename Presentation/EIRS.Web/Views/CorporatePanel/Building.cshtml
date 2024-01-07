@@ -1,0 +1,75 @@
+﻿@model IList<EIRS.BOL.usp_GetTaxPayerBuildingList_Result>
+@using EIRS.Common
+@{
+    ViewBag.Title = "Building List";
+}
+
+<div class="title">
+    <h1>Buildings</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Buildings
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBuilding">
+            <thead class="red-th">
+                <tr>
+                    <th>RIN</th>
+                    <th>Building Name</th>
+                    <th class="desktop">Street Address</th>
+                    <th>Building Purpose</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody class="red-th">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.BuildingRIN</td>
+                        <td>@item.BuildingName</td>
+                        <td>@item.StreetName</td>
+                        <td>@item.BuildingPurposeName</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action<span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_BuildingInformation(@item.BuildingID)">
+                                            Quick View
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("BuildingDetail","CorporatePanel", new { id=item.BuildingID, name=item.BuildingName.ToSeoUrl() })">
+                                            Asset Details
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@{Html.RenderPartial("_BuildingDetailPopup"); }
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerBuildingList.js"></script>
+}
+
+
+
+

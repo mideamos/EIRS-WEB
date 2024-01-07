@@ -1,0 +1,95 @@
+@model EIRS.Models.BusinessSectorViewModel
+
+@{
+    ViewBag.BusinessCategory = "Add Business Sector";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-BusinessCategory txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-fax"></i>
+                Business Sector
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvAddBusinessSector">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Add Business Sector</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Add", "BusinessSector", FormMethod.Post, htmlAttributes: new { @class = "smart-form" }))
+                            {
+                                <header>
+                                    Business Sector Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.BusinessTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.BusinessTypeID, (SelectList)ViewBag.BusinessTypeList, "Select Business Type", htmlAttributes: new { @tabindex = "1", @class = "select2", @width = "100%", @id= "cboBusinessType" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.BusinessTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+
+                                    <section>
+                                        @Html.LabelFor(model => model.BusinessCategoryID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.BusinessCategoryID, (SelectList)ViewBag.BusinessCategoryList, "Select Business Category", htmlAttributes: new { @tabindex = "2", @class = "select2", @width = "100%", @id = "cboBusinessCategory" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.BusinessCategoryID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+
+                                    <section>
+                                        @Html.LabelFor(model => model.BusinessSectorName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.BusinessSectorName, htmlAttributes: new { @tabindex = "3", @placeholder = "Enter Business Sector" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter business Sector
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.BusinessSectorName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" class="btn btn-primary">
+                                        Submit
+                                    </button>
+                                    <a href="@Url.Action("List","BusinessSector")" class="btn btn-default" >
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsBusinessSectorDetails.js"></script>
+}

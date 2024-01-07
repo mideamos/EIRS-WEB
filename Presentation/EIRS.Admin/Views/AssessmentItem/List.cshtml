@@ -1,0 +1,118 @@
+@model IList<EIRS.BOL.usp_GetAssessmentItemList_Result>
+
+@{
+    ViewBag.Title = "Assessment Item List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Assessment Item
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("Add","AssessmentItem")" class="btn btn-default">
+                Add Assessment Item
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data- id="dvAssessmentItemList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Assessment Item List </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Add","AssessmentItem")" class="btn btn-primary">Add Assessment Item </a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbAssessmentItem" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Assessment Item Reference No" id="txtAssessmentItemRefNo"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Asset Type " id="txtAssetTypeName"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Assessment Group" id="txtAssessmentGroupName"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Assessment Sub Group" id="txtAssessmentSubGroupName"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Revenue Stream" id="txtRevenueStreamName"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Revenue Sub Stream " id="txtRevenueSubStreamName"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Assessment Item Category" id="txtItemCategory"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Assessment Item Sub Category " id="txtItemSubCategory"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Revenue Agency " id="txtAgencyName"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Assessment Item Name " id="txtAssessmentItemName"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Computation " id="txtComputationName"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Tax Base Amount " id="txtTaxBaseAmount"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Percentage " id="txtPercentage"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Tax Amount " id="txtTaxAmount"/>
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Status" id="txtStatus"/>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Assessment Item Reference No</th>
+                                        <th>Asset Type</th>
+                                        <th>Assessment Group</th>
+                                        <th>Assessment Sub Group</th>
+                                        <th>Revenue Stream</th>
+                                        <th>Revenue Sub Stream</th>
+                                        <th>Assessment Item Category</th>
+                                        <th>Assessment Item Sub Category</th>
+                                        <th>Revenue Agency</th>
+                                        <th>Assessment Item Name</th>
+                                        <th>Computation</th>
+                                        <th>Tax Base Amount</th>
+                                        <th>Percentage</th>
+                                        <th>Tax Amount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsAssessmentItemList.js"></script>
+}
+

@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Pay As You Earn - PAYE Contribution - Formal Business Employee";
+}
+
+<div class="title">
+    <h1>Pay As You Earn</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Pay As You Earn
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPAYE">
+            <thead class="red-th">
+                <tr>
+                    <th>Profile Name</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pay As You Earn - PAYE Collections - Multiple Employees</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("PAYEPCME","Profile")">View Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pay As You Earn - PAYE Contribution - Formal Business Employee</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("PAYEPCFBE","Profile")">View Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsPAYEList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

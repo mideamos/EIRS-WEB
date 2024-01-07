@@ -1,0 +1,158 @@
+﻿@model EIRS.Models.APVehicleViewModel
+
+@{
+    ViewBag.Title = "Update Auto Profiler Default Values - Vehicle";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-automobile"></i>
+                Auto Profiler Defaults - Vehicles
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditVehicle">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Update Vehicle</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("UpdateVehicle", "AutoProfiler", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id = "frmVehicle" }))
+                            {
+                                <header>
+                                    Auto Profiler Vehicle Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.VehicleID, htmlAttributes: new { @value = Model.VehicleID })
+                                @*@Html.HiddenFor(model => model.VehicleRIN, htmlAttributes: new { @value = Model.VehicleRIN })*@
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleRIN, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.VehicleRIN, htmlAttributes: new { @placeholder = "Enter Vehicle RIN" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Auto numbering by system
+                                            </b>
+                                        </label>
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleRegNumber, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.VehicleRegNumber, htmlAttributes: new { @tabindex = "1", @placeholder = "Enter Vehicle Reg Number" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter vehicle FRSC registration number
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleRegNumber, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VIN, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.VIN, htmlAttributes: new { @tabindex = "2", @placeholder = "Enter vehicle VIN" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter vehicle VIN
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VIN, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleDescription)
+                                        <label class="textarea">
+                                            @Html.TextAreaFor(model => model.VehicleDescription, htmlAttributes: new { @tabindex = "3", @Rows = "3", @placeholder = "Enter Vehicle Description" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleDescription, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AssetTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.AssetTypeID, (SelectList)ViewBag.AssetTypeList, "Select Asset Type", htmlAttributes: new { @tabindex = "4", @class = "select2", @width = "100%", @disabled = "true" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AssetTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.VehicleTypeID, (SelectList)ViewBag.VehicleTypeList, "Select Vehicle Type", htmlAttributes: new { @tabindex = "5", @class = "select2", @id = "cboVehicleType", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleSubTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.VehicleSubTypeID, (SelectList)ViewBag.VehicleSubTypeList, "Select Vehicle Sub Type", htmlAttributes: new { @tabindex = "6", @id = "cboVehicleSubType", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.LGAID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.LGAID, (SelectList)ViewBag.LGAList, "Select Registration LGA", htmlAttributes: new { @tabindex = "7", @id = "cboLGA", @class = "select2", @data_select_width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.LGAID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehiclePurposeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.VehiclePurposeID, (SelectList)ViewBag.VehiclePurposeList, "Select Vehicle Purpose", htmlAttributes: new { @tabindex = "8", @class = "select2", @width = "100%", @id = "cboVehiclePurpose" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehiclePurposeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleFunctionID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.DropDownListFor(model => model.VehicleFunctionID, (SelectList)ViewBag.VehicleFunctionList, "Select Vehicle Function", htmlAttributes: new { @tabindex = "9", @class = "select2", @width = "100%", @id = "cboVehicleFunction" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                select vehicle function
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleFunctionID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleOwnershipID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.VehicleOwnershipID, (SelectList)ViewBag.VehicleOwnershipList, "Select Vehicle Ownership", htmlAttributes: new { @tabindex = "10", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleOwnershipID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <input type="submit" class="btn-theme btn" value="Update" tabindex="3" id="btnSubmit" />
+
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

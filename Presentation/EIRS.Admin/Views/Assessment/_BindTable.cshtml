@@ -1,0 +1,49 @@
+﻿@model IList<EIRS.BOL.usp_GetAssessmentList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.AssessmentRefNo</td>
+            <td>@CommUtil.GetFormatedDate(item.AssessmentDate)</td>
+            <td>@item.TaxPayerTypeName</td>
+            <td>@item.TaxPayerRIN</td>
+            <td>@item.AssessmentAmount.GetValueOrDefault().ToString("N2")</td>
+            <td>@CommUtil.GetFormatedDate(item.SettlementDueDate)</td>
+            <td>@item.SettlementStatusName</td>
+            <td>@CommUtil.GetFormatedDate(item.SettlementDate)</td>
+            <td>@item.AssessmentNotes</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        @if (item.SettlementStatusID < 3)
+                        {
+                            <li>
+                                <a href="@Url.Action("Edit", "Assessment", new { id = item.AssessmentID, name = item.AssessmentRefNo.ToSeoUrl() })">
+                                    Edit Details
+                                </a>
+                            </li>
+                        }
+                        <li>
+                            <a href="@Url.Action("Details","Assessment", new { id = item.AssessmentID, name=item.AssessmentRefNo.ToSeoUrl()})">
+                                View Details
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ChangeStatus(@item.AssessmentID)">
+                                Mark @(item.Active.GetValueOrDefault() ? "Inactive" : "Active")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}

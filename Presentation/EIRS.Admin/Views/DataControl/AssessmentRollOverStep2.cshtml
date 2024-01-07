@@ -1,0 +1,79 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<EIRS.BOL.Assessment_Rules>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Assessment Rule RollOver Step 2";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-lg fa-fw fa-life-saver"></i>
+            Map Assessment Rule To Item
+        </h1>
+    </div>
+    <div class="col-xs-12 col-sm-5 text-right">
+
+        <a href="@Url.Action("AssessmentRollOverStep3","DataControl")" class="btn btn-default"> Map  </a>
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().AssessmentRuleID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().AssessmentRuleCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().ProfileID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().AssessmentRuleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().AssessmentAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().TaxYear)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssessmentRuleID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssessmentRuleCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProfileID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssessmentRuleName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.AssessmentAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxYear)
+            </td>
+
+        </tr>
+    }
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("AssessmentRollOverStep2",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

@@ -1,0 +1,144 @@
+﻿@model EIRS.Models.BusinessViewModel
+
+@{
+    ViewBag.Title = "Business Details";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-briefcase"></i>
+                Businesses
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvBusinessDetails">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
+                        <h2>Business</h2>
+                    </header>
+                    <div class="content">
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-horizontal">
+                                <fieldset>
+                                    <legend>Business Details</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business RIN</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessRIN
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Name</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Asset Type</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.AssetTypeName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Type</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessTypeName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">LGA</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.LGAName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Category</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessCategoryName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Sector</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessSectorName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Sub Sector</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessSubSectorName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Structure</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessStructureName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Operations</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessOperationName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Premises Size</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.SizeName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Contact Name</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ContactName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Number</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessNumber
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Business Address</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.BusinessAddress
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Status</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ActiveText
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-default" href="@Url.Action("List","Business")">
+                                                Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

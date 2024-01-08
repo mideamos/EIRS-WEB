@@ -2735,8 +2735,10 @@ namespace EIRS.Web.Controllers
                 if (mObjIncomeStreamModel != null)
                 {
                     IList<usp_GetTaxPayerAssetForTCC_Result> lstTaxPayerAsset = new BLTCC().BL_GetTaxPayerAssetList(tpid, tptid);
-                    lstTaxPayerAsset = lstTaxPayerAsset.Where(t => t.TaxPayerRoleID == mObjIncomeStreamModel.TaxPayerRoleID).ToList();
-
+                    if (mObjIncomeStreamModel.TaxPayerRoleID != 0)
+                    {
+                        lstTaxPayerAsset = lstTaxPayerAsset.Where(t => t.TaxPayerRoleID == mObjIncomeStreamModel.TaxPayerRoleID).ToList();
+                    }
                     dcResponse["success"] = true;
                     dcResponse["AssetList"] = lstTaxPayerAsset.Select(t => new { id = t.AssetID, text = t.AssetName }).Distinct();
                     dcResponse["IncomeStreamData"] = mObjIncomeStreamModel;

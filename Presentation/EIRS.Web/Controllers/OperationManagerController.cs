@@ -87,7 +87,7 @@ namespace EIRS.Web.Controllers
             }
 
             return View(lstLateCharges);
-        }       
+        }
         [HttpGet]
         public ActionResult TccDownload()
         {
@@ -468,7 +468,8 @@ namespace EIRS.Web.Controllers
                     UI_FillDropDown();
                     ViewBag.Message = "Please Enter Transaction Ref No";
                     return View(pobjPaymentViewModel);
-                }if (pobjPaymentViewModel.Amount <= 0|| pobjPaymentViewModel.Amount==null)
+                }
+                if (pobjPaymentViewModel.Amount <= 0 || pobjPaymentViewModel.Amount == null)
                 {
                     UI_FillDropDown();
                     ViewBag.Message = "Please Enter Amount";
@@ -4624,7 +4625,7 @@ namespace EIRS.Web.Controllers
 
         }
 
-       public ActionResult PaymentChannelByRevenueStreamDetail(int smthId, int tyear, int rstrmID, DateTime? fdate, DateTime? tdate)
+        public ActionResult PaymentChannelByRevenueStreamDetail(int smthId, int tyear, int rstrmID, DateTime? fdate, DateTime? tdate)
         {
             ViewBag.SettlementMethodID = smthId;
             ViewBag.TaxYear = tyear;
@@ -4753,11 +4754,9 @@ namespace EIRS.Web.Controllers
             string strTableName = "Tax Officer by Revenue Stream Target";
 
             IList<usp_RPT_TaxOfficerByRevenueStreamTarget_Result> lstSummary = new BLOperationManager().BL_GetTaxOfficerByRevenueStreamTarget(TaxOfficerID, Year, Month);
+            DataTable dt = CommUtil.ConvertToDataTable(lstSummary);
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel(
-                new string[] { "RevenueStreamName", "TargetAmount", "AssessedAmount", "RevenueAmount" },
-                new string[] { "Revenue Stream", "Target Amount", "Total Assessed", "Total Revenue" },
-                new string[] { "string", "money", "money", "money" }, strTableName, lstSummary);
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficerByRevenueStreamTarget_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
@@ -4824,10 +4823,9 @@ namespace EIRS.Web.Controllers
 
             IList<usp_RPT_RevenueStreamByTaxOfficerTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficerTarget(TaxOfficeID, RevenueStreamID, Year, Month);
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel(
-                new string[] { "TaxOfficerName", "TargetAmount", "AssessedAmount", "RevenueAmount" },
-                new string[] { "Tax Officer", "Target Amount", "Total Assessed", "Total Revenue" },
-                new string[] { "string", "money", "money", "money" }, strTableName, lstSummary);
+            DataTable dt = CommUtil.ConvertToDataTable(lstSummary);
+
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RevenueStreamByTaxOfficerTarget_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
@@ -6401,10 +6399,9 @@ namespace EIRS.Web.Controllers
 
             IList<usp_RPT_TaxOfficeManagerStatus_Result> lstTaxPayer = new BLOperationManager().BL_GetTaxOfficeManagerStatus(TaxOfficeID, TaxPayerTypeID, ReviewStatusID, TOManagerID);
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel(
-                new string[] { "TaxPayerRIN", "TaxPayerName", "TaxPayerTypeName", "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount", "TaxOfficerName", "ReviewStatusName" },
-                new string[] { "Tax Payer RIN", "Tax Payer Name", "Tax Payer Type", "Assessment", "Payment", "Outstanding", "Tax Officer", "Review Status" },
-                new string[] { "string", "string", "string", "money", "money", "money", "string", "string" }, strTableName, lstTaxPayer);
+            DataTable dt = CommUtil.ConvertToDataTable(lstTaxPayer);
+
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficeManagerStatus_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
@@ -6463,14 +6460,10 @@ namespace EIRS.Web.Controllers
 
 
             IList<usp_RPT_TaxOfficerSummary_Result> lstSummary = new BLOperationManager().BL_GetTaxOfficerSummary(TaxOfficeID);
-            DataTable dt =CommUtil.ConvertToDataTable(lstSummary);
+            DataTable dt = CommUtil.ConvertToDataTable(lstSummary);
 
             var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
-            //byte[] ObjExcelData = CommUtil.ExportToExcel(
-            //    new string[] { "TaxOfficerName", "TotalTaxPayerCount", "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" },
-            //    new string[] { "Tax Officer", "Total Number of Tax Payers", "Total Assessments", "Total Payments", "Total Outstanding" },
-            //    new string[] { "string", "int", "money", "money", "money" }, strTableName, lstSummary);
-           return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficerSummary_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficerSummary_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
 
@@ -6581,11 +6574,9 @@ namespace EIRS.Web.Controllers
 
 
             IList<usp_RPT_TaxOfficeManagerSummary_Result> lstSummary = new BLOperationManager().BL_GetTaxOfficeManagerSummary(TaxOfficeID);
+            DataTable dt = CommUtil.ConvertToDataTable(lstSummary);
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel(
-                new string[] { "TaxOfficeManagerName", "TaxOfficerCount", "TotalTaxPayerCount", "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" },
-                new string[] { "Tax Office Manager Name", "Total Number of Tax Officers", "Total Number of Tax Payers", "Total Assessments", "Total Payments", "Total Outstanding" },
-                new string[] { "string", "int", "int", "money", "money", "money" }, strTableName, lstSummary);
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficeManagerSummary_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
@@ -6707,11 +6698,9 @@ namespace EIRS.Web.Controllers
             string strTableName = "Review Status Summary Report";
 
             IList<usp_RPT_ReviewStatusSummary_Result> lstSummary = new BLOperationManager().BL_GetReviewStatusSummary(TaxOfficeID, TaxPayerTypeID, ReviewStatusID);
+            DataTable dt = CommUtil.ConvertToDataTable(lstSummary);
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel(
-                new string[] { "ReviewStatusName", "TotalTaxPayerCount", "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" },
-                new string[] { "Status Name", "Total Number of Tax Payers", "Total Assessments", "Total Payments", "Total Outstanding" },
-                new string[] { "string", "int", "money", "money", "money" }, strTableName, lstSummary);
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ReviewStatusSummaryReport_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
@@ -7160,11 +7149,9 @@ namespace EIRS.Web.Controllers
             string strTableName = "Income Tax Liability Report";
 
             IList<usp_RPT_InvidualLiabilityStatus_Result> lstIndividualLiabilityStatus = new BLOperationManager().BL_GetIndividualLiabilityStatus();
+            DataTable dt = CommUtil.ConvertToDataTable(lstIndividualLiabilityStatus);
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel(
-                new string[] { "TaxPayerRIN", "TaxPayerName", "MobileNumber", "Balance" },
-                new string[] { "RIN", "Tax Payer Name", "Mobile Number", "Balance" },
-                new string[] { "string", "string", "string", "money" }, strTableName, lstIndividualLiabilityStatus);
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "IncomeTaxLiabilityReport_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }

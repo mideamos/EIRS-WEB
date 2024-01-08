@@ -1,4 +1,5 @@
-﻿using Microsoft.Reporting.WebForms;
+﻿using ClosedXML.Excel;
+using Microsoft.Reporting.WebForms;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
@@ -18,6 +19,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Excel = Microsoft.Office.Interop.Excel;
+using LicenseContext = OfficeOpenXml.LicenseContext;
 
 
 namespace EIRS.Common
@@ -116,7 +119,29 @@ namespace EIRS.Common
             return dcAmount.GetValueOrDefault().ToString("C", CultureInfo.CreateSpecificCulture("en-NG"));
         }
 
-
+        public static DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+        }
         public static string GetIPAddress()
         {
             System.Web.HttpContext context = System.Web.HttpContext.Current;
@@ -231,6 +256,36 @@ namespace EIRS.Common
         {
             return null;
         }
+        public static void GenerateExcel(DataTable dataTable, string path)
+        {
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(dataTable);
+            // create a excel app along side with workbook and worksheet and give a name to it
+            Excel.Application excelApp = new Excel.Application();
+            Excel.Workbook excelWorkBook = excelApp.Workbooks.Add();
+            Excel._Worksheet xlWorksheet = excelWorkBook.Sheets[1];
+            Excel.Range xlRange = xlWorksheet.UsedRange;
+            foreach (DataTable table in dataSet.Tables)
+            {
+                //Add a new worksheet to workbook with the Datatable name
+                Excel.Worksheet excelWorkSheet = excelWorkBook.Sheets.Add();
+                excelWorkSheet.Name = table.TableName;
+                // add all the columns
+                for (int i = 1; i < table.Columns.Count + 1; i++)
+                {
+                    excelWorkSheet.Cells[1, i] = table.Columns[i - 1].ColumnName;
+                }
+                // add all the rows
+                for (int j = 0; j < table.Rows.Count; j++)
+                {
+                    for (int k = 0; k < table.Columns.Count; k++)
+                    {
+                        excelWorkSheet.Cells[j + 2, k + 1] = table.Rows[j].ItemArray[k].ToString();
+                    }
+                }
+            }
+        }
         public static DataTable ConvertToDataTable<T>(IList<T> models)
         {
             // creating a data table instance and typed it as our incoming model   
@@ -261,41 +316,23 @@ namespace EIRS.Common
             }
             return dataTable;
         }
-        public static void GenerateExcel(DataTable dataTable, string path)
+        public static byte[] ConvertDataTableToExcel(DataTable dataTable)
         {
-
-            DataSet dataSet = new DataSet();
-            dataSet.Tables.Add(dataTable);
-
-            // create a excel app along side with workbook and worksheet and give a name to it  
-            Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
-            Microsoft.Office.Interop.Excel.Workbook excelWorkBook = excelApp.Workbooks.Add();
-            Microsoft.Office.Interop.Excel._Worksheet xlWorksheet = excelWorkBook.Sheets[1];
-            Microsoft.Office.Interop.Excel.Range xlRange = xlWorksheet.UsedRange;
-            foreach (DataTable table in dataSet.Tables)
+            ExcelPackage.LicenseContext = LicenseContext.Commercial;
+            using (var package = new ExcelPackage())
             {
-                //Add a new worksheet to workbook with the Datatable name  
-                Microsoft.Office.Interop.Excel.Worksheet excelWorkSheet = excelWorkBook.Sheets.Add();
-                excelWorkSheet.Name = table.TableName;
+                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
 
-                // add all the columns  
-                for (int i = 1; i < table.Columns.Count + 1; i++)
-                {
-                    excelWorkSheet.Cells[1, i] = table.Columns[i - 1].ColumnName;
-                }
+                // Load the data from DataTable to Excel worksheet
+                worksheet.Cells.LoadFromDataTable(dataTable, true);
 
-                // add all the rows  
-                for (int j = 0; j < table.Rows.Count; j++)
+                // Save the Excel package to a MemoryStream
+                using (var memoryStream = new MemoryStream())
                 {
-                    for (int k = 0; k < table.Columns.Count; k++)
-                    {
-                        excelWorkSheet.Cells[j + 2, k + 1] = table.Rows[j].ItemArray[k].ToString();
-                    }
+                    package.SaveAs(memoryStream);
+                    return memoryStream.ToArray();
                 }
             }
-            excelWorkBook.SaveAs(path); 
-            excelWorkBook.Close();
-            excelApp.Quit();
         }
         public static byte[] ExportToExcel2<T>(IList<T> lstData, MemberInfo[] pObjMemberInfo, bool blnShowTotal = false, string[] strTotalColumns = null)
         {

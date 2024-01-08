@@ -10,8 +10,10 @@ using EIRS.Web.Models;
 using Elmah;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
+using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OfficeOpenXml;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
@@ -4622,73 +4624,7 @@ namespace EIRS.Web.Controllers
 
         }
 
-        public static void GenerateExcel(DataTable dt, string path)
-        {
-
-            DataSet dataSet = new DataSet();
-            dataSet.Tables.Add(dt);
-
-            // create a excel app along side with workbook and worksheet and give a name to it  
-            Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
-            Microsoft.Office.Interop.Excel.Workbook excelWorkBook = excelApp.Workbooks.Add();
-            Microsoft.Office.Interop.Excel._Worksheet xlWorksheet = excelWorkBook.Sheets[1];
-            Microsoft.Office.Interop.Excel.Range xlRange = xlWorksheet.UsedRange;
-            foreach (DataTable table in dataSet.Tables)
-            {
-                //Add a new worksheet to workbook with the Datatable name  
-                Microsoft.Office.Interop.Excel.Worksheet excelWorkSheet = excelWorkBook.Sheets.Add();
-                excelWorkSheet.Name = "PCByRevenueStreamReport";
-
-                // add all the columns  
-                for (int i = 1; i < table.Columns.Count + 1; i++)
-                {
-                    excelWorkSheet.Cells[1, i] = table.Columns[i - 1].ColumnName;
-                }
-
-                // add all the rows  
-                for (int j = 0; j < table.Rows.Count; j++)
-                {
-                    for (int k = 0; k < table.Columns.Count; k++)
-                    {
-                        excelWorkSheet.Cells[j + 2, k + 1] = table.Rows[j].ItemArray[k].ToString();
-                    }
-                }
-            }
-            excelWorkBook.SaveAs(path);
-            excelWorkBook.Close();
-            excelApp.Quit();
-        }
-        public static DataTable ConvertToDataTable<T>(IList<T> models)
-        {
-            // creating a data table instance and typed it as our incoming model   
-            // as I make it generic, if you want, you can make it the model typed you want.  
-            DataTable dataTable = new DataTable(typeof(T).Name);
-
-            //Get all the properties of that model  
-            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            // Loop through all the properties              
-            // Adding Column name to our datatable  
-            foreach (PropertyInfo prop in Props)
-            {
-                //Setting column names as Property names    
-                dataTable.Columns.Add(prop.Name);
-            }
-            // Adding Row and its value to our dataTable  
-            foreach (T item in models)
-            {
-                var values = new object[Props.Length];
-                for (int i = 0; i < Props.Length; i++)
-                {
-                    //inserting property values to datatable rows    
-                    values[i] = Props[i].GetValue(item, null);
-                }
-                // Finally add value to datatable    
-                dataTable.Rows.Add(values);
-            }
-            return dataTable;
-        }
-        public ActionResult PaymentChannelByRevenueStreamDetail(int smthId, int tyear, int rstrmID, DateTime? fdate, DateTime? tdate)
+       public ActionResult PaymentChannelByRevenueStreamDetail(int smthId, int tyear, int rstrmID, DateTime? fdate, DateTime? tdate)
         {
             ViewBag.SettlementMethodID = smthId;
             ViewBag.TaxYear = tyear;
@@ -6527,12 +6463,14 @@ namespace EIRS.Web.Controllers
 
 
             IList<usp_RPT_TaxOfficerSummary_Result> lstSummary = new BLOperationManager().BL_GetTaxOfficerSummary(TaxOfficeID);
+            DataTable dt =CommUtil.ConvertToDataTable(lstSummary);
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel(
-                new string[] { "TaxOfficerName", "TotalTaxPayerCount", "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" },
-                new string[] { "Tax Officer", "Total Number of Tax Payers", "Total Assessments", "Total Payments", "Total Outstanding" },
-                new string[] { "string", "int", "money", "money", "money" }, strTableName, lstSummary);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficerSummary_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
+            //byte[] ObjExcelData = CommUtil.ExportToExcel(
+            //    new string[] { "TaxOfficerName", "TotalTaxPayerCount", "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" },
+            //    new string[] { "Tax Officer", "Total Number of Tax Payers", "Total Assessments", "Total Payments", "Total Outstanding" },
+            //    new string[] { "string", "int", "money", "money", "money" }, strTableName, lstSummary);
+           return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficerSummary_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
 

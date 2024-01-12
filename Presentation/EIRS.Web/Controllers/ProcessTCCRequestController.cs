@@ -1141,6 +1141,11 @@ namespace EIRS.Web.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult ValidateTaxPayerIncome(ValidateTaxPayerIncomeViewModel pobjValidateTaxPayerIncomeModel)
         {
+            if(pobjValidateTaxPayerIncomeModel.SourceOfIncome == "---Select One----")
+            {
+
+                return View(pobjValidateTaxPayerIncomeModel);
+            }
             IList<PayeApiResponse> lstPayeDetail = SessionManager.LstPayeApiResponse ?? new List<PayeApiResponse>();
             ViewBag.PAYEIncomeStreamList = lstPayeDetail;
             IList<Request_IncomeStream> lstErasDetail = SessionManager.LstIncomeStream ?? new List<Request_IncomeStream>();
@@ -1482,7 +1487,6 @@ namespace EIRS.Web.Controllers
                         return View(pobjValidateTaxPayerIncomeModel);
                     }
                 }
-
             }
         }
 
@@ -1503,6 +1507,9 @@ namespace EIRS.Web.Controllers
             using (var _db = new EIRSEntities())
             {
                 var res = _db.NatureOfBusiness.ToList();
+                res.Add(new NatureOfBusiness { Id = 0, NatureOfBusinessName = "---Select One----" });
+
+                res = res.OrderBy(x => x.Id).ToList();
                 foreach (var i in res)
                 {
                     lstres.Add(new SelectListItem() { Text = i.NatureOfBusinessName, Value = i.NatureOfBusinessName });

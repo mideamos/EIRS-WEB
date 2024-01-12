@@ -229,7 +229,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         @Html.LabelFor(model => model.SourceOfIncome, htmlAttributes: new { @class = "control-label required-star" })
-                        @Html.DropDownListFor(model => model.SourceOfIncome, new SelectList(ViewBag.lstresList, "Text", "Value"))
+                        @Html.DropDownListFor(model => model.SourceOfIncome, new SelectList(ViewBag.lstresList, "Text", "Value", "Select One Please"))
                          @Html.ValidationMessageFor(model => model.SourceOfIncome, "", htmlAttributes: new { @class = "help-block" })
                     </div>
                     @*<div class="form-group">

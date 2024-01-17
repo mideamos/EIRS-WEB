@@ -3523,7 +3523,6 @@ namespace EIRS.Web.Controllers
                     IndividualID = id.GetValueOrDefault(),
                     intStatus = 1
                 };
-
                 usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(mObjIndividual);
 
                 if (mObjIndividualData != null)

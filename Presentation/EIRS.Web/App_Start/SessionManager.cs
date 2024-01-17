@@ -323,6 +323,7 @@ namespace EIRS.Web
         public decimal RA { get; set; }
         public decimal SA { get; set; }
         public decimal BA { get; set; }
+        public string TransactionRefNo { get; set; }
 
     }
     public class NewPoASettlementViewModel

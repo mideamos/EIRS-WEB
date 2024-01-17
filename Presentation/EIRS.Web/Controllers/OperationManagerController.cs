@@ -483,6 +483,7 @@ namespace EIRS.Web.Controllers
                     To_TaxPayerTypeID = pobjPaymentViewModel.ToTaxPayerTypeID,
                     POAAccountId = Convert.ToInt32(myClass.PaymentAccountID),
                     To_TaxPayerID = pobjPaymentViewModel.ToTaxPayerID,
+                    TransactionRefNo = myClass.TransactionRefNo,
                     Amount = pobjPaymentViewModel.Amount,
                     OperationDate = CommUtil.GetCurrentDateTime(),
                     CreatedBy = SessionManager.UserID,

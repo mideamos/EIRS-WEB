@@ -35,7 +35,6 @@ namespace EIRS.BOL
         public virtual DbSet<Assessment_Item_SubCategory> Assessment_Item_SubCategory { get; set; }
         public virtual DbSet<Assessment_Items> Assessment_Items { get; set; }
         public virtual DbSet<Assessment_Rules> Assessment_Rules { get; set; }
-        public virtual DbSet<NatureOfBusiness> NatureOfBusiness { get; set; }
         public virtual DbSet<Assessment_SubGroup> Assessment_SubGroup { get; set; }
         public virtual DbSet<Asset_Types> Asset_Types { get; set; }
         public virtual DbSet<Building> Buildings { get; set; }

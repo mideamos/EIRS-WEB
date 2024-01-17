@@ -423,6 +423,7 @@
                     <th>Bill Type</th>
                     <th class="desktop">Bill ID</th>
                     <th>Bill Amount</th>
+                    <th>Bill Transaction Ref</th>
                     <th class="action-th all">Action</th>
                 </tr>
             </thead>
@@ -434,6 +435,7 @@
                         <td>@vPaymentItem.PaymentTypeName</td>
                         <td>@vPaymentItem.PaymentRefNo</td>
                         <td>@CommUtil.GetFormatedCurrency(vPaymentItem.Amount)</td>
+                        <td>@vPaymentItem.TransactionRefNo</td>
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -452,7 +454,6 @@
         </table>
     </div>
 </div>
-
 <div class="portlet light">
     <div class="portlet-title">
         <div class="caption">Tax Clearance Certificates</div>

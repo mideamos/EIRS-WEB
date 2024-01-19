@@ -1506,7 +1506,7 @@ namespace EIRS.Web.Controllers
             IList<SelectListItem> lstres = new List<SelectListItem>();
             using (var _db = new EIRSEntities())
             {
-                var res = _db.NatureOfBusiness.ToList();
+                var res = _db.NatureOfBusinesses.ToList();
                 res.Add(new NatureOfBusiness { Id = 0, NatureOfBusinessName = "---Select One----" });
 
                 res = res.OrderBy(x => x.Id).ToList();

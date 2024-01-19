@@ -186,31 +186,32 @@ namespace EIRS.Repository
         {
             using (_db = new EIRSEntities())
             {
-                decimal? sumValue =0;
+                decimal? sumValue = 0;
                 //var settlements = new List<MAP_Assessment_LateCharge>();
                 // var settlements = new List<MAP_ServiceBill_Adjustment>();
 
                 if (assessmentId != null)
                 {
-                    var retVal = _db.MAP_Assessment_AssessmentRule.Where(o=>o.AssessmentID == assessmentId).ToList();   
-                    foreach(var ret in retVal)
+                    var retVal = _db.MAP_Assessment_AssessmentRule.Where(o => o.AssessmentID == assessmentId).ToList();
+                    foreach (var ret in retVal)
                     {
-                        var retItem= _db.MAP_Assessment_AssessmentItem.Where(n=>n.AARID == ret.AARID).ToList();
+                        var retItem = _db.MAP_Assessment_AssessmentItem.Where(n => n.AARID == ret.AARID).ToList();
                         //sumValue = +retItem.Sum(o => o.TaxAmount);
-                        foreach(var rt in retItem) {
-                          var kk = (from smnt in _db.MAP_Assessment_LateCharge
-                                       where smnt.AAIID == rt.AAIID
-                                       select smnt).Sum(x=>x.TotalAmount);
-                            if(kk==null)
-                                kk= 0;  
+                        foreach (var rt in retItem)
+                        {
+                            var kk = (from smnt in _db.MAP_Assessment_LateCharge
+                                      where smnt.AAIID == rt.AAIID
+                                      select smnt).Sum(x => x.TotalAmount);
+                            if (kk == null)
+                                kk = 0;
                             sumValue += kk;
                         }
                     }
-                   
+
                     //return settlements;
                 }
 
-              
+
                 return sumValue.Value;
             }
         }
@@ -246,7 +247,7 @@ namespace EIRS.Repository
                 }
 
 
-               
+
 
                 return sumValue.Value;
             }
@@ -308,12 +309,101 @@ namespace EIRS.Repository
             }
         }
 
+        //public IList<usp_GetTaxPayerPayment_Result> REP_GetTaxPayerPayment(int pIntTaxPayerID, int pIntTaxPayerTypeID)
+        //{
+        //    using (_db = new EIRSEntities())
+        //    {
+        //        return _db.usp_GetTaxPayerPayment(pIntTaxPayerID, pIntTaxPayerTypeID).ToList();
+        //    }
+        //}
         public IList<usp_GetTaxPayerPayment_Result> REP_GetTaxPayerPayment(int pIntTaxPayerID, int pIntTaxPayerTypeID)
         {
             using (_db = new EIRSEntities())
             {
-                return _db.usp_GetTaxPayerPayment(pIntTaxPayerID, pIntTaxPayerTypeID).ToList();
+                string sqlQuery = @"
+            SELECT
+                stmt.SettlementID AS PaymentID,
+                stmt.SettlementDate AS PaymentDate,
+                1 AS PaymentTypeID,
+                'Settlement' AS PaymentTypeName,
+                stmt.SettlementRefNo AS PaymentRefNo,
+                stmt.SettlementAmount AS Amount,
+                stmt.TransactionRefNo AS TransactionRefNo
+            FROM Settlement stmt
+            INNER JOIN Assessment ast ON stmt.AssessmentID = ast.AssessmentID AND stmt.AssessmentID IS NOT NULL
+            WHERE ast.TaxPayerTypeID = COALESCE(NULLIF('" + pIntTaxPayerTypeID + @"', 0), ast.TaxPayerTypeID)
+            AND ast.TaxPayerID = COALESCE(NULLIF('" + pIntTaxPayerID + @"', 0), ast.TaxPayerID)
+
+            UNION ALL
+
+            SELECT
+                stmt.SettlementID AS PaymentID,
+                stmt.SettlementDate AS PaymentDate,
+                1 AS PaymentTypeID,
+                'Settlement' AS PaymentTypeName,
+                stmt.SettlementRefNo AS PaymentRefNo,
+                stmt.SettlementAmount AS Amount,
+                stmt.TransactionRefNo AS TransactionRefNo
+            FROM Settlement stmt
+            INNER JOIN ServiceBill sb ON stmt.ServiceBillID = sb.ServiceBillID AND stmt.ServiceBillID IS NOT NULL
+            WHERE sb.TaxPayerTypeID = COALESCE(NULLIF(" + pIntTaxPayerTypeID + @", 0), sb.TaxPayerTypeID)
+            AND sb.TaxPayerID = COALESCE(NULLIF('" + pIntTaxPayerID + @"', 0), sb.TaxPayerID)
+
+            UNION ALL
+
+                SELECT
+                    map.POAAccountId AS PaymentID,
+                    map.OperationDate AS PaymentDate,
+                    2 AS PaymentTypeID,
+                    'Payment on Account' AS PaymentTypeName,
+                          cast(map.POAID as varchar(50)) AS PaymentRefNo,
+                    COALESCE(map.amount, 0) AS Amount,
+                    map.TransactionRefNo AS TransactionRefNo
+                FROM MAP_PaymentAccount_Operation map
+                WHERE map.To_TaxPayerTypeID = CASE WHEN ISNULL(" + pIntTaxPayerTypeID + @", 0) = 0 THEN map.To_TaxPayerTypeID ELSE ISNULL(" + pIntTaxPayerTypeID + @", 0) END
+                AND map.To_TaxPayerID = CASE WHEN ISNULL('" + pIntTaxPayerID + @"', 1) = 0 THEN map.To_TaxPayerID ELSE ISNULL('" + pIntTaxPayerID + @"', 1) END
+
+		    UNION ALL
+
+            SELECT
+                map.POAAccountId AS PaymentID,
+                map.OperationDate AS PaymentDate,
+                2 AS PaymentTypeID,
+                'Payment on Account' AS PaymentTypeName,
+                cast(map.POAID as varchar(50)) AS PaymentRefNo,
+                COALESCE(map.amount, 0) AS Amount,
+                map.TransactionRefNo AS TransactionRefNo
+            FROM MAP_PaymentAccount_Operation map
+            WHERE map.From_TaxPayerTypeID = CASE WHEN ISNULL(" + pIntTaxPayerTypeID + @", 0) = 0 THEN map.From_TaxPayerTypeID ELSE ISNULL(" + pIntTaxPayerTypeID + @", 0) END
+            AND map.From_TaxPayerID = CASE WHEN ISNULL('" + pIntTaxPayerID + @"', 1) = 0 THEN map.From_TaxPayerID ELSE ISNULL('" + pIntTaxPayerID + @"', 1) END
+        ";
+
+                var result = _db.Database.SqlQuery<TaxpayerPayment>(sqlQuery).ToList();
+
+                var convertedResult = result.Select(tp => new usp_GetTaxPayerPayment_Result
+                {
+                    PaymentID = (int?)tp.PaymentID,
+                    PaymentDate = tp.PaymentDate,
+                    PaymentTypeID = tp.PaymentTypeID,
+                    PaymentTypeName = tp.PaymentTypeName,
+                    PaymentRefNo = tp.PaymentRefNo,
+                    Amount = tp.Amount,
+                    TransactionRefNo = tp.TransactionRefNo
+                }).ToList();
+
+                return convertedResult;
             }
+        }
+        internal partial class TaxpayerPayment
+        {
+
+            public int PaymentID { get; set; }
+            public DateTime PaymentDate { get; set; }
+            public int PaymentTypeID { get; set; }
+            public string PaymentTypeName { get; set; }
+            public string PaymentRefNo { get; set; }
+            public decimal Amount { get; set; }
+            public string TransactionRefNo { get; set; }
         }
 
         public IList<usp_GetSettleTransactionList_Result> REP_GetSettleTransactionList(Settlement pObjSettlement)

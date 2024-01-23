@@ -222,6 +222,7 @@ namespace EIRS.Repository
                 mObjInsertUpdatePaymentAccount.To_BillID = pObjPaymentAccount.To_BillID;
                 mObjInsertUpdatePaymentAccount.To_BillTypeID = pObjPaymentAccount.To_BillTypeID;
                 mObjInsertUpdatePaymentAccount.POAAccountId = pObjPaymentAccount.POAAccountId;
+                mObjInsertUpdatePaymentAccount.TransactionRefNo = pObjPaymentAccount.TransactionRefNo;
                 mObjInsertUpdatePaymentAccount.Amount = pObjPaymentAccount.Amount;
                 mObjInsertUpdatePaymentAccount.Active = pObjPaymentAccount.Active;
 

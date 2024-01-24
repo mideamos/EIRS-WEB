@@ -702,7 +702,7 @@ namespace EIRS.Web.Controllers
                     ViewBag.TCCRequestList = lstTCCRequest;
 
                     IList<DropDownListResult> lstYear = new List<DropDownListResult>();
-                    lstYear.Add(new DropDownListResult() { id = DateTime.Now.Year - 1, text = (DateTime.Now.Year - 1).ToString() });
+                    lstYear.Add(new DropDownListResult() { id = DateTime.Now.Year, text = (DateTime.Now.Year).ToString() });
                     ViewBag.YearList = new SelectList(lstYear, "id", "text");
 
                     return View(mObjIndividualData);

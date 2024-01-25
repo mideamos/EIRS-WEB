@@ -1141,7 +1141,7 @@ namespace EIRS.Web.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult ValidateTaxPayerIncome(ValidateTaxPayerIncomeViewModel pobjValidateTaxPayerIncomeModel)
         {
-            if(pobjValidateTaxPayerIncomeModel.SourceOfIncome == "---Select One----")
+            if (pobjValidateTaxPayerIncomeModel.SourceOfIncome == "---Select One----")
             {
 
                 return View(pobjValidateTaxPayerIncomeModel);
@@ -1837,7 +1837,7 @@ namespace EIRS.Web.Controllers
                 var txxx = new TaxClearanceCertificate();
                 using (var ddd = new EIRSEntities())
                 {
-                    txxx = ddd.TaxClearanceCertificates.FirstOrDefault(o=>o.SerialNumber ==reqid.ToString());
+                    txxx = ddd.TaxClearanceCertificates.FirstOrDefault(o => o.SerialNumber == reqid.ToString());
                 }
                 string busiName = "";
 
@@ -1851,6 +1851,9 @@ namespace EIRS.Web.Controllers
                 usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
                 if (mObjRequestData != null)
                 {
+                    var curYear = DateTime.Now.Year;
+                    if (mObjRequestData.TaxYear == curYear)
+                        mObjRequestData.TaxYear = curYear - 1;
                     usp_GetTCCRequestDetails_Result mObjRequestDatanew = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
                     IList<usp_GetTCCDetail_Result> lstTCCDetail = mObjBLTCC.BL_GetTCCDetail(mObjRequestData.IndividualID, (int)EnumList.TaxPayerType.Individual, mObjRequestData.TaxYear.GetValueOrDefault());
 
@@ -1859,9 +1862,9 @@ namespace EIRS.Web.Controllers
                     IList<usp_GetTaxClearanceCertificateDetails_Result> lstTCC = mObjBLTCC.BL_GetTaxClearanceCertificateList(new TaxClearanceCertificate() { TaxPayerID = mObjRequestData.IndividualID, TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual });
                     var certNumber = lstTCC.Where(t => t.TaxYear == mObjRequestData.TaxYear).ToList();
 
-                    var lastyear = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear)).FirstOrDefault();
-                    var last2year = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).FirstOrDefault();
-                    var last3year = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).FirstOrDefault();
+                    var lastyear = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear)).FirstOrDefault();
+                    var last2year = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).FirstOrDefault();
+                    var last3year = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).FirstOrDefault();
                     //get receipt
                     IList<TicketRef> trf = SessionManager.LstTicketRef ?? new List<TicketRef>();
                     usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(new Individual() { intStatus = 1, IndividualID = mObjRequestData.IndividualID });

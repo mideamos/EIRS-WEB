@@ -537,7 +537,7 @@
                 <input type="hidden" id="hdnIndividualID" value="@Model.IndividualID" />
                 <div class="form-group">
                     <label class="control-label required-star">Select Tax Year</label>
-                    @Html.DropDownList("cboTaxYear", (SelectList)ViewBag.YearList, "Select Tax Year", new { @class = "form-control bs-select", @id = "cboTaxYear" })
+                    @Html.DropDownList("cboTaxYear", (SelectList)ViewBag.YearListlstYearForDropDown, "Select Tax Year", new { @class = "form-control bs-select", @id = "cboTaxYear" })
                 </div>
             </div>
             <div class="modal-footer">

@@ -703,7 +703,10 @@ namespace EIRS.Web.Controllers
 
                     IList<DropDownListResult> lstYear = new List<DropDownListResult>();
                     lstYear.Add(new DropDownListResult() { id = DateTime.Now.Year-1, text = (DateTime.Now.Year-1).ToString() });
-                    ViewBag.YearList = new SelectList(lstYear, "id", "text");
+                    ViewBag.YearList = new SelectList(lstYear, "id", "text");     
+                    IList<DropDownListResult> lstYearForDropDown = new List<DropDownListResult>();
+                    lstYearForDropDown.Add(new DropDownListResult() { id = DateTime.Now.Year-1, text = (DateTime.Now.Year-1).ToString() });
+                    ViewBag.YearListlstYearForDropDown = new SelectList(lstYearForDropDown, "id", "text");
 
                     return View(mObjIndividualData);
                 }

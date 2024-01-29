@@ -630,7 +630,7 @@ namespace EIRS.Web.Controllers
 
         public JsonResult PoATransferValidate(string pid, int? pIntTaxPayerTypeID, int? pIntTaxPayerID)
         {
-            decimal? reciedAmount = 0; decimal? sentAmount = 0; decimal? newbalance = 0;
+            decimal? reciedAmount = 0; decimal? sentAmount = 0; decimal? newbalance = 0; 
             string noUser = "";
             List<MAP_PaymentAccount_Operation> lstret = new List<MAP_PaymentAccount_Operation>();
             MAP_PaymentAccount_Operation ret = new MAP_PaymentAccount_Operation();
@@ -641,16 +641,24 @@ namespace EIRS.Web.Controllers
                 if (res != null)
                 {
                     if (pIntTaxPayerID.Value == 0)
+                    {
                         pIntTaxPayerID = SessionManager.TaxPayerIDForPoa;
-
+                        if (pIntTaxPayerID.Value == 0)
+                        {
+                            dcResponse["success"] = false;
+                            dcResponse["noUser"] = "Taxpayer Number not Found. Please Try again";
+                            return Json(dcResponse, JsonRequestBehavior.AllowGet);
+                        }
+                    }
                     lstret = _db.MAP_PaymentAccount_Operation.Where(o => o.POAAccountId == res.PaymentAccountID).ToList();
                     if (lstret.Count > 0)
                     {
+
                         reciedAmount = lstret.Where(o => o.To_TaxPayerID == pIntTaxPayerID && o.To_TaxPayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
                         sentAmount = lstret.Where(o => o.From_TaxPayerID == pIntTaxPayerID && o.From_TaxPayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
                         newbalance = reciedAmount - sentAmount;
 
-                        PoaMyClass myClass = new PoaMyClass() { BA = newbalance.Value, PaymentAccountID = res.PaymentAccountID, SA = sentAmount.Value, RA = reciedAmount.Value };
+                        PoaMyClass myClass = new PoaMyClass() { TransactionRefNo = pid, BA = newbalance.Value, PaymentAccountID = res.PaymentAccountID, SA = sentAmount.Value, RA = reciedAmount.Value };
                         SessionManager.poaMyClass = myClass;
                     }
 

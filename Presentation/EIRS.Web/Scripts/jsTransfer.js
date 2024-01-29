@@ -65,7 +65,13 @@
             pIntTaxPayerTypeID: vTaxpayerTypeID == '' ? 0 : vTaxpayerTypeID,
             pIntTaxPayerID: vTaxPayerID == '' ? 0 : vTaxPayerID
         };
-        console.log(vData);
+        // Check if pIntTaxPayerID is equal to 0
+        //if (vData.pIntTaxPayerID === 0) {
+        //    alert('Taxpayer Number not Found. Please Try again');
+        //    // Stop the process or return from the function if needed
+        //    return;
+        //}
+        //console.log(vData);
         jsfn_ajaxPost('/OperationManager/PoATransferValidate/', vData, jsfn_onValidateResponse);
     });
 

@@ -1,4 +1,4 @@
-﻿@model usp_GetAssessmentList_Result
+@model usp_GetAssessmentList_Result
 @using EIRS.Common
 @using EIRS.BOL
 
@@ -87,6 +87,8 @@
                         <div class="desc-row">
                             Amount Charged: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Where(t => t.AARID == item.AARID).Sum(t => t.TotalAmount)) <br /> <br />      @*Amount Charged: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount) <br />*@
                             Amount Paid: @CommUtil.GetFormatedCurrency(item.SettledAmount) <a data-toggle="modal" data-target="#dvViewPaymentModal_@item.AARID">[View Payments]</a> <br />
+                            @*Outstanding: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault()) <br />*@
+
                             Outstanding: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Where(t => t.AARID == item.AARID).Sum(t => t.TotalAmount) - item.SettledAmount.GetValueOrDefault())<br />
 
 
@@ -250,30 +252,33 @@
                 </div>
             </div>
 
-            @if (Model.SettlementStatusID < (int)EnumList.SettlementStatus.Settled)
+            @if (Model.SettlementStatusID < (int)EnumList.SettlementStatus.PendingApproval)
             {
                 <hr class="margin-top-0" />
 
                 <div class="form-horizontal">
-                    <div class="form-group">
+                    @*<div class="form-group">
                         <label class="control-label col-sm-4">Settlement Method*</label>
                         <div class="col-sm-8">
                             @Html.DropDownList("cboSettlementMethod", (SelectList)ViewBag.SettlementMethodList, "Select Settlement Method", htmlAttributes: new { @tabindex = "2", @class = "form-control bs-select", @width = "100%" })
                         </div>
-                    </div>
+                    </div>*@
                     <div class="form-group">
-                        <label class="control-label col-sm-4">Add Notes</label>
+                        <label class="control-label col-sm-4">Add Notes *</label>
                         <div class="col-sm-8">
-                            <textarea class="form-control"></textarea>
+                            <textarea class="form-control" id="txtareaId" required></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4"></label>
                         <div class="col-sm-2">
-                            <a href="@Url.Action("Details","CaptureIndividual",new { id  =  Model.TaxPayerID, name = Model.TaxPayerRIN.ToSeoUrl() })" class="btn btn-redtheme btn-block" id="btnCancel"> Cancel </a>
+                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type =1 })" class="btn btn-redtheme btn-block" id="btnCancel"> Disapprove </a>
                         </div>
                         <div class="col-sm-6">
-                            <a class="btn btn-theme btn-block"> Make Payment </a>
+                            @*<a class="btn btn-theme btn-block"> Approve </a>*@
+                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type =2 })"class="btn btn-theme btn-block">
+                                View Bill
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -305,6 +305,9 @@
     <Compile Include="LGAClass.cs">
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MapAssessmentDisapprove_.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MAP_API_Users_Rights.cs">
       <DependentUpon>ERASModel.tt</DependentUpon>
     </Compile>

@@ -2,8 +2,14 @@
 using EIRS.BOL;
 using EIRS.Common;
 using EIRS.Models;
+using EIRS.Web.GISModels;
+using Google.Protobuf.WellKnownTypes;
+using SixLabors.ImageSharp.Drawing;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using static EIRS.Common.EnumList;
 using static EIRS.Web.Controllers.Filters;
 
 namespace EIRS.Web.Controllers
@@ -47,6 +53,186 @@ namespace EIRS.Web.Controllers
         public ActionResult ChangePassword()
         {
             return View();
+        }
+        public ActionResult Pending()
+        {
+            var retList = new List<ApprovalFlow>();
+            using (var _db = new EIRSEntities())
+            {
+                int det = 0;
+                var doc = new Dictionary<string, string>();
+                var statusList = new List<int?>();
+                statusList.Add(6);
+                statusList.Add(8);
+                var allTax = _db.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
+                if (!allTax.Any())
+                { allTax = _db.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID); det = 1; }
+                else
+                    det = 2;
+                if (!allTax.Any())
+                    return RedirectToAction("Unauthorised");
+                var allTaxOffice = allTax.Select(o => o.TaxOfficeID);
+
+                var allAss = _db.Assessments.Where(o => statusList.Contains(o.SettlementStatusID));
+                switch (det)
+                {
+                    case 1:
+                        allAss = allAss.Where(o => o.AssessmentAmount <= 100000);
+                        break;
+                    case 2:
+                        allAss = allAss.Where(o => o.AssessmentAmount > 100000);
+                        break;
+                    default:
+                        break;
+                }
+                var possibleCompanies = allAss.Where(o => o.TaxPayerTypeID == 2).Select(o => o.TaxPayerID);
+                var allCom = _db.Companies.Where(o => possibleCompanies.Contains(o.CompanyID) && allTaxOffice.Contains(o.TaxOfficeID.Value));
+                var possibleIndividuals = allAss.Where(o => o.TaxPayerTypeID == 1).Select(o => o.TaxPayerID);
+                var allInd = _db.Individuals.Where(o => possibleIndividuals.Contains(o.IndividualID));
+                allInd = allInd.Where(o => allTaxOffice.Contains(o.TaxOfficeID.Value));
+                var possibleGov = allAss.Where(o => o.TaxPayerTypeID == 4).Select(o => o.TaxPayerID);
+                var allGov = _db.Governments.Where(o => possibleGov.Contains(o.GovernmentID) && allTaxOffice.Contains(o.TaxOfficeID.Value));
+                foreach (var status in allCom)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.CompanyID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = status.CompanyName;
+                        af.Rin = status.CompanyRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+                        af.Id = status.CompanyID;
+                        retList.Add(af);
+                    }
+                }
+                foreach (var status in allInd)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.IndividualID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = $"{status.FirstName} {status.LastName}";
+                        af.Rin = status.IndividualRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+
+                        af.Id = status.IndividualID;
+                        retList.Add(af);
+                    }
+                }
+                foreach (var status in allGov)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.GovernmentID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = status.GovernmentName;
+                        af.Rin = status.GovernmentRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+                        af.Id = status.GovernmentID;
+                        retList.Add(af);
+                    }
+                }
+            }
+            ViewBag.ProfileInformation = retList;
+            return View(retList);
+        }
+        public ActionResult Declined()
+        {
+            var retList = new List<ApprovalFlow>();
+            using (var _db = new EIRSEntities())
+            {
+                int det = 0;
+                var doc = new Dictionary<string, string>();
+               
+                var allTax = _db.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
+                if (!allTax.Any())
+                { allTax = _db.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID); det = 1; }
+                else
+                    det = 2;
+                if (!allTax.Any())
+                    return RedirectToAction("Unauthorised");
+                var allTaxOffice = allTax.Select(o => o.TaxOfficeID);
+
+                var allAss = _db.Assessments.Where(o => o.SettlementStatusID == (int)SettlementStatus.Disapproved);
+                switch (det)
+                {
+                    case 1:
+                        allAss = allAss.Where(o => o.AssessmentAmount <= 100000);
+                        break;
+                    case 2:
+                        allAss = allAss.Where(o => o.AssessmentAmount > 100000);
+                        break;
+                    default:
+                        break;
+                }
+                var possibleCompanies = allAss.Where(o => o.TaxPayerTypeID == 2).Select(o => o.TaxPayerID);
+                var allCom = _db.Companies.Where(o => possibleCompanies.Contains(o.CompanyID) && allTaxOffice.Contains(o.TaxOfficeID.Value));
+                var possibleIndividuals = allAss.Where(o => o.TaxPayerTypeID == 1).Select(o => o.TaxPayerID);
+                var allInd = _db.Individuals.Where(o => possibleIndividuals.Contains(o.IndividualID));
+                allInd = allInd.Where(o => allTaxOffice.Contains(o.TaxOfficeID.Value));
+                var possibleGov = allAss.Where(o => o.TaxPayerTypeID == 4).Select(o => o.TaxPayerID);
+                var allGov = _db.Governments.Where(o => possibleGov.Contains(o.GovernmentID) && allTaxOffice.Contains(o.TaxOfficeID.Value));
+                foreach (var status in allCom)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.CompanyID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = status.CompanyName;
+                        af.Rin = status.CompanyRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+                        af.Id = status.CompanyID;
+                        retList.Add(af);
+                    }
+                }
+                foreach (var status in allInd)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.IndividualID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = $"{status.FirstName} {status.LastName}";
+                        af.Rin = status.IndividualRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+
+                        af.Id = status.IndividualID;
+                        retList.Add(af);
+                    }
+                }
+                foreach (var status in allGov)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.GovernmentID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = status.GovernmentName;
+                        af.Rin = status.GovernmentRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+                        af.Id = status.GovernmentID;
+                        retList.Add(af);
+                    }
+                }
+            }
+            ViewBag.ProfileInformation = retList;
+            return View(retList);
         }
 
         [HttpPost]

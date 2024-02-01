@@ -2015,6 +2015,9 @@
     </Content>
     <Content Include="web.config" />
     <Content Include="Views\OperationManager\TccDownload.cshtml" />
+    <Content Include="Views\Home\Pending.cshtml" />
+    <Content Include="Views\Home\Declined.cshtml" />
+    <Content Include="Views\CaptureIndividual\AssessmentBillDetailFromPending.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -2103,6 +2106,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsRDLCTable.xsd</DependentUpon>
     </Compile>
+    <Compile Include="GISModels\ApprovalFlow.cs" />
     <Compile Include="GISModels\EIRSContext.cs" />
     <Compile Include="GISModels\GISFileAssessment.cs" />
     <Compile Include="GISModels\GISFileAssessmentItem.cs" />
@@ -3272,7 +3276,6 @@
     <Error Condition="!Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
- 
     <Error Condition="!Exists('..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets'))" />
     <Error Condition="!Exists('..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets'))" />

@@ -1857,6 +1857,17 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="MapAssessmentDisapprove ">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssessmentID" Type="bigint" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="TaxOfficerId" Type="int" />
+          <Property Name="TaxOfficerDesignation" Type="nvarchar(max)" />
+          <Property Name="DateCreated" Type="datetime" />
+        </EntityType>
         <EntityType Name="MaritalStatus">
           <Key>
             <PropertyRef Name="MaritalStatusID" />
@@ -2620,6 +2631,8 @@
           <Property Name="Approver2" Type="int" />
           <Property Name="Approver3" Type="int" />
           <Property Name="ZoneId" Type="int" />
+          <Property Name="OfficeManagerID" Type="int" />
+          <Property Name="IncomeDirector" Type="int" />
           <Property Name="Active" Type="bit" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedDate" Type="datetime" />
@@ -6885,7 +6898,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="TaxPayerID" Type="int" Mode="In" />
           <Parameter Name="TaxYear" Type="int" Mode="In" />
         </Function>
-        
         <Function Name="usp_GetTaxPayerMDAService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaxPayerID" Type="int" Mode="In" />
           <Parameter Name="TaxPayerTypeID" Type="int" Mode="In" />
@@ -6906,7 +6918,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="TaxPayerID" Type="int" Mode="In" />
           <Parameter Name="TaxPayerTypeID" Type="int" Mode="In" />
         </Function>
-        
         <Function Name="usp_GetTaxPayerProfileForExport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProfileIds" Type="varchar" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
@@ -8228,6 +8239,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="MAP_TCCRequest_ValidateTaxPayerIncome" EntityType="Self.MAP_TCCRequest_ValidateTaxPayerIncome" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_TCCRequest_ValidateTaxPayerInformation" EntityType="Self.MAP_TCCRequest_ValidateTaxPayerInformation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_TreasuryReceipt_Settlement" EntityType="Self.MAP_TreasuryReceipt_Settlement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MapAssessmentDisapprove " EntityType="Self.MapAssessmentDisapprove " Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MaritalStatus" EntityType="Self.MaritalStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MDA_Service_Items" EntityType="Self.MDA_Service_Items" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MDA_Services" EntityType="Self.MDA_Services" Schema="dbo" store:Type="Tables" />
@@ -12822,6 +12834,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <FunctionImport Name="usp_GetTccDownloadByYear" ReturnType="Collection(EIRSModel.usp_GetTccDownloadByYear_Result)" />
           <EntitySet Name="ValidateTccs" EntityType="EIRSModel.ValidateTcc" />
           <EntitySet Name="NatureOfBusinesses" EntityType="EIRSModel.NatureOfBusiness" />
+          <EntitySet Name="MapAssessmentDisapprove_" EntityType="EIRSModel.MapAssessmentDisapprove_" />
           <!--<EntitySet Name="TestingNEWTAB" EntityType="EIRSModel.TestingNEWTAB" />
           <EntitySet Name="vw_ServiceBillNew" EntityType="EIRSModel.vw_ServiceBillNew" />-->
           </EntityContainer>
@@ -20712,6 +20725,8 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <NavigationProperty Name="Specials" Relationship="EIRSModel.FK_Special_Tax_Offices" FromRole="Tax_Offices" ToRole="Special" />
           <NavigationProperty Name="Companies" Relationship="EIRSModel.FK_Company_Tax_Offices" FromRole="Tax_Offices" ToRole="Company" />
           <Property Name="ZoneId" Type="Int32" />
+          <Property Name="OfficeManagerID" Type="Int32" />
+          <Property Name="IncomeDirector" Type="Int32" />
         </EntityType>
         <Association Name="FK_Tax_Offices_Address_Types">
           <End Type="EIRSModel.Address_Types" Role="Address_Types" Multiplicity="0..1" />
@@ -23866,6 +23881,17 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NatureOfBusinessName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MapAssessmentDisapprove_">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssessmentID" Type="Int64" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TaxOfficerId" Type="Int32" />
+          <Property Name="TaxOfficerDesignation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
         </EntityType>
         
         </Schema>
@@ -30565,6 +30591,8 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySetMapping Name="Tax_Offices">
             <EntityTypeMapping TypeName="EIRSModel.Tax_Offices">
               <MappingFragment StoreEntitySet="Tax_Offices">
+                <ScalarProperty Name="IncomeDirector" ColumnName="IncomeDirector" />
+                <ScalarProperty Name="OfficeManagerID" ColumnName="OfficeManagerID" />
                 <ScalarProperty Name="ZoneId" ColumnName="ZoneId" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
@@ -33436,6 +33464,18 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
             <EntityTypeMapping TypeName="EIRSModel.NatureOfBusiness">
               <MappingFragment StoreEntitySet="NatureOfBusiness">
                 <ScalarProperty Name="NatureOfBusinessName" ColumnName="NatureOfBusinessName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MapAssessmentDisapprove_">
+            <EntityTypeMapping TypeName="EIRSModel.MapAssessmentDisapprove_">
+              <MappingFragment StoreEntitySet="MapAssessmentDisapprove ">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="TaxOfficerDesignation" ColumnName="TaxOfficerDesignation" />
+                <ScalarProperty Name="TaxOfficerId" ColumnName="TaxOfficerId" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

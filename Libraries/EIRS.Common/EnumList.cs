@@ -22,7 +22,7 @@ namespace EIRS.Common
 
         public enum UserType { Admin = 1, Staff = 2, Partner = 3 }
 
-        public enum SettlementStatus { Notified = 2, Assessed = 1, Partial = 3, Settled = 4, Unsettled = 5 }
+        public enum SettlementStatus { Notified = 2, Assessed = 1, Partial = 3, Settled = 4, Unsettled = 5, PendingApproval=6, Disapproved=7, PartialWithPendingApproval=8 }
 
         public enum PaymentStatus { Due = 1, Partial = 2, Paid = 3, }
 

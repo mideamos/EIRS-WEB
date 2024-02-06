@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using EIRS.BOL;
 using EIRS.Common;
+using Newtonsoft.Json;
 
 namespace EIRS.Repository
 {
@@ -16,6 +17,7 @@ namespace EIRS.Repository
 
         public FuncResponse<Individual> REP_InsertUpdateIndividual(Individual pObjIndividual, bool pblnSkipNoValidation = false)
         {
+            NewErrorLog.WriteFormModel("I got here 1", "SettlementResponse");
             using (_db = new EIRSEntities())
             {
                 Individual mObjInsertUpdateIndividual; //Individual Insert Update Object
@@ -190,11 +192,15 @@ namespace EIRS.Repository
                 if (pObjIndividual.IndividualID == 0)
                 {
                     _db.Individuals.Add(mObjInsertUpdateIndividual);
+
+                    NewErrorLog.WriteFormModel("I got here 2", "SettlementResponse");
                 }
 
                 try
                 {
                     _db.SaveChanges();
+
+                    NewErrorLog.WriteFormModel("I got here 1", "SettlementResponse");
 
                     var context = ((IObjectContextAdapter)_db).ObjectContext;
                     var refreshableObjects = _db.ChangeTracker.Entries().Select(c => c.Entity).ToList();
@@ -215,6 +221,8 @@ namespace EIRS.Repository
                 }
                 catch (Exception Ex)
                 {
+
+                    NewErrorLog.WriteFormModel($"I got here 4 because of {Ex.Message}", "SettlementResponse");
                     mObjFuncResponse.Success = false;
                     mObjFuncResponse.Exception = Ex;
 

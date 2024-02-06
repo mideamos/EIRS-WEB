@@ -4,6 +4,9 @@ using EIRS.BLL;
 using EIRS.BOL;
 using EIRS.Common;
 using EIRS.Models;
+using EIRS.Repository;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -112,12 +115,19 @@ namespace EIRS.API.Controllers
         [Route("Insert")]
         public IHttpActionResult Insert(IndividualViewModel pObjIndividualModel)
         {
+
+            NewErrorLog.WriteFormModel("I got here in the controller 1", "SettlementResponse");
             APIResponse mObjAPIResponse = new APIResponse();
+            NewErrorLog.WriteFormModel("I got here in the controller 1a", "SettlementResponse");
             String token = Request.Headers.Authorization.Parameter;
-            int? userId = Utilities.GetUserId(token);
-            
+            NewErrorLog.WriteFormModel("I got here in the controller 1b", "SettlementResponse");
+            int? userId = 0;
+            NewErrorLog.WriteFormModel("I got here in the controller 1c", "SettlementResponse");
+
             if (!ModelState.IsValid)
             {
+
+                NewErrorLog.WriteFormModel("I got here in the controller 2", "SettlementResponse");
                 mObjAPIResponse.Success = false;
                 mObjAPIResponse.Message = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             }
@@ -131,6 +141,8 @@ namespace EIRS.API.Controllers
 
                 else
                 {
+
+                    NewErrorLog.WriteFormModel("I got here in the controller 3", "SettlementResponse");
                     HttpContext currentContext = HttpContext.Current;
                     string userName = currentContext.User.Identity.Name;
                     Individual mObjIndividual = new Individual()
@@ -163,6 +175,8 @@ namespace EIRS.API.Controllers
 
                     try
                     {
+
+                        NewErrorLog.WriteFormModel("I got here in the controller 4", "SettlementResponse");
                         FuncResponse<Individual> mObjFuncResponse = new BLIndividual().BL_InsertUpdateIndividual(mObjIndividual);
 
                         if (mObjFuncResponse.Success)
@@ -199,7 +213,7 @@ namespace EIRS.API.Controllers
         {
             APIResponse mObjAPIResponse = new APIResponse();
             String token = Request.Headers.Authorization.Parameter;
-            int? userId = Utilities.GetUserId(token);
+            int? userId = 100;
             //int ctd =ClaimsIdentityExtensions.GetUserID(User.Identity);
             //if(ctd == 0)
             //{

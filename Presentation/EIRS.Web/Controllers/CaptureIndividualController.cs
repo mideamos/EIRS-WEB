@@ -3679,6 +3679,68 @@ namespace EIRS.Web.Controllers
                 return RedirectToAction("Search", "CaptureIndividual");
             }
         }
+        public ActionResult BillDetailFromDecline(int? id, long? billid, string billrefno)
+        {
+            if (id.GetValueOrDefault() > 0 && billid.GetValueOrDefault() > 0)
+            {
+                Individual mObjIndividual = new Individual()
+                {
+                    IndividualID = id.GetValueOrDefault(),
+                    intStatus = 1
+                };
+                usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(mObjIndividual);
+
+                if (mObjIndividualData != null)
+                {
+                    if (billrefno.StartsWith("AB"))
+                    {
+                        BLAssessment mObjBLAssessment = new BLAssessment();
+                        BLAssessmentItem mObjBLAssessmentItem = new BLAssessmentItem();
+                        usp_GetAssessmentList_Result mObjAssessmentData = mObjBLAssessment.BL_GetAssessmentDetails(new Assessment() { AssessmentID = billid.GetValueOrDefault(), IntStatus = 2 });
+
+                        if (mObjAssessmentData != null && mObjAssessmentData.TaxPayerID == mObjIndividualData.IndividualID && mObjAssessmentData.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
+                        {
+                            IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = mObjBLAssessment.BL_GetAssessmentRules(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = mObjBLAssessment.BL_GetAssessmentRuleItem(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = mObjBLAssessment.BL_GetAssessmentRuleBasedSettlement(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentAdjustmentList_Result> lstAssessmentAdjustment = mObjBLAssessment.BL_GetAssessmentAdjustment(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentLateChargeList_Result> lstAssessmentLateCharge = mObjBLAssessment.BL_GetAssessmentLateCharge(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+
+                            IList<DropDownListResult> lstSettlementMethod = mObjBLAssessment.BL_GetSettlementMethodAssessmentRuleBased(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+
+                            IList<usp_GetSettlementList_Result> lstSettlement = new BLSettlement().BL_GetSettlementList(new Settlement() { ServiceBillID = -1, AssessmentID = mObjAssessmentData.AssessmentID.GetValueOrDefault() });
+
+                            ViewBag.SettlementMethodList = new SelectList(lstSettlementMethod, "id", "text");
+                            ViewBag.MAPAssessmentRules = lstMAPAssessmentRules;
+                            ViewBag.AssessmentItems = lstAssessmentItems;
+                            ViewBag.AssessmentRuleSettlement = lstAssessmentRuleSettlement;
+                            ViewBag.SettlementList = lstSettlement;
+                            ViewBag.AdjustmentList = lstAssessmentAdjustment;
+                            ViewBag.LateChargeList = lstAssessmentLateCharge;
+
+                            return View("BillDetailFromDecline", mObjAssessmentData);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Search", "CaptureIndividual");
+                        }
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("Search", "CaptureIndividual");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Search", "CaptureIndividual");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Search", "CaptureIndividual");
+            }
+        }
         public ActionResult BillDetailToBeApproved(long? billid, int type)
         {
             BLAssessment mObjBLAssessment = new BLAssessment();

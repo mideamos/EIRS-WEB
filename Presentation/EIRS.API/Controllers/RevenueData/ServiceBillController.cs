@@ -816,7 +816,6 @@ namespace EIRS.API.Controllers
                     }
                     catch (Exception ex)
                     {
-                        NewErrorLog.ErrorLogging(ex);
                         ErrorSignal.FromCurrentContext().Raise(ex);
                         mObjAPIResponse.Success = false;
                         mObjAPIResponse.Message = "Error occurred while saving service bill";

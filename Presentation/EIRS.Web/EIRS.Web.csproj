@@ -2018,6 +2018,7 @@
     <Content Include="Views\Home\Pending.cshtml" />
     <Content Include="Views\Home\Declined.cshtml" />
     <Content Include="Views\CaptureIndividual\AssessmentBillDetailFromPending.cshtml" />
+    <Content Include="Views\CaptureIndividual\BillDetailFromDecline.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

@@ -1834,6 +1834,12 @@ namespace EIRS.Web.Controllers
         {
             if (reqid.GetValueOrDefault() > 0)
             {
+                var lastyear = new Request_TCCDetail();
+                var last2year = new Request_TCCDetail();
+                var last3year = new Request_TCCDetail();
+                var lastyear1 = new usp_GetTCCDetail_Result();
+                var last2year1 = new usp_GetTCCDetail_Result();
+                var last3year1 = new usp_GetTCCDetail_Result();
                 var txxx = new TaxClearanceCertificate();
                 using (var ddd = new EIRSEntities())
                 {
@@ -1851,6 +1857,7 @@ namespace EIRS.Web.Controllers
                 usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
                 if (mObjRequestData != null)
                 {
+                    var eget = "1";
                     var curYear = DateTime.Now.Year;
                     if (mObjRequestData.TaxYear == curYear)
                         mObjRequestData.TaxYear = curYear - 1;
@@ -1861,10 +1868,24 @@ namespace EIRS.Web.Controllers
 
                     IList<usp_GetTaxClearanceCertificateDetails_Result> lstTCC = mObjBLTCC.BL_GetTaxClearanceCertificateList(new TaxClearanceCertificate() { TaxPayerID = mObjRequestData.IndividualID, TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual });
                     var certNumber = lstTCC.Where(t => t.TaxYear == mObjRequestData.TaxYear).ToList();
+                    if (tccDetails!=null)
+                    {
+                        eget = "2";
+                        lastyear = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear)).FirstOrDefault();
+                        last2year = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).FirstOrDefault();
+                        last3year = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).FirstOrDefault();
+                    }
+                    else
+                    {
+                        if (lstTCCDetail != null)
+                        {
+                            eget = "3";
+                            lastyear1 = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear)).FirstOrDefault();
+                            last2year1 = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).FirstOrDefault();
+                            last3year1 = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).FirstOrDefault();
+                        }
 
-                    var lastyear = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear)).FirstOrDefault();
-                    var last2year = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).FirstOrDefault();
-                    var last3year = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).FirstOrDefault();
+                    }
                     //get receipt
                     IList<TicketRef> trf = SessionManager.LstTicketRef ?? new List<TicketRef>();
                     usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(new Individual() { intStatus = 1, IndividualID = mObjRequestData.IndividualID });
@@ -1939,6 +1960,37 @@ namespace EIRS.Web.Controllers
                         ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
                         rdreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).ReciptRef : "";
                     }
+                    string money1="", money2 = "", money3 = "";
+                    string money1a = "", money2a = "", money3a = "";
+                    string money1b = "", money2b = "", money3b = "";
+                    switch (eget)
+                    {
+                        case "2":
+                            money1 = lastyear != null ? CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money2 = last2year != null ? CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money3 = last3year != null ? CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money1a = lastyear != null ? CommUtil.GetFormatedCurrency(lastyear.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money2a = last2year != null ? CommUtil.GetFormatedCurrency(last2year.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money3a = last3year != null ? CommUtil.GetFormatedCurrency(last3year.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money1b = lastyear != null ? CommUtil.GetFormatedCurrency(lastyear.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            money2b = last2year != null ? CommUtil.GetFormatedCurrency(last2year.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            money3b = last3year != null ? CommUtil.GetFormatedCurrency(last3year.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            break;
+                        case "3":
+                            money1 = lastyear1 != null ? CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money2 = last2year1 != null ? CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money3 = last3year1 != null ? CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money1a = lastyear1 != null ? CommUtil.GetFormatedCurrency(lastyear.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money2a = last2year1 != null ? CommUtil.GetFormatedCurrency(last2year.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money3a = last3year1 != null ? CommUtil.GetFormatedCurrency(last3year.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money1b = lastyear1 != null ? CommUtil.GetFormatedCurrency(lastyear.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            money2b = last2year1 != null ? CommUtil.GetFormatedCurrency(last2year.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            money3b = last3year1 != null ? CommUtil.GetFormatedCurrency(last3year.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+
+                            break;
+                        default:
+                            break;
+                    }
                     serialNumber = certNumber.Select(o => o.SerialNumber).FirstOrDefault();
                     certificateNumber = certNumber.Select(o => o.TCCNumber).FirstOrDefault();
                     tin = mObjRequestData.TIN;
@@ -1975,15 +2027,15 @@ namespace EIRS.Web.Controllers
                                          .Replace("@@Title@@", title)
                                          .Replace("@@FirstName@@", firstName)
                                          .Replace("@@LastName@@", lastName)
-                                         .Replace("@@3rdAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(last3year.AssessableIncome))
-                                         .Replace("@@2ndTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid))
-                                         .Replace("@@3rdTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid))
-                                         .Replace("@@1stTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid))
-                                         .Replace("@@2ndAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(last2year.AssessableIncome))
-                                         .Replace("@@1stAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(lastyear.AssessableIncome))
-                                         .Replace("@@3rdTaxPaid@@", CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid))
-                                         .Replace("@@2ndTaxPaid@@", CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid))
-                                         .Replace("@@1stTaxPaid@@", CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid))
+                                          .Replace("@@1stTotalTaxAssessed@@", money1b)
+                                         .Replace("@@2ndTotalTaxAssessed@@", money2b)
+                                         .Replace("@@3rdTotalTaxAssessed@@", money3b)
+                                         .Replace("@@3rdAssessableTaxIncome@@", money3a)
+                                         .Replace("@@2ndAssessableTaxIncome@@", money2a)
+                                         .Replace("@@1stAssessableTaxIncome@@", money1a)
+                                         .Replace("@@3rdTaxPaid@@", money3)
+                                         .Replace("@@2ndTaxPaid@@", money2)
+                                         .Replace("@@1stTaxPaid@@", money1)
                                          .Replace("@@CertificateNumber@@", certificateNumber)
                                          .Replace("@@SerialNumber@@", serialNumber)
                                          .Replace("@@IncomeSource@@", incomeSource)
@@ -2000,15 +2052,24 @@ namespace EIRS.Web.Controllers
                                          .Replace("@@Title@@", title)
                                          .Replace("@@FirstName@@", firstName)
                                          .Replace("@@LastName@@", lastName)
-                                         .Replace("@@3rdAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(last3year.AssessableIncome))
-                                         .Replace("@@2ndTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid))
-                                         .Replace("@@3rdTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid))
-                                         .Replace("@@1stTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid))
-                                         .Replace("@@2ndAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(last2year.AssessableIncome))
-                                         .Replace("@@1stAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(lastyear.AssessableIncome))
-                                         .Replace("@@3rdTaxPaid@@", CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid))
-                                         .Replace("@@2ndTaxPaid@@", CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid))
-                                         .Replace("@@1stTaxPaid@@", CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid))
+                                          .Replace("@@1stTotalTaxAssessed@@", money1b)
+                                         .Replace("@@2ndTotalTaxAssessed@@", money2b)
+                                         .Replace("@@3rdTotalTaxAssessed@@", money3b)
+                                         .Replace("@@3rdAssessableTaxIncome@@", money3a)
+                                         .Replace("@@2ndAssessableTaxIncome@@", money2a)
+                                         .Replace("@@1stAssessableTaxIncome@@", money1a)
+                                         .Replace("@@3rdTaxPaid@@", money3)
+                                         .Replace("@@2ndTaxPaid@@", money2)
+                                         .Replace("@@1stTaxPaid@@", money1)
+                                         //.Replace("@@3rdAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(last3year.AssessableIncome))
+                                         //.Replace("@@2ndTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid))
+                                         //.Replace("@@3rdTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid))
+                                         //.Replace("@@1stTotalTaxAssessed@@", CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid))
+                                         //.Replace("@@2ndAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(last2year.AssessableIncome))
+                                         //.Replace("@@1stAssessableTaxIncome@@", CommUtil.GetFormatedCurrency(lastyear.AssessableIncome))
+                                         //.Replace("@@3rdTaxPaid@@", CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid))
+                                         //.Replace("@@2ndTaxPaid@@", CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid))
+                                         //.Replace("@@1stTaxPaid@@", CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid))
                                          .Replace("@@CertificateNumber@@", certificateNumber)
                                          .Replace("@@SerialNumber@@", serialNumber)
                                          .Replace("@@IncomeSource@@", incomeSource)

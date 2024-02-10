@@ -1829,11 +1829,13 @@ namespace EIRS.Web.Controllers
 
             return File(FileBytes, "application/pdf");
         }
+
         [HttpGet]
-        public ActionResult GenerateTCC(long? reqid)
+        public async Task<ActionResult> GenerateTCC(long? reqid)
         {
             if (reqid.GetValueOrDefault() > 0)
             {
+                var url = "https://localhost:7115/GenerateTCCAndSaveToPath";
                 var lastyear = new Request_TCCDetail();
                 var last2year = new Request_TCCDetail();
                 var last3year = new Request_TCCDetail();
@@ -1868,7 +1870,7 @@ namespace EIRS.Web.Controllers
 
                     IList<usp_GetTaxClearanceCertificateDetails_Result> lstTCC = mObjBLTCC.BL_GetTaxClearanceCertificateList(new TaxClearanceCertificate() { TaxPayerID = mObjRequestData.IndividualID, TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual });
                     var certNumber = lstTCC.Where(t => t.TaxYear == mObjRequestData.TaxYear).ToList();
-                    if (tccDetails!=null)
+                    if (tccDetails != null)
                     {
                         eget = "2";
                         lastyear = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear)).FirstOrDefault();
@@ -1960,7 +1962,332 @@ namespace EIRS.Web.Controllers
                         ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
                         rdreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).ReciptRef : "";
                     }
-                    string money1="", money2 = "", money3 = "";
+                    string money1 = "", money2 = "", money3 = "";
+                    string money1a = "", money2a = "", money3a = "";
+                    string money1b = "", money2b = "", money3b = "";
+                    switch (eget)
+                    {
+                        case "2":
+                            money1 = lastyear != null ? CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money2 = last2year != null ? CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money3 = last3year != null ? CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money1a = lastyear != null ? CommUtil.GetFormatedCurrency(lastyear.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money2a = last2year != null ? CommUtil.GetFormatedCurrency(last2year.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money3a = last3year != null ? CommUtil.GetFormatedCurrency(last3year.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money1b = lastyear != null ? CommUtil.GetFormatedCurrency(lastyear.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            money2b = last2year != null ? CommUtil.GetFormatedCurrency(last2year.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            money3b = last3year != null ? CommUtil.GetFormatedCurrency(last3year.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            break;
+                        case "3":
+                            money1 = lastyear1 != null ? CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money2 = last2year1 != null ? CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money3 = last3year1 != null ? CommUtil.GetFormatedCurrency(last3year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
+                            money1a = lastyear1 != null ? CommUtil.GetFormatedCurrency(lastyear.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money2a = last2year1 != null ? CommUtil.GetFormatedCurrency(last2year.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money3a = last3year1 != null ? CommUtil.GetFormatedCurrency(last3year.AssessableIncome) : CommUtil.GetFormatedCurrency(0);
+                            money1b = lastyear1 != null ? CommUtil.GetFormatedCurrency(lastyear.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            money2b = last2year1 != null ? CommUtil.GetFormatedCurrency(last2year.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+                            money3b = last3year1 != null ? CommUtil.GetFormatedCurrency(last3year.ERASAssessed) : CommUtil.GetFormatedCurrency(0);
+
+                            break;
+                        default:
+                            break;
+                    }
+                    serialNumber = certNumber.Select(o => o.SerialNumber).FirstOrDefault();
+                    certificateNumber = certNumber.Select(o => o.TCCNumber).FirstOrDefault();
+                    tin = mObjRequestData.TIN;
+                    lastName = mObjRequestData.LastName;
+                    firstName = mObjRequestData.FirstName;
+                    rin = mObjRequestData.IndividualRIN;
+                    title = mObjIndividualData.TitleName;
+                    address = mObjIndividualData.ContactAddress;
+                    station = mObjIndividualData.TaxOfficeName;
+                    incomeSource = txxx != null ? txxx.IncomeSource : "";
+                    string fullName = $"{firstName} {lastName}";
+                    var SigBase = BrCode(fullName, rin, certificateNumber);
+                    var SigBase64 = $"data:image/png;base64,{SigBase}";
+                    string marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
+                    string marksheetForPrint = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
+
+                    using (HttpClient client = new HttpClient())
+                    {
+                        try
+                        {
+                            TccModel t = new TccModel();
+                            t.money1 = money1;
+                            t.money1a = money1a;
+                            t.money2 = money2;
+                            t.money2a = money2a;
+                            t.money3 = money3;
+                            t.money3a = money3a;
+                            t.money1b = money1b;
+                            t.money2b = money2b;
+                            t.money3b = money3b;
+                            t.marksheet = marksheet;
+                            t.marksheetForPrint = marksheetForPrint;
+                            t.rin = rin;
+                            t.station = station;
+                            t.busiName = busiName;
+                            t.tin = tin;
+                            t.title = title;
+                            t.firstName = firstName;
+                            t.lastName = lastName;
+                            t.certificateNumber = certificateNumber;
+                            t.serialNumber = serialNumber;
+                            t.incomeSource = incomeSource;
+                            t.rdreciptanddate = rdreciptanddate;
+                            t.ndreciptanddate = ndreciptanddate;
+                            t.streciptanddate = streciptanddate;
+                            t.address = address;
+                            t.SigBase64 = SigBase64;
+                            t.mStrGeneratedHtmlPath = mStrGeneratedHtmlPath;
+                            t.mStrGeneratedHtmlPathForPrint = mStrGeneratedHtmlPathForPrint;
+                            t.mStrGeneratedDocumentPath = mStrGeneratedDocumentPath;
+                            t.mStrGeneratedDocumentPathForPrint = mStrGeneratedDocumentPathForPrint;
+                            // Convert the data to JSON
+                            string jsonContent = Newtonsoft.Json.JsonConvert.SerializeObject(t);
+
+                            // Create a StringContent with the JSON data
+                            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                            // Make a POST request
+                            HttpResponseMessage response = await client.PostAsync(url, content);
+
+                            // Check if the request was successful
+                            if (response.IsSuccessStatusCode)
+                            {
+                                // Read and display the response content
+                                string result = await response.Content.ReadAsStringAsync();
+                                if (result == "false")
+                                {
+                                    return RedirectToAction("List", "ProcessTCCRequest");
+                                }
+                            }
+                            else
+                            {
+                                return RedirectToAction("List", "ProcessTCCRequest");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Handle any exceptions that may occur during the request
+                            ViewBag.ApiResponse = $"Exception: {ex.Message}";
+                        }
+                    }
+                    ViewBag.RequestData = mObjRequestData;
+                    ViewBag.pdf = mStrGeneratedDocumentPath;
+                    GenerateViewModel mObjGenerateTCCModel = new GenerateViewModel()
+                    {
+                        RequestID = mObjRequestData.TCCRequestID,
+                    };
+                    mObjGenerateTCCModel.RGID = ret.RGID;
+                    mObjGenerateTCCModel.GenerateNotes = ret.Notes;
+                    mObjGenerateTCCModel.ExpiryDate = ret.ExpiryDate;
+                    mObjGenerateTCCModel.IsExpirable = true;
+                    mObjGenerateTCCModel.Reason = ret.Reason;
+                    mObjGenerateTCCModel.Location = ret.Location;
+                    mObjGenerateTCCModel.PDFTemplateID = mObjRequestData.PDFTemplateID.GetValueOrDefault();
+                    mObjGenerateTCCModel.SEDE_DocumentID = mObjRequestData.SEDE_DocumentID.GetValueOrDefault();
+
+                    // lstTemplateField = SEDEFunction.PDFTemplateFieldList(GlobalDefaultValues.TCC_PDFTemplateID, mObjGenerateTCCModel.SEDE_DocumentID);
+
+                    TCC_Request mObjUpdateStatus = new TCC_Request()
+                    {
+                        TCCRequestID = mObjRequestData.TCCRequestID,
+                        StatusID = (int)NewTCCRequestStage.Waiting_For_First_Signature,
+                        ModifiedBy = SessionManager.UserID,
+                        SEDE_OrderID = (long)TCCSigningStage.AwaitingFirstSigner,
+                        ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+                        GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+                        GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/" + mStrGeneratedFileName,
+                        ModifiedDate = CommUtil.GetCurrentDateTime()
+                    };
+                    mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
+                    Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
+                    string file = Convert.ToBase64String(bytesArray);
+                    ValidateTcc tcc = new ValidateTcc()
+                    {
+                        DateCreated = DateTime.Now,
+                        Fullname = fullName,
+                        Taxyear = mObjRequestData.TaxYear.ToString(),
+                        TaxpayerRIN = rin,
+                        TaxpayerTIN = tin,
+                        TCCCertificateNumber = certificateNumber,
+                        DateofTCCissued = DateTime.Now,
+                        TCCpdf = file,
+                        TccRequestId = mObjRequestData.TCCRequestID
+                    };
+                    using (_db = new EIRSEntities())
+                    {
+                        _db.ValidateTccs.Add(tcc);
+                        _db.SaveChanges();
+                    }
+
+                    //send mail to the signer
+                    int yr = DateTime.Now.Year;
+                    string[] separatingStrings = { "||" };
+                    string[] words = first_Signer.Split(separatingStrings, System.StringSplitOptions.RemoveEmptyEntries);
+                    //   var strlist = first_Signer.Split("||".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToArray();
+                    EmailDetails mObjEmailDetails = new EmailDetails()
+                    {
+                        FirstSignerEmail = words[0],
+                        FirstSignerName = words[1],
+                        TaxPayerRIN = rin,
+                        CertificateID = certificateNumber,
+                        ExpiryDate = $"12/31/{yr}",
+                        TaxPayerName = fullName,
+                        TaxYearCovered = $"{yr - 1},{yr - 2},{yr - 3}"
+                    };
+
+                    if (!string.IsNullOrWhiteSpace(mObjEmailDetails.FirstSignerEmail))
+                    {
+                        BLEmailHandler.BL_TccSignerAsync(mObjEmailDetails);
+                    }
+                    SessionManager.Path = mStrGeneratedDocumentPath;
+                    ViewBag.path = GlobalDefaultValues.DocumentLocation;
+                    return View(mObjGenerateTCCModel);
+                }
+
+                return RedirectToAction("List", "ProcessTCCRequest");
+
+            }
+            else
+            {
+                return RedirectToAction("List", "ProcessTCCRequest");
+            }
+        }
+        [HttpGet]
+        public ActionResult GenerateTCCIIII(long? reqid)
+        {
+            if (reqid.GetValueOrDefault() > 0)
+            {
+                var lastyear = new Request_TCCDetail();
+                var last2year = new Request_TCCDetail();
+                var last3year = new Request_TCCDetail();
+                var lastyear1 = new usp_GetTCCDetail_Result();
+                var last2year1 = new usp_GetTCCDetail_Result();
+                var last3year1 = new usp_GetTCCDetail_Result();
+                var txxx = new TaxClearanceCertificate();
+                using (var ddd = new EIRSEntities())
+                {
+                    txxx = ddd.TaxClearanceCertificates.FirstOrDefault(o => o.SerialNumber == reqid.ToString());
+                }
+                string busiName = "";
+
+                IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
+                foreach (var item in bnLst)
+                    busiName += $",{item.BusinessName}";
+
+                busiName = !string.IsNullOrEmpty(busiName) ? busiName.Substring(1) : null;
+                BLTCC mObjBLTCC = new BLTCC();
+                var ret = mObjBLTCC.BL_GetTCCRequestGenerateDetails((long)reqid);
+                usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
+                if (mObjRequestData != null)
+                {
+                    var eget = "1";
+                    var curYear = DateTime.Now.Year;
+                    if (mObjRequestData.TaxYear == curYear)
+                        mObjRequestData.TaxYear = curYear - 1;
+                    usp_GetTCCRequestDetails_Result mObjRequestDatanew = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
+                    IList<usp_GetTCCDetail_Result> lstTCCDetail = mObjBLTCC.BL_GetTCCDetail(mObjRequestData.IndividualID, (int)EnumList.TaxPayerType.Individual, mObjRequestData.TaxYear.GetValueOrDefault());
+
+                    IList<Request_TCCDetail> tccDetails = SessionManager.LstTCCDetail;
+
+                    IList<usp_GetTaxClearanceCertificateDetails_Result> lstTCC = mObjBLTCC.BL_GetTaxClearanceCertificateList(new TaxClearanceCertificate() { TaxPayerID = mObjRequestData.IndividualID, TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual });
+                    var certNumber = lstTCC.Where(t => t.TaxYear == mObjRequestData.TaxYear).ToList();
+                    if (tccDetails != null)
+                    {
+                        eget = "2";
+                        lastyear = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear)).FirstOrDefault();
+                        last2year = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).FirstOrDefault();
+                        last3year = tccDetails.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).FirstOrDefault();
+                    }
+                    else
+                    {
+                        if (lstTCCDetail != null)
+                        {
+                            eget = "3";
+                            lastyear1 = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear)).FirstOrDefault();
+                            last2year1 = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).FirstOrDefault();
+                            last3year1 = lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).FirstOrDefault();
+                        }
+
+                    }
+                    //get receipt
+                    IList<TicketRef> trf = SessionManager.LstTicketRef ?? new List<TicketRef>();
+                    usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(new Individual() { intStatus = 1, IndividualID = mObjRequestData.IndividualID });
+                    string mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/";
+                    string mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+                    string mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
+                    string mStrGeneratedBarCodePath = Path.Combine(mStrDirectory + "/Temp/Barcode/");
+                    string mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+                    string mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}/";
+                    string mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+                    string mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
+                    string mStrGeneratedBarCodePathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Barcode/");
+                    string mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+
+                    string mHtmlDirectory = $"{DocumentHTMLLocation}/Personal-eTCCForAllYears.html";
+                    string mHtmlDirectoryForPrint = $"{DocumentHTMLLocation}/EtccForPrintCase.html";
+                    if (!Directory.Exists(mStrDirectory))
+                    {
+                        Directory.CreateDirectory(mStrDirectory);
+                    }
+
+                    if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+                    {
+                        Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+                    }
+                    if (!Directory.Exists(mStrDirectoryForPrint))
+                    {
+                        Directory.CreateDirectory(mStrDirectoryForPrint);
+                    }
+
+                    if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
+                    {
+                        Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
+                    }
+                    string tin = "", firstName = "", lastName = "", streciptanddate = "", ndreciptanddate = "", rdreciptanddate = "", rin = "", station = "", title = "", address = "", certificateNumber = "", serialNumber = "", incomeSource = "";
+                    TicketRef streciptand = new TicketRef();
+                    TicketRef ndreciptand = new TicketRef();
+                    TicketRef rdreciptand = new TicketRef();
+                    if (trf.Count > 0)
+                    {
+                        streciptand = trf.Where(o => o.TaxYear == mObjRequestData.TaxYear.ToString()).FirstOrDefault();
+                        if (streciptand != null)
+                            if ((streciptand.TickRefNo != null) && (streciptand.PaymentDate != null))
+                                streciptanddate = $"{streciptand.TickRefNo} || {streciptand.PaymentDate}";
+                            else
+                                streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
+                        else
+                            streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
+                        ndreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 1).ToString()).FirstOrDefault();
+                        if (ndreciptand != null)
+                            if ((ndreciptand.TickRefNo != null) && (ndreciptand.PaymentDate != null))
+                                ndreciptanddate = $"{ndreciptand.TickRefNo} || {ndreciptand.PaymentDate}";
+                            else
+                                ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
+                        else
+                            ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
+                        rdreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 2).ToString()).FirstOrDefault();
+                        if (rdreciptand != null)
+                            if ((rdreciptand.TickRefNo != null) && (rdreciptand.PaymentDate != null))
+                                rdreciptanddate = $"{rdreciptand.TickRefNo} || {rdreciptand.PaymentDate}";
+                            else
+                                rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
+                        else
+                            rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
+                    }
+                    else
+                    {
+                        var allRef = _db.TccRefHolders.OrderByDescending(o => o.ReqId == reqid.ToString()).ToList();
+
+                        // var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 1)).ToList();
+                        streciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
+                        ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
+                        rdreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).ReciptRef : "";
+                    }
+                    string money1 = "", money2 = "", money3 = "";
                     string money1a = "", money2a = "", money3a = "";
                     string money1b = "", money2b = "", money3b = "";
                     switch (eget)
@@ -2027,7 +2354,7 @@ namespace EIRS.Web.Controllers
                                          .Replace("@@Title@@", title)
                                          .Replace("@@FirstName@@", firstName)
                                          .Replace("@@LastName@@", lastName)
-                                          .Replace("@@1stTotalTaxAssessed@@", money1b)
+                                         .Replace("@@1stTotalTaxAssessed@@", money1b)
                                          .Replace("@@2ndTotalTaxAssessed@@", money2b)
                                          .Replace("@@3rdTotalTaxAssessed@@", money3b)
                                          .Replace("@@3rdAssessableTaxIncome@@", money3a)

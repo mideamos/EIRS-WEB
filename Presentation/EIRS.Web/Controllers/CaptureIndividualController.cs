@@ -3786,8 +3786,7 @@ namespace EIRS.Web.Controllers
                     map.TaxOfficerId = allTax.FirstOrDefault().TaxOfficeID;
                     _db.MapAssessmentDisapprove_.Add(map);
                     _db.SaveChanges();
-
-                    return View("AssessmentBillDetailFromPending", ass);
+                    return RedirectToAction("Declined", "Home", new { id = ass.TaxPayerID, name = ass.TaxPayerRIN });
                     break;
                 default:
                     break;

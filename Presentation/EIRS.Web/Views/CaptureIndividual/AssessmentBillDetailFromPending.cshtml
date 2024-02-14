@@ -252,8 +252,7 @@
                 </div>
             </div>
 
-            @if (Model.SettlementStatusID < (int)EnumList.SettlementStatus.PendingApproval)
-            {
+           
                 <hr class="margin-top-0" />
 
                 <div class="form-horizontal">
@@ -272,17 +271,16 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4"></label>
                         <div class="col-sm-2">
-                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type =1 })" class="btn btn-redtheme btn-block" id="btnCancel"> Disapprove </a>
+                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type =2 })" class="btn btn-redtheme btn-block" id="btnCancel"> Disapprove </a>
                         </div>
                         <div class="col-sm-6">
                             @*<a class="btn btn-theme btn-block"> Approve </a>*@
-                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type =2 })"class="btn btn-theme btn-block">
-                                View Bill
+                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type =1 })"class="btn btn-theme btn-block">
+                                Approve
                             </a>
                         </div>
                     </div>
                 </div>
-            }
         </div>
     </div>
 </div>

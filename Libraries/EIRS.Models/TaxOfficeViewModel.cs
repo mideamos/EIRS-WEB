@@ -24,7 +24,13 @@ namespace EIRS.Models
 
         [Display(Name = "Approver 3")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Select Approver 3")]
-        public int Approver3 { get; set; }
+        public int Approver3 { get; set; } 
+        [Display(Name = "IncomeDirector")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Select Income Director")]
+        public int IncomeDirector { get; set; }
+        [Display(Name = "Office Manager")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Select Office Manager")]
+        public int OfficeManager { get; set; }
 
         [Display(Name = "Status")]
         public bool Active { get; set; }

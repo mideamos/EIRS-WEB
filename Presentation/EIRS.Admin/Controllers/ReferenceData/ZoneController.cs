@@ -134,7 +134,7 @@ namespace EIRS.Admin.Controllers.ReferenceData
             {
                 IList<spZoneDetailNew_Result> lstAgency = new BLZone().BL_GetZoneList(id.Value);
                 spZoneDetailNew_Result zone = lstAgency.FirstOrDefault();
-                EIRS.Admin.Models.Zone zone1 = new EIRS.Admin.Models.Zone();
+                Zone zone1 = new Zone();
                 zone1.ZoneName = zone.ZoneName;
                 zone1.LgaId = zone.LgaId.GetValueOrDefault();
                 zone1.ZoneCode = zone.ZoneCode;

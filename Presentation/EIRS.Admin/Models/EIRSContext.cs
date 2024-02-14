@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using EIRS.Admin.Models;
+using EIRS.BOL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -70,7 +71,7 @@ namespace EIRS.Admin.Models
                                 .HasColumnType("datetime")
                                 .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ModifiedBy).HasColumnName("ModifiedBY");
+                entity.Property(e => e.ModifiedBY).HasColumnName("ModifiedBY");
 
                 entity.Property(e => e.ModifiedDate)
                                 .HasColumnType("datetime")

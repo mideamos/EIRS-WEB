@@ -888,6 +888,19 @@
     </Compile>
     <Compile Include="Migrations\EirsDbContextModelSnapshot.cs" />
     <Compile Include="Models\AssessmentAndItemRollOver.cs" />
+    <Compile Include="Models\AssessmentItemViewModel.cs" />
+    <Compile Include="Models\AssessmentRuleRollover.cs" />
+    <Compile Include="Models\EIRSContext.cs" />
+    <Compile Include="Models\EirsDbContext.cs" />
+    <Compile Include="Models\ERASContext.cs" />
+    <Compile Include="Models\MDAServiceItemViewModel.cs" />
+    <Compile Include="Models\MdaserviceRollover.cs" />
+    <Compile Include="Models\PaymentAccountViewModel.cs" />
+    <Compile Include="Models\ServiceBillAndItemRollOver.cs" />
+    <Compile Include="Models\SystemUserViewModel.cs" />
+    <Compile Include="Models\TaxOffice.cs" />
+    <Compile Include="Models\TempAssHolder.cs" />
+    <Compile Include="Models\ZoneLga.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

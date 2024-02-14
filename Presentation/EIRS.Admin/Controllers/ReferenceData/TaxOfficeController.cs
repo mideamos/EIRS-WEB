@@ -207,6 +207,8 @@ namespace EIRS.Admin.Controllers
                     Approver1 = pObjTaxOfficeModel.Approver1,
                     Approver2 = pObjTaxOfficeModel.Approver2,
                     Approver3 = pObjTaxOfficeModel.Approver3,
+                    OfficeManagerID = pObjTaxOfficeModel.OfficeManager,
+                    IncomeDirector = pObjTaxOfficeModel.IncomeDirector,
                     AddressTypeID = mObjTaxOfficeAddress != null ? mObjTaxOfficeAddress.AddressTypeID : 0,
                     BuildingID = mObjTaxOfficeAddress != null ? mObjTaxOfficeAddress.BuildingID : 0,
                     ZoneId = mObjTaxOfficeAddress != null ? mObjTaxOfficeAddress.ZoneID : 0,

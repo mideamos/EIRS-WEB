@@ -236,7 +236,7 @@ namespace EIRS.Admin.Controllers
                     intStatus = 2
                 };
 
-                usp_GetBusinessList_Result mObjBusinessData = new BLBusiness().BL_GetBusinessDetails(mObjBusiness);
+                usp_GetBusinessListNewTy_Result mObjBusinessData = new BLBusiness().BL_GetBusinessDetails(mObjBusiness);
 
                 if (mObjBusinessData != null)
                 {
@@ -343,7 +343,7 @@ namespace EIRS.Admin.Controllers
                     intStatus = 2
                 };
 
-                usp_GetBusinessList_Result mObjBusinessData = new BLBusiness().BL_GetBusinessDetails(mObjBusiness);
+                usp_GetBusinessListNewTy_Result mObjBusinessData = new BLBusiness().BL_GetBusinessDetails(mObjBusiness);
 
                 if (mObjBusinessData != null)
                 {
@@ -435,7 +435,7 @@ namespace EIRS.Admin.Controllers
                 };
 
                 IList<usp_GetTaxPayerAssetList_Result> lstTaxPayerAsset = new BLTaxPayerAsset().BL_GetTaxPayerAssetList(mObjTaxPayerAsset);
-                usp_GetBusinessList_Result mObjBusinessDetails = new BLBusiness().BL_GetBusinessDetails(new Business() { intStatus = 2, BusinessID = id.GetValueOrDefault() });
+                usp_GetBusinessListNewTy_Result mObjBusinessDetails = new BLBusiness().BL_GetBusinessDetails(new Business() { intStatus = 2, BusinessID = id.GetValueOrDefault() });
                 if (mObjBusinessDetails != null)
                 {
                     ViewBag.AssetID = id;
@@ -465,7 +465,7 @@ namespace EIRS.Admin.Controllers
         {
             if (id.GetValueOrDefault() > 0)
             {
-                usp_GetBusinessList_Result mObjBusinessDetails = new BLBusiness().BL_GetBusinessDetails(new Business() { intStatus = 2, BusinessID = id.GetValueOrDefault() });
+                usp_GetBusinessListNewTy_Result mObjBusinessDetails = new BLBusiness().BL_GetBusinessDetails(new Business() { intStatus = 2, BusinessID = id.GetValueOrDefault() });
                 TaxPayerAssetViewModel mObjTaxPayerAssetModel = new TaxPayerAssetViewModel()
                 {
                     AssetID = id.GetValueOrDefault(),
@@ -529,7 +529,7 @@ namespace EIRS.Admin.Controllers
             if (id.GetValueOrDefault() > 0)
             {
                 IList<usp_GetBusinessBuildingList_Result> lstBuildingInformation = new BLBusiness().BL_GetBusinessBuildingList(new MAP_Business_Building() { BusinessID = id.GetValueOrDefault() });
-                usp_GetBusinessList_Result mObjBusinessDetails = new BLBusiness().BL_GetBusinessDetails(new Business() { intStatus = 2, BusinessID = id.GetValueOrDefault() });
+                usp_GetBusinessListNewTy_Result mObjBusinessDetails = new BLBusiness().BL_GetBusinessDetails(new Business() { intStatus = 2, BusinessID = id.GetValueOrDefault() });
 
                 if (mObjBusinessDetails != null)
                 {
@@ -553,7 +553,7 @@ namespace EIRS.Admin.Controllers
         {
             if (id.GetValueOrDefault() > 0)
             {
-                usp_GetBusinessList_Result mObjBusinessDetails = new BLBusiness().BL_GetBusinessDetails(new Business() { intStatus = 2, BusinessID = id.GetValueOrDefault() });
+                usp_GetBusinessListNewTy_Result mObjBusinessDetails = new BLBusiness().BL_GetBusinessDetails(new Business() { intStatus = 2, BusinessID = id.GetValueOrDefault() });
 
                 IList<usp_GetBuildingList_Result> lstBuilding = new BLBuilding().BL_GetBuildingList(new Building() { intStatus = 1 });
                 ViewBag.BuildingList = lstBuilding;

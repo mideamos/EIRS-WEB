@@ -65,6 +65,8 @@ $(document).ready(function () {
             $("#hdnApprover1").val($("#cboApprover1").val());
             $("#hdnApprover2").val($("#cboApprover2").val());
             $("#hdnApprover3").val($("#cboApprover3").val());
+            $("#hdnOfficeManager").val($("#cboOfficeManager").val());
+            $("#hdnIncomeDirector").val($("#cboIncomeDirector").val());
             $("#hdnZone").val($("#cboZone").val());
             $("#hdnActive").val($("#chkActive").is(":checked"));
             $("#frmTaxOfficeInformation").hide();

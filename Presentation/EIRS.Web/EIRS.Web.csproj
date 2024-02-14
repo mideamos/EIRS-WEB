@@ -45,7 +45,7 @@
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
+    <WarningLevel>2</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -2159,6 +2159,7 @@
     <Compile Include="Models\ManualPoAViewModel.cs" />
     <Compile Include="Models\NewAssessmentViewModel.cs" />
     <Compile Include="Models\NewTccViewModel.cs" />
+    <Compile Include="Models\RequestPayload.cs" />
     <Compile Include="Models\TaxPayerDocumentViewModel.cs" />
     <Compile Include="Models\EMDataImportViewModel.cs" />
     <Compile Include="Models\ExportProfileDataViewModel.cs" />

@@ -38,6 +38,8 @@ namespace EIRS.BOL
         public Nullable<int> ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ZoneId { get; set; }
+        public Nullable<int> OfficeManagerID { get; set; }
+        public Nullable<int> IncomeDirector { get; set; }
     
         public virtual Address_Types Address_Types { get; set; }
         public virtual Building Building { get; set; }

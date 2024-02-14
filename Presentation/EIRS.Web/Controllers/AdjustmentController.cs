@@ -15,7 +15,8 @@ namespace EIRS.Web.Controllers
 {
     [SessionTimeout]
     public class AdjustmentController : BaseController
-    { EIRSEntities _db;
+    {
+        EIRSEntities _db;
         IAssessmentRepository _AssessmentRepository;
         public AdjustmentController()
         {
@@ -91,14 +92,19 @@ namespace EIRS.Web.Controllers
             IDictionary<string, object> dcResponse = new Dictionary<string, object>();
             try
             {
-
                 decimal? Amountholder = 0;
+                List<int?> lstOfProfiles = new List<int?>();
                 MAP_Assessment_AssessmentItem retVal2 = new MAP_Assessment_AssessmentItem();
+                Assessment retVal = new Assessment();
                 using (_db = new EIRSEntities())
                 {
-                    var retVal = _db.Assessments.FirstOrDefault(o => o.AssessmentID == AssessmentID);
+                    retVal = _db.Assessments.FirstOrDefault(o => o.AssessmentID == AssessmentID);
                     Amountholder = retVal.AssessmentAmount;
                     retVal2 = _db.MAP_Assessment_AssessmentItem.FirstOrDefault(o => o.AAIID == pObjAdjustment.AAIID);
+                    var lstAssessmentRules = _db.MAP_Assessment_AssessmentRule.Where(o => o.AssessmentID == AssessmentID);
+                    var lstProfileId = lstAssessmentRules.Select(o => o.ProfileID).ToList();
+                    lstOfProfiles = _db.Profiles.Where(o => lstProfileId.Contains(o.ProfileID)).Select(o => o.ProfileTypeID).ToList();
+                    lstOfProfiles = lstOfProfiles.Where(o => o.Value.Equals(5) || o.Value.Equals(7)).ToList();
                 }
                 BLAssessment mObjBLAssessment = new BLAssessment();
                 pObjAdjustment.AdjustmentDate = CommUtil.GetCurrentDateTime();
@@ -150,16 +156,31 @@ namespace EIRS.Web.Controllers
                     TaxBaseAmount = retVal2.TaxBaseAmount
                 };
                 mObjBLAssessment.BL_UpdateAssessmentItemStatus(mObjAAI);
-
+                Assessment mObjAssessment = new Assessment();
                 //update assessment table
-                Assessment mObjAssessment = new Assessment()
+                if (lstOfProfiles.Count > 0)
                 {
-                    AssessmentID = AssessmentID,
-                    SettlementStatusID = statId,
-                    ModifiedDate = CommUtil.GetCurrentDateTime(),
-                    ModifiedBy = SessionManager.UserID,
-                    AssessmentAmount = Amountholder
-                };
+                    mObjAssessment = new Assessment()
+                    {
+                        AssessmentID = AssessmentID,
+                        SettlementStatusID = retVal.SettlementStatusID == 3 ? 8 : 6,
+                        ModifiedDate = CommUtil.GetCurrentDateTime(),
+                        ModifiedBy = SessionManager.UserID,
+                        AssessmentAmount = Amountholder
+                    };
+                }
+                else
+                {
+                    mObjAssessment = new Assessment()
+                    {
+                        AssessmentID = AssessmentID,
+                        SettlementStatusID = statId,
+                        ModifiedDate = CommUtil.GetCurrentDateTime(),
+                        ModifiedBy = SessionManager.UserID,
+                        AssessmentAmount = Amountholder
+                    };
+                }
+
                 mObjBLAssessment.BL_UpdateAssessmentSettlementStatus(mObjAssessment);
 
                 dcResponse["success"] = mObjResponse.Success;

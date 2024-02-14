@@ -24,6 +24,9 @@ using System.Configuration;
 using System.Web.Configuration;
 using SelectPdf;
 using EIRS.Web.Utility;
+using static EIRS.Common.EnumList;
+using Twilio.TwiML.Voice;
+using Aspose.Pdf.Operators;
 
 namespace EIRS.Web.Controllers
 {
@@ -702,8 +705,11 @@ namespace EIRS.Web.Controllers
                     ViewBag.TCCRequestList = lstTCCRequest;
 
                     IList<DropDownListResult> lstYear = new List<DropDownListResult>();
-                    lstYear.Add(new DropDownListResult() { id = DateTime.Now.Year-1, text = (DateTime.Now.Year-1).ToString() });
+                    lstYear.Add(new DropDownListResult() { id = DateTime.Now.Year - 1, text = (DateTime.Now.Year - 1).ToString() });
                     ViewBag.YearList = new SelectList(lstYear, "id", "text");
+                    IList<DropDownListResult> lstYearForDropDown = new List<DropDownListResult>();
+                    lstYearForDropDown.Add(new DropDownListResult() { id = DateTime.Now.Year - 1, text = (DateTime.Now.Year - 1).ToString() });
+                    ViewBag.YearListlstYearForDropDown = new SelectList(lstYearForDropDown, "id", "text");
 
                     return View(mObjIndividualData);
                 }
@@ -862,7 +868,7 @@ namespace EIRS.Web.Controllers
             };
 
             IList<usp_GetBusinessListNewTy_Result> lstBusiness = new BLBusiness().BL_GetBusinessList(mObjBusiness);
-            if(lstBusiness.Count()> 5)
+            if (lstBusiness.Count() > 5)
                 return PartialView("_BindBusinessTable_SingleSelect", lstBusiness.Take(5).ToList());
             else
                 return PartialView("_BindBusinessTable_SingleSelect", lstBusiness.ToList());
@@ -1063,7 +1069,7 @@ namespace EIRS.Web.Controllers
                         ContactAddress = mObjIndividualData.ContactAddress,
                         AssetTypeID = (int)EnumList.AssetTypes.Business,
                         ZoneId = 0,
-                        TaxOfficeId =0
+                        TaxOfficeId = 0
                     };
 
                     UI_FillBusinessDropDown(mObjBusinessModel);
@@ -2312,8 +2318,6 @@ namespace EIRS.Web.Controllers
                                         }
                                     }
                                 }
-
-
                             }
 
                         }
@@ -2368,6 +2372,9 @@ namespace EIRS.Web.Controllers
                     {
                         BLAssessment mObjBLAssessment = new BLAssessment();
 
+                        var lstProfileId = lstAssessmentRules.Select(o => o.ProfileID).ToList();
+                        var lstOfProfiles = _db.Profiles.Where(o => lstProfileId.Contains(o.ProfileID)).Select(o => o.ProfileTypeID).ToList();
+                        lstOfProfiles = lstOfProfiles.Where(o => o.Value.Equals(5) || o.Value.Equals(7)).ToList();
                         Assessment mObjAssessment = new Assessment()
                         {
                             AssessmentID = 0,
@@ -2376,7 +2383,7 @@ namespace EIRS.Web.Controllers
                             AssessmentAmount = lstAssessmentRules.Count > 0 ? lstAssessmentItems.Sum(t => t.TaxBaseAmount) : 0,
                             AssessmentDate = CommUtil.GetCurrentDateTime(),
                             SettlementDueDate = pObjAssessmentModel.SettlementDuedate,
-                            SettlementStatusID = (int)EnumList.SettlementStatus.Assessed,
+                            SettlementStatusID = lstOfProfiles.Count > 0 ? (int)EnumList.SettlementStatus.PendingApproval : (int)EnumList.SettlementStatus.Assessed,
                             AssessmentNotes = pObjAssessmentModel.Notes,
                             Active = true,
                             CreatedBy = SessionManager.UserID,
@@ -3610,6 +3617,183 @@ namespace EIRS.Web.Controllers
                 return RedirectToAction("Search", "CaptureIndividual");
             }
         }
+        public ActionResult BillDetailFromPending(int? id, long? billid, string billrefno)
+        {
+            if (id.GetValueOrDefault() > 0 && billid.GetValueOrDefault() > 0)
+            {
+                Individual mObjIndividual = new Individual()
+                {
+                    IndividualID = id.GetValueOrDefault(),
+                    intStatus = 1
+                };
+                usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(mObjIndividual);
+
+                if (mObjIndividualData != null)
+                {
+                    if (billrefno.StartsWith("AB"))
+                    {
+                        BLAssessment mObjBLAssessment = new BLAssessment();
+                        BLAssessmentItem mObjBLAssessmentItem = new BLAssessmentItem();
+                        usp_GetAssessmentList_Result mObjAssessmentData = mObjBLAssessment.BL_GetAssessmentDetails(new Assessment() { AssessmentID = billid.GetValueOrDefault(), IntStatus = 2 });
+
+                        if (mObjAssessmentData != null && mObjAssessmentData.TaxPayerID == mObjIndividualData.IndividualID && mObjAssessmentData.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
+                        {
+                            IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = mObjBLAssessment.BL_GetAssessmentRules(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = mObjBLAssessment.BL_GetAssessmentRuleItem(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = mObjBLAssessment.BL_GetAssessmentRuleBasedSettlement(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentAdjustmentList_Result> lstAssessmentAdjustment = mObjBLAssessment.BL_GetAssessmentAdjustment(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentLateChargeList_Result> lstAssessmentLateCharge = mObjBLAssessment.BL_GetAssessmentLateCharge(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+
+                            IList<DropDownListResult> lstSettlementMethod = mObjBLAssessment.BL_GetSettlementMethodAssessmentRuleBased(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+
+                            IList<usp_GetSettlementList_Result> lstSettlement = new BLSettlement().BL_GetSettlementList(new Settlement() { ServiceBillID = -1, AssessmentID = mObjAssessmentData.AssessmentID.GetValueOrDefault() });
+
+                            ViewBag.SettlementMethodList = new SelectList(lstSettlementMethod, "id", "text");
+                            ViewBag.MAPAssessmentRules = lstMAPAssessmentRules;
+                            ViewBag.AssessmentItems = lstAssessmentItems;
+                            ViewBag.AssessmentRuleSettlement = lstAssessmentRuleSettlement;
+                            ViewBag.SettlementList = lstSettlement;
+                            ViewBag.AdjustmentList = lstAssessmentAdjustment;
+                            ViewBag.LateChargeList = lstAssessmentLateCharge;
+
+                            return View("AssessmentBillDetailFromPending", mObjAssessmentData);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Search", "CaptureIndividual");
+                        }
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("Search", "CaptureIndividual");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Search", "CaptureIndividual");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Search", "CaptureIndividual");
+            }
+        }
+        public ActionResult BillDetailFromDecline(int? id, long? billid, string billrefno)
+        {
+            if (id.GetValueOrDefault() > 0 && billid.GetValueOrDefault() > 0)
+            {
+                Individual mObjIndividual = new Individual()
+                {
+                    IndividualID = id.GetValueOrDefault(),
+                    intStatus = 1
+                };
+                usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(mObjIndividual);
+
+                if (mObjIndividualData != null)
+                {
+                    if (billrefno.StartsWith("AB"))
+                    {
+                        BLAssessment mObjBLAssessment = new BLAssessment();
+                        BLAssessmentItem mObjBLAssessmentItem = new BLAssessmentItem();
+                        usp_GetAssessmentList_Result mObjAssessmentData = mObjBLAssessment.BL_GetAssessmentDetails(new Assessment() { AssessmentID = billid.GetValueOrDefault(), IntStatus = 2 });
+
+                        if (mObjAssessmentData != null && mObjAssessmentData.TaxPayerID == mObjIndividualData.IndividualID && mObjAssessmentData.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
+                        {
+                            IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = mObjBLAssessment.BL_GetAssessmentRules(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = mObjBLAssessment.BL_GetAssessmentRuleItem(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = mObjBLAssessment.BL_GetAssessmentRuleBasedSettlement(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentAdjustmentList_Result> lstAssessmentAdjustment = mObjBLAssessment.BL_GetAssessmentAdjustment(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+                            IList<usp_GetAssessmentLateChargeList_Result> lstAssessmentLateCharge = mObjBLAssessment.BL_GetAssessmentLateCharge(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+
+                            IList<DropDownListResult> lstSettlementMethod = mObjBLAssessment.BL_GetSettlementMethodAssessmentRuleBased(mObjAssessmentData.AssessmentID.GetValueOrDefault());
+
+                            IList<usp_GetSettlementList_Result> lstSettlement = new BLSettlement().BL_GetSettlementList(new Settlement() { ServiceBillID = -1, AssessmentID = mObjAssessmentData.AssessmentID.GetValueOrDefault() });
+
+                            ViewBag.SettlementMethodList = new SelectList(lstSettlementMethod, "id", "text");
+                            ViewBag.MAPAssessmentRules = lstMAPAssessmentRules;
+                            ViewBag.AssessmentItems = lstAssessmentItems;
+                            ViewBag.AssessmentRuleSettlement = lstAssessmentRuleSettlement;
+                            ViewBag.SettlementList = lstSettlement;
+                            ViewBag.AdjustmentList = lstAssessmentAdjustment;
+                            ViewBag.LateChargeList = lstAssessmentLateCharge;
+
+                            return View("BillDetailFromDecline", mObjAssessmentData);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Search", "CaptureIndividual");
+                        }
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("Search", "CaptureIndividual");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Search", "CaptureIndividual");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Search", "CaptureIndividual");
+            }
+        }
+        public ActionResult BillDetailToBeApproved(long? billid, int type)
+        {
+            BLAssessment mObjBLAssessment = new BLAssessment();
+            var ass = _db.Assessments.FirstOrDefault(o => o.AssessmentID == billid);
+            var set = _db.Settlements.FirstOrDefault(o => o.AssessmentID == billid);
+            var allTax = _db.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
+            if (!allTax.Any())
+                allTax = _db.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID);
+            switch (type)
+            {
+                case 1:
+                    if (ass.SettlementStatusID == 6)
+                    {
+                        ass.SettlementStatusID = 1;
+                    }
+                    else if (ass.SettlementStatusID == 8)
+                    {
+                        IList<usp_GetAssessmentAdjustmentList_Result> lstAssessmentAdjustment = mObjBLAssessment.BL_GetAssessmentAdjustment(ass.AssessmentID);
+                        IList<usp_GetAssessmentLateChargeList_Result> lstAssessmentLateCharge = mObjBLAssessment.BL_GetAssessmentLateCharge(ass.AssessmentID);
+
+
+                        //sum of items
+                        var totalAss = ass.AssessmentAmount + lstAssessmentAdjustment.Sum(o => o.Amount) + lstAssessmentLateCharge.Sum(o => o.TotalAmount);
+                        if (set.SettlementAmount == 0)
+                            ass.SettlementStatusID = 1;
+                        else if (totalAss > set.SettlementAmount)
+                            ass.SettlementStatusID = 3;
+                        else
+                            ass.SettlementStatusID = 4;
+
+                    }
+
+                    _db.SaveChanges();
+                    return RedirectToAction("Details", "CaptureIndividual", new { id = ass.TaxPayerID, name = ass.TaxPayerRIN });
+                    break;
+                case 2:
+                    ass.SettlementStatusID = 7;
+                    MapAssessmentDisapprove_ map = new MapAssessmentDisapprove_();
+                    map.AssessmentID = billid;
+                    // map.Notes = 
+                    map.DateCreated = DateTime.Now;
+                    map.TaxOfficerDesignation = SessionManager.UserID.ToString();
+                    map.TaxOfficerId = allTax.FirstOrDefault().TaxOfficeID;
+                    _db.MapAssessmentDisapprove_.Add(map);
+                    _db.SaveChanges();
+
+                    return View("AssessmentBillDetailFromPending", ass);
+                    break;
+                default:
+                    break;
+            }
+            return View("AssessmentBillDetailFromPending", ass);
+        }
         public ActionResult GenerateBill(int? id, string name, int? billid, string billrefno)
         {
             string url = getUrl();
@@ -3693,7 +3877,7 @@ namespace EIRS.Web.Controllers
                             .Replace("@@rptBillDueDate@@", CommUtil.GetFormatedFullDate(mObjAssessmentData.SettlementDueDate))
                             .Replace("@@rptAgencyName@@", mObjAssessmentData.ReportingAgencyName);
 
-                            
+
                             PdfDocument doc = pdf.ConvertHtmlString(marksheet);
                             var bytes = doc.Save();
                             string strDirectory = "/Bills/";

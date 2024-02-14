@@ -71,7 +71,7 @@
                             </a>
                         </li>
                         @if (SessionManager.TaxPayerTypeID == 0)
-                      //  @if (SessionManager.TaxPayerTypeID == 0 && SessionManager.DataSubmitterID == 0)
+                        //  @if (SessionManager.TaxPayerTypeID == 0 && SessionManager.DataSubmitterID == 0)
                         {
                             <li class="search-li no-hover">
                                 <input type="text" class="form-control" placeholder="Search" id="txtMasterSearch">
@@ -81,7 +81,7 @@
                             </li>
                         }
                         @if (SessionManager.TaxPayerTypeID == 0)
-                       // @if (SessionManager.TaxPayerTypeID == 0 && SessionManager.DataSubmitterID == 0)
+                        // @if (SessionManager.TaxPayerTypeID == 0 && SessionManager.DataSubmitterID == 0)
                         {
                             Html.RenderAction("GetCentralTopMenuList", "Home", new { area = "", pIntParentMenuID = 1 });
                             Html.RenderAction("GetCentralTopMenuList", "Home", new { area = "", pIntParentMenuID = 2 });
@@ -294,29 +294,29 @@
                             </li>
                         }
                         @*else if (SessionManager.DataSubmitterID > 0)
-                        {
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    My Operations<span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="@Url.Action("Log","DataSubmitterPanel")">My Submissions</a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            Profile<span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="@Url.Action("Search","ProfileBuilding")">Buildings</a></li>
-                                            <li><a href="@Url.Action("Search","ProfileBusiness")">Businesses</a></li>
-                                            <li><a href="@Url.Action("Search","ProfileLand")">Lands</a></li>
-                                            <li><a href="@Url.Action("Search","ProfileVehicle")">Vehicles</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        }*@
+                            {
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        My Operations<span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="@Url.Action("Log","DataSubmitterPanel")">My Submissions</a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                Profile<span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="@Url.Action("Search","ProfileBuilding")">Buildings</a></li>
+                                                <li><a href="@Url.Action("Search","ProfileBusiness")">Businesses</a></li>
+                                                <li><a href="@Url.Action("Search","ProfileLand")">Lands</a></li>
+                                                <li><a href="@Url.Action("Search","ProfileVehicle")">Vehicles</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }*@
                     </ul>
                     <ul class="nav navbar-nav pull-right">
                         <li class="no-hover hidden p0"><a>Welcome</a></li>
@@ -337,15 +337,37 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-3">
-                    @if (SessionManager.TaxPayerTypeID == 0 )
+                    @if (SessionManager.TaxPayerTypeID == 0)
                     //@if (SessionManager.TaxPayerTypeID == 0 && SessionManager.DataSubmitterID == 0)
                     {
-                        Html.RenderAction("GetCentralSideMenuList", "Home", new { area="", pIntParentMenuID = 9 });
+                        Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 9 });
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 10 });
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 11 });
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 12 });
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 46 });
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 60 });
+
+
+                        if (SessionManager.UserID == 32)
+                        {
+                            <div class="portlet light compressed-menu">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        Approvals
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <ul class="nav">
+                                        <li>
+                                            <a href="@Url.Action("Pending","Home")"> <i class="fa fa-angle-right"></i> Pending</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Declined","Home")"> <i class="fa fa-angle-right"></i> Declined</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
                     }
                     else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
                     {
@@ -582,36 +604,36 @@
                         </div>
                     }
                     @*else if (SessionManager.DataSubmitterID > 0)
-                    {
-                        <div class="portlet light compressed-menu">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    My Operations
-                                </div>
-                            </div>
-                            <div class="portlet-body">
-                                <ul class="nav">
-                                    <li>
-                                        <a href="@Url.Action("SubmitData","DataSubmitterPanel")"> <i class="fa fa-angle-right"></i> Submit Data</a>
-                                    </li>
-                                    <li>
-                                        <a href="@Url.Action("Log","DataSubmitterPanel")"> <i class="fa fa-angle-right"></i> Submission Log</a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            Profile<span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="@Url.Action("Search","ProfileBuilding")">Buildings</a></li>
-                                            <li><a href="@Url.Action("Search","ProfileBusiness")">Businesses</a></li>
-                                            <li><a href="@Url.Action("Search","ProfileLand")">Lands</a></li>
-                                            <li><a href="@Url.Action("Search","ProfileVehicle")">Vehicles</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    }*@
+        {
+            <div class="portlet light compressed-menu">
+                <div class="portlet-title">
+                    <div class="caption">
+                        My Operations
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <ul class="nav">
+                        <li>
+                            <a href="@Url.Action("SubmitData","DataSubmitterPanel")"> <i class="fa fa-angle-right"></i> Submit Data</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Log","DataSubmitterPanel")"> <i class="fa fa-angle-right"></i> Submission Log</a>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Profile<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("Search","ProfileBuilding")">Buildings</a></li>
+                                <li><a href="@Url.Action("Search","ProfileBusiness")">Businesses</a></li>
+                                <li><a href="@Url.Action("Search","ProfileLand")">Lands</a></li>
+                                <li><a href="@Url.Action("Search","ProfileVehicle")">Vehicles</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        }*@
                 </div>
                 <div class="col-sm-9">
                     <div class="content" id="dvAlertConatiner">

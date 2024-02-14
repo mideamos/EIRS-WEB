@@ -269,13 +269,13 @@ namespace EIRS.Web.Models
 
                 if (mObjFuncResponse.Success)
                 {
-
                     SessionManager.UserID = mObjFuncResponse.AdditionalData.UserID;
                     SessionManager.ContactName = mObjFuncResponse.AdditionalData.ContactName;
                     SessionManager.ContactNumber = mObjFuncResponse.AdditionalData.ContactNumber;
                     SessionManager.EmailAddress = mObjFuncResponse.AdditionalData.EmailAddress;
                     SessionManager.UserTypeID = mObjFuncResponse.AdditionalData.UserTypeID.GetValueOrDefault();
-
+                    //if (SessionManager.UserID == 32)
+                    //    ViewBag.DetSideBar = "1";
                     FormsAuthenticationTicket objTicket = null;
                     HttpCookie objCookie = null;
                     objTicket = new FormsAuthenticationTicket(1, SessionManager.UserID.ToString(), CommUtil.GetCurrentDateTime(), CommUtil.GetCurrentDateTime().AddMinutes(600), false, "Admin");

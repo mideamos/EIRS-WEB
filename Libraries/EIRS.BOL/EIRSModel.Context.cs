@@ -254,6 +254,7 @@ namespace EIRS.BOL
         public virtual DbSet<ZoneLGA> ZoneLGAs { get; set; }
         public virtual DbSet<ValidateTcc> ValidateTccs { get; set; }
         public virtual DbSet<NatureOfBusiness> NatureOfBusinesses { get; set; }
+        public virtual DbSet<MapAssessmentDisapprove_> MapAssessmentDisapprove_ { get; set; }
     
         public virtual ObjectResult<string> ELMAH_GetErrorsXml(string application, Nullable<int> pageIndex, Nullable<int> pageSize, ObjectParameter totalCount)
         {

@@ -1,0 +1,59 @@
+﻿@using EIRS.Web.GISModels
+@{
+    ViewBag.Title = "Pending";
+    IList<ApprovalFlow> lstProfileInformation = (IList<ApprovalFlow>)ViewBag.ProfileInformation;
+
+}
+
+<h2>Pending</h2>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Pending Approvals</div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPendingList">
+            <thead class="red-th">
+                <tr>
+                    <th>RIN</th>
+                    <th>Taxpayer Name</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vProfile in lstProfileInformation)
+                {
+                    <tr>
+                        <td>@vProfile.Rin</td>
+                        <td>@vProfile.TaxPayerName</td>
+                        <td>@vProfile.Amount</td>
+                        <td>@vProfile.Status</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="@Url.Action("BillDetailFromDecline", "CaptureIndividual", new {id=vProfile.Id, billid = vProfile.AssessmentId, billrefno = vProfile.AssessmentRefNo })">
+                                            View Bill
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="/Content/plugins/plupload/js/plupload.full.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jsIndividualDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script src="~/Scripts/jsTaxPayerMessage.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber" type="text/javascript"></script>
+}

@@ -6,13 +6,11 @@ $(document).ready(function () {
     jsfn_ConvertToDatableWithCustomSort($('#tblProfileList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Profiles Found');
     vMDAServiceTable = jsfn_ConvertToDatableWithCustomSort($('#tblMDAServiceList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated MDA Services Found');
     vBillTable = jsfn_ConvertToDatableWithCustomSort($('#tblBillList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Bills Found');
-    vPaymentTable = jsfn_ConvertToDatableWithCustomSort($('#tblPaymentList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": false }], 'No Assoicated Payments Found');
+    vPaymentTable = jsfn_ConvertToDatableWithCustomSort($('#tblPaymentList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Payments Found');
     jsfn_ConvertToDatableWithCustomSort($('#tblTCCRequest'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Request Found');
     jsfn_ConvertToDatableWithCustomSort($('#tblDocumentList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Document Found');
 
     $("#btnAddTCCRequest").on("click", function () {
-
-
         $("#dvAddTCCRequestModal").modal('show');
     });
 

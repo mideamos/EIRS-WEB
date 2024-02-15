@@ -83,6 +83,10 @@ namespace EIRS.BLL
         {
             return _UserRepository.REP_GetApproverList(pObjUser);
         }
+        public IList<DropDownListResult> REP_GetApproverDetList(MST_Users pObjUser, string det)
+        {
+            return _UserRepository.REP_GetApproverDetList(pObjUser, det);
+        }
 
 
         public FuncResponse BL_ReplaceTaxOfficeManager(MST_Users pObjUser)

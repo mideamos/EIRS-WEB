@@ -107,7 +107,7 @@
                                         @Html.LabelFor(model => model.OfficeManager, htmlAttributes: new { @class = "label required" })
                                         <label class="input">
                                             <i class="icon-append fa fa-question-circle"></i>
-                                            @Html.DropDownListFor(model => model.OfficeManager, (SelectList)ViewBag.UserList, "Select Office Manager", htmlAttributes: new { @tabindex = "4", @placeholder = "Select Office Manager", @class = "select2", @width = "100%", @id = "cboOfficeManager" })
+                                            @Html.DropDownListFor(model => model.OfficeManager, (SelectList)ViewBag.UserListForapproval, "Select Office Manager", htmlAttributes: new { @tabindex = "4", @placeholder = "Select Office Manager", @class = "select2", @width = "100%", @id = "cboOfficeManager" })
                                         <b class="tooltip tooltip-top-right">
                                             <i class="fa fa-warning txt-color-teal"></i>
                                             Select Branch Manager for Approval
@@ -119,7 +119,7 @@
                                         @Html.LabelFor(model => model.IncomeDirector, htmlAttributes: new { @class = "label required" })
                                         <label class="input">
                                             <i class="icon-append fa fa-question-circle"></i>
-                                            @Html.DropDownListFor(model => model.IncomeDirector, (SelectList)ViewBag.UserList, "Select Income Director", htmlAttributes: new { @tabindex = "4", @placeholder = "Select Income Director", @class = "select2", @width = "100%", @id = "cboIncomeDirector" })
+                                            @Html.DropDownListFor(model => model.IncomeDirector, (SelectList)ViewBag.UserListForDirector, "Select Income Director", htmlAttributes: new { @tabindex = "4", @placeholder = "Select Income Director", @class = "select2", @width = "100%", @id = "cboIncomeDirector" })
                                         <b class="tooltip tooltip-top-right">
                                             <i class="fa fa-warning txt-color-teal"></i>
                                             Select Income Director For Approval

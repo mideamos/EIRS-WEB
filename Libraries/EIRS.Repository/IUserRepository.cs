@@ -26,7 +26,7 @@ namespace EIRS.Repository
         IList<usp_GetTaxOfficerTargetList_Result> REP_GetTaxOfficerTarget(MAP_TaxOfficer_Target pObjTarget);
         IList<DropDownListResult> REP_GetUserDropDownList(MST_Users pObjUser);
         IList<DropDownListResult> REP_GetApproverList(MST_Users pObjUser);
-
+        IList<DropDownListResult> REP_GetApproverDetList(MST_Users pObjUser, string det);
         FuncResponse REP_ReplaceTaxOfficeManager(MST_Users pObjUser);
 
         FuncResponse REP_ReplaceTaxOfficer(MST_Users pObjUser);

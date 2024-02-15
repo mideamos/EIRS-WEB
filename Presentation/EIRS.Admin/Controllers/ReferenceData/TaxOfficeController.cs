@@ -43,6 +43,8 @@ namespace EIRS.Admin.Controllers
             REP_GetZoneDropDownList();
 
             UI_FillApproverDropDown(new MST_Users() { intStatus = 1, UserTypeID = (int)EnumList.UserType.Staff, TaxOfficeID = TaxOfficeID });
+            UI_FillDiDirectorDropDown(new MST_Users() { intStatus = 1, UserTypeID = (int)EnumList.UserType.Staff, TaxOfficeID = TaxOfficeID });
+            UI_FillDiDropDown(new MST_Users() { intStatus = 1, UserTypeID = (int)EnumList.UserType.Staff, TaxOfficeID = TaxOfficeID });
 
             UI_FillAddressTypeDropDown(new Address_Types() { intStatus = 1, IncludeAddressTypeIds = AddressTypeID.ToString() });
         }

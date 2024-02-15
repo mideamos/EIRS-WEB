@@ -687,8 +687,28 @@ namespace EIRS.Admin.Controllers
 
             IList<DropDownListResult> lstUsers = new BLUser().BL_GetApproverList(pObjUsers);
             ViewBag.UserList = new SelectList(lstUsers, "id", "text");
-        }
+        } 
+        public void UI_FillDiDropDown(MST_Users pObjUsers = null)
+        {
+            if (pObjUsers == null)
+                pObjUsers = new MST_Users();
 
+            pObjUsers.intStatus = 1;
+
+            IList<DropDownListResult> lstUsers = new BLUser().REP_GetApproverDetList(pObjUsers,"1");
+            ViewBag.UserListForapproval = new SelectList(lstUsers, "id", "text");
+        }  
+        public void UI_FillDiDirectorDropDown(MST_Users pObjUsers = null)
+        {
+            if (pObjUsers == null)
+                pObjUsers = new MST_Users();
+
+            pObjUsers.intStatus = 1;
+
+            IList<DropDownListResult> lstUsers = new BLUser().REP_GetApproverDetList(pObjUsers,"2");
+            ViewBag.UserListForDirector = new SelectList(lstUsers, "id", "text");
+        } 
+        
         public JsonResult GetWard(int LGAID)
         {
             IList<DropDownListResult> lstWard = new BLWard().BL_GetWardDropDownList(new Ward() { intStatus = 1, LGAID = LGAID });

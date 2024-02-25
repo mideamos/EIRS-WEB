@@ -16,6 +16,13 @@ namespace EIRS.Web
             get { return TrynParse.parseInt(HttpContext.Current.Session["UserID"]); }
             set { HttpContext.Current.Session["UserID"] = value; }
         }
+     
+        public static bool CanSeeApproval
+        {
+            get { return TrynParse.parseBool(HttpContext.Current.Session["CanSeeApproval"]); }
+            set { HttpContext.Current.Session["CanSeeApproval"] = value; }
+        }
+        
 
         public static int DataSubmitterID
         {
@@ -268,13 +275,18 @@ namespace EIRS.Web
             set { HttpContext.Current.Session["LstTCCNotesAttachment"] = JsonConvert.SerializeObject(value); }
         }
     }
+    public class newServiceBillIdsRequest
+    {
+        public string AssID { get; set; }
+        public string ServiceId { get; set; }
+    }
 
     public class TicketRef
     {
         public string TickRefNo { get; set; }
         public string TaxYear { get; set; }
         public string PaymentDate { get; set; }
-    } 
+    }
     public class BusinessNameHolder
     {
         public string BusinessName { get; set; }

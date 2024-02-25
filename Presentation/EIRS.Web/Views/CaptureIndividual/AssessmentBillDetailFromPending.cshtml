@@ -252,38 +252,62 @@
                 </div>
             </div>
 
-           
-                <hr class="margin-top-0" />
 
-                <div class="form-horizontal">
-                    @*<div class="form-group">
+            <hr class="margin-top-0" />
+
+            <div class="form-horizontal">
+                @*<div class="form-group">
                         <label class="control-label col-sm-4">Settlement Method*</label>
                         <div class="col-sm-8">
                             @Html.DropDownList("cboSettlementMethod", (SelectList)ViewBag.SettlementMethodList, "Select Settlement Method", htmlAttributes: new { @tabindex = "2", @class = "form-control bs-select", @width = "100%" })
                         </div>
                     </div>*@
-                    <div class="form-group">
+                @*<div class="form-group">
                         <label class="control-label col-sm-4">Add Notes *</label>
                         <div class="col-sm-8">
-                            <textarea class="form-control" id="txtareaId" required></textarea>
+                            <textarea class="form-control" id="txtareaId" name="txtareaId" required></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4"></label>
                         <div class="col-sm-2">
-                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type =2 })" class="btn btn-redtheme btn-block" id="btnCancel"> Disapprove </a>
-                        </div>
-                        <div class="col-sm-6">
-                            @*<a class="btn btn-theme btn-block"> Approve </a>*@
-                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type =1 })"class="btn btn-theme btn-block">
-                                Approve
-                            </a>
-                        </div>
+                            <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new  { billid = Model.AssessmentID,type =2,declineNote =txtareaId })" class="btn btn-redtheme btn-block" id="btnCancel"> Disapprove </a>
+                        </div>*@
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Add Notes *</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" id="txtareaId" name="txtareaId" required></textarea>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4"></label>
+                    <div class="col-sm-2">
+                        <a href="#" class="btn btn-redtheme btn-block" id="btnDisapprove"> Disapprove </a>
+                    </div>
+                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                    <script>
+                         $(document).ready(function () {
+                             $("#btnDisapprove")
+                                 .on("click", function (e) {
+                                   e.preventDefault();
+                                   var txtareaValue = $("#txtareaId").val();
+                                   var url = "@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID, type = "2", })" + "&declineNote=" + encodeURIComponent(txtareaValue);
+                                     window.location.href = url;
+                             });
+                            });
+                    </script>
+
+                    <div class="col-sm-6">
+                        <a href="@Url.Action("BillDetailToBeApproved", "CaptureIndividual", new { billid = Model.AssessmentID,type ="1",declineNote = "" })" class="btn btn-theme btn-block">
+                            Approve
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 <div class="modal fade custom-modal" id="dvViewSettlementModal" tabindex="-1" role="dialog" aria-labelledby="dvViewSettlementModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -417,3 +441,5 @@
         </div>
     </div>
 </div>
+
+

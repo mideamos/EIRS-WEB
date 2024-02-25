@@ -42,7 +42,6 @@ function jsfn_AssessmentRuleDetails(aruleID) {
     jsfn_ShowLoading();
     jsfn_ajaxPost('/Base/GetAssessmentRuleDetails', vData, jsfn_ShowAssessmentRuleDetailResponse);
 }
-
 function jsfn_ShowAssessmentRuleDetailResponse(data) {
 
     jsfn_HideLoading();
@@ -254,7 +253,7 @@ function jsfn_BillPaymentDetailResponse(data) {
     if (data.success) {
         $('#dvBillPaymentModal').modal('show');
         $('#dvBillPaymentData').html(data.BillPaymentList);
-        jsfn_ConvertToDatableWithCustomSort($('#tblBillPayment'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Payment History Found',[]);
+        jsfn_ConvertToDatableWithCustomSort($('#tblBillPayment'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Payment History Found', []);
     }
     else {
         jsfn_ShowAlert(data.Message, 'danger');
@@ -354,7 +353,7 @@ function jsfn_AddTCCResponse(data) {
         $("#dvAddTCCRequestModal").modal('hide');
     }
     else {
-        jsfn_ShowAlert(data.Message, 'danger', true,'#dvTCCRMessage');
+        jsfn_ShowAlert(data.Message, 'danger', true, '#dvTCCRMessage');
     }
 }
 

@@ -37,4 +37,12 @@ namespace EIRS.Web.Models
         public string MobileNumber { get; set; }
         public string BillStatus { get; set; }
     }
+
+    public class GGApproval 
+    {
+        public int BillId { get; set; }
+        public int Type { get; set; }
+        public string Note { get; set; }
+    }
+
 }

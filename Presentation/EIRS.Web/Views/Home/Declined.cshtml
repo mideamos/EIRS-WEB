@@ -1,11 +1,10 @@
 ﻿@using EIRS.Web.GISModels
 @{
-    ViewBag.Title = "Pending";
+    ViewBag.Title = "Declined";
     IList<ApprovalFlow> lstProfileInformation = (IList<ApprovalFlow>)ViewBag.ProfileInformation;
 
 }
 
-<h2>Declined</h2>
 
 <div class="portlet light">
     <div class="portlet-title">
@@ -17,6 +16,7 @@
                 <tr>
                     <th>RIN</th>
                     <th>Taxpayer Name</th>
+                    <th>Assessment Id</th>
                     <th>Amount</th>
                     <th>Status</th>
                     <th class="action-th all">Action</th>
@@ -28,6 +28,7 @@
                     <tr>
                         <td>@vProfile.Rin</td>
                         <td>@vProfile.TaxPayerName</td>
+                        <td>@vProfile.AssessmentId</td>
                         <td>@vProfile.Amount</td>
                         <td>@vProfile.Status</td>
                         <td>

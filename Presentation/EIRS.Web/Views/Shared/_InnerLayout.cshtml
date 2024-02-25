@@ -348,7 +348,7 @@
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 60 });
 
 
-                        if (SessionManager.UserID == 32)
+                        if (SessionManager.CanSeeApproval)
                         {
                             <div class="portlet light compressed-menu">
                                 <div class="portlet-title">
@@ -604,36 +604,36 @@
                         </div>
                     }
                     @*else if (SessionManager.DataSubmitterID > 0)
-        {
-            <div class="portlet light compressed-menu">
-                <div class="portlet-title">
-                    <div class="caption">
-                        My Operations
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <ul class="nav">
-                        <li>
-                            <a href="@Url.Action("SubmitData","DataSubmitterPanel")"> <i class="fa fa-angle-right"></i> Submit Data</a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("Log","DataSubmitterPanel")"> <i class="fa fa-angle-right"></i> Submission Log</a>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Profile<span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="@Url.Action("Search","ProfileBuilding")">Buildings</a></li>
-                                <li><a href="@Url.Action("Search","ProfileBusiness")">Businesses</a></li>
-                                <li><a href="@Url.Action("Search","ProfileLand")">Lands</a></li>
-                                <li><a href="@Url.Action("Search","ProfileVehicle")">Vehicles</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        }*@
+                        {
+                            <div class="portlet light compressed-menu">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        My Operations
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <ul class="nav">
+                                        <li>
+                                            <a href="@Url.Action("SubmitData","DataSubmitterPanel")"> <i class="fa fa-angle-right"></i> Submit Data</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Log","DataSubmitterPanel")"> <i class="fa fa-angle-right"></i> Submission Log</a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                Profile<span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="@Url.Action("Search","ProfileBuilding")">Buildings</a></li>
+                                                <li><a href="@Url.Action("Search","ProfileBusiness")">Businesses</a></li>
+                                                <li><a href="@Url.Action("Search","ProfileLand")">Lands</a></li>
+                                                <li><a href="@Url.Action("Search","ProfileVehicle")">Vehicles</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }*@
                 </div>
                 <div class="col-sm-9">
                     <div class="content" id="dvAlertConatiner">

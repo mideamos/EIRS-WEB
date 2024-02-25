@@ -209,7 +209,7 @@ namespace EIRS.Web.Models
                     HttpCookie objCookie = null;
                     objTicket = new FormsAuthenticationTicket(1, SessionManager.UserID.ToString(), CommUtil.GetCurrentDateTime(), CommUtil.GetCurrentDateTime().AddMinutes(600), false, "Admin");
                     objCookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(objTicket));
-                  
+
                     Response.Cookies.Add(objCookie);
 
                     if (Url.IsLocalUrl(pObjLoginModel.returnUrl) && pObjLoginModel.returnUrl.Length > 1 && pObjLoginModel.returnUrl.StartsWith("/") && !pObjLoginModel.returnUrl.StartsWith("//") && !pObjLoginModel.returnUrl.StartsWith("/\\"))
@@ -284,7 +284,19 @@ namespace EIRS.Web.Models
 
                     IList<usp_GetScreenUserList_Result> lstScreens = new BLScreen().BL_GetScreenUserList(new MST_Screen() { UserID = mObjFuncResponse.AdditionalData.UserID });
                     SessionManager.LstScreensToSee = lstScreens.ToList();
-
+                    if (SessionManager.LstScreensToSee.Where(o => o.ScreenName == "Side Approvals").Count() <= 0)
+                    {
+                        using (var _db = new EIRSEntities())
+                        {
+                            var det = _db.Tax_Offices.Where(o => o.OfficeManagerID == mObjFuncResponse.AdditionalData.UserID || o.IncomeDirector == mObjFuncResponse.AdditionalData.UserID).ToList();
+                            if (det.Any())
+                                SessionManager.CanSeeApproval = true;
+                            else
+                                SessionManager.CanSeeApproval = false;
+                        }
+                    }
+                    else
+                        SessionManager.CanSeeApproval = true;
                     if (Url.IsLocalUrl(pObjLoginModel.returnUrl) && pObjLoginModel.returnUrl.Length > 1 && pObjLoginModel.returnUrl.StartsWith("/") && !pObjLoginModel.returnUrl.StartsWith("//") && !pObjLoginModel.returnUrl.StartsWith("/\\"))
                     {
                         return Redirect(pObjLoginModel.returnUrl);
@@ -356,7 +368,19 @@ namespace EIRS.Web.Models
                     Response.Cookies.Add(objCookie);
                     IList<usp_GetScreenUserList_Result> lstScreens = new BLScreen().BL_GetScreenUserList(new MST_Screen() { UserID = mObjFuncResponse.AdditionalData.UserID });
                     SessionManager.LstScreensToSee = lstScreens.ToList();
-
+                    if (SessionManager.LstScreensToSee.Where(o => o.ScreenName == "Side Approvals").Count() <= 0)
+                    {
+                        using (var _db = new EIRSEntities())
+                        {
+                            var det = _db.Tax_Offices.Where(o => o.OfficeManagerID == mObjFuncResponse.AdditionalData.UserID || o.IncomeDirector == mObjFuncResponse.AdditionalData.UserID).ToList();
+                            if (det.Any())
+                                SessionManager.CanSeeApproval = true;
+                            else
+                                SessionManager.CanSeeApproval = false;
+                        }
+                    }
+                    else
+                        SessionManager.CanSeeApproval = true;
                     if (Url.IsLocalUrl(pObjLoginModel.returnUrl) && pObjLoginModel.returnUrl.Length > 1 && pObjLoginModel.returnUrl.StartsWith("/") && !pObjLoginModel.returnUrl.StartsWith("//") && !pObjLoginModel.returnUrl.StartsWith("/\\"))
                     {
                         return Redirect(pObjLoginModel.returnUrl);

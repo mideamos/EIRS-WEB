@@ -1033,7 +1033,7 @@ namespace EIRS.Repository
                 {
                     case "1":
                         vResult = (from usrs in _db.MST_Users
-                                   where usrs.Active == true && usrs.UserTypeID == pObjUser.UserTypeID && (usrs.TaxOfficeID == pObjUser.TaxOfficeID || usrs.IsTOManager == true)
+                                   where usrs.Active == true && usrs.UserTypeID == pObjUser.UserTypeID && usrs.TaxOfficeID == pObjUser.TaxOfficeID && usrs.IsTOManager == true
                                    select new DropDownListResult()
                                    {
                                        id = usrs.UserID,

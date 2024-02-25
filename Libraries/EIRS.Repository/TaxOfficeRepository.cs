@@ -59,6 +59,8 @@ namespace EIRS.Repository
                 mObjInsertUpdateTaxOffice.AddressTypeID = pObjTaxOffice.AddressTypeID;
                 mObjInsertUpdateTaxOffice.BuildingID = pObjTaxOffice.BuildingID;
                 mObjInsertUpdateTaxOffice.ZoneId = pObjTaxOffice.ZoneId;
+                mObjInsertUpdateTaxOffice.OfficeManagerID = pObjTaxOffice.OfficeManagerID;
+                mObjInsertUpdateTaxOffice.IncomeDirector = pObjTaxOffice.IncomeDirector;
                 mObjInsertUpdateTaxOffice.Approver1 = pObjTaxOffice.Approver1;
                 mObjInsertUpdateTaxOffice.Approver2 = pObjTaxOffice.Approver2;
                 mObjInsertUpdateTaxOffice.Approver3 = pObjTaxOffice.Approver3;

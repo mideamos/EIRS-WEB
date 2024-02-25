@@ -1835,7 +1835,8 @@ namespace EIRS.Web.Controllers
         {
             if (reqid.GetValueOrDefault() > 0)
             {
-                var url = "http://51.145.26.246:2424/GenerateTCCAndSaveToPath";
+                //var url = "http://51.145.26.246:2424/GenerateTCCAndSaveToPath";
+                var url = "http://92.205.57.77:2424/GenerateTCCAndSaveToPath";
               //  var url = "https://localhost:7115/GenerateTCCAndSaveToPath";
                 var lastyear = new Request_TCCDetail();
                 var last2year = new Request_TCCDetail();

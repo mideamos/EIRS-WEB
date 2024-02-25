@@ -2187,12 +2187,7 @@ namespace EIRS.Web.Controllers
             }
         }
         //had to add the new model here since i dont have controll over the eirs.models
-        public class newServiceBillIdsRequest
-        {
-            public string AssID { get; set; }
-            public string ServiceId { get; set; }
-        }
-
+       
         public ActionResult AddAssessment(int? id, string name, string aruleIds)
         {
             string url = getUrl();
@@ -3700,6 +3695,7 @@ namespace EIRS.Web.Controllers
 
                         if (mObjAssessmentData != null && mObjAssessmentData.TaxPayerID == mObjIndividualData.IndividualID && mObjAssessmentData.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
                         {
+                            var disaap = _db.MapAssessmentDisapprove_.Where(o => o.AssessmentID == mObjAssessmentData.AssessmentID).ToList();
                             IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = mObjBLAssessment.BL_GetAssessmentRules(mObjAssessmentData.AssessmentID.GetValueOrDefault());
                             IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = mObjBLAssessment.BL_GetAssessmentRuleItem(mObjAssessmentData.AssessmentID.GetValueOrDefault());
                             IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = mObjBLAssessment.BL_GetAssessmentRuleBasedSettlement(mObjAssessmentData.AssessmentID.GetValueOrDefault());
@@ -3717,6 +3713,7 @@ namespace EIRS.Web.Controllers
                             ViewBag.SettlementList = lstSettlement;
                             ViewBag.AdjustmentList = lstAssessmentAdjustment;
                             ViewBag.LateChargeList = lstAssessmentLateCharge;
+                            ViewBag.disaap = disaap;
 
                             return View("BillDetailFromDecline", mObjAssessmentData);
                         }
@@ -3741,15 +3738,18 @@ namespace EIRS.Web.Controllers
                 return RedirectToAction("Search", "CaptureIndividual");
             }
         }
-        public ActionResult BillDetailToBeApproved(long? billid, int type)
+
+        public ActionResult BillDetailToBeApproved(string billid, string type, string declineNote)
         {
+            long bId = Convert.ToInt64(billid);
+            int t = type != null ? Convert.ToInt32(type) : 2;
             BLAssessment mObjBLAssessment = new BLAssessment();
-            var ass = _db.Assessments.FirstOrDefault(o => o.AssessmentID == billid);
-            var set = _db.Settlements.FirstOrDefault(o => o.AssessmentID == billid);
+            var ass = _db.Assessments.FirstOrDefault(o => o.AssessmentID == bId);
+            var set = _db.Settlements.FirstOrDefault(o => o.AssessmentID == bId);
             var allTax = _db.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
             if (!allTax.Any())
                 allTax = _db.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID);
-            switch (type)
+            switch (t)
             {
                 case 1:
                     if (ass.SettlementStatusID == 6)
@@ -3779,8 +3779,8 @@ namespace EIRS.Web.Controllers
                 case 2:
                     ass.SettlementStatusID = 7;
                     MapAssessmentDisapprove_ map = new MapAssessmentDisapprove_();
-                    map.AssessmentID = billid;
-                    // map.Notes = 
+                    map.AssessmentID = bId;
+                    map.Notes = declineNote;
                     map.DateCreated = DateTime.Now;
                     map.TaxOfficerDesignation = SessionManager.UserID.ToString();
                     map.TaxOfficerId = allTax.FirstOrDefault().TaxOfficeID;

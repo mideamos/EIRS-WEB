@@ -77,10 +77,10 @@ namespace EIRS.Web.Controllers
                 switch (det)
                 {
                     case 1:
-                        allAss = allAss.Where(o => o.AssessmentAmount <= 100000);
+                        allAss = allAss.Where(o => o.AssessmentAmount > 100000);
                         break;
                     case 2:
-                        allAss = allAss.Where(o => o.AssessmentAmount > 100000);
+                        allAss = allAss.Where(o => o.AssessmentAmount <= 100000);
                         break;
                     default:
                         break;
@@ -166,10 +166,10 @@ namespace EIRS.Web.Controllers
                 switch (det)
                 {
                     case 1:
-                        allAss = allAss.Where(o => o.AssessmentAmount <= 100000);
+                        allAss = allAss.Where(o => o.AssessmentAmount > 100000);
                         break;
                     case 2:
-                        allAss = allAss.Where(o => o.AssessmentAmount > 100000);
+                        allAss = allAss.Where(o => o.AssessmentAmount <= 100000);
                         break;
                     default:
                         break;

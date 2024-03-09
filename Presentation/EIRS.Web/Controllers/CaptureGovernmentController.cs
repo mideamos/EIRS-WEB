@@ -207,9 +207,12 @@ namespace EIRS.Web.Controllers
                 pObjGovernmentViewModel = new GovernmentViewModel();
             }
 
+            int LOGINtAXoFFICE = SessionManager.TaxOfficeID;
             UI_FillTaxOfficeDropDown(new Tax_Offices() { intStatus = 1, IncludeTaxOfficeIds = pObjGovernmentViewModel.TaxOfficeID.ToString() });
             UI_FillTaxPayerTypeDropDown(new TaxPayer_Types() { intStatus = 1, IncludeTaxPayerTypeIds = pObjGovernmentViewModel.TaxPayerTypeID.ToString() }, (int)EnumList.TaxPayerType.Government);
             UI_FillGovernmentTypeDropDown(new Government_Types() { intStatus = 1, IncludeGovernmentTypeIds = pObjGovernmentViewModel.GovernmentTypeID.ToString() });
+            UI_FillTaxOfficeDropDownForStatic(new Tax_Offices() { intStatus = 1, IncludeTaxOfficeIds = pObjGovernmentViewModel.TaxOfficeID.ToString() }, false, 0, LOGINtAXoFFICE);
+            UI_FillTaxOfficeDropDownForStatic(new Tax_Offices() { intStatus = 1, IncludeTaxOfficeIds = pObjGovernmentViewModel.TaxOfficeID.ToString() }, false, pObjGovernmentViewModel.TaxOfficeID.GetValueOrDefault(), 0);
             UI_FillNotificationMethodDropDown(new Notification_Method() { intStatus = 1, IncludeNotificationMethodIds = pObjGovernmentViewModel.NotificationMethodID.ToString() });
         }
 
@@ -338,6 +341,7 @@ namespace EIRS.Web.Controllers
                         GovernmentName = mObjGovernmentData.GovernmentName,
                         GovernmentTypeID = mObjGovernmentData.GovernmentTypeID.GetValueOrDefault(),
                         TaxOfficeID = mObjGovernmentData.TaxOfficeID,
+                        PresentTaxOfficeID = mObjGovernmentData.TaxOfficeID.GetValueOrDefault(),
                         TaxPayerTypeID = (int)EnumList.TaxPayerType.Government,
                         ContactNumber = mObjGovernmentData.ContactNumber,
                         ContactEmail = mObjGovernmentData.ContactEmail,
@@ -444,7 +448,91 @@ namespace EIRS.Web.Controllers
                 }
             }
         }
+        public ActionResult EditTaxOffice(int? id, string name)
+        {
+            if (id.GetValueOrDefault() > 0)
+            {
+                Government mObjGovernment = new Government()
+                {
+                    GovernmentID = id.GetValueOrDefault(),
+                    intStatus = 1
+                };
 
+                usp_GetGovernmentList_Result mObjGovernmentData  = new BLGovernment().BL_GetGovernmentDetails(mObjGovernment);
+
+                if (mObjGovernmentData != null)
+                {
+                    GovernmentViewModel mObjGovernmentModelView = new GovernmentViewModel()
+                    {
+                        GovernmentID = mObjGovernmentData.GovernmentID.GetValueOrDefault(),
+                        GovernmentRIN = mObjGovernmentData.GovernmentRIN,
+                        TIN = mObjGovernmentData.TIN,
+                        GovernmentName = mObjGovernmentData.GovernmentName,
+                        GovernmentTypeID = mObjGovernmentData.GovernmentTypeID.GetValueOrDefault(),
+                        PresentTaxOfficeID = mObjGovernmentData.TaxOfficeID.GetValueOrDefault(),
+                        TaxOfficeID = mObjGovernmentData.TaxOfficeID,
+                        TaxPayerTypeID = (int)EnumList.TaxPayerType.Government,
+                        ContactNumber = mObjGovernmentData.ContactNumber,
+                        ContactEmail = mObjGovernmentData.ContactEmail,
+                        ContactName = mObjGovernmentData.ContactName,
+                        NotificationMethodID = mObjGovernmentData.NotificationMethodID.GetValueOrDefault(),
+                        ContactAddress = mObjGovernmentData.ContactAddress,
+                        Active = mObjGovernmentData.Active.GetValueOrDefault(),
+                    };
+                    UI_FillDropDown(mObjGovernmentModelView);
+                    return View(mObjGovernmentModelView);
+                }
+                else
+                {
+                    return RedirectToAction("Search", "CaptureGovernment");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Search", "CaptureGovernment");
+            }
+        }
+        [HttpPost()]
+        [ValidateAntiForgeryToken()]
+        public ActionResult EditTaxOffice(GovernmentViewModel p)
+        {
+            int ret = 0;
+            Government det = new Government();
+            if (p.NewTaxOfficeID == 0)
+            {
+                FlashMessage.Info("Select New Tax Office");
+                UI_FillDropDown(p);
+                return View(p);
+            }
+            try
+            {
+                using (var db = new EIRSEntities())
+                {
+                    det = db.Governments.FirstOrDefault(o => o.GovernmentID == p.GovernmentID);
+                    det.TaxOfficeID = p.NewTaxOfficeID;
+                    ret = db.SaveChanges();
+                }
+                if (ret > 0)
+                {
+                    FlashMessage.Info("Tax Office Updated Successfully");
+                    return RedirectToAction("Details", "CaptureGovernment", new { id = det.GovernmentID, name = det.GovernmentRIN.ToSeoUrl() });
+                }
+                else
+                {
+                    UI_FillDropDown(p);
+                    return View(p);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.SendErrorToText(ex);
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                UI_FillDropDown(p);
+                ViewBag.Message = "Error occurred while saving Individual";
+                return View(p);
+            }
+
+        }
 
         public ActionResult Details(int? id, string name)
         {

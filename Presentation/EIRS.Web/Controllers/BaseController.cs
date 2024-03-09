@@ -119,6 +119,25 @@ namespace EIRS.Web.Controllers
             }
 
         }
+        public void UI_FillTaxOfficeDropDownForStatic(Tax_Offices pObjTaxOffice = null, bool pblnAddAll = false,int userTaxOffice=0,int loginTaxOffice=0)
+        {
+            if (pObjTaxOffice == null)
+                pObjTaxOffice = new Tax_Offices();
+
+            pObjTaxOffice.intStatus = 1;
+
+            IList<DropDownListResult> lstTaxOffice = new BLTaxOffice().BL_GetTaxOfficeDropDownList(pObjTaxOffice);
+            if (userTaxOffice != 0)
+            {
+                lstTaxOffice = lstTaxOffice.Where(o => o.id == userTaxOffice).ToList();
+                ViewBag.UserTaxOffice = new SelectList(lstTaxOffice, "id", "text");
+            }
+            else
+            {
+                lstTaxOffice = lstTaxOffice.Where(o => o.id == loginTaxOffice).ToList();
+                ViewBag.LoginTaxOffice = new SelectList(lstTaxOffice, "id", "text");
+            }
+        }
 
         public void UI_FillBuildingTypeDropDown(Building_Types pObjBuildingType = null)
         {

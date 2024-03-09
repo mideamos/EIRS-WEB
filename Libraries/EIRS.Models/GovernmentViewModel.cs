@@ -24,7 +24,13 @@ namespace EIRS.Models
 
         [Display(Name = "Tax Office")]
         public int? TaxOfficeID { get; set; }
+        [Display(Name = "Present Tax Office")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Select Tax Office")]
+        public int? PresentTaxOfficeID { get; set; }
 
+        [Display(Name = "New Tax Office")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Select Tax Office")]
+        public int? NewTaxOfficeID { get; set; }
         public string TaxOfficeName { get; set; }
 
         [Display(Name = "Tax Payer Type")]

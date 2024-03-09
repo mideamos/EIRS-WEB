@@ -2010,6 +2010,9 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
+    <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
+    <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />
     <Content Include="Web1.config">
       <SubType>Designer</SubType>
     </Content>
@@ -2019,6 +2022,7 @@
     <Content Include="Views\Home\Declined.cshtml" />
     <Content Include="Views\CaptureIndividual\AssessmentBillDetailFromPending.cshtml" />
     <Content Include="Views\CaptureIndividual\BillDetailFromDecline.cshtml" />
+    <Content Include="Views\CaptureIndividual\EditTaxOffice.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

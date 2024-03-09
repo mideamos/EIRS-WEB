@@ -274,6 +274,7 @@ namespace EIRS.Web.Models
                     SessionManager.ContactNumber = mObjFuncResponse.AdditionalData.ContactNumber;
                     SessionManager.EmailAddress = mObjFuncResponse.AdditionalData.EmailAddress;
                     SessionManager.UserTypeID = mObjFuncResponse.AdditionalData.UserTypeID.GetValueOrDefault();
+                    SessionManager.TaxOfficeID = mObjFuncResponse.AdditionalData.TaxOfficeID.GetValueOrDefault();
                     //if (SessionManager.UserID == 32)
                     //    ViewBag.DetSideBar = "1";
                     FormsAuthenticationTicket objTicket = null;
@@ -360,6 +361,7 @@ namespace EIRS.Web.Models
                     SessionManager.ContactNumber = mObjFuncResponse.AdditionalData.ContactNumber;
                     SessionManager.EmailAddress = mObjFuncResponse.AdditionalData.EmailAddress;
                     SessionManager.UserTypeID = mObjFuncResponse.AdditionalData.UserTypeID.GetValueOrDefault();
+                    SessionManager.TaxOfficeID = mObjFuncResponse.AdditionalData.TaxOfficeID.GetValueOrDefault();
 
                     FormsAuthenticationTicket objTicket = null;
                     HttpCookie objCookie = null;

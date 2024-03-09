@@ -200,10 +200,12 @@ namespace EIRS.Web.Controllers
                 pObjIndividualViewModel.TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual;
             else if (pObjIndividualViewModel == null)
                 pObjIndividualViewModel = new IndividualViewModel();
-
+            int LOGINtAXoFFICE = SessionManager.TaxOfficeID;
             UI_FillGender();
             UI_FillTitleDropDown(new Title() { intStatus = 1, IncludeTitleIds = pObjIndividualViewModel.TitleID.ToString(), GenderID = pObjIndividualViewModel.GenderID });
             UI_FillTaxOfficeDropDown(new Tax_Offices() { intStatus = 1, IncludeTaxOfficeIds = pObjIndividualViewModel.TaxOfficeID.ToString() });
+            UI_FillTaxOfficeDropDownForStatic(new Tax_Offices() { intStatus = 1, IncludeTaxOfficeIds = pObjIndividualViewModel.TaxOfficeID.ToString() }, false, 0, LOGINtAXoFFICE);
+            UI_FillTaxOfficeDropDownForStatic(new Tax_Offices() { intStatus = 1, IncludeTaxOfficeIds = pObjIndividualViewModel.TaxOfficeID.ToString() }, false, pObjIndividualViewModel.TaxOfficeID.GetValueOrDefault(), 0);
             UI_FillMaritalStatus();
             UI_FillNationality();
             UI_FillTaxPayerTypeDropDown(new TaxPayer_Types() { intStatus = 1, IncludeTaxPayerTypeIds = pObjIndividualViewModel.TaxPayerTypeID.ToString() }, (int)EnumList.TaxPayerType.Individual);
@@ -605,6 +607,103 @@ namespace EIRS.Web.Controllers
                     return View(pObjIndividualModel);
                 }
             }
+        }
+        public ActionResult EditTaxOffice(int? id, string name)
+        {
+            if (id.GetValueOrDefault() > 0)
+            {
+                Individual mObjIndividual = new Individual()
+                {
+                    IndividualID = id.GetValueOrDefault(),
+                    intStatus = 1
+                };
+
+                usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(mObjIndividual);
+
+                if (mObjIndividualData != null)
+                {
+                    string nin = _db.Individuals.FirstOrDefault(o => o.IndividualID == mObjIndividualData.IndividualID.Value).NIN;
+                    IndividualViewModel mObjIndividualModelView = new IndividualViewModel()
+                    {
+                        IndividualID = mObjIndividualData.IndividualID.GetValueOrDefault(),
+                        IndividualRIN = mObjIndividualData.IndividualRIN,
+                        GenderID = mObjIndividualData.GenderID.GetValueOrDefault(),
+                        TitleID = mObjIndividualData.TitleID.GetValueOrDefault(),
+                        FirstName = mObjIndividualData.FirstName,
+                        LastName = mObjIndividualData.LastName,
+                        MiddleName = mObjIndividualData.MiddleName,
+                        DOB = mObjIndividualData.DOB == null ? "" : mObjIndividualData.DOB.Value.ToString("dd/MM/yyyy"),
+                        TIN = mObjIndividualData.TIN,
+                        NIN = nin,
+                        MobileNumber1 = mObjIndividualData.MobileNumber1,
+                        MobileNumber2 = mObjIndividualData.MobileNumber2,
+                        EmailAddress1 = mObjIndividualData.EmailAddress1,
+                        EmailAddress2 = mObjIndividualData.EmailAddress2,
+                        BiometricDetails = mObjIndividualData.BiometricDetails,
+                        TaxOfficeID = mObjIndividualData.TaxOfficeID,
+                        MaritalStatusID = mObjIndividualData.MaritalStatusID,
+                        PresentTaxOfficeID = mObjIndividualData.TaxOfficeID.GetValueOrDefault(),
+                        NationalityID = mObjIndividualData.NationalityID.GetValueOrDefault(),
+                        TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
+                        EconomicActivitiesID = mObjIndividualData.EconomicActivitiesID.GetValueOrDefault(),
+                        NotificationMethodID = mObjIndividualData.NotificationMethodID.GetValueOrDefault(),
+                        ContactAddress = mObjIndividualData.ContactAddress,
+                        Active = mObjIndividualData.Active.GetValueOrDefault(),
+                    };
+
+                    UI_FillDropDown(mObjIndividualModelView);
+                    return View(mObjIndividualModelView);
+                }
+                else
+                {
+                    return RedirectToAction("Search", "CaptureIndividual");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Search", "CaptureIndividual");
+            }
+        }
+        [HttpPost()]
+        [ValidateAntiForgeryToken()]
+        public ActionResult EditTaxOffice(IndividualViewModel p)
+        {
+            int ret = 0;
+            Individual det = new Individual();
+            if (p.NewTaxOfficeID == 0)
+            {
+                FlashMessage.Info("Select New Tax Office");
+                UI_FillDropDown(p);
+                return View(p);
+            }
+            try
+            {
+                using (var db = new EIRSEntities())
+                {
+                    det = db.Individuals.FirstOrDefault(o=>o.IndividualID == p.IndividualID);
+                    det.TaxOfficeID = p.NewTaxOfficeID;
+                    ret =db.SaveChanges();
+                }
+                if (ret>0)
+                {
+                    FlashMessage.Info("Tax Office Updated Successfully");
+                    return RedirectToAction("Details", "CaptureIndividual", new { id = det.IndividualID, name = det.IndividualRIN.ToSeoUrl() });
+                }
+                else
+                {
+                    UI_FillDropDown(p);
+                    return View(p);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.SendErrorToText(ex);
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                UI_FillDropDown(p);
+                ViewBag.Message = "Error occurred while saving Individual";
+                return View(p);
+            }
+
         }
         public ActionResult Details(int? id, string name)
         {
@@ -2187,7 +2286,7 @@ namespace EIRS.Web.Controllers
             }
         }
         //had to add the new model here since i dont have controll over the eirs.models
-       
+
         public ActionResult AddAssessment(int? id, string name, string aruleIds)
         {
             string url = getUrl();

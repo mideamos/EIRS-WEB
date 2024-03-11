@@ -7,6 +7,7 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using SelectPdf;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic;
@@ -439,17 +440,18 @@ namespace EIRS.Web.Controllers
 
             IList<usp_GetDemandNoticeList_Result> lstDemandNotice = new BLOperationManager().BL_GetDemandNoticeList();
 
-            string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerTypeName", "TaxPayerName", "TotalAssessed", "TotalPenalty", "TotalInterest", "TotalCharge" };
-            string[] strTotalColumns = new string[] { "TotalAssessed", "TotalPenalty", "TotalInterest", "TotalCharge" };
-            var vMemberInfoData = typeof(usp_GetDemandNoticeList_Result)
-                    .GetProperties()
-                    .Where(pi => strColumns.Contains(pi.Name))
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
+            //string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerTypeName", "TaxPayerName", "TotalAssessed", "TotalPenalty", "TotalInterest", "TotalCharge" };
+            //string[] strTotalColumns = new string[] { "TotalAssessed", "TotalPenalty", "TotalInterest", "TotalCharge" };
+            //var vMemberInfoData = typeof(usp_GetDemandNoticeList_Result)
+            //        .GetProperties()
+            //        .Where(pi => strColumns.Contains(pi.Name))
+            //        .Select(pi => (MemberInfo)pi)
+            //        .ToArray();
 
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstDemandNotice, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DemandNotice_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            DataTable dt = CommUtil.ConvertToDataTable(lstDemandNotice);
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DemandNoticeCharge_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         public ActionResult DemandNoticeCharges(int tptid, int tpid)
@@ -511,17 +513,18 @@ namespace EIRS.Web.Controllers
 
             IList<usp_GetPaymentChargeList_Result> lstPaymentCharge = new BLOperationManager().BL_GetPaymentChargeList(TaxPayerID, TaxPayerTypeID);
 
-            string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerTypeName", "TaxPayerName", "TaxYear", "BillRefNo", "BillDate", "RevenueStreamName", "Penalty", "Interest", "TotalCharge", "ChargeDate", "BillStatus" };
-            string[] strTotalColumns = new string[] { "Penalty", "Interest", "TotalCharge" };
-            var vMemberInfoData = typeof(usp_GetPaymentChargeList_Result)
-                    .GetProperties()
-                    .Where(pi => strColumns.Contains(pi.Name))
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
-
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstPaymentCharge, vMemberInfoData, true, strTotalColumns);
+            //string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerTypeName", "TaxPayerName", "TaxYear", "BillRefNo", "BillDate", "RevenueStreamName", "Penalty", "Interest", "TotalCharge", "ChargeDate", "BillStatus" };
+            //string[] strTotalColumns = new string[] { "Penalty", "Interest", "TotalCharge" };
+            //var vMemberInfoData = typeof(usp_GetPaymentChargeList_Result)
+            //        .GetProperties()
+            //        .Where(pi => strColumns.Contains(pi.Name))
+            //        .Select(pi => (MemberInfo)pi)
+            //        .ToArray();
+            DataTable dt = CommUtil.ConvertToDataTable(lstPaymentCharge);
+            var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DemandNoticeCharge_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            //byte[] ObjExcelData = CommUtil.ExportToExcel2(lstPaymentCharge, vMemberInfoData, true, strTotalColumns);
+           // return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DemandNoticeCharge_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         public ActionResult GenerateDemandNoticePDF(int tptid, int tpid)

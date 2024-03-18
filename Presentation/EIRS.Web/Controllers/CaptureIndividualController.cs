@@ -680,11 +680,11 @@ namespace EIRS.Web.Controllers
             {
                 using (var db = new EIRSEntities())
                 {
-                    det = db.Individuals.FirstOrDefault(o=>o.IndividualID == p.IndividualID);
+                    det = db.Individuals.FirstOrDefault(o => o.IndividualID == p.IndividualID);
                     det.TaxOfficeID = p.NewTaxOfficeID;
-                    ret =db.SaveChanges();
+                    ret = db.SaveChanges();
                 }
-                if (ret>0)
+                if (ret > 0)
                 {
                     FlashMessage.Info("Tax Office Updated Successfully");
                     return RedirectToAction("Details", "CaptureIndividual", new { id = det.IndividualID, name = det.IndividualRIN.ToSeoUrl() });
@@ -709,6 +709,8 @@ namespace EIRS.Web.Controllers
         {
             string url = getUrl();
             decimal? newAmount = 0;
+            decimal? totalnewAmount = 0;
+            decimal? totalnewAmountLateCharge = 0;
             bool itCan = new UtilityController().CheckAccess(url);
             if (!itCan) { return RedirectToAction("AccessDenied", "Utility"); }
             if (id.GetValueOrDefault() > 0)
@@ -723,50 +725,63 @@ namespace EIRS.Web.Controllers
 
                 if (mObjIndividualData != null)
                 {
-                    List<AdjustmentResponse> adjustmentResponse = new List<AdjustmentResponse>();
-                    List<AdjustmentResponse> lateChargeResponse = new List<AdjustmentResponse>();
-                    List<AdjustmentResponse> lateServiceChargeResponse = new List<AdjustmentResponse>();
-                    List<AdjustmentResponse> serviceResponse = new List<AdjustmentResponse>();
-                    adjustmentResponse = _AdjustmentRepository.GetAdjustmentResponse();
-                    lateChargeResponse = _AdjustmentRepository.GetLateChargeResponse();
-                    lateServiceChargeResponse = _AdjustmentRepository.GetLateChargeServiceResponse();
-                    serviceResponse = _AdjustmentRepository.GetAdjustmentServiceResponse();
                     IList<usp_GetTaxPayerBill_Result> lstTaxPayerBill = new BLAssessment().BL_GetTaxPayerBill(id.GetValueOrDefault(), (int)EnumList.TaxPayerType.Individual, 0);
+                    var lstOfBillId = lstTaxPayerBill.Select(o => Convert.ToInt64(o.BillID.Value)).ToList();
+                    var lstAAIID = _AdjustmentRepository.GetListOfItemId(lstOfBillId);
+                    var saiid = _AdjustmentRepository.GetListOfServiceItemId(lstOfBillId);
+                    //lstAAIID
+                    var aaiid = lstAAIID.Select(o=>o.AAIID).ToList();
+                    var adjustmentResponse = _AdjustmentRepository.GetAdjustmentResponse(aaiid);
+                    var lateChargeResponse = _AdjustmentRepository.GetLateChargeResponse(aaiid);
+                    var lateServiceChargeResponse = _AdjustmentRepository.GetLateChargeServiceResponse();
+                    var serviceResponse = _AdjustmentRepository.GetAdjustmentServiceResponse();
                     var assBill = lstTaxPayerBill.Where(o => o.BillRefNo.StartsWith("AB")).ToList();
                     foreach (var ass in assBill)
                     {
-                        var aaiid = _AdjustmentRepository.GetListOfItemId(ass.BillID.Value);
-                        if (aaiid.Count > 1)
+                        var naaiid = lstAAIID.Where(o =>o.BillId == ass.BillID.Value).ToList();
+                        if (naaiid.Count > 1)
                         {
-                            foreach (var aa in aaiid)
+                            foreach (var aa in naaiid)
                             {
-                                newAmount = adjustmentResponse.Where(o => o.AAIID == aa).Select(x => x.TotalAmount).FirstOrDefault();
+                                var lti = lateChargeResponse.Where(o => o.AAIID == aa.AAIID).Select(x => x.TotalAmount).FirstOrDefault();
+                                newAmount = adjustmentResponse.Where(o => o.AAIID == aa.AAIID).Select(x => x.TotalAmount).FirstOrDefault();
+                                totalnewAmount = newAmount == null ? totalnewAmount + 0 : totalnewAmount + newAmount;
+                                totalnewAmountLateCharge = lti == null ? totalnewAmountLateCharge + 0 : totalnewAmountLateCharge + lti;
+                            
                             }
                         }
                         else
                         {
-                            newAmount = adjustmentResponse.Where(o => o.AAIID == aaiid.FirstOrDefault()).Select(x => x.TotalAmount).FirstOrDefault();
+                            var lt = lateChargeResponse.Where(o => o.AAIID == naaiid.FirstOrDefault().AAIID).Select(x => x.TotalAmount).FirstOrDefault();
+                            newAmount = adjustmentResponse.Where(o => o.AAIID == naaiid.FirstOrDefault().AAIID).Select(x => x.TotalAmount).FirstOrDefault();
+                            totalnewAmount = newAmount == null ? totalnewAmount + 0 : totalnewAmount + newAmount;
+                            totalnewAmountLateCharge = lt == null ? totalnewAmountLateCharge + 0 : totalnewAmountLateCharge + lt;
                         }
-                        newAmount = newAmount.HasValue ? newAmount : 0;
-                        ass.BillAmount = ass.BillAmount + newAmount;
+
+                        ass.BillAmount = ass.BillAmount + totalnewAmount+ totalnewAmountLateCharge;
+                        totalnewAmount = 0;
+                        totalnewAmountLateCharge = 0;
                     }
                     var serviceBill = lstTaxPayerBill.Where(o => o.BillRefNo.StartsWith("SB")).ToList();
                     foreach (var ass in serviceBill)
                     {
-                        var aaiid = _AdjustmentRepository.GetListOfServiceItemId(ass.BillID.Value);
-                        if (aaiid.Count > 1)
+                        var nsaiid = saiid.Where(o => o.ToString() == ass.BillID.Value.ToString()).ToList();
+                        if (nsaiid.Count > 1)
                         {
-                            foreach (var aa in aaiid)
+                            foreach (var aa in nsaiid)
                             {
                                 newAmount = serviceResponse.Where(o => o.SBIID == aa).Select(x => x.TotalAmount).FirstOrDefault();
+                                totalnewAmount = newAmount == null ? totalnewAmount + 0 : totalnewAmount + newAmount;
                             }
                         }
                         else
                         {
                             newAmount = serviceResponse.Where(o => o.SBIID == aaiid.FirstOrDefault()).Select(x => x.TotalAmount).FirstOrDefault();
+                            totalnewAmount = newAmount == null ? totalnewAmount + 0 : totalnewAmount + newAmount;
                         }
                         newAmount = newAmount.HasValue ? newAmount : 0;
                         ass.BillAmount = ass.BillAmount + newAmount;
+                        totalnewAmount = 0;
                     }
                     ViewBag.TaxPayerBill = lstTaxPayerBill;
                     MAP_TaxPayer_Asset mObjTaxPayerAsset = new MAP_TaxPayer_Asset()

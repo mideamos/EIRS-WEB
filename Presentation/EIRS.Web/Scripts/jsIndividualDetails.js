@@ -1,14 +1,15 @@
 ﻿var vAssetTable, vAssessmentRuleTable;
 
 $(document).ready(function () {
+
     vAssetTable = jsfn_ConvertToDatableWithCustomSort($('#tblAssetList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Assets Found');
     vAssessmentRuleTable = jsfn_ConvertToDatableWithCustomSort($('#tblAssessmentRules'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Rules Found');
     jsfn_ConvertToDatableWithCustomSort($('#tblProfileList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Profiles Found');
-    jsfn_ConvertToDatableWithCustomSort($('#tblPendingList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Pending Approvals Found');
-    jsfn_ConvertToDatableWithCustomSort($('#tblDendingList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Declined Approvals Found');
+    //jsfn_ConvertToDatableWithCustomSort($('#tblPendingList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": false }], 'No Assoicated Pending Approvals Found');
+    //jsfn_ConvertToDatableWithCustomSort($('#tblDendingList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": false }], 'No Assoicated Declined Approvals Found');
     vMDAServiceTable = jsfn_ConvertToDatableWithCustomSort($('#tblMDAServiceList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated MDA Services Found');
     vBillTable = jsfn_ConvertToDatableWithCustomSort($('#tblBillList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Bills Found');
-    vPaymentTable = jsfn_ConvertToDatableWithCustomSort($('#tblPaymentList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Payments Found');
+    vPaymentTable = jsfn_ConvertToDatableWithCustomSort($('#tblPaymentList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": false }], 'No Assoicated Payments Found');
     jsfn_ConvertToDatableWithCustomSort($('#tblTCCRequest'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Request Found');
     jsfn_ConvertToDatableWithCustomSort($('#tblDocumentList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Document Found');
 

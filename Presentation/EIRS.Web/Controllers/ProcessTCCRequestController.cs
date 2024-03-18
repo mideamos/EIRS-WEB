@@ -419,132 +419,132 @@ namespace EIRS.Web.Controllers
             BLTCC mObjBLTCCC = new BLTCC();
             usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCCC.BL_GetRequestDetails(pobjValidateTaxPayerInformationModel.RequestID);
 
-            if (!ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            //    ViewBag.RequestData = mObjRequestData;
+            //    UI_FillDropDown(pobjValidateTaxPayerInformationModel);
+            //    return View(pobjValidateTaxPayerInformationModel);
+            //}
+            //else
+            //{
+            Individual mObjIndividual = new Individual()
             {
-                ViewBag.RequestData = mObjRequestData;
-                UI_FillDropDown(pobjValidateTaxPayerInformationModel);
-                return View(pobjValidateTaxPayerInformationModel);
-            }
-            else
+                IndividualID = pobjValidateTaxPayerInformationModel.IndividualID,
+                GenderID = pobjValidateTaxPayerInformationModel.GenderID,
+                TitleID = pobjValidateTaxPayerInformationModel.TitleID,
+                FirstName = pobjValidateTaxPayerInformationModel.FirstName,
+                LastName = pobjValidateTaxPayerInformationModel.LastName,
+                MiddleName = pobjValidateTaxPayerInformationModel.MiddleName,
+                DOB = TrynParse.parseDatetime(pobjValidateTaxPayerInformationModel.DOB),
+                TIN = mObjRequestData.TIN,
+                MobileNumber1 = pobjValidateTaxPayerInformationModel.MobileNumber1,
+                MobileNumber2 = pobjValidateTaxPayerInformationModel.MobileNumber2,
+                EmailAddress1 = pobjValidateTaxPayerInformationModel.EmailAddress1,
+                EmailAddress2 = pobjValidateTaxPayerInformationModel.EmailAddress2,
+                BiometricDetails = pobjValidateTaxPayerInformationModel.BiometricDetails,
+                TaxOfficeID = pobjValidateTaxPayerInformationModel.TaxOfficeID,
+                MaritalStatusID = pobjValidateTaxPayerInformationModel.MaritalStatusID,
+                NationalityID = pobjValidateTaxPayerInformationModel.NationalityID,
+                TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
+                EconomicActivitiesID = pobjValidateTaxPayerInformationModel.EconomicActivitiesID,
+                NotificationMethodID = pobjValidateTaxPayerInformationModel.NotificationMethodID,
+                ContactAddress = pobjValidateTaxPayerInformationModel.ContactAddress,
+                Active = true,
+                CreatedBy = SessionManager.UserID,
+                CreatedDate = CommUtil.GetCurrentDateTime(),
+                ModifiedBy = SessionManager.UserID,
+                ModifiedDate = CommUtil.GetCurrentDateTime()
+            };
+
+            try
             {
-                Individual mObjIndividual = new Individual()
+
+                FuncResponse<Individual> mObjResponse = new BLIndividual().BL_InsertUpdateIndividual(mObjIndividual);
+
+                if (mObjResponse.Success)
                 {
-                    IndividualID = pobjValidateTaxPayerInformationModel.IndividualID,
-                    GenderID = pobjValidateTaxPayerInformationModel.GenderID,
-                    TitleID = pobjValidateTaxPayerInformationModel.TitleID,
-                    FirstName = pobjValidateTaxPayerInformationModel.FirstName,
-                    LastName = pobjValidateTaxPayerInformationModel.LastName,
-                    MiddleName = pobjValidateTaxPayerInformationModel.MiddleName,
-                    DOB = TrynParse.parseDatetime(pobjValidateTaxPayerInformationModel.DOB),
-                    TIN = mObjRequestData.TIN,
-                    MobileNumber1 = pobjValidateTaxPayerInformationModel.MobileNumber1,
-                    MobileNumber2 = pobjValidateTaxPayerInformationModel.MobileNumber2,
-                    EmailAddress1 = pobjValidateTaxPayerInformationModel.EmailAddress1,
-                    EmailAddress2 = pobjValidateTaxPayerInformationModel.EmailAddress2,
-                    BiometricDetails = pobjValidateTaxPayerInformationModel.BiometricDetails,
-                    TaxOfficeID = pobjValidateTaxPayerInformationModel.TaxOfficeID,
-                    MaritalStatusID = pobjValidateTaxPayerInformationModel.MaritalStatusID,
-                    NationalityID = pobjValidateTaxPayerInformationModel.NationalityID,
-                    TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
-                    EconomicActivitiesID = pobjValidateTaxPayerInformationModel.EconomicActivitiesID,
-                    NotificationMethodID = pobjValidateTaxPayerInformationModel.NotificationMethodID,
-                    ContactAddress = pobjValidateTaxPayerInformationModel.ContactAddress,
-                    Active = true,
-                    CreatedBy = SessionManager.UserID,
-                    CreatedDate = CommUtil.GetCurrentDateTime(),
-                    ModifiedBy = SessionManager.UserID,
-                    ModifiedDate = CommUtil.GetCurrentDateTime()
-                };
-
-                try
-                {
-
-                    FuncResponse<Individual> mObjResponse = new BLIndividual().BL_InsertUpdateIndividual(mObjIndividual);
-
-                    if (mObjResponse.Success)
+                    if (GlobalDefaultValues.SendNotification)
                     {
-                        if (GlobalDefaultValues.SendNotification)
+                        //Send Notification
+                        EmailDetails mObjEmailDetails = new EmailDetails()
                         {
-                            //Send Notification
-                            EmailDetails mObjEmailDetails = new EmailDetails()
-                            {
-                                TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
-                                TaxPayerTypeName = "Individual",
-                                TaxPayerID = mObjIndividual.IndividualID,
-                                TaxPayerName = mObjIndividual.FirstName + " " + mObjIndividual.LastName,
-                                TaxPayerRIN = mObjIndividual.IndividualRIN,
-                                TaxPayerMobileNumber = mObjIndividual.MobileNumber1,
-                                TaxPayerEmail = mObjIndividual.EmailAddress1,
-                                ContactAddress = mObjIndividual.ContactAddress,
-                                TaxPayerTIN = mObjIndividual.TIN,
-                                LoggedInUserID = SessionManager.UserID,
-                            };
-
-                            if (!string.IsNullOrWhiteSpace(mObjIndividual.EmailAddress1))
-                            {
-                                BLEmailHandler.BL_TaxPayerCreated(mObjEmailDetails);
-                            }
-
-                            if (!string.IsNullOrWhiteSpace(mObjIndividual.MobileNumber1))
-                            {
-                                UtilityController.BL_TaxPayerCreated(mObjEmailDetails);
-                            }
-                        }
-
-                        //Update 
-                        MAP_TCCRequest_ValidateTaxPayerInformation mObjValidateInformation = new MAP_TCCRequest_ValidateTaxPayerInformation()
-                        {
-                            VTPInformationID = pobjValidateTaxPayerInformationModel.VTPInformationID,
-                            RequestID = pobjValidateTaxPayerInformationModel.RequestID,
-                            Notes = pobjValidateTaxPayerInformationModel.Notes,
-                            CreatedBy = SessionManager.UserID,
-                            CreatedDate = CommUtil.GetCurrentDateTime()
+                            TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
+                            TaxPayerTypeName = "Individual",
+                            TaxPayerID = mObjIndividual.IndividualID,
+                            TaxPayerName = mObjIndividual.FirstName + " " + mObjIndividual.LastName,
+                            TaxPayerRIN = mObjIndividual.IndividualRIN,
+                            TaxPayerMobileNumber = mObjIndividual.MobileNumber1,
+                            TaxPayerEmail = mObjIndividual.EmailAddress1,
+                            ContactAddress = mObjIndividual.ContactAddress,
+                            TaxPayerTIN = mObjIndividual.TIN,
+                            LoggedInUserID = SessionManager.UserID,
                         };
 
-                        FuncResponse mObjFuncResponse = mObjBLTCCC.BL_InsertUpdateValidateInformation(mObjValidateInformation);
-
-                        if (mObjFuncResponse.Success)
+                        if (!string.IsNullOrWhiteSpace(mObjIndividual.EmailAddress1))
                         {
-                            //Update Stage Status
-                            MAP_TCCRequest_Stages mObjRequestStage = new MAP_TCCRequest_Stages()
-                            {
-                                ApprovalDate = CommUtil.GetCurrentDateTime(),
-                                StageID = (int)NewTCCRequestStage.Validate_Tax_Payer_Information,
-                                StatusID = (int)TCCRequestStatus.Validated_Information,
-                                RequestID = pobjValidateTaxPayerInformationModel.RequestID
-                            };
-
-                            mObjBLTCCC.BL_UpdateRequestStage(mObjRequestStage);
-
-                            return RedirectToAction("Details", "ProcessTCCRequest", new { reqid = pobjValidateTaxPayerInformationModel.RequestID });
-
+                            BLEmailHandler.BL_TaxPayerCreated(mObjEmailDetails);
                         }
-                        else
+
+                        if (!string.IsNullOrWhiteSpace(mObjIndividual.MobileNumber1))
                         {
-                            ViewBag.RequestData = mObjRequestData;
-                            UI_FillDropDown(pobjValidateTaxPayerInformationModel);
-                            ViewBag.Message = mObjFuncResponse.Message;
-                            return View(pobjValidateTaxPayerInformationModel);
+                            UtilityController.BL_TaxPayerCreated(mObjEmailDetails);
                         }
+                    }
+
+                    //Update 
+                    MAP_TCCRequest_ValidateTaxPayerInformation mObjValidateInformation = new MAP_TCCRequest_ValidateTaxPayerInformation()
+                    {
+                        VTPInformationID = pobjValidateTaxPayerInformationModel.VTPInformationID,
+                        RequestID = pobjValidateTaxPayerInformationModel.RequestID,
+                        Notes = pobjValidateTaxPayerInformationModel.Notes,
+                        CreatedBy = SessionManager.UserID,
+                        CreatedDate = CommUtil.GetCurrentDateTime()
+                    };
+
+                    FuncResponse mObjFuncResponse = mObjBLTCCC.BL_InsertUpdateValidateInformation(mObjValidateInformation);
+
+                    if (mObjFuncResponse.Success)
+                    {
+                        //Update Stage Status
+                        MAP_TCCRequest_Stages mObjRequestStage = new MAP_TCCRequest_Stages()
+                        {
+                            ApprovalDate = CommUtil.GetCurrentDateTime(),
+                            StageID = (int)NewTCCRequestStage.Validate_Tax_Payer_Information,
+                            StatusID = (int)TCCRequestStatus.Validated_Information,
+                            RequestID = pobjValidateTaxPayerInformationModel.RequestID
+                        };
+
+                        mObjBLTCCC.BL_UpdateRequestStage(mObjRequestStage);
+
+                        return RedirectToAction("Details", "ProcessTCCRequest", new { reqid = pobjValidateTaxPayerInformationModel.RequestID });
+
                     }
                     else
                     {
                         ViewBag.RequestData = mObjRequestData;
                         UI_FillDropDown(pobjValidateTaxPayerInformationModel);
-                        ViewBag.Message = mObjResponse.Message;
+                        ViewBag.Message = mObjFuncResponse.Message;
                         return View(pobjValidateTaxPayerInformationModel);
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.SendErrorToText(ex);
                     ViewBag.RequestData = mObjRequestData;
-                    ErrorSignal.FromCurrentContext().Raise(ex);
                     UI_FillDropDown(pobjValidateTaxPayerInformationModel);
-                    ViewBag.Message = "Error occurred while saving individual";
+                    ViewBag.Message = mObjResponse.Message;
                     return View(pobjValidateTaxPayerInformationModel);
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.SendErrorToText(ex);
+                ViewBag.RequestData = mObjRequestData;
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                UI_FillDropDown(pobjValidateTaxPayerInformationModel);
+                ViewBag.Message = "Error occurred while saving individual";
+                return View(pobjValidateTaxPayerInformationModel);
+            }
+
         }
 
         [HttpGet]
@@ -906,7 +906,6 @@ namespace EIRS.Web.Controllers
                                 AssessmentYear = currentYear - 3,
                                 TotalIncomeEarned = 0
                             };
-
                         }
                         lstIncomeStream.Add(new Request_IncomeStream { TotalIncomeEarned = lastYREras.TotalIncomeEarned.Value, TaxYear = lastYREras.AssessmentYear.Value, RowID = 1 });
                         lstIncomeStream.Add(new Request_IncomeStream { TotalIncomeEarned = last2YREras.TotalIncomeEarned.Value, TaxYear = last2YREras.AssessmentYear.Value, RowID = 2 });
@@ -994,7 +993,6 @@ namespace EIRS.Web.Controllers
                             {
                                 ref3 = ret3Paye;
                             }
-
                         }
 
                         //newlstTaxPayerPayment.OrderByDescending(o => o.PaymentID).FirstOrDefault().PaymentDate.Value.ToString("dd-MMMM-yyyy")
@@ -1096,7 +1094,8 @@ namespace EIRS.Web.Controllers
                     MAP_TaxPayer_Asset mObjTaxPayerAsset = new MAP_TaxPayer_Asset()
                     {
                         TaxPayerID = mObjValidateTaxPayerIncomeModel.TaxPayerID,
-                        TaxPayerTypeID = mObjValidateTaxPayerIncomeModel.TaxPayerTypeID
+                        TaxPayerTypeID = mObjValidateTaxPayerIncomeModel.TaxPayerTypeID,
+                        AssetTypeID =3
                     };
                     //usp_GetTaxPayerAssetForTCC_Result
                     IList<usp_GetTaxPayerAssetList_Result> lstTaxPayerAsset = new BLTaxPayerAsset().BL_GetTaxPayerAssetList(mObjTaxPayerAsset);
@@ -1141,7 +1140,7 @@ namespace EIRS.Web.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult ValidateTaxPayerIncome(ValidateTaxPayerIncomeViewModel pobjValidateTaxPayerIncomeModel)
         {
-            if(pobjValidateTaxPayerIncomeModel.SourceOfIncome == "---Select One----")
+            if (pobjValidateTaxPayerIncomeModel.SourceOfIncome == "---Select One----")
             {
 
                 return View(pobjValidateTaxPayerIncomeModel);
@@ -1837,7 +1836,7 @@ namespace EIRS.Web.Controllers
             {
                 //var url = "http://51.145.26.246:2424/GenerateTCCAndSaveToPath";
                 var url = "http://92.205.57.77:2424/GenerateTCCAndSaveToPath";
-              //  var url = "https://localhost:7115/GenerateTCCAndSaveToPath";
+                //  var url = "https://localhost:7115/GenerateTCCAndSaveToPath";
                 var lastyear = new Request_TCCDetail();
                 var last2year = new Request_TCCDetail();
                 var last3year = new Request_TCCDetail();
@@ -1966,15 +1965,15 @@ namespace EIRS.Web.Controllers
                     }
                     string money1 = "", money2 = "", money3 = "";
                     string money1a = "", money2a = "", money3a = "";
-                    string money1b = "", money2b = "", money3b = "",senty ="";
+                    string money1b = "", money2b = "", money3b = "", senty = "";
                     decimal x = 0, y = 0, z = 0, l = 0;
                     switch (eget)
                     {
                         case "2":
-                             x = lastyear != null ? lastyear.ERASTaxPaid:0;
-                             y = lastyear != null ? last2year.ERASTaxPaid:0;
-                             z = lastyear != null ? last3year.ERASTaxPaid:0;
-                            l= x + y + z;
+                            x = lastyear != null ? lastyear.ERASTaxPaid : 0;
+                            y = lastyear != null ? last2year.ERASTaxPaid : 0;
+                            z = lastyear != null ? last3year.ERASTaxPaid : 0;
+                            l = x + y + z;
                             senty = CommUtil.GetFormatedCurrency(l);
                             money1 = lastyear != null ? CommUtil.GetFormatedCurrency(lastyear.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
                             money2 = last2year != null ? CommUtil.GetFormatedCurrency(last2year.ERASTaxPaid) : CommUtil.GetFormatedCurrency(0);
@@ -2072,7 +2071,7 @@ namespace EIRS.Web.Controllers
                             {
                                 // Read and display the response content
                                 var result = await response.Content.ReadAsStringAsync();
-                                if (Convert.ToBoolean(result)==false)
+                                if (Convert.ToBoolean(result) == false)
                                 {
                                     return RedirectToAction("List", "ProcessTCCRequest");
                                 }
@@ -2138,9 +2137,9 @@ namespace EIRS.Web.Controllers
                     }
 
                     //send mail to the signer
-                //    int yr = DateTime.Now.Year;
-                 //   string[] separatingStrings = { "||" };
-                  //  string[] words = first_Signer.Split(separatingStrings, System.StringSplitOptions.RemoveEmptyEntries);
+                    //    int yr = DateTime.Now.Year;
+                    //   string[] separatingStrings = { "||" };
+                    //  string[] words = first_Signer.Split(separatingStrings, System.StringSplitOptions.RemoveEmptyEntries);
                     //   var strlist = first_Signer.Split("||".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToArray();
                     //EmailDetails mObjEmailDetails = new EmailDetails()
                     //{

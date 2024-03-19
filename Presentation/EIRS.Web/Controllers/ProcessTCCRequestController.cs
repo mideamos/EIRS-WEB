@@ -1095,7 +1095,7 @@ namespace EIRS.Web.Controllers
                     {
                         TaxPayerID = mObjValidateTaxPayerIncomeModel.TaxPayerID,
                         TaxPayerTypeID = mObjValidateTaxPayerIncomeModel.TaxPayerTypeID,
-                        AssetTypeID =3
+                        AssetTypeID = 3
                     };
                     //usp_GetTaxPayerAssetForTCC_Result
                     IList<usp_GetTaxPayerAssetList_Result> lstTaxPayerAsset = new BLTaxPayerAsset().BL_GetTaxPayerAssetList(mObjTaxPayerAsset);
@@ -1181,11 +1181,10 @@ namespace EIRS.Web.Controllers
                 IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
                 if (pobjValidateTaxPayerIncomeModel.needBusinessName == true)
                 {
-                    BusinessNameHolder bn = new BusinessNameHolder();
-                    var allAssetName = lstTaxPayerAsset.Select(i => i.AssetName).OrderBy(j => j).ToArray();
-                    allAssetName = allAssetName.Distinct().ToArray();
+                    var allAssetName = lstTaxPayerAsset.Select(i => i.AssetName).ToArray();
                     foreach (var e in allAssetName)
                     {
+                        BusinessNameHolder bn = new BusinessNameHolder();
                         bn.BusinessName = e;
                         bnLst.Add(bn);
                     }
@@ -1834,9 +1833,7 @@ namespace EIRS.Web.Controllers
         {
             if (reqid.GetValueOrDefault() > 0)
             {
-                //var url = "http://51.145.26.246:2424/GenerateTCCAndSaveToPath";
-                var url = "http://92.205.57.77:2424/GenerateTCCAndSaveToPath";
-                //  var url = "https://localhost:7115/GenerateTCCAndSaveToPath";
+                var url = tccAPI;
                 var lastyear = new Request_TCCDetail();
                 var last2year = new Request_TCCDetail();
                 var last3year = new Request_TCCDetail();
@@ -1851,10 +1848,12 @@ namespace EIRS.Web.Controllers
                 string busiName = "";
 
                 IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
-                foreach (var item in bnLst)
-                    busiName += $",{item.BusinessName}";
 
-                busiName = !string.IsNullOrEmpty(busiName) ? busiName.Substring(1) : null;
+                var distinctStrings = bnLst.GroupBy(v => v.BusinessName).ToList();
+                foreach (var item in distinctStrings)
+                {
+                    busiName += $",{item.Key}";
+                }
                 BLTCC mObjBLTCC = new BLTCC();
                 var ret = mObjBLTCC.BL_GetTCCRequestGenerateDetails((long)reqid);
                 usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
@@ -3895,6 +3894,7 @@ namespace EIRS.Web.Controllers
         static string DocumentLocation = WebConfigurationManager.AppSettings["documentLocation"] ?? "";
         static string DocumentHTMLLocation = WebConfigurationManager.AppSettings["documentHTMLLocation"] ?? "";
         static string payeAPI = WebConfigurationManager.AppSettings["PayeApiLink"] ?? "";
+        static string tccAPI = WebConfigurationManager.AppSettings["TCCApiLink"] ?? "";
         static string first_Signer = WebConfigurationManager.AppSettings["signer1st"] ?? "";
 
     }

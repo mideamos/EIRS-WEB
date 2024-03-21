@@ -485,6 +485,33 @@
           <Property Name="DSRefID" Type="bigint" />
           <Property Name="CAC" Type="varchar" MaxLength="20" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DA_And_PAYE_TCC_Details">
+          <Key>
+            <PropertyRef Name="TccRequestId" />
+            <PropertyRef Name="RevenueStreamTypeId" />
+          </Key>
+          <Property Name="TccRequestId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RevenueStreamTypeId" Type="tinyint" Nullable="false" />
+          <Property Name="BusinessId" Type="nvarchar" MaxLength="50" />
+          <Property Name="TaxYear" Type="int" />
+          <Property Name="BusinessName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LgaId" Type="int" />
+          <Property Name="LgaName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IncomeAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AssessedAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TaxPaid" Type="nvarchar" MaxLength="50" />
+          <Property Name="Balance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ReceiptDetail" Type="nvarchar" MaxLength="200" />
+          <Property Name="chargeableIncome" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AnnualTax" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AnnualTaxII" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Dealer_Types">
           <Key>
             <PropertyRef Name="DealerTypeID" />
@@ -2041,6 +2068,21 @@
           <Property Name="Role" Type="varchar" MaxLength="50" />
           <Property Name="BusinessName" Type="varchar" MaxLength="50" />
           <Property Name="LGA" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="NewTCCDetailsHold">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RowID" Type="int" />
+          <Property Name="TBKID" Type="bigint" />
+          <Property Name="TaxYear" Type="int" />
+          <Property Name="AssessableIncome" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TCCTaxPaid" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ERASTaxPaid" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ERASAssessed" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Tax_receipt" Type="nvarchar" MaxLength="100" />
+          <Property Name="IndividualRIN" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Notification_Method">
           <Key>
@@ -8257,6 +8299,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="Nationality" EntityType="Self.Nationality" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NatureOfBusiness" EntityType="Self.NatureOfBusiness" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewERASTccHolder" EntityType="Self.NewERASTccHolder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NewTCCDetailsHold" EntityType="Self.NewTCCDetailsHold" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification_Method" EntityType="Self.Notification_Method" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification_Mode" EntityType="Self.Notification_Mode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification_Type" EntityType="Self.Notification_Type" Schema="dbo" store:Type="Tables" />
@@ -8324,6 +8367,29 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="Ward" EntityType="Self.Ward" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Zone" EntityType="Self.Zone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZoneLGA" EntityType="Self.ZoneLGA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DA_And_PAYE_TCC_Details" EntityType="Self.DA_And_PAYE_TCC_Details" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DA_And_PAYE_TCC_Details].[TccRequestId] AS [TccRequestId], 
+    [DA_And_PAYE_TCC_Details].[RevenueStreamTypeId] AS [RevenueStreamTypeId], 
+    [DA_And_PAYE_TCC_Details].[BusinessId] AS [BusinessId], 
+    [DA_And_PAYE_TCC_Details].[TaxYear] AS [TaxYear], 
+    [DA_And_PAYE_TCC_Details].[BusinessName] AS [BusinessName], 
+    [DA_And_PAYE_TCC_Details].[RoleId] AS [RoleId], 
+    [DA_And_PAYE_TCC_Details].[RoleName] AS [RoleName], 
+    [DA_And_PAYE_TCC_Details].[LgaId] AS [LgaId], 
+    [DA_And_PAYE_TCC_Details].[LgaName] AS [LgaName], 
+    [DA_And_PAYE_TCC_Details].[IncomeAmount] AS [IncomeAmount], 
+    [DA_And_PAYE_TCC_Details].[AssessedAmount] AS [AssessedAmount], 
+    [DA_And_PAYE_TCC_Details].[TaxPaid] AS [TaxPaid], 
+    [DA_And_PAYE_TCC_Details].[Balance] AS [Balance], 
+    [DA_And_PAYE_TCC_Details].[ReceiptDetail] AS [ReceiptDetail], 
+    [DA_And_PAYE_TCC_Details].[chargeableIncome] AS [chargeableIncome], 
+    [DA_And_PAYE_TCC_Details].[AnnualTax] AS [AnnualTax], 
+    [DA_And_PAYE_TCC_Details].[AnnualTaxII] AS [AnnualTaxII], 
+    [DA_And_PAYE_TCC_Details].[CreatedDate] AS [CreatedDate], 
+    [DA_And_PAYE_TCC_Details].[ModifiedDate] AS [ModifiedDate]
+    FROM [dbo].[DA_And_PAYE_TCC_Details] AS [DA_And_PAYE_TCC_Details]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="vw_AssessmentBill" EntityType="Self.vw_AssessmentBill" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vw_AssessmentBill].[AssessmentID] AS [AssessmentID], 
@@ -12835,6 +12901,8 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="ValidateTccs" EntityType="EIRSModel.ValidateTcc" />
           <EntitySet Name="NatureOfBusinesses" EntityType="EIRSModel.NatureOfBusiness" />
           <EntitySet Name="MapAssessmentDisapprove_" EntityType="EIRSModel.MapAssessmentDisapprove_" />
+          <EntitySet Name="DA_And_PAYE_TCC_Details" EntityType="EIRSModel.DA_And_PAYE_TCC_Details" />
+          <EntitySet Name="NewTCCDetailsHolds" EntityType="EIRSModel.NewTCCDetailsHold" />
           <!--<EntitySet Name="TestingNEWTAB" EntityType="EIRSModel.TestingNEWTAB" />
           <EntitySet Name="vw_ServiceBillNew" EntityType="EIRSModel.vw_ServiceBillNew" />-->
           </EntityContainer>
@@ -23893,7 +23961,47 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="TaxOfficerDesignation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
         </EntityType>
-        
+        <EntityType Name="DA_And_PAYE_TCC_Details">
+          <Key>
+            <PropertyRef Name="TccRequestId" />
+            <PropertyRef Name="RevenueStreamTypeId" />
+          </Key>
+          <Property Name="TccRequestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RevenueStreamTypeId" Type="Byte" Nullable="false" />
+          <Property Name="BusinessId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TaxYear" Type="Int32" />
+          <Property Name="BusinessName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LgaId" Type="Int32" />
+          <Property Name="LgaName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IncomeAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AssessedAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TaxPaid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ReceiptDetail" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="chargeableIncome" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AnnualTax" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AnnualTaxII" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="NewTCCDetailsHold">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RowID" Type="Int32" />
+          <Property Name="TBKID" Type="Int64" />
+          <Property Name="TaxYear" Type="Int32" />
+          <Property Name="AssessableIncome" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TCCTaxPaid" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ERASTaxPaid" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ERASAssessed" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Tax_receipt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IndividualRIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+       
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -33476,6 +33584,47 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
                 <ScalarProperty Name="TaxOfficerId" ColumnName="TaxOfficerId" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DA_And_PAYE_TCC_Details">
+            <EntityTypeMapping TypeName="EIRSModel.DA_And_PAYE_TCC_Details">
+              <MappingFragment StoreEntitySet="DA_And_PAYE_TCC_Details">
+                <ScalarProperty Name="AnnualTaxII" ColumnName="AnnualTaxII" />
+                <ScalarProperty Name="AnnualTax" ColumnName="AnnualTax" />
+                <ScalarProperty Name="chargeableIncome" ColumnName="chargeableIncome" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ReceiptDetail" ColumnName="ReceiptDetail" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="TaxPaid" ColumnName="TaxPaid" />
+                <ScalarProperty Name="AssessedAmount" ColumnName="AssessedAmount" />
+                <ScalarProperty Name="IncomeAmount" ColumnName="IncomeAmount" />
+                <ScalarProperty Name="LgaName" ColumnName="LgaName" />
+                <ScalarProperty Name="LgaId" ColumnName="LgaId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+                <ScalarProperty Name="TaxYear" ColumnName="TaxYear" />
+                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
+                <ScalarProperty Name="RevenueStreamTypeId" ColumnName="RevenueStreamTypeId" />
+                <ScalarProperty Name="TccRequestId" ColumnName="TccRequestId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NewTCCDetailsHolds">
+            <EntityTypeMapping TypeName="EIRSModel.NewTCCDetailsHold">
+              <MappingFragment StoreEntitySet="NewTCCDetailsHold">
+                <ScalarProperty Name="IndividualRIN" ColumnName="IndividualRIN" />
+                <ScalarProperty Name="Tax_receipt" ColumnName="Tax_receipt" />
+                <ScalarProperty Name="ERASAssessed" ColumnName="ERASAssessed" />
+                <ScalarProperty Name="ERASTaxPaid" ColumnName="ERASTaxPaid" />
+                <ScalarProperty Name="TCCTaxPaid" ColumnName="TCCTaxPaid" />
+                <ScalarProperty Name="AssessableIncome" ColumnName="AssessableIncome" />
+                <ScalarProperty Name="TaxYear" ColumnName="TaxYear" />
+                <ScalarProperty Name="TBKID" ColumnName="TBKID" />
+                <ScalarProperty Name="RowID" ColumnName="RowID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

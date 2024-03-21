@@ -158,6 +158,9 @@
     <Compile Include="DAOutput.cs">
       <DependentUpon>ERASDWModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DA_And_PAYE_TCC_Details.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Dealer_Types.cs">
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>
@@ -181,6 +184,11 @@
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EIRSModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EIRSModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EIRSModel1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EIRSModel.edmx</DependentUpon>
@@ -576,6 +584,9 @@
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="NewERASTccHolder.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NewTCCDetailsHold.cs">
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Notification.cs">
@@ -1969,7 +1980,7 @@
     <None Include="App.config" />
     <EntityDeploy Include="EIRSModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>EIRSModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>EIRSModel1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="EIRSModel.edmx.diagram">
       <DependentUpon>EIRSModel.edmx</DependentUpon>

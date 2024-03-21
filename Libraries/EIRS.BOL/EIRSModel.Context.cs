@@ -255,6 +255,8 @@ namespace EIRS.BOL
         public virtual DbSet<ValidateTcc> ValidateTccs { get; set; }
         public virtual DbSet<NatureOfBusiness> NatureOfBusinesses { get; set; }
         public virtual DbSet<MapAssessmentDisapprove_> MapAssessmentDisapprove_ { get; set; }
+        public virtual DbSet<DA_And_PAYE_TCC_Details> DA_And_PAYE_TCC_Details { get; set; }
+        public virtual DbSet<NewTCCDetailsHold> NewTCCDetailsHolds { get; set; }
     
         public virtual ObjectResult<string> ELMAH_GetErrorsXml(string application, Nullable<int> pageIndex, Nullable<int> pageSize, ObjectParameter totalCount)
         {

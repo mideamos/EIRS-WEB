@@ -158,8 +158,8 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.TIN, htmlAttributes: new { @class = "control-label" })
-                        @Html.TextBoxFor(model => model.TIN, htmlAttributes: new { @class = "form-control", @tabindex = "9", @placeholder = "Enter individuals’ tax identification number from JTB if available", @disabled = "true" })
+                        @Html.LabelFor(model => model.TIN, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.TIN, htmlAttributes: new { @class = "form-control", @tabindex = "9", @placeholder = "Enter individuals’ tax identification number from JTB if available" })
                     </div>
                 </div>
             </div>

@@ -2161,6 +2161,7 @@
     <Compile Include="Models\DocumentSubmissionViewModel.cs" />
     <Compile Include="Models\LateChargeResponse.cs" />
     <Compile Include="Models\ManualPoAViewModel.cs" />
+    <Compile Include="Models\ModelFromController.cs" />
     <Compile Include="Models\NewAssessmentViewModel.cs" />
     <Compile Include="Models\NewTccViewModel.cs" />
     <Compile Include="Models\RequestPayload.cs" />

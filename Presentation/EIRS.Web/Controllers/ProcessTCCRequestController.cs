@@ -1257,7 +1257,7 @@ namespace EIRS.Web.Controllers
                                 ReceiptDetail = item.ReceiptDetail
                             });
                         }
-                        List<BalanceHolder> lstb =new List<BalanceHolder>();
+                        List<BalanceHolder> lstb = new List<BalanceHolder>();
                         IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
                         MAP_TCCRequest_IncomeStream mObjIncomeStream;
                         foreach (var item in lstErasDetail)
@@ -1347,9 +1347,8 @@ namespace EIRS.Web.Controllers
                             string refDate = "";
                             var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == item.TaxYear).ToList();
                             if (newlstTaxPayerPayment.Count > 0)
-                            {
                                 refDate = newlstTaxPayerPayment.OrderByDescending(o => o.PaymentID).FirstOrDefault().PaymentDate.Value.ToString("dd-MMMM-yyyy") ?? "";
-                            }
+
                             var allToBeDeleted = _db.TccRefHolders.Where(o => o.TaxYear == item.TaxYear && o.ReqId == pobjValidateTaxPayerIncomeModel.RequestID.ToString()).ToList();
                             _db.TccRefHolders.RemoveRange(allToBeDeleted);
                             //_db.TccRefHolders.Add(new TccRefHolder { ReciptRef = item.Tax_receipt, TaxYear = item.TaxYear, ReqId = pobjValidateTaxPayerIncomeModel.RequestID.ToString() });

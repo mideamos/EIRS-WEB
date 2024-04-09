@@ -3854,6 +3854,11 @@ namespace EIRS.Web.Controllers
 
         public ActionResult BillDetailToBeApproved(string billid, string type, string declineNote)
         {
+            if (string.IsNullOrEmpty(declineNote) || string.IsNullOrWhiteSpace(declineNote))
+            {
+                FlashMessage.Danger("Decline Note Cant Be Empty");
+                return RedirectToAction("Pending", "Home");
+            }
             long bId = Convert.ToInt64(billid);
             int t = type != null ? Convert.ToInt32(type) : 2;
             BLAssessment mObjBLAssessment = new BLAssessment();

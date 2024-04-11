@@ -181,6 +181,7 @@ namespace EIRS.Web.Controllers
         }
         public ActionResult Declined()
         {
+            var lll = new List<long>();
             int det = 0;
             using (var _con = new EIRSEntities())
             {
@@ -193,31 +194,28 @@ namespace EIRS.Web.Controllers
                     return RedirectToAction("Unauthorised");
             }
             var retList = new List<usp_GetAssessmentForPendingOrDeclined_Result>();
-            using (var _db = new EIRSContext())
+
+            retList = getSPList().Where(o => o.SettlementStatusID == (int)SettlementStatus.Disapproved).ToList();
+
+            switch (det)
             {
-                var doc = new Dictionary<string, string>();
-
-                retList = _db.usp_GetAssessmentForPendingOrDeclined().Where(o => o.SettlementStatusID == ((int)SettlementStatus.Disapproved)).ToList();
-
-                switch (det)
-                {
-                    case 1:
-                        retList = retList.Where(o => o.Amount > 100000).ToList();
-                        break;
-                    case 2:
-                        retList = retList.Where(o => o.Amount <= 100000).ToList();
-                        break;
-                    default:
-                        break;
-                }
+                case 1:
+                    retList = retList.Where(o => o.Amount > 100000).ToList();
+                    break;
+                case 2:
+                    retList = retList.Where(o => o.Amount <= 100000).ToList();
+                    break;
+                default:
+                    break;
             }
+            var k = retList.Select(o => o.AssessmentID).ToList();
+            lll.AddRange(k);
             using (var _db = new EIRSEntities())
             {
-                var allAdj = _db.MAP_Assessment_Adjustment.Where(o => retList.Select(x => x.AssessmentID).Contains(o.AAIID.Value)).ToList();
-                var allLate = _db.MAP_Assessment_LateCharge.Where(o => retList.Select(x => x.AssessmentID).Contains(o.AAIID.Value)).ToList();
+                var allAdj = _db.MAP_Assessment_Adjustment.Where(o => lll.Contains(o.AAIID.Value)).ToList();
+                var allLate = _db.MAP_Assessment_LateCharge.Where(o => lll.Contains(o.AAIID.Value)).ToList();
                 foreach (var ri in retList)
                     ri.Amount = Convert.ToDouble(ri.Amount + (Convert.ToDouble(allAdj.Where(o => o.AAIID == ri.AssessmentID)?.Sum(o => o.Amount) + allLate.Where(o => o.AAIID == ri.AssessmentID)?.Sum(o => o.TotalAmount))));
-
             }
             ViewBag.ProfileInformation = retList;
             return View(retList);
@@ -409,7 +407,10 @@ namespace EIRS.Web.Controllers
         private List<usp_GetAssessmentForPendingOrDeclined_Result> getSPList()
         {
 
-            return _appDbContext.usp_GetAssessmentForPendingOrDeclined().ToList();
+           var res= _appDbContext.usp_GetAssessmentForPendingOrDeclined();
+            return res.GroupBy(o=>o.AssessmentID)
+
+                .Select(group => group.First()).ToList();
         }
     }
 

@@ -26,7 +26,7 @@ using SelectPdf;
 using EIRS.Web.Utility;
 using static EIRS.Common.EnumList;
 using Twilio.TwiML.Voice;
-using Aspose.Pdf.Operators;
+//using Aspose.Pdf.Operators;
 
 namespace EIRS.Web.Controllers
 {

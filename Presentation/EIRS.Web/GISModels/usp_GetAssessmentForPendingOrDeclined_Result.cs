@@ -9,7 +9,7 @@ namespace EIRS.Web.GISModels
     {
         public long AssessmentID { get; set; }
         public long ID { get; set; }
-        public double Amount { get; set; }
+        public decimal? Amount { get; set; }
         public int SettlementStatusID { get; set; }
         public string Status { get; set; }
         public string  TaxPayerName  { get; set; }

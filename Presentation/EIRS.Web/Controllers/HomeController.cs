@@ -1,6 +1,4 @@
-﻿using Aspose.Pdf.Operators;
-using DocumentFormat.OpenXml.Wordprocessing;
-using EIRS.BLL;
+﻿using EIRS.BLL;
 using EIRS.BOL;
 using EIRS.Common;
 using EIRS.Models;
@@ -10,7 +8,6 @@ using SixLabors.ImageSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Web.Mvc;
 using static EIRS.Common.EnumList;
 using static EIRS.Web.Controllers.Filters;
@@ -20,7 +17,6 @@ namespace EIRS.Web.Controllers
     [SessionTimeout]
     public class HomeController : BaseController
     {
-        EIRSContext _appDbContext = new EIRSContext();
         public ActionResult GetCentralTopMenuList(int pIntParentMenuID)
         {
             IList<usp_GetCentralMenuUserBased_Result> lstMenuData = new BLCentralMenu().BL_GetCentralMenuUserBased(SessionManager.UserID, pIntParentMenuID);
@@ -58,13 +54,8 @@ namespace EIRS.Web.Controllers
         {
             return View();
         }
-        public ActionResult Pending2()
+        public ActionResult Pending()
         {
-            var mST_Users = new List<MST_Users>();
-            using (var _db2 = new ERASEntities())
-            {
-                mST_Users = _db2.MST_Users.ToList();
-            }
             var retList = new List<ApprovalFlow>();
             using (var _db = new EIRSEntities())
             {
@@ -94,168 +85,154 @@ namespace EIRS.Web.Controllers
                     default:
                         break;
                 }
-                var allAdj = _db.MAP_Assessment_Adjustment.Where(o => allAss.Select(x => x.AssessmentID).Contains(o.AAIID.Value)).ToList();
-                var allLate = _db.MAP_Assessment_LateCharge.Where(o => allAss.Select(x => x.AssessmentID).Contains(o.AAIID.Value)).ToList();
-                var allCom = _db.Companies.ToList();
-                var allInd = _db.Individuals.ToList();
-                var allGov = _db.Governments.ToList();
-
-                foreach (var a in allAss)
+                var possibleCompanies = allAss.Where(o => o.TaxPayerTypeID == 2).Select(o => o.TaxPayerID);
+                var allCom = _db.Companies.Where(o => possibleCompanies.Contains(o.CompanyID) && allTaxOffice.Contains(o.TaxOfficeID.Value));
+                var possibleIndividuals = allAss.Where(o => o.TaxPayerTypeID == 1).Select(o => o.TaxPayerID);
+                var allInd = _db.Individuals.Where(o => possibleIndividuals.Contains(o.IndividualID));
+                allInd = allInd.Where(o => allTaxOffice.Contains(o.TaxOfficeID.Value));
+                var possibleGov = allAss.Where(o => o.TaxPayerTypeID == 4).Select(o => o.TaxPayerID);
+                var allGov = _db.Governments.Where(o => possibleGov.Contains(o.GovernmentID) && allTaxOffice.Contains(o.TaxOfficeID.Value));
+                foreach (var status in allCom)
                 {
-                    decimal? adjAmount = allAdj.Where(o => o.AAIID == a.AssessmentID)?.Sum(o => o.Amount);
-                    decimal? ltAmount = allLate.Where(o => o.AAIID == a.AssessmentID)?.Sum(o => o.TotalAmount);
-                    ApprovalFlow af = new ApprovalFlow();
-                    switch (a.TaxPayerTypeID)
+                    var ass = allAss.Where(o => o.TaxPayerID == status.CompanyID);
+                    foreach (var a in ass)
                     {
-                        case 1:
-                            var ind = allInd.FirstOrDefault(o => o.IndividualID == a.TaxPayerID);
-                            af.TaxPayerName = $"{ind?.FirstName} {ind?.LastName}";
-                            af.Rin = ind?.IndividualRIN;
-                            af.Id = ind?.IndividualID;
-                            break;
-                        case 2:
-                            var com = allCom.FirstOrDefault(o => o.CompanyID == a.TaxPayerID);
-                            af.TaxPayerName = com?.CompanyName;
-                            af.Rin = com?.CompanyRIN;
-                            af.Id = com?.CompanyID;
-                            break;
-                        case 4:
-                            var gov = allGov.FirstOrDefault(o => o.GovernmentID == a.TaxPayerID);
-                            af.TaxPayerName = gov?.GovernmentName;
-                            af.Rin = gov?.GovernmentRIN;
-                            af.Id = gov?.GovernmentID;
-                            break;
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = status.CompanyName;
+                        af.Rin = status.CompanyRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+                        af.Id = status.CompanyID;
+                        retList.Add(af);
                     }
-                    af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
-                    af.AssessmentId = a.AssessmentID;
-                    af.Amount = Math.Round(Convert.ToDouble(a.AssessmentAmount.GetValueOrDefault() + adjAmount + ltAmount), 2);
-                    af.AssessmentRefNo = a.AssessmentRefNo;
-                    retList.Add(af);
                 }
-            }
-            ViewBag.ProfileInformation = retList;
-            return View(retList);
-        }
-        public ActionResult Pending()
-        {
-            var lll = new List<long>();
-            int det = 0;
-            using (var _con = new EIRSEntities())
-            {
-                var allTax = _con.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
-                if (!allTax.Any())
-                { allTax = _con.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID); det = 1; }
-                else
-                    det = 2;
-                if (!allTax.Any())
-                    return RedirectToAction("Unauthorised");
-            }
-            var retList = new List<usp_GetAssessmentForPendingOrDeclined_Result>();
+                foreach (var status in allInd)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.IndividualID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = $"{status.FirstName} {status.LastName}";
+                        af.Rin = status.IndividualRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
 
-            var doc = new Dictionary<string, string>();
-
-            retList= getSPList().Where(o => o.SettlementStatusID != (int)SettlementStatus.Disapproved).ToList();
-
-            switch (det)
-            {
-                case 1:
-                    retList = retList.Where(o => o.Amount > 100000).ToList();
-                    break;
-                case 2:
-                    retList = retList.Where(o => o.Amount <= 100000).ToList();
-                    break;
-                default:
-                    break;
-            }
-            var k = retList.Select(o => o.AssessmentID).ToList();
-            lll.AddRange(k);
-            using (var _db = new EIRSEntities())
-            {
-                var allAdj = _db.MAP_Assessment_Adjustment.Where(o => lll.Contains(o.AAIID.Value)).ToList();
-                var allLate = _db.MAP_Assessment_LateCharge.Where(o => lll.Contains(o.AAIID.Value)).ToList();
-                foreach (var ri in retList)
-                    ri.Amount = Convert.ToDouble(ri.Amount + (Convert.ToDouble(allAdj.Where(o => o.AAIID == ri.AssessmentID)?.Sum(o => o.Amount) + allLate.Where(o => o.AAIID == ri.AssessmentID)?.Sum(o => o.TotalAmount))));
+                        af.Id = status.IndividualID;
+                        retList.Add(af);
+                    }
+                }
+                foreach (var status in allGov)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.GovernmentID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = status.GovernmentName;
+                        af.Rin = status.GovernmentRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+                        af.Id = status.GovernmentID;
+                        retList.Add(af);
+                    }
+                }
             }
             ViewBag.ProfileInformation = retList;
             return View(retList);
         }
         public ActionResult Declined()
         {
-            int det = 0;
-            using (var _con = new EIRSEntities())
+            var retList = new List<ApprovalFlow>();
+            using (var _db = new EIRSEntities())
             {
-                var allTax = _con.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
+                int det = 0;
+                var doc = new Dictionary<string, string>();
+               
+                var allTax = _db.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
                 if (!allTax.Any())
-                { allTax = _con.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID); det = 1; }
+                { allTax = _db.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID); det = 1; }
                 else
                     det = 2;
                 if (!allTax.Any())
                     return RedirectToAction("Unauthorised");
-            }
-            var retList = new List<usp_GetAssessmentForPendingOrDeclined_Result>();
-            using (var _db = new EIRSContext())
-            {
-                var doc = new Dictionary<string, string>();
+                var allTaxOffice = allTax.Select(o => o.TaxOfficeID);
 
-                retList = _db.usp_GetAssessmentForPendingOrDeclined().Where(o => o.SettlementStatusID == ((int)SettlementStatus.Disapproved)).ToList();
-
+                var allAss = _db.Assessments.Where(o => o.SettlementStatusID == (int)SettlementStatus.Disapproved);
                 switch (det)
                 {
                     case 1:
-                        retList = retList.Where(o => o.Amount > 100000).ToList();
+                        allAss = allAss.Where(o => o.AssessmentAmount > 100000);
                         break;
                     case 2:
-                        retList = retList.Where(o => o.Amount <= 100000).ToList();
+                        allAss = allAss.Where(o => o.AssessmentAmount <= 100000);
                         break;
                     default:
                         break;
                 }
-            }
-            using (var _db = new EIRSEntities())
-            {
-                var allAdj = _db.MAP_Assessment_Adjustment.Where(o => retList.Select(x => x.AssessmentID).Contains(o.AAIID.Value)).ToList();
-                var allLate = _db.MAP_Assessment_LateCharge.Where(o => retList.Select(x => x.AssessmentID).Contains(o.AAIID.Value)).ToList();
-                foreach (var ri in retList)
-                    ri.Amount = Convert.ToDouble(ri.Amount + (Convert.ToDouble(allAdj.Where(o => o.AAIID == ri.AssessmentID)?.Sum(o => o.Amount) + allLate.Where(o => o.AAIID == ri.AssessmentID)?.Sum(o => o.TotalAmount))));
+                var possibleCompanies = allAss.Where(o => o.TaxPayerTypeID == 2).Select(o => o.TaxPayerID);
+                var allCom = _db.Companies.Where(o => possibleCompanies.Contains(o.CompanyID) && allTaxOffice.Contains(o.TaxOfficeID.Value));
+                var possibleIndividuals = allAss.Where(o => o.TaxPayerTypeID == 1).Select(o => o.TaxPayerID);
+                var allInd = _db.Individuals.Where(o => possibleIndividuals.Contains(o.IndividualID));
+                allInd = allInd.Where(o => allTaxOffice.Contains(o.TaxOfficeID.Value));
+                var possibleGov = allAss.Where(o => o.TaxPayerTypeID == 4).Select(o => o.TaxPayerID);
+                var allGov = _db.Governments.Where(o => possibleGov.Contains(o.GovernmentID) && allTaxOffice.Contains(o.TaxOfficeID.Value));
+                foreach (var status in allCom)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.CompanyID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = status.CompanyName;
+                        af.Rin = status.CompanyRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+                        af.Id = status.CompanyID;
+                        retList.Add(af);
+                    }
+                }
+                foreach (var status in allInd)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.IndividualID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = $"{status.FirstName} {status.LastName}";
+                        af.Rin = status.IndividualRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
 
+                        af.Id = status.IndividualID;
+                        retList.Add(af);
+                    }
+                }
+                foreach (var status in allGov)
+                {
+                    var ass = allAss.Where(o => o.TaxPayerID == status.GovernmentID);
+                    foreach (var a in ass)
+                    {
+                        ApprovalFlow af = new ApprovalFlow();
+                        af.Status = System.Enum.GetName(typeof(SettlementStatus), a.SettlementStatusID);
+                        af.AssessmentId = a.AssessmentID;
+                        af.Amount = a.AssessmentAmount.GetValueOrDefault();
+                        af.TaxPayerName = status.GovernmentName;
+                        af.Rin = status.GovernmentRIN;
+                        af.AssessmentRefNo = a.AssessmentRefNo;
+                        af.Id = status.GovernmentID;
+                        retList.Add(af);
+                    }
+                }
             }
             ViewBag.ProfileInformation = retList;
             return View(retList);
-            //var retList = new List<usp_GetAssessmentForPendingOrDeclined_Result>();
-            //using (var _db = new EIRSEntities())
-            //{
-            //    int det = 0;
-            //    var doc = new Dictionary<string, string>();
-
-            //    var allTax = _db.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
-            //    if (!allTax.Any())
-            //    { allTax = _db.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID); det = 1; }
-            //    else
-            //        det = 2;
-            //    if (!allTax.Any())
-            //        return RedirectToAction("Unauthorised");
-            //    retList = _db.usp_GetAssessmentForPendingOrDeclined().Where(o => o.Status == ((int)SettlementStatus.Disapproved).ToString()).ToList();
-
-            //    switch (det)
-            //    {
-            //        case 1:
-            //            retList = retList.Where(o => o.Amount > 100000).ToList();
-            //            break;
-            //        case 2:
-            //            retList = retList.Where(o => o.Amount <= 100000).ToList();
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //    var allAdj = _db.MAP_Assessment_Adjustment.Where(o => retList.Select(x => x.AssessmentID).Contains(o.AAIID.Value)).ToList();
-            //    var allLate = _db.MAP_Assessment_LateCharge.Where(o => retList.Select(x => x.AssessmentID).Contains(o.AAIID.Value)).ToList();
-            //    foreach (var ri in retList)
-            //        ri.Amount = Convert.ToDouble(ri.Amount + (Convert.ToDouble(allAdj.Where(o => o.AAIID == ri.AssessmentID)?.Sum(o => o.Amount) + allLate.Where(o => o.AAIID == ri.AssessmentID)?.Sum(o => o.TotalAmount))));
-
-            //}
-            //ViewBag.ProfileInformation = retList;
-            //return View(retList);
         }
 
         [HttpPost]
@@ -403,13 +380,6 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_GetVehicleChart_Result> lstVehicleChart = new BLDashboard().BL_GetVehicleChart(FilterType);
             return Json(lstVehicleChart, JsonRequestBehavior.AllowGet);
-        }
-
-        [NonAction]
-        private List<usp_GetAssessmentForPendingOrDeclined_Result> getSPList()
-        {
-
-            return _appDbContext.usp_GetAssessmentForPendingOrDeclined().ToList();
         }
     }
 

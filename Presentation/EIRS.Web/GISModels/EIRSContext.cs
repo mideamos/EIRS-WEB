@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -25,12 +23,8 @@ namespace EIRS.Web.GISModels
         public virtual DbSet<GISFileAssessment> GISFileAssessment { get; set; }
         public virtual DbSet<GISFileAsset> GISFileAsset { get; set; }
         public virtual DbSet<GISFileParty> GISFileParty { get; set; }
-        public DbSet<usp_GetAssessmentForPendingOrDeclined_Result> usp_GetAssessmentForPendingOrDeclined_Results { get; set; }
         public virtual DbSet<GISFileHolder> GISFileHolder { get; set; }
-        public IList<usp_GetAssessmentForPendingOrDeclined_Result> usp_GetAssessmentForPendingOrDeclined()
-        {
-            return this.Set<usp_GetAssessmentForPendingOrDeclined_Result>().FromSqlRaw("EXECUTE usp_GetAssessmentForPendingOrDeclined").ToList();
-        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

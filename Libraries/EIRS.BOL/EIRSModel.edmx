@@ -5988,7 +5988,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="SearchType" Type="int" Mode="In" />
         </Function>
         <Function Name="usp_GetAssessmentDataForPT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        
         <Function Name="usp_GetAssessmentGroupList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AssessmentGroupName" Type="varchar" Mode="In" />
           <Parameter Name="AssessmentGroupID" Type="int" Mode="In" />

@@ -13,6 +13,6 @@ namespace EIRS.Web.GISModels
         public decimal Amount { get; set; }
         public string Status { get; set; }
         public long AssessmentId { get; set; }
-        public long Id { get; set; }
+        public int? Id { get; set; }
     }
 }

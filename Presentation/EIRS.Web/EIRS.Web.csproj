@@ -2011,6 +2011,8 @@
     <Content Include="Scripts\jsWTCSLTaxPayerList.js" />
     <Content Include="Scripts\jsWTCTaxPayerList.js" />
     <Content Include="Scripts\LateCharge.js" />
+    <Content Include="Views\OperationManager\ManageLateCharge.cshtml" />
+    <Content Include="Views\Adjustment\AssessmentLateCharge.cshtml" />
     <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
     <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
     <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />

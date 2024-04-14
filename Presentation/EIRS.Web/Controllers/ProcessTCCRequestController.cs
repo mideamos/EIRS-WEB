@@ -1236,7 +1236,7 @@ namespace EIRS.Web.Controllers
                         FuncResponse mObjFuncResponse;
                         foreach (var item in lstPayeDetail)
                         {
-                            var removeFormal = _db.PayeTccHolders.Where(o => o.AssessmentYear == item.AssessmentYear && o.IndividualRIN == item.EmployeeRin).ToList();
+                            var removeFormal = _db.PayeTccHolders.Where(o => o.AssessmentYear == item.AssessmentYear && o.IndividualRIN == mObjRequestData.IndividualRIN).ToList();
                             if (removeFormal != null)
                                 _db.PayeTccHolders.RemoveRange(removeFormal);
                             _db.PayeTccHolders.Add(new PayeTccHolder
@@ -1972,19 +1972,22 @@ namespace EIRS.Web.Controllers
                 string busiName = "";
 
                 IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
-
-                var distinctStrings = bnLst.GroupBy(v => v.BusinessName).ToList();
-                if (distinctStrings.Count > 1)
+                if (bnLst.Any())
                 {
-                    foreach (var item in distinctStrings)
+                    var distinctStrings = bnLst.GroupBy(v => v.BusinessName).ToList();
+                    if (distinctStrings.Count > 1)
                     {
-                        busiName += $"{item.Key},";
+                        foreach (var item in distinctStrings)
+                        {
+                            busiName += $"{item.Key},";
+                        }
+                        busiName = busiName.Remove(busiName.Length - 1);
+                        busiName = busiName.TrimStart(',') ;
                     }
-                    busiName = busiName.Remove(busiName.Length - 1);
-                }
-                else
-                {
-                    busiName = distinctStrings.FirstOrDefault().Key;
+                    else
+                    {
+                        busiName = distinctStrings.FirstOrDefault().Key;
+                    }
                 }
                 BLTCC mObjBLTCC = new BLTCC();
                 var ret = mObjBLTCC.BL_GetTCCRequestGenerateDetails((long)reqid);
@@ -2850,8 +2853,8 @@ namespace EIRS.Web.Controllers
                 {
                     mObjTCCDetail.TaxYear = mObjIncomeStreamModel.TaxYear;
                     mObjTCCDetail.TCCTaxPaid = Convert.ToDecimal(pp.AnnualTaxII);
-                    mObjTCCDetail.ERASTaxPaid = Convert.ToDecimal(pp.AnnualTax);
-                    mObjTCCDetail.ERASAssessed = Convert.ToDecimal(pp.ChargeableIncome);
+                    mObjTCCDetail.ERASTaxPaid = Convert.ToDecimal(pp.AnnualTaxII);
+                    mObjTCCDetail.ERASAssessed = Convert.ToDecimal(pp.AnnualTax);
                     mObjTCCDetail.Tax_receipt = "";
                     mObjTCCDetail.AssessableIncome = Convert.ToDecimal(pp.ChargeableIncome);
                     mObjTCCDetail.intTrack = lstIncomeStream.Where(t => t.TaxYear == mObjIncomeStreamModel.TaxYear && t.intTrack != EnumList.Track.DELETE).Any() ? EnumList.Track.UPDATE : EnumList.Track.DELETE;

@@ -204,17 +204,8 @@ namespace EIRS.Web.Controllers
                 totalnewAmount = 0;
                 totalnewAmountLateCharge = 0;
             }
-            switch (det)
-            {
-                case 1:
-                    retList = retList.Where(o => o.Amount > 100000).ToList();
-                    break;
-                case 2:
-                    retList = retList.Where(o => o.Amount <= 100000).ToList();
-                    break;
-                default:
-                    break;
-            }
+            retList = retList.Where(o => o.UserID ==SessionManager.UserID).ToList();
+
             ViewBag.ProfileInformation = retList;
             return View(retList);
 
@@ -368,18 +359,10 @@ namespace EIRS.Web.Controllers
         }
 
         [NonAction]
-        private async Task<List<usp_GetAssessmentForPendingOrDeclined_Result>> getSPListAsync()
-        {
-
-            //var res = _appDbContext.usp_GetAssessmentForPendingOrDeclined();
-            var rawQuery = "SELECT ast.AssessmentID,ss.SettlementStatusID,ast.AssessmentRefNo,ast.assessmentamount as Amount,ss.SettlementStatusName as Status,office.ContactName as TaxOfficerName,ast.TaxPayerID as ID,dbo.GetTaxPayerName(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxPayerName,dbo.GetTaxPayerRIN(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxPayerRIN,dbo.GetTaxPayerTaxOfficeName(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxOfficeName FROM Assessment ast left JOIN Settlement_Status ss  ON ast.SettlementStatusID = ss.SettlementStatusID left JOIN TaxPayer_Types tptype ON ast.TaxPayerTypeID = tptype.TaxPayerTypeID   left JOIN ERAS.DBO.MST_Users  office ON ast.CreatedBy = office.UserID where ast.SettlementStatusID = 6  or ast.SettlementStatusID =8 or ast.SettlementStatusID =7";
-            var res = _appDbContext.usp_GetAssessmentForPendingOrDeclined_Results.FromSqlRaw(rawQuery).ToList();
-            return res.ToList();
-        }
         private List<usp_GetAssessmentForPendingOrDeclined_Result> getSPList()
         {
             //var res = _appDbContext.usp_GetAssessmentForPendingOrDeclined();
-            var rawQuery = "SELECT ast.AssessmentID,ss.SettlementStatusID,ast.AssessmentRefNo,ast.assessmentamount as Amount,ss.SettlementStatusName as Status,office.ContactName as TaxOfficerName,ast.TaxPayerID as ID,dbo.GetTaxPayerName(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxPayerName,dbo.GetTaxPayerRIN(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxPayerRIN,dbo.GetTaxPayerTaxOfficeName(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxOfficeName FROM Assessment ast left JOIN Settlement_Status ss  ON ast.SettlementStatusID = ss.SettlementStatusID left JOIN TaxPayer_Types tptype ON ast.TaxPayerTypeID = tptype.TaxPayerTypeID   left JOIN ERAS.DBO.MST_Users  office ON ast.CreatedBy = office.UserID where ast.SettlementStatusID = 6  or ast.SettlementStatusID =8 or ast.SettlementStatusID =7";
+            var rawQuery = "SELECT ast.AssessmentID,ss.SettlementStatusID,office.UserID, ast.AssessmentRefNo,ast.assessmentamount as Amount,ss.SettlementStatusName as Status,office.ContactName as TaxOfficerName,ast.TaxPayerID as ID,dbo.GetTaxPayerName(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxPayerName,dbo.GetTaxPayerRIN(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxPayerRIN,dbo.GetTaxPayerTaxOfficeName(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxOfficeName FROM Assessment ast left JOIN Settlement_Status ss  ON ast.SettlementStatusID = ss.SettlementStatusID left JOIN TaxPayer_Types tptype ON ast.TaxPayerTypeID = tptype.TaxPayerTypeID   left JOIN ERAS.DBO.MST_Users  office ON ast.CreatedBy = office.UserID where ast.SettlementStatusID = 6  or ast.SettlementStatusID =8 or ast.SettlementStatusID =7";
             // List to hold the results
             List<usp_GetAssessmentForPendingOrDeclined_Result> results = new List<usp_GetAssessmentForPendingOrDeclined_Result>();
 
@@ -396,9 +379,11 @@ namespace EIRS.Web.Controllers
                             {
                                 results.Add(new usp_GetAssessmentForPendingOrDeclined_Result
                                 {
+
                                     AssessmentID = Convert.ToInt64(reader["AssessmentID"]),
                                     SettlementStatusID = Convert.ToInt32(reader["SettlementStatusID"]),
                                     ID = Convert.ToInt32(reader["ID"]),
+                                    UserID = Convert.ToInt32(reader["UserID"]),
                                     Amount = Convert.ToDecimal(reader["Amount"]),
                                     AssessmentRefNo = reader["AssessmentRefNo"].ToString(),
                                     Status = reader["Status"].ToString(),

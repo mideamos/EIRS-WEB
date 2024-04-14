@@ -1,0 +1,61 @@
+﻿
+
+@model EIRS.Web.Models.ReviseBillViewModel
+@{
+    ViewBag.Title = "Operation Manager - Revise Late Charge";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Revise Late Charge
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Revise Late Charge
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-7">
+                @using (Html.BeginForm("ManageLateCharge", "OperationManager", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Message
+                        </div>
+                    }
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BillRefNo, htmlAttributes: new { @class = "control-label col-sm-3" })
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(model => model.BillRefNo, htmlAttributes: new { @tabindex = "1", @class = "form-control", @placeholder = "Enter Bill Ref No" })
+                            @Html.ValidationMessageFor(model => model.BillRefNo, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" type="submit"> Open Bill </button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <div class="col-sm-5">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

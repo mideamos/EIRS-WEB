@@ -630,7 +630,7 @@ namespace EIRS.Web.Controllers
 
         public JsonResult PoATransferValidate(string pid, int? pIntTaxPayerTypeID, int? pIntTaxPayerID)
         {
-            decimal? reciedAmount = 0; decimal? sentAmount = 0; decimal? newbalance = 0; 
+            decimal? reciedAmount = 0; decimal? sentAmount = 0; decimal? newbalance = 0;
             string noUser = "";
             List<MAP_PaymentAccount_Operation> lstret = new List<MAP_PaymentAccount_Operation>();
             MAP_PaymentAccount_Operation ret = new MAP_PaymentAccount_Operation();
@@ -7071,6 +7071,62 @@ namespace EIRS.Web.Controllers
                     if (mObjAssessmentData != null)
                     {
                         return RedirectToAction("Assessment", "Adjustment", new { id = mObjAssessmentData.AssessmentID, name = mObjAssessmentData.AssessmentRefNo.ToSeoUrl() });
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Invalid Bill Ref No";
+                        return View(pObjReviseBillModel);
+                    }
+
+                }
+                else if (pObjReviseBillModel.BillRefNo.StartsWith("SB"))
+                {
+                    BLServiceBill mObjBLServiceBill = new BLServiceBill();
+                    usp_GetServiceBillList_Result mObjServiceBillData = mObjBLServiceBill.BL_GetServiceBillDetails(new ServiceBill() { ServiceBillRefNo = pObjReviseBillModel.BillRefNo, IntStatus = 2 });
+
+                    if (mObjServiceBillData != null)
+                    {
+                        return RedirectToAction("ServiceBill", "Adjustment", new { id = mObjServiceBillData.ServiceBillID, name = mObjServiceBillData.ServiceBillRefNo.ToSeoUrl() });
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Invalid Bill Ref No";
+                        return View(pObjReviseBillModel);
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Invalid Bill Ref No";
+                    return View(pObjReviseBillModel);
+                }
+            }
+        }
+        public ActionResult ManageLateCharge()
+        {
+            //string url = getUrl();
+            //bool itCan = new UtilityController().CheckAccess(url);
+            //if (!itCan) { return RedirectToAction("AccessDenied", "Utility"); }
+           return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public ActionResult ManageLateCharge(ReviseBillViewModel pObjReviseBillModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(pObjReviseBillModel);
+            }
+            else
+            {
+                if (pObjReviseBillModel.BillRefNo.StartsWith("AB"))
+                {
+                    BLAssessment mObjBLAssessment = new BLAssessment();
+                    usp_GetAssessmentList_Result mObjAssessmentData = mObjBLAssessment.BL_GetAssessmentDetails(new Assessment() { AssessmentRefNo = pObjReviseBillModel.BillRefNo, IntStatus = 2 });
+
+                    if (mObjAssessmentData != null)
+                    {
+                        return RedirectToAction("AssessmentLateCharge", "Adjustment", new { id = mObjAssessmentData.AssessmentID, name = mObjAssessmentData.AssessmentRefNo.ToSeoUrl() });
                     }
                     else
                     {

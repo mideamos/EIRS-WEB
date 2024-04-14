@@ -15,10 +15,9 @@
                 <tr>
                     <th>RIN</th>
                     <th>Taxpayer Name</th>
-                    <th>Assessment Id</th>
                     <th>Amount</th>
-                    <th>Name Of The Tax Officer</th>
-                    <th>Tax Office Name</th>
+                    <th>TaxOfficerName</th>
+                    <th>TaxOfficeName</th>
                     <th>Status</th>
                     <th class="action-th all">Action</th>
                 </tr>
@@ -30,8 +29,7 @@
                     <tr>
                         <td>@vProfile.TaxPayerRIN</td>
                         <td>@vProfile.TaxPayerName</td>
-                        <td>@vProfile.AssessmentID</td>
-                        <td>@vProfile.Amount</td>
+                        <td>@CommUtil.GetFormatedCurrency(vProfile.Amount)</td>
                         <td>@vProfile.TaxOfficerName</td>
                         <td>@vProfile.TaxOfficeName</td>
                         <td>@vProfile.Status</td>

@@ -2127,7 +2127,6 @@
     <Compile Include="GISModels\MapReveuneStreamWithLateCharge.cs" />
     <Compile Include="GISModels\NewCommon.cs" />
     <Compile Include="GISModels\TccDownloaded.cs" />
-    <Compile Include="GISModels\usp_GetAssessmentForPendingOrDeclined_Result.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

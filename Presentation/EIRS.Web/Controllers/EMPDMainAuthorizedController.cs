@@ -217,7 +217,7 @@ namespace EIRS.Web.Controllers
                             UI_FillYearDropDown();
                             UI_FillMonthDropDown();
                             ModelState.Clear();
-                            
+
 
                             ViewBag.SMessage = "Upload Completed Successfully.";
                             ViewBag.ResultFilePath = "/Document/ERASManual/PDMA/" + strOutputFileName;
@@ -227,7 +227,7 @@ namespace EIRS.Web.Controllers
                             //return File(mByteData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", strfilename);
                         }
 
-                        
+
                     }
                     else
                     {
@@ -301,7 +301,7 @@ namespace EIRS.Web.Controllers
                     if (mObjFuncResponse.Success)
                     {
                         FlashMessage.Info(mObjFuncResponse.Message);
-                        return RedirectToAction("DataSource","ERASManual");
+                        return RedirectToAction("DataSource", "ERASManual");
                     }
                     else
                     {

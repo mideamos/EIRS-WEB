@@ -17,12 +17,11 @@ using static EIRS.Web.Controllers.Filters;
 using EIRS.Repository;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System.IdentityModel.Tokens.Jwt;
-
 namespace EIRS.Web.Controllers
 {
     public class CBSController : Controller
     {
-        EIRSEntities _db= new EIRSEntities();
+        EIRSEntities _db = new EIRSEntities();
         ITreasuryReceiptRepository _repo;
         public CBSController()
         {
@@ -859,7 +858,7 @@ namespace EIRS.Web.Controllers
                             string res = readTask.Result.ToString();
                             mObjTaxPayerResponse = JsonConvert.DeserializeObject<APIResponse>(res);
 
-                           // mObjTaxPayerResponse = readTask.Result;
+                            // mObjTaxPayerResponse = readTask.Result;
 
                             EIRS.BOL.Individual mObjIndividualData = JsonConvert.DeserializeObject<EIRS.BOL.Individual>(mObjTaxPayerResponse.Result.ToString());
                             mIntTaxPayerID = mObjIndividualData.IndividualID;
@@ -1160,7 +1159,7 @@ namespace EIRS.Web.Controllers
                     string res = readTask.Result.ToString();
                     mObjAPIResponse = JsonConvert.DeserializeObject<APIResponse>(res);
 
-                   // mObjAPIResponse = readTask.Result;
+                    // mObjAPIResponse = readTask.Result;
 
                     if (mObjAPIResponse.Success)
                     {
@@ -1199,7 +1198,7 @@ namespace EIRS.Web.Controllers
                     string res = readTask.Result.ToString();
                     mObjAPIResponse = JsonConvert.DeserializeObject<APIResponse>(res);
 
-                   // mObjAPIResponse = readTask.Result;
+                    // mObjAPIResponse = readTask.Result;
 
                     if (mObjAPIResponse.Success)
                     {
@@ -1354,16 +1353,16 @@ namespace EIRS.Web.Controllers
             }
             else
             {
-                var vTreasuryReceiptData =  _repo.REP_VerifyTreasuryReceiptNew(new Treasury_Receipt()
+                var vTreasuryReceiptData = _repo.REP_VerifyTreasuryReceiptNew(new Treasury_Receipt()
                 {
                     BillRefNo = pObjVerifyTRModel.BillNumber,
                     ReceiptRefNo = pObjVerifyTRModel.ReceiptNumber
                 });
 
-                if(vTreasuryReceiptData != null)
+                if (vTreasuryReceiptData != null)
                 {
                     var checker = _db.Assessments.FirstOrDefault(o => o.AssessmentID == vTreasuryReceiptData.AssessmentID);
-                    if(checker != null && checker.AssessmentRefNo == pObjVerifyTRModel.BillNumber)
+                    if (checker != null && checker.AssessmentRefNo == pObjVerifyTRModel.BillNumber)
                     {
                         //TreasuryReceipt/240524/RP230255_14092022_Signed.pdf
                         ViewBag.TRValid = true;

@@ -1237,7 +1237,7 @@ namespace EIRS.Web.Controllers
                         FuncResponse mObjFuncResponse;
                         foreach (var item in lstPayeDetail)
                         {
-                            var removeFormal = _db.PayeTccHolders.Where(o => o.AssessmentYear == item.AssessmentYear && o.IndividualRIN == item.EmployeeRin).ToList();
+                            var removeFormal = _db.PayeTccHolders.Where(o => o.AssessmentYear == item.AssessmentYear && o.IndividualRIN == mObjRequestData.IndividualRIN).ToList();
                             if (removeFormal != null)
                                 _db.PayeTccHolders.RemoveRange(removeFormal);
                             _db.PayeTccHolders.Add(new PayeTccHolder
@@ -1973,19 +1973,22 @@ namespace EIRS.Web.Controllers
                 string busiName = "";
 
                 IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
-
-                var distinctStrings = bnLst.GroupBy(v => v.BusinessName).ToList();
-                if (distinctStrings.Count > 1)
+                if (bnLst.Any())
                 {
-                    foreach (var item in distinctStrings)
+                    var distinctStrings = bnLst.GroupBy(v => v.BusinessName).ToList();
+                    if (distinctStrings.Count > 1)
                     {
-                        busiName += $"{item.Key},";
+                        foreach (var item in distinctStrings)
+                        {
+                            busiName += $"{item.Key},";
+                        }
+                        busiName = busiName.Remove(busiName.Length - 1);
+                        busiName = busiName.TrimStart(',');
                     }
-                    busiName = busiName.Remove(busiName.Length - 1);
-                }
-                else
-                {
-                    busiName = distinctStrings.FirstOrDefault().Key;
+                    else
+                    {
+                        busiName = distinctStrings.FirstOrDefault().Key;
+                    }
                 }
                 BLTCC mObjBLTCC = new BLTCC();
                 var ret = mObjBLTCC.BL_GetTCCRequestGenerateDetails((long)reqid);
@@ -2190,8 +2193,7 @@ namespace EIRS.Web.Controllers
                             t.mStrGeneratedDocumentPath = mStrGeneratedDocumentPath;
                             t.mStrGeneratedDocumentPathForPrint = mStrGeneratedDocumentPathForPrint;
                             // Convert the data to JSON
-                            JavaScriptSerializer js = new();
-                            string jsonContent = js.Serialize(t);
+                            string jsonContent = Newtonsoft.Json.JsonConvert.SerializeObject(t);
 
                             // Create a StringContent with the JSON data
                             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
@@ -2852,8 +2854,8 @@ namespace EIRS.Web.Controllers
                 {
                     mObjTCCDetail.TaxYear = mObjIncomeStreamModel.TaxYear;
                     mObjTCCDetail.TCCTaxPaid = Convert.ToDecimal(pp.AnnualTaxII);
-                    mObjTCCDetail.ERASTaxPaid = Convert.ToDecimal(pp.AnnualTax);
-                    mObjTCCDetail.ERASAssessed = Convert.ToDecimal(pp.ChargeableIncome);
+                    mObjTCCDetail.ERASTaxPaid = Convert.ToDecimal(pp.AnnualTaxII);
+                    mObjTCCDetail.ERASAssessed = Convert.ToDecimal(pp.AnnualTax);
                     mObjTCCDetail.Tax_receipt = "";
                     mObjTCCDetail.AssessableIncome = Convert.ToDecimal(pp.ChargeableIncome);
                     mObjTCCDetail.intTrack = lstIncomeStream.Where(t => t.TaxYear == mObjIncomeStreamModel.TaxYear && t.intTrack != EnumList.Track.DELETE).Any() ? EnumList.Track.UPDATE : EnumList.Track.DELETE;
@@ -3597,10 +3599,7 @@ namespace EIRS.Web.Controllers
                 {
                     var result = response.Content.ReadAsStringAsync();
                     string res = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    JavaScriptSerializer js = new();
-                    respObj = (PayeApiFullResponse)js.DeserializeObject(res);
-                    // respObj = JsonConvert.DeserializeObject<PayeApiFullResponse>(res);
+                    respObj = JsonConvert.DeserializeObject<PayeApiFullResponse>(res);
                     if (respObj.Result.Count() > 0)
                     {
                         for (int i = 1; i < respObj.Result.Count(); i++)

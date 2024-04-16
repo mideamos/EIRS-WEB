@@ -706,7 +706,7 @@ namespace EIRS.Web.Controllers
 
                             if (TrynParse.parseBool(dcSEDEResponse["success"]))
                             {
-                               
+
                                 mObjSignDigital.CSDID = mObjFuncResponse.AdditionalData.CSDID;
                                 mObjSignDigital.SignedDigitalPath = "Certificate/" + mObjCertificateData.CertificateID + "/SignDigital/" + mStrSignDigitalFileName;
                                 mObjSignDigital.StageID = (int)EnumList.CertificateStage.Sign_Digital;
@@ -845,7 +845,7 @@ namespace EIRS.Web.Controllers
 
                             if (TrynParse.parseBool(dcSEDEResponse["success"]))
                             {
-                               
+
                                 mObjSeal.CSID = mObjFuncResponse.AdditionalData.CSID;
                                 mObjSeal.SealedPath = "Certificate/" + mObjCertificateData.CertificateID + "/Seal/" + mStrSealFileName;
                                 mObjSeal.StageID = (int)EnumList.CertificateStage.Seal;

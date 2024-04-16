@@ -18,13 +18,13 @@ namespace EIRS.Web.Controllers
 {
     public class RINGeneratorController : BaseController
     {
-        
+
         public ActionResult List()
         {
             return View();
         }
 
-        
+
         public ActionResult UploadCompany()
         {
             return View();
@@ -32,7 +32,7 @@ namespace EIRS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
-        
+
         public ActionResult UploadCompany(RINGeneratorViewModel pCompanyRGViewModel)
         {
             if (!ModelState.IsValid)
@@ -474,7 +474,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult UploadIndividual()
         {
             return View();
@@ -482,7 +482,7 @@ namespace EIRS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
-        
+
         public ActionResult UploadIndividual(RINGeneratorViewModel pIndividualRGViewModel)
         {
             if (!ModelState.IsValid)

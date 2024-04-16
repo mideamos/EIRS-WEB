@@ -353,7 +353,7 @@ namespace EIRS.Web.Controllers
                         }
                         else
                         {
-                            if(mObjICFuncResponse.AdditionalData.StatusID < (int)EnumList.TCCRequestStatus.Awaiting_for_Payment)
+                            if (mObjICFuncResponse.AdditionalData.StatusID < (int)EnumList.TCCRequestStatus.Awaiting_for_Payment)
                             {
                                 Session["TaxPayerID"] = mObjICFuncResponse.AdditionalData.TaxPayerID;
                                 Session["RequestID"] = mObjICFuncResponse.AdditionalData.TCCRequestID;

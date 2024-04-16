@@ -13,7 +13,7 @@ using Microsoft.Reporting.WebForms;
 
 namespace EIRS.Web.Controllers
 {
-    
+
     public class ReportController : BaseController
     {
         // GET: Report
@@ -154,11 +154,11 @@ namespace EIRS.Web.Controllers
             string strReferenceName = "";
             switch (mIntReference)
             {
-                case 1: strReferenceName = "Revenue Stream";break;
+                case 1: strReferenceName = "Revenue Stream"; break;
                 case 2: strReferenceName = "Asset Type"; break;
-                case 3: strReferenceName = "Tax Office";break;
-                case 4: strReferenceName = "LGA";break;
-                case 5: strReferenceName = "Directorate";break;
+                case 3: strReferenceName = "Tax Office"; break;
+                case 4: strReferenceName = "LGA"; break;
+                case 5: strReferenceName = "Directorate"; break;
             }
 
             //Generating Invoice
@@ -183,8 +183,8 @@ namespace EIRS.Web.Controllers
             mObjReportDataSource.Value = lstDailySummaryReport;
             localReport.DataSources.Add(mObjReportDataSource);
 
-            
-            
+
+
 
             string strDirectory = "/DailySummaryReport/";
             string strfilename = DateTime.Now.ToString("ddMMyyyymmss_") + "DailyReport.pdf";
@@ -199,7 +199,7 @@ namespace EIRS.Web.Controllers
             if (System.IO.File.Exists(strExportFilePath))
                 System.IO.File.Delete(strExportFilePath);
 
-           // //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
+            // //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
 
             return File(strExportFilePath, "application/pdf", strfilename);
         }

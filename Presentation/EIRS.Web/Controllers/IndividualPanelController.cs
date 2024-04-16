@@ -19,7 +19,7 @@ using EIRS.Web.Utility;
 
 namespace EIRS.Web.Controllers
 {
-    
+
     public class IndividualPanelController : BaseController
     {
         EIRSEntities _db;
@@ -2297,7 +2297,7 @@ namespace EIRS.Web.Controllers
                             if (System.IO.File.Exists(strExportFilePath))
                                 System.IO.File.Delete(strExportFilePath);
 
-                          //  //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
+                            //  //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
 
 
                             //Send email to assessment@eras.eirs.gov.ng

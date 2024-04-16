@@ -2045,11 +2045,8 @@ namespace EIRS.Web.Controllers
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
-                    JavaScriptSerializer js = new();
-                   // var com = new RegularLoanReasonToDecline { LoanApplicationId = obj.LoanApplicationId, Comment = obj.Comment };
-                    var re = js.Serialize(result);
-                    //JObject joResponse = JObject.Parse(result);
-                    //printObj = JsonConvert.DeserializeObject<ResultModel>(re);
+                    JObject joResponse = JObject.Parse(result);
+                    printObj = JsonConvert.DeserializeObject<ResultModel>(result);
 
                     lgisNewFile = InsertIntoFile(printObj, PageNo);
 
@@ -7110,7 +7107,7 @@ namespace EIRS.Web.Controllers
             //string url = getUrl();
             //bool itCan = new UtilityController().CheckAccess(url);
             //if (!itCan) { return RedirectToAction("AccessDenied", "Utility"); }
-           return View();
+            return View();
         }
 
         [HttpPost]

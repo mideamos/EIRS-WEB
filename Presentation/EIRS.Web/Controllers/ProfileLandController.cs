@@ -27,7 +27,7 @@ namespace EIRS.Web.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         public JsonResult LoadData()
         {
@@ -73,14 +73,14 @@ namespace EIRS.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpGet]
         public ActionResult ListWithExport()
         {
             return View();
         }
 
-        
+
         [HttpPost]
         public JsonResult LoadExportData()
         {
@@ -126,7 +126,7 @@ namespace EIRS.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpGet]
         public ActionResult ExportData()
         {
@@ -154,14 +154,14 @@ namespace EIRS.Web.Controllers
             return ExportToExcel(lstLandData, this.RouteData, strColumns, "Land");
         }
 
-        
+
         public ActionResult Search()
         {
             return View();
         }
 
         [HttpPost]
-        
+
         public ActionResult Search(FormCollection pObjCollection)
         {
             string mStrPlotNumber = pObjCollection.Get("txtPlotNumber");
@@ -198,7 +198,7 @@ namespace EIRS.Web.Controllers
             UI_FillLandStreetConditionDropDown(new Land_StreetCondition() { intStatus = 1, IncludeLandStreetConditionIds = pObjLandViewModel.LandStreetConditionID.ToString() });
         }
 
-        
+
         public ActionResult Add()
         {
             UI_FillDropDown();
@@ -206,7 +206,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult Add(LandViewModel pObjLandModel)
         {
@@ -272,7 +272,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult Edit(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -327,7 +327,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost()]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult Edit(LandViewModel pObjLandModel)
         {
@@ -393,7 +393,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult Details(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -456,7 +456,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult SearchIndividual(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -511,7 +511,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult SearchIndividual(FormCollection pObjCollection)
         {
             string mStrName = pObjCollection.Get("txtName");
@@ -530,7 +530,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindIndividualTable_SingleSelect", lstIndividual.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchCorporate(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -585,7 +585,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult SearchCorporate(FormCollection pObjCollection)
         {
             string mStrCompanyName = pObjCollection.Get("txtCompanyName");
@@ -604,7 +604,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindCompanyTable_SingleSelect", lstCompany.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchGovernment(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -659,7 +659,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult SearchGovernment(FormCollection pObjCollection)
         {
             string mStrGovernmentName = pObjCollection.Get("txtGovernmentName");
@@ -678,7 +678,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindGovernmentTable_SingleSelect", lstGovernment.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchSpecial(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -733,7 +733,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult SearchSpecial(FormCollection pObjCollection)
         {
             string mStrSpecialName = pObjCollection.Get("txtSpecialName");
@@ -770,7 +770,7 @@ namespace EIRS.Web.Controllers
             UI_FillNotificationMethodDropDown(new Notification_Method() { intStatus = 1, IncludeNotificationMethodIds = pObjIndividualViewModel.NotificationMethodID.ToString() });
         }
 
-        
+
         public ActionResult AddIndividual(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -811,7 +811,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddIndividual(TPIndividualViewModel pObjIndividualModel)
         {
@@ -981,7 +981,7 @@ namespace EIRS.Web.Controllers
             UI_FillNotificationMethodDropDown(new Notification_Method() { intStatus = 1, IncludeNotificationMethodIds = pObjCompanyViewModel.NotificationMethodID.ToString() });
         }
 
-        
+
         public ActionResult AddCorporate(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1022,7 +1022,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddCorporate(TPCompanyViewModel pObjCompanyModel)
         {
@@ -1185,7 +1185,7 @@ namespace EIRS.Web.Controllers
             UI_FillTaxPayerRoleDropDown(new TaxPayer_Roles() { TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual, AssetTypeID = (int)EnumList.AssetTypes.Land });
         }
 
-        
+
         public ActionResult AddGovernment(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1226,7 +1226,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddGovernment(TPGovernmentViewModel pObjGovernmentModel)
         {
@@ -1386,7 +1386,7 @@ namespace EIRS.Web.Controllers
             UI_FillTaxPayerRoleDropDown(new TaxPayer_Roles() { TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual, AssetTypeID = (int)EnumList.AssetTypes.Land });
         }
 
-        
+
         public ActionResult AddSpecial(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1427,7 +1427,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddSpecial(TPSpecialViewModel pObjSpecialModel)
         {

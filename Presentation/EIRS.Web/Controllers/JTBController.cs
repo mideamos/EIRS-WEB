@@ -140,7 +140,7 @@ namespace EIRS.Web.Controllers
             return View();
         }
 
-        
+
         public JsonResult GetNonIndividualData()
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();

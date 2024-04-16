@@ -14,13 +14,13 @@ namespace EIRS.Web.Controllers
     public partial class ProfileController : BaseController
     {
         #region PAYE
-        
+
         public ActionResult PAYE()
         {
             return View();
         }
 
-        
+
         public ActionResult PAYEPCME()
         {
             return View();
@@ -77,7 +77,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PAYEPCME_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -155,7 +155,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PAYEPCME_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -232,13 +232,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PAYEPCFBE()
         {
             return View();
         }
 
-        
+
         public ActionResult PAYEPCFBE_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -262,7 +262,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PAYEPCFBE_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -447,13 +447,13 @@ namespace EIRS.Web.Controllers
         #endregion
 
         #region DirectAssessment
-        
+
         public ActionResult DirectAssessment()
         {
             return View();
         }
 
-        
+
         public ActionResult DA()
         {
             return View();
@@ -510,7 +510,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult DA_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -588,7 +588,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult DA_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -665,7 +665,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult DAFBSE()
         {
             return View();
@@ -727,7 +727,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult DAFBSE_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -805,7 +805,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult DAFBSE_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -882,7 +882,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult DAMEBO()
         {
             return View();
@@ -939,7 +939,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult DAMEBO_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1018,7 +1018,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult DAMEBO_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1097,19 +1097,19 @@ namespace EIRS.Web.Controllers
         #endregion
 
         #region WithHoldingTax
-        
+
         public ActionResult WithHoldingTax()
         {
             return View();
         }
 
-        
+
         public ActionResult WTC()
         {
             return View();
         }
 
-        
+
         public ActionResult WTC_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1133,7 +1133,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WTC_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1315,13 +1315,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WTCCB()
         {
             return View();
         }
 
-        
+
         public ActionResult WTCCB_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1345,7 +1345,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WTCCB_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1369,7 +1369,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-         public JsonResult GetWTCCBData()
+        public JsonResult GetWTCCBData()
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
 
@@ -1527,13 +1527,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WTCSL()
         {
             return View();
         }
 
-        
+
         public ActionResult WTCSL_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1557,7 +1557,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WTCSL_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1742,19 +1742,19 @@ namespace EIRS.Web.Controllers
         #endregion
 
         #region Vehicle License Registration 
-        
+
         public ActionResult VehicleLicenseRegistration()
         {
             return View();
         }
 
-        
+
         public ActionResult VL()
         {
             return View();
         }
 
-        
+
         public ActionResult VL_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1778,7 +1778,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult VL_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1959,13 +1959,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult VLC()
         {
             return View();
         }
 
-        
+
         public ActionResult VLC_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1989,7 +1989,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult VLC_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -2171,13 +2171,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult VLP()
         {
             return View();
         }
 
-        
+
         public ActionResult VLP_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -2201,7 +2201,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult VLP_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -2388,19 +2388,19 @@ namespace EIRS.Web.Controllers
 
         #region Presumptive Taxes
 
-        
+
         public ActionResult PresumptiveTaxes()
         {
             return View();
         }
 
-        
+
         public ActionResult PT()
         {
             return View();
         }
 
-        
+
         public ActionResult PT_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -2424,7 +2424,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PT_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -2609,19 +2609,19 @@ namespace EIRS.Web.Controllers
         #endregion
 
         #region Business Premises
-        
+
         public ActionResult BusinessPremises()
         {
             return View();
         }
 
-        
+
         public ActionResult BP()
         {
             return View();
         }
 
-        
+
         public ActionResult BP_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -2645,7 +2645,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult BP_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -2830,19 +2830,19 @@ namespace EIRS.Web.Controllers
         #endregion
 
         #region Consumption Tax
-        
+
         public ActionResult ConsumptionTax()
         {
             return View();
         }
 
-        
+
         public ActionResult CTC()
         {
             return View();
         }
 
-        
+
         public ActionResult CTC_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -2866,7 +2866,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CTC_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3048,13 +3048,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult CTCB()
         {
             return View();
         }
 
-        
+
         public ActionResult CTCB_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3078,7 +3078,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CTCB_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3260,13 +3260,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult CTCR()
         {
             return View();
         }
 
-        
+
         public ActionResult CTCR_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3290,7 +3290,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CTCR_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3472,13 +3472,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult CTCEC()
         {
             return View();
         }
 
-        
+
         public ActionResult CTCEC_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3502,7 +3502,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CTCEC_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3684,13 +3684,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult CTCGH()
         {
             return View();
         }
 
-        
+
         public ActionResult CTCGH_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3714,7 +3714,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CTCGH_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3896,13 +3896,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult CTCH()
         {
             return View();
         }
 
-        
+
         public ActionResult CTCH_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -3926,7 +3926,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CTCH_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4108,13 +4108,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult CTCM()
         {
             return View();
         }
 
-        
+
         public ActionResult CTCM_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4138,7 +4138,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CTCM_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4320,13 +4320,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult CTCODT()
         {
             return View();
         }
 
-        
+
         public ActionResult CTCODT_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4350,7 +4350,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CTCODT_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4534,18 +4534,18 @@ namespace EIRS.Web.Controllers
         #endregion
 
         #region Land Use Charge
-        
+
         public ActionResult LandUseCharges()
         {
             return View();
         }
-        
+
         public ActionResult LUC()
         {
             return View();
         }
 
-        
+
         public ActionResult LUC_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4569,7 +4569,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult LUC_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4753,19 +4753,19 @@ namespace EIRS.Web.Controllers
         #endregion
 
         #region Pools Betting
-        
+
         public ActionResult PoolsBetting()
         {
             return View();
         }
 
-        
+
         public ActionResult PB()
         {
             return View();
         }
 
-        
+
         public ActionResult PB_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4789,7 +4789,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PB_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -4971,13 +4971,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBCO()
         {
             return View();
         }
 
-        
+
         public ActionResult PBCO_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5001,7 +5001,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBCO_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5183,13 +5183,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBGMO()
         {
             return View();
         }
 
-        
+
         public ActionResult PBGMO_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5213,7 +5213,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBGMO_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5395,13 +5395,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBLO()
         {
             return View();
         }
 
-        
+
         public ActionResult PBLO_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5425,7 +5425,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBLO_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5607,13 +5607,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBLTA()
         {
             return View();
         }
 
-        
+
         public ActionResult PBLTA_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5637,7 +5637,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBLTA_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5819,13 +5819,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBLA()
         {
             return View();
         }
 
-        
+
         public ActionResult PBLA_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -5849,7 +5849,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBLA_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6031,13 +6031,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBLTO()
         {
             return View();
         }
 
-        
+
         public ActionResult PBLTO_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6061,7 +6061,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBLTO_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6243,13 +6243,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBOSBA()
         {
             return View();
         }
 
-        
+
         public ActionResult PBOSBA_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6273,7 +6273,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBOSBA_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6455,13 +6455,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBOSBO()
         {
             return View();
         }
 
-        
+
         public ActionResult PBOSBO_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6485,7 +6485,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBOSBO_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6667,13 +6667,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBPA()
         {
             return View();
         }
 
-        
+
         public ActionResult PBPA_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6697,7 +6697,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBPA_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6879,13 +6879,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PBPP()
         {
             return View();
         }
 
-        
+
         public ActionResult PBPP_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -6909,7 +6909,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult PBPP_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7094,19 +7094,19 @@ namespace EIRS.Web.Controllers
         #endregion
 
         #region Waste Management
-        
+
         public ActionResult WasteManagement()
         {
             return View();
         }
 
-        
+
         public ActionResult CWM()
         {
             return View();
         }
 
-        
+
         public ActionResult CWM_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7130,7 +7130,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult CWM_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7312,13 +7312,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WMC()
         {
             return View();
         }
 
-        
+
         public ActionResult WMC_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7342,7 +7342,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WMC_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7524,13 +7524,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WMCR()
         {
             return View();
         }
 
-        
+
         public ActionResult WMCR_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7554,7 +7554,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WMCR_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7736,13 +7736,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WMR()
         {
             return View();
         }
 
-        
+
         public ActionResult WMR_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7766,7 +7766,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WMR_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7948,13 +7948,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WMRe()
         {
             return View();
         }
 
-        
+
         public ActionResult WMRe_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -7978,7 +7978,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WMRe_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -8160,13 +8160,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WMH()
         {
             return View();
         }
 
-        
+
         public ActionResult WMH_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -8190,7 +8190,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WMH_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -8372,13 +8372,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WMS()
         {
             return View();
         }
 
-        
+
         public ActionResult WMS_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -8402,7 +8402,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WMS_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -8584,13 +8584,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WMEC()
         {
             return View();
         }
 
-        
+
         public ActionResult WMEC_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -8614,7 +8614,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WMEC_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -8796,13 +8796,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult WMHO()
         {
             return View();
         }
 
-        
+
         public ActionResult WMHO_TaxPayer(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -8826,7 +8826,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult WMHO_Asset(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)

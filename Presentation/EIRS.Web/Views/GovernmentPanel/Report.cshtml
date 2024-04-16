@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Tax Payer Report";
+    ViewBag.PageHeader = "Tax Payer Report";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i> Search Filters
+                </div>
+                <div class="tools">
+                    <a class="collapse"></a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                @using (Ajax.BeginForm("Report", "GovernmentPanel", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Post", OnBegin = "jsfn_ShowLoading", OnSuccess = "jsfn_bindTable();", OnComplete = "jsfn_HideLoading" }))
+                {
+                    @Html.ValidationSummary(true)
+
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Tax Year</label>
+                                    @Html.DropDownList("TaxYear", (SelectList)ViewBag.YearList, new { @class = "form-control bs-select", @tabindex = "1", @data_live_search = "true" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Month</label>
+                                    @Html.DropDownList("TaxMonth", (SelectList)ViewBag.MonthList, "All Months", new { @class = "form-control bs-select", @tabindex = "2", @data_live_search = "true" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions right">
+                        <input type="submit" value="Generate Report" tabindex="4" class="btn btn-theme" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-content-inner" id="dvData">
+
+</div>
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerReportList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

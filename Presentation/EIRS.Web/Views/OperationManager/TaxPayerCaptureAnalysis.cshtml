@@ -1,0 +1,82 @@
+﻿@using EIRS.Common;
+@model EIRS.Web.Models.TaxPayerCaptureAnalysisViewModel
+
+@{
+    ViewBag.Title = "Operation Manager - Tax Payer Capture Analysis";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Tax Payer Capture Analysis
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("TaxPayerCaptureAnalysis", "OperationManager", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.FromDate, new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control",@placeholder = "Enter From Date", @id = "txtFromDate",@tabindex="1" })
+                            @Html.ValidationMessageFor(m => m.FromDate, "", new { @class = "help-block" })
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ToDate, new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", @placeholder = "Enter To Date", @id = "txtToDate", @tabindex = "2" })
+                            @Html.ValidationMessageFor(m => m.ToDate, "", new { @class = "help-block" })
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.TaxPayerTypeID, new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(m => m.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", new { @class = "form-control bs-select", @tabindex = "3" })
+                            @Html.ValidationMessageFor(m => m.TaxPayerTypeID, "", new { @class = "help-block" })
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.TaxOfficeID, new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(m => m.TaxOfficeID, (SelectList)ViewBag.YearList, "All Tax Office", new { @class = "form-control bs-select", @tabindex = "4" })
+                            @Html.ValidationMessageFor(m => m.TaxOfficeID, "", new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="submit" tabindex="5"> Export </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerCaptureAnalysis.js"></script>
+    }
+
+
+
+
+

@@ -1,0 +1,370 @@
+﻿@*@model EIRS.Web.Models.UserViewModel
+
+    @{
+        ViewBag.Title = "Add New User";
+    }
+
+    @section Header {
+        <link href="/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" />
+    }
+
+    <div class="title">
+        <h1>
+            Manage Users : Add New User
+        </h1>
+        <hr>
+    </div>
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">
+                Add Users
+            </div>
+            <div class="actions">
+                <a href="@Url.Action("List","User")" class="btn btn-redtheme"> Cancel </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            @using (Html.BeginForm("Add", "User", FormMethod.Post, htmlAttributes: new { @enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(m => m.SignatureFilePath, new { @Value = (Model != null ? Model.SignatureFilePath : ""), @id = "hdnSignatureFilePath" })
+
+                if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.Message
+                    </div>
+                }
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UserTypeID, htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.UserTypeID, (SelectList)ViewBag.UserTypeList, "Select User Type", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "1", @id = "cboUserType" })
+                            @Html.ValidationMessageFor(model => model.UserTypeID, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.UserName, htmlAttributes: new { @class = "form-control", @tabindex = "2", @placeholder = "Enter User Name" })
+                            @Html.ValidationMessageFor(model => model.UserName, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.ContactName, htmlAttributes: new { @class = "form-control", @tabindex = "3", @placeholder = "Enter Contact Name" })
+                            @Html.ValidationMessageFor(model => model.ContactName, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Email, htmlAttributes: new { @class = "form-control", @tabindex = "4", @placeholder = "Enter Email Address" })
+                            @Html.ValidationMessageFor(model => model.Email, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ContactNumber, htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.ContactNumber, htmlAttributes: new { @class = "form-control", @tabindex = "5", @placeholder = "Enter Contact Number" })
+                            @Html.ValidationMessageFor(model => model.ContactNumber, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6 staff">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsTOManager, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group">
+                                <div class="icheck-inline">
+                                    <label>
+                                        @Html.CheckBoxFor(model => model.IsTOManager, new Dictionary<string, object> { { "data-checkbox", "icheckbox_square-green" }, { "class", "icheck" }, { "tabindex", "6" }, { "id", "chkIsManager" } })
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row staff">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TaxOfficeID, htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.TaxOfficeID, (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "7", @id = "cboTaxOffice" })
+                            @Html.ValidationMessageFor(model => model.TaxOfficeID, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6 manager">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TOManagerID, htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.TOManagerID, (SelectList)ViewBag.ManagerList, "Select Manager", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "8", @id = "cboManager" })
+                            @Html.ValidationMessageFor(model => model.TOManagerID, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+                            @Html.PasswordFor(model => model.Password, htmlAttributes: new { @class = "form-control", @tabindex = "9", @placeholder = "Enter Password" })
+                            @Html.ValidationMessageFor(model => model.Password, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+                            @Html.PasswordFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "form-control", @tabindex = "10", @placeholder = "Enter Confirm Password" })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row staff">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsDirector, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group">
+                                <div class="icheck-inline">
+                                    <label>
+                                        @Html.CheckBoxFor(model => model.IsDirector, new Dictionary<string, object> { { "data-checkbox", "icheckbox_square-green" }, { "class", "icheck" }, { "tabindex", "6" } })
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.SignatureFilePath, new { @class = "control-label" })
+                            <div>
+                                <div class="fileinput @(Model != null && !string.IsNullOrWhiteSpace(Model.SignatureFilePath) ? "fileinput-exists" : "fileinput-new")" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
+                                        @if (Model != null && !string.IsNullOrEmpty(Model.SignatureFilePath))
+                                        {
+                                            <img src="/Document/@Model.SignatureFilePath" alt="Organization Users" />
+                                        }
+                                    </div>
+                                    <div>
+                                        <span class="btn default btn-file">
+                                            <span class="fileinput-new"> Select image </span>
+                                            <span class="fileinput-exists"> Change </span>
+                                            @Html.TextBoxFor(m => m.SignatureFileUpload, new { type = "file", id = "fuSignatureFile", name = "fuSignatureFile", accept = "image/*" })
+                                        </span>
+                                        <a class="btn red fileinput-exists remove"> Remove </a>
+                                    </div>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.SignatureFileUpload, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="text-right col-sm-12">
+                        <div class="form-group">
+                            <br />
+                            <input type="submit" class="btn btn-theme" tabindex="11" value="Save" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @section Footer {
+        <script src="/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+        <script type="text/javascript" src="~/Scripts/jsUserDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    }*@
+
+
+@model EIRS.Web.Models.UserViewModel
+
+@{
+    ViewBag.Title = "Add New User";
+}
+
+@section Header {
+    <link href="/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" />
+}
+
+<div class="title">
+    <h1>
+        Manage Users : Add New User
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add Users
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","User")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Add", "User", FormMethod.Post, htmlAttributes: new { @enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(m => m.SignatureFilePath, new { @Value = (Model != null ? Model.SignatureFilePath : ""), @id = "hdnSignatureFilePath" })
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserTypeID, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.UserTypeID, (SelectList)ViewBag.UserTypeList, "Select User Type", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "1", @id = "cboUserType" })
+                        @Html.ValidationMessageFor(model => model.UserTypeID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.UserName, htmlAttributes: new { @class = "form-control", @tabindex = "2", @placeholder = "Enter User Name" })
+                        @Html.ValidationMessageFor(model => model.UserName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.ContactName, htmlAttributes: new { @class = "form-control", @tabindex = "3", @placeholder = "Enter Contact Name" })
+                        @Html.ValidationMessageFor(model => model.ContactName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Email, htmlAttributes: new { @class = "form-control", @tabindex = "4", @placeholder = "Enter Email Address" })
+                        @Html.ValidationMessageFor(model => model.Email, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ContactNumber, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.ContactNumber, htmlAttributes: new { @class = "form-control", @tabindex = "5", @placeholder = "Enter Contact Number" })
+                        @Html.ValidationMessageFor(model => model.ContactNumber, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6 staff">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsTOManager, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group">
+                            <div class="icheck-inline">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.IsTOManager, new Dictionary<string, object> { { "data-checkbox", "icheckbox_square-green" }, { "class", "icheck" }, { "tabindex", "6" }, { "id", "chkIsManager" } })
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row staff">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxOfficeID, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.TaxOfficeID, (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "7", @id = "cboTaxOffice" })
+                        @Html.ValidationMessageFor(model => model.TaxOfficeID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6 manager">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TOManagerID, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.TOManagerID, (SelectList)ViewBag.ManagerList, "Select Manager", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "8", @id = "cboManager" })
+                        @Html.ValidationMessageFor(model => model.TOManagerID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+                        @Html.PasswordFor(model => model.Password, htmlAttributes: new { @class = "form-control", @tabindex = "9", @placeholder = "Enter Password" })
+                        @Html.ValidationMessageFor(model => model.Password, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+                        @Html.PasswordFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "form-control", @tabindex = "10", @placeholder = "Enter Confirm Password" })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row staff">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsDirector, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group">
+                            <div class="icheck-inline">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.IsDirector, new Dictionary<string, object> { { "data-checkbox", "icheckbox_square-green" }, { "class", "icheck" }, { "tabindex", "6" } })
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SignatureFilePath, new { @class = "control-label" })
+                        <div>
+                            <div class="fileinput @(Model != null && !string.IsNullOrWhiteSpace(Model.SignatureFilePath) ? "fileinput-exists" : "fileinput-new")" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
+                                    @if (Model != null && !string.IsNullOrEmpty(Model.SignatureFilePath))
+                                    {
+                                        <img src="/Document/@Model.SignatureFilePath" alt="Organization Users" />
+                                    }
+                                </div>
+                                <div>
+                                    <span class="btn default btn-file">
+                                        <span class="fileinput-new"> Select image </span>
+                                        <span class="fileinput-exists"> Change </span>
+                                        @Html.TextBoxFor(m => m.SignatureFileUpload, new { type = "file", id = "fuSignatureFile", name = "fuSignatureFile", accept = "image/*" })
+                                    </span>
+                                    <a class="btn red fileinput-exists remove"> Remove </a>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.SignatureFileUpload, "", new { @class = "red-text" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <br />
+                        <input type="submit" class="btn btn-theme" tabindex="11" value="Save" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Footer {
+    <script src="/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/Scripts/jsUserDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+

@@ -1,0 +1,39 @@
+﻿@{
+
+    ViewBag.Title = "Pools Betting - Lotto Agents";
+}
+
+<div class="title">
+    <h1>Pools Betting - Lotto Agents</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Pools Betting - Lotto Agents
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPBLTA">
+            <thead class="red-th">
+                <tr>
+                    <th>Profile Ref</th>
+                    <th>Profile Name</th>
+                    <th>Tax Payers Count</th>
+                    <th>Asset Count</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{Html.RenderPartial("_ProfileDetailPopup"); }
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsPBLTAList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

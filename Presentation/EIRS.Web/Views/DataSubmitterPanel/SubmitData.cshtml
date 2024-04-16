@@ -1,0 +1,94 @@
+﻿@model EIRS.Web.Models.DS_DocumentSubmissionViewModel
+
+@{
+    ViewBag.Title = "Submit Data";
+}
+
+
+@section Header{
+    <link href="/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" />
+}
+
+<div class="title">
+    <h1>
+        Data Submission
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Data Submission
+        </div>
+        <div class="actions">
+            
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("SubmitData", "DataSubmitterPanel", FormMethod.Post, htmlAttributes: new { @id = "frmSubmitData", @enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DataSubmissionTypeID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.DataSubmissionTypeID, (SelectList)ViewBag.DataSubmissionTypeList, "Select Data Submission Type", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "3", @id = "cboDataSubmissionType" })
+                        @Html.ValidationMessageFor(model => model.DataSubmissionTypeID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxYear, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.TaxYear, (SelectList)ViewBag.YearList, "Select Tax Year", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "2" })
+                        @Html.ValidationMessageFor(model => model.TaxYear, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DocumentFile, new { @class = "control-label" })
+                        <div>
+                            <div class="fileinput fileinput-new" id="dvDocumentFile" data-provides="fileinput">
+                                <div class="input-group input-large">
+                                    <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                        <span class="fileinput-filename"></span>
+                                    </div>
+                                    <span class="input-group-addon btn default btn-file">
+                                        <span class="fileinput-new"> Select file </span>
+                                        <span class="fileinput-exists"> Change </span>
+                                        @Html.TextBoxFor(m => m.DocumentFile, new { type = "file", id = "fuDocumentFile", @tabindex = "4", name = "fuDocumentFile", accept = ".xlsx" })
+                                    </span>
+                                    <a class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.DocumentFile, "", new { @class = "red-text" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="3" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Footer {
+    <script src="/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+}

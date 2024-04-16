@@ -1,0 +1,137 @@
+﻿@model EIRS.Web.Models.ManualPoAViewModel
+
+@{
+
+    ViewBag.Title = "Manual PoA";
+}
+
+@section header {
+    <link href="~/Content/Plugins/typeahead/typeahead.css" rel="stylesheet" />
+}
+
+<div class="title">
+    <h1>
+        Manual PoA
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add New PoA
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("ManualPoA", "OperationManager", FormMethod.Post, htmlAttributes: new { @id = "frmManualPoA" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(m => m.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", new { @class = "form-control bs-select", @tabindex = "1", @data_live_search = "true", @id = "cboTaxPayerType" })
+                        @Html.ValidationMessageFor(model => model.TaxPayerTypeID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.HiddenFor(model => model.TaxPayerID, new { @id = "hdnTaxPayerID" })
+                        @Html.LabelFor(model => model.TaxPayerID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.TaxPayerName, "", new { @class = "form-control", @id = "txtTaxPayer", @autocomplete = "off", @tabindex="2", @placeholder = "Enter Tax Payer Name" })
+                        @Html.ValidationMessageFor(model => model.TaxPayerID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RevenueStreamID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.RevenueStreamID, (SelectList)ViewBag.RevenueStreamList, "Select Revenue Stream", new { @tabindex = "3", @class = "form-control bs-select", @id = "cboRevenueStream" })
+                        @Html.ValidationMessageFor(model => model.RevenueStreamID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RevenueSubStreamID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.RevenueSubStreamID, (SelectList)ViewBag.RevenueSubStreamList, "Select Revenue Sub Stream", new { @tabindex = "4", @class = "form-control bs-select", @id = "cboRevenueSubStream" })
+                        @Html.ValidationMessageFor(model => model.RevenueSubStreamID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AgencyID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.AgencyID, (SelectList)ViewBag.AgencyList, "Select Agency", new { @tabindex = "5", @class = "form-control bs-select" })
+                        @Html.ValidationMessageFor(model => model.AgencyID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SettlementMethodID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.SettlementMethodID, (SelectList)ViewBag.SettlementMethodList, "Select Settlement Method", new { @tabindex = "6", @class = "form-control bs-select" })
+                        @Html.ValidationMessageFor(model => model.SettlementMethodID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TransactionRefNo, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.TransactionRefNo, new { @tabindex = "7", @class = "form-control", @placeholder= "Enter Transaction Ref No" })
+                        @Html.ValidationMessageFor(model => model.TransactionRefNo, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.PaymentDate, new { @tabindex = "8", @class = "form-control", @placeholder = "Enter Payment Date",@id= "txtPaymentDate" })
+                        @Html.ValidationMessageFor(model => model.PaymentDate, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.Amount, htmlAttributes: new { @tabindex = "9", @placeholder = "Enter Transfer Amount", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Amount, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Notes, new { @tabindex = "10", @class = "form-control", @placeholder = "Enter Notes",@Rows="3" })
+                        @Html.ValidationMessageFor(model => model.Notes, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="11" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Footer {
+    <script src="~/Content/Plugins/typeahead/handlebars.min.js"></script>
+    <script src="~/Content/Plugins/typeahead/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jsManualPoA.js"></script>
+}

@@ -1,0 +1,105 @@
+﻿@model EIRS.Models.LoginViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "StaffAccess";
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Staff Access
+            </h1>
+            <hr>
+            <p>
+                Only registered tax payers can gain access to this system
+            </p>
+        </div>
+
+        <div class="row custom-tabs">
+            <div class="col-sm-4">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Login
+                        </div>
+                    </div>
+                    <div class="portlet-body ">
+                        <p>
+                            Select one option from below
+                        </p>
+                        <ul class="nav nav-tabs nav-pills nav-stacked margin-0">
+                            <li>
+                                <a href="@Url.Action("Individual", "Login")"><i class="fa fa-angle-right"></i> Tax Payer - Individual</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Company", "Login")"><i class="fa fa-angle-right"></i>  Tax Payer - Company</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Government", "Login")"><i class="fa fa-angle-right"></i>  Tax Payer - Government</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("AdminAccess", "Login")"><i class="fa fa-angle-right"></i> Admin Access</a>
+                            </li>
+                            <li class="active">
+                                <a href="@Url.Action("StaffAccess", "Login")"><i class="fa fa-angle-right"></i>  Staff Access</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("PartnerAccess", "Login")"><i class="fa fa-angle-right"></i>  Partner Access</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("DataSubmitter", "Login")"><i class="fa fa-angle-right"></i>  Data Submitters</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Log into EIRS as EIRS Staff
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-sm-7">
+                                @using (Html.BeginForm("StaffAccess", "Login", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+
+                                    if (ViewBag.Message != null)
+                                    {
+                                        <div class="alert alert-danger">
+                                            <span>@ViewBag.Message</span>
+                                        </div>
+                                    }
+                                    <div class="form-group">
+                                        @Html.LabelFor(Model => Model.EmailAddress, new { @class = "control-label" })
+                                        <span class="pull-right"><a> Request Access</a></span>
+                                        @Html.TextBoxFor(Model => Model.EmailAddress, new { @class = "form-control", @autocomplete = "off", @tabindex="1", @placeholder = "Enter Email Address" })
+                                        @Html.ValidationMessageFor(Model => Model.EmailAddress, "", new { @class = "help-block" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(Model => Model.Password, new { @class = "control-label" })
+                                        <span class="pull-right"><a> Forgot Password</a></span>
+                                        @Html.TextBoxFor(Model => Model.Password, new { @class = "form-control", @autocomplete = "off", @tabindex = "2", @placeholder = "Enter Password", @type = "password" })
+                                        @Html.ValidationMessageFor(Model => Model.Password, "", new { @class = "help-block" })
+                                    </div>
+                                    <div class="form-group text-right">
+                                        <button type="submit" class="btn btn-theme">Login</button>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-sm-5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

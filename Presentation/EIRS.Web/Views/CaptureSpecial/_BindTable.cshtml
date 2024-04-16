@@ -1,0 +1,48 @@
+﻿@model IList<EIRS.BOL.usp_GetSpecialList_Result>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblSpecial">
+    <thead class="red-th">
+        <tr>
+            <th>RIN</th>
+            <th>Special Name</th>
+            <th>TIN</th>
+            <th class="desktop">Contact Name</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Count > 0)
+    {
+        <tbody>
+            @foreach (var vSpecial in Model)
+            {
+                <tr>
+                    <td>@vSpecial.SpecialRIN</td>
+                    <td>@vSpecial.SpecialTaxPayerName</td>
+                    <td>@vSpecial.TIN</td>
+                    <td>@vSpecial.ContactName</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a onclick="javascript:jsfn_SpecialInformation(@vSpecial.SpecialID)">
+                                        Quick View
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Details", "CaptureSpecial", new { id = vSpecial.SpecialID, name=vSpecial.SpecialRIN.ToSeoUrl() })">
+                                        Tax Payer Details
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>
+

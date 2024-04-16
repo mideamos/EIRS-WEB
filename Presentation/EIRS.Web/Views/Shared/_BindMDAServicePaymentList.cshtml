@@ -1,0 +1,32 @@
+﻿@model IList<EIRS.BOL.usp_GetMDAServiceBasedSettlement_Result>
+@using EIRS.Common
+
+<table class="table table-bordered table-striped ">
+    <thead class="thead-theme">
+        <tr>
+            <th>Payment Ref</th>
+            <th>Payment Date</th>
+            <th>Amount Paid</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var aitem in Model)
+            {
+                <tr>
+                    <td>@aitem.SettlementRefNo</td>
+                    <td>@CommUtil.GetFormatedDate(aitem.SettlementDate)</td>
+                    <td>@CommUtil.GetFormatedCurrency(aitem.SettlementAmount)</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" align="center">No Payment Found</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

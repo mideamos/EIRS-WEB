@@ -1,0 +1,41 @@
+﻿@model IList<EIRS.BOL.usp_EM_GetBankList_Result>
+@{
+    ViewBag.Title = "ERAS Manual - Classification Bank";
+}
+
+<div class="title">
+    <h1>ERAS Manual - Manage Banks</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Banks
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Add","EMBank")" class="btn btn-theme">
+                Add New
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBank">
+            <thead class="red-th">
+                <tr>
+                    <th>Bank Name</th>
+                    <th>Account Number</th>
+                    <th>Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @{Html.RenderPartial("_BindTable", Model);}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsEMBankList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

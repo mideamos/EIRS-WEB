@@ -1,0 +1,74 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - JTB Pull Data";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - JTB Pull Data
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmTaxOfficeManagerSummary" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tax Payer Type:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("TaxPayerType", (IList<SelectListItem>)ViewBag.TaxPayerList, "All Tax Payer Type", new { @class = "form-control bs-select", @id = "cboTaxPayerType" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">From Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtFromDate", "", new { @class = "form-control", @id = "txtFromDate", @autocomplete = "off", tabindex = "1", @placeholder = "Enter From Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">To Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtToDate", "", new { @class = "form-control", @id = "txtToDate", @autocomplete = "off", tabindex = "2", @placeholder = "Enter To Date" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnPullData" type="button" tabindex="4"> Pull Data </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="portlet light" id="dvResult">
+    <div class="portlet-title">
+        <div class="caption">Pull Data Status</div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <ul id="ulSyncResult"></ul>
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsJTBPullData.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

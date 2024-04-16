@@ -1,0 +1,35 @@
+﻿@model IList<EIRS.BOL.usp_RPT_GetRevenueStreamReport_Result>
+<div class="portlet light ">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-list"></i> Revenue Stream Report
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%">
+            <thead>
+                <tr>
+                    <th> Revenue Stream </th>
+                    <th> Profiled </th>
+                    <th> Assessed </th>
+                    <th> Notified </th>
+                    <th> Settled </th>
+                    <th> Unsettled </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.RevenueStreamName</td>
+                        <td>@item.ProfiledAmount.GetValueOrDefault().ToString("N2")</td>
+                        <td>@item.AssessedAmount.GetValueOrDefault().ToString("N2")</td>
+                        <td>@item.NotifiedAmount.GetValueOrDefault().ToString("N2")</td>
+                        <td>@item.SettledAmount.GetValueOrDefault().ToString("N2")</td>
+                        <td>@item.UnSettledAmount.GetValueOrDefault().ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

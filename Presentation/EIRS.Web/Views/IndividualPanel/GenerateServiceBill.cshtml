@@ -1,0 +1,137 @@
+﻿@model EIRS.Web.Models.GenerateServiceBillViewModel
+@using EIRS.Common
+@using EIRS.BOL
+
+@{
+    ViewBag.Title = "Individual Tax Payer - Generate Service Bill";
+    //IList<usp_GetMDAServiceForServiceBill_Result> lstMDAService = (IList<usp_GetMDAServiceForServiceBill_Result>)ViewBag.MDAServiceInformation;
+}
+
+<div class="title">
+    <h1>
+        Individual Tax Payer: Add New ServiceBill
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Individual Tax Payer Information
+        </div>
+        <div class="actions">
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript:jsfn_IndividualInformation(@Model.TaxPayerID)">View Details</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Edit","IndividualPanel", new { id=Model.TaxPayerID, name =Model.TaxPayerRIN.ToSeoUrl() })">Edit Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Type: </label>
+                <div class="form-control-static">
+                    @Model.TaxPayerTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer TIN: </label>
+                <div class="form-control-static">
+                    @Model.TaxPayerTIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @Model.ContactNumber
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @Model.TaxPayerTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer EIN: </label>
+                <div class="form-control-static">
+                    @Model.TaxPayerRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Contact  Address: </label>
+                <div class="form-control-static">
+                    @Model.ContactAddress
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Generate New Service Bill
+        </div>
+        <div class="actions">
+            <button id="btnSave" class="btn btn-redtheme">Generate Service Bill</button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("GenerateServiceBill", "IndividualPanel", FormMethod.Post, htmlAttributes: new { @id = "frmAddServiceBill" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(m => m.TaxPayerID, new { @Value = Model.TaxPayerID })
+            @Html.HiddenFor(m => m.TaxPayerTypeID, new { @Value = Model.TaxPayerTypeID })
+            @Html.HiddenFor(m => m.TaxPayerTypeName, new { @Value = Model.TaxPayerTypeName })
+            @Html.HiddenFor(m => m.TaxPayerName, new { @Value = Model.TaxPayerName })
+            @Html.HiddenFor(m => m.TaxPayerTIN, new { @Value = Model.TaxPayerTIN })
+            @Html.HiddenFor(m => m.TaxPayerRIN, new { @Value = Model.TaxPayerRIN })
+            @Html.HiddenFor(m => m.ContactNumber, new { @Value = Model.ContactNumber })
+            @Html.HiddenFor(m => m.ContactAddress, new { @Value = Model.ContactAddress })
+            @Html.HiddenFor(m => m.MDAServiceIds, new { @Value = Model.MDAServiceIds, @id = "hdnMDAServiceIds" })
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblMDAServices">
+                <thead class="red-th">
+                    <tr>
+                        <th>Service Year</th>
+                        <th>Service Name</th>
+                        <th>Service Amount</th>
+                        <th class="action-th all">Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+
+        }
+    </div>
+</div>
+
+
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsGenerateServiceBill.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+

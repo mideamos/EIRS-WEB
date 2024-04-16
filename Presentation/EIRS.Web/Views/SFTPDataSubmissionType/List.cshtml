@@ -1,0 +1,68 @@
+﻿@model IList<EIRS.BOL.usp_SFTP_GetDataSubmissionTypeList_Result>
+@{
+    ViewBag.Title = "SFTP - Data Submission Types";
+}
+
+<div class="title">
+    <h1>SFTP - Data Submission Types</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Data Submission Type
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Add","SFTPDataSubmissionType")" class="btn btn-theme">
+                Add New
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblDataSubmissionType">
+            <thead class="red-th">
+                <tr>
+                    <th>Data Submission Type</th>
+                    <th>Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.DataSubmissionTypeName</td>
+                            <td>@item.ActiveText</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="@Url.Action("Details","SFTPDataSubmissionType", new { id = item.DataSubmissionTypeID, name=item.DataSubmissionTypeName.ToSeoUrl()})">
+                                                View Details
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Edit", "SFTPDataSubmissionType", new { id = item.DataSubmissionTypeID, name=item.DataSubmissionTypeName.ToSeoUrl() })">
+                                                Edit Details
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsSFTPDataSubmissionTypeList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

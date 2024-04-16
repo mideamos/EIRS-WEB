@@ -1,0 +1,85 @@
+﻿@model EIRS.Web.Models.SFTPDataSubmissionTypeViewModel
+
+@{
+    ViewBag.Title = "Add Data Submission Type";
+}
+
+
+@section Header{
+    <link href="/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" />
+}
+
+<div class="title">
+    <h1>
+        Data Submission Type
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add New Data Submission Type
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","SFTPDataSubmissionType")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Add", "SFTPDataSubmissionType", FormMethod.Post, htmlAttributes: new { @id = "frmAddDataSubmissionType", @enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DataSubmissionTypeName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.DataSubmissionTypeName, htmlAttributes: new { @class = "form-control", @tabindex = "1", @placeholder = "Enter Data Submission Type Name" })
+                        @Html.ValidationMessageFor(model => model.DataSubmissionTypeName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TemplatePath, new { @class = "control-label" })
+                        <div>
+                            <div class="fileinput @(Model != null && !string.IsNullOrWhiteSpace(Model.TemplatePath) ? "fileinput-exists" : "fileinput-new")" id="dvtemplate" data-provides="fileinput">
+                                <div class="input-group input-large">
+                                    <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                        <span class="fileinput-filename"> @(Model != null ? Model.TemplatePath : "")</span>
+                                    </div>
+                                    <span class="input-group-addon btn default btn-file">
+                                        <span class="fileinput-new"> Select file </span>
+                                        <span class="fileinput-exists"> Change </span>
+                                        @Html.TextBoxFor(m => m.TemplateFile, new { type = "file", id = "fuTemplateFile", @tabindex = "8", name = "fuTemplateFile", accept = ".xlsx" })
+                                    </span>
+                                    <a class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.TemplatePath, "", new { @class = "red-text" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="3" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Footer {
+    <script src="/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+}

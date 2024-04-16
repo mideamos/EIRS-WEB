@@ -1,0 +1,47 @@
+﻿@model IList<EIRS.BOL.usp_GetSettlementList_Result>
+@using EIRS.Common
+@{
+    ViewBag.Title = "Settlement List";
+}
+
+
+<div class="title">
+    <h1>
+        Settlement
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Settlement</div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblSettlementList">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer</th>
+                    <th class="desktop">Bill Ref</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th class="desktop">Method</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("_SettlementDetailPopup");
+}
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsSettlementList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+

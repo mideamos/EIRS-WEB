@@ -1,0 +1,55 @@
+﻿@model EIRS.Models.GovernmentViewModel
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.GovernmentName, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.TextBoxFor(model => model.GovernmentName, htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Government name", @class="form-control", @disabled = "true" })
+            @Html.ValidationMessageFor(model => model.GovernmentName, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.TIN, htmlAttributes: new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.TIN, htmlAttributes: new { @tabindex = "3", @placeholder = "Enter tax identification number from JTB if available", @class = "form-control", @disabled = "true" })
+            @Html.ValidationMessageFor(model => model.TIN, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", htmlAttributes: new { @tabindex = "6", @class = "form-control bs-select", @id = "cboTaxPayerTypeID", @disabled = "true" })
+            @Html.ValidationMessageFor(model => model.TaxPayerTypeID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.ContactName, htmlAttributes: new { @tabindex = "7", @placeholder = "Enter Contact Name", @class = "form-control", @disabled = "true" })
+            @Html.ValidationMessageFor(model => model.ContactName, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.PresentTaxOfficeID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.PresentTaxOfficeID, (SelectList)ViewBag.UserTaxOffice, "Select Tax Office", htmlAttributes: new { @tabindex = "15", @id = "cboTaxOffice", @class = "form-control bs-select", @width = "100%", @disabled = "true" })
+            @Html.ValidationMessageFor(model => model.PresentTaxOfficeID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.NewTaxOfficeID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.NewTaxOfficeID, (SelectList)ViewBag.LoginTaxOffice, "Select Tax Office", htmlAttributes: new { @tabindex = "15", @id = "cboTaxOffice", @class = "form-control bs-select", @width = "100%" })
+            @Html.ValidationMessageFor(model => model.NewTaxOfficeID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+
+

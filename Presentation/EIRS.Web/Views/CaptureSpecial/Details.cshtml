@@ -1,0 +1,279 @@
+﻿@model usp_GetSpecialList_Result
+@using EIRS.Common
+@using EIRS.BOL
+@{
+    ViewBag.Title = "Special Details";
+}
+<input type="hidden" id="hdnTaxPayerID" value="@Model.SpecialID" />
+<input type="hidden" id="hdnTaxPayerRIN" value="@Model.SpecialRIN" />
+<div class="title">
+    <h1>
+        Special Tax Payer
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Special Tax Payer Information
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript:jsfn_SpecialInformation(@Model.SpecialID)">View Details</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Edit","CaptureSpecial", new { id=Model.SpecialID, name =Model.SpecialRIN.ToSeoUrl() })">Edit Detail</a>
+                    </li>
+                    <li><a onclick="javascript:jsfn_ChangeStatus(@Model.SpecialID)">@(Model.Active == false ? "Mark Active" : "Mark Inactive")</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Type: </label>
+                <div class="form-control-static">
+                    @Model.TaxPayerTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer TIN: </label>
+                <div class="form-control-static">
+                    @Model.TIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @Model.ContactNumber
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Office: </label>
+                <div class="form-control-static">
+                    @Model.TaxOfficeName
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @Model.SpecialTaxPayerName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer RIN: </label>
+                <div class="form-control-static">
+                    @Model.SpecialRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Allocated Tax Officer: </label>
+                <div class="form-control-static">
+                    @Model.TaxOfficerName
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Assets</div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="@Url.Action("SearchBusiness","CaptureSpecial",new { id=Model.SpecialID, name =Model.SpecialRIN.ToSeoUrl() })" )">Business</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchBuilding","CaptureSpecial",new { id=Model.SpecialID, name =Model.SpecialRIN.ToSeoUrl() })" )">Building</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchLand","CaptureSpecial",new { id=Model.SpecialID, name =Model.SpecialRIN.ToSeoUrl() })" )">Land</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchVehicle","CaptureSpecial",new { id=Model.SpecialID, name =Model.SpecialRIN.ToSeoUrl() })" )">Vehicles</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAssetList">
+            <thead class="red-th">
+                <tr>
+                    <th>Asset Type</th>
+                    <th>Asset Name</th>
+                    <th>Tax Payer Role</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Bills</div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="@Url.Action("GenerateAssessment","CaptureSpecial",new { id=Model.SpecialID, name =Model.SpecialRIN.ToSeoUrl() })" )">Assessment Bill</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("GenerateServiceBill","CaptureSpecial",new { id=Model.SpecialID, name =Model.SpecialRIN.ToSeoUrl() })" )">MDA Service Bill</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBillList">
+            <thead class="red-th">
+                <tr>
+                    <th>Date</th>
+                    <th>Bill Type</th>
+                    <th class="desktop">Bill ID</th>
+                    <th>Bill Amount</th>
+                    <th class="desktop">Bill Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Rules</div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Tax Year <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript: jsfn_FilterAssessmentRuleTable(2018);">2018</a>
+                    </li>
+                    <li>
+                        <a onclick="javascript: jsfn_FilterAssessmentRuleTable(2019);">2019</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAssessmentRules">
+            <thead class="red-th">
+                <tr>
+                    <th>Rule Year</th>
+                    <th>Rule Name</th>
+                    <th>Rule Amount</th>
+                    <th>Billed Amount</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Associated MDA Services
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Tax Year <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript: jsfn_FilterMDAServiceTable(2018);">2018</a>
+                    </li>
+                    <li>
+                        <a onclick="javascript: jsfn_FilterMDAServiceTable(2019);">2019</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblMDAServiceList">
+            <thead class="red-th">
+                <tr>
+                    <th>Service Year</th>
+                    <th>Service Name</th>
+                    <th>Service Amount</th>
+                    <th>Billed Amount</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Payments</div>
+        <div class="actions">
+            <div class="btn-group">
+                <span>PoA Balance : </span> @CommUtil.GetFormatedCurrency(ViewBag.PoABalance)
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPaymentList">
+            <thead class="red-th">
+                <tr>
+                    <th>Date</th>
+                    <th>Bill Type</th>
+                    <th class="desktop">Bill ID</th>
+                    <th>Bill Amount</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("_SpecialDetailPopup");
+    Html.RenderPartial("_BuildingDetailPopup");
+    Html.RenderPartial("_VehicleDetailPopup");
+    Html.RenderPartial("_BusinessDetailPopup");
+    Html.RenderPartial("_LandDetailPopup");
+    Html.RenderPartial("_AssessmentRuleDetailPopup");
+    Html.RenderPartial("_ProfileDetailPopup");
+    Html.RenderPartial("_AssessmentRuleItemPopup");
+    Html.RenderPartial("_MDAServiceDetailPopup");
+    Html.RenderPartial("_MDAServiceItemPopup");
+    Html.RenderPartial("_ServiceBillDetailPopup");
+    Html.RenderPartial("_AssessmentDetailPopup");
+    Html.RenderPartial("_BillPaymentPopup");
+    Html.RenderPartial("_SettlementDetailPopup");
+    Html.RenderPartial("_PaymentAccountDetailPopup");
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsSpecialDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

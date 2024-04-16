@@ -1,0 +1,63 @@
+﻿@using EIRS.Common;
+@model EIRS.Web.Models.ExportProfileDataViewModel
+
+@{
+    ViewBag.Title = "Operation Manager - Export Profile Data";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Export Profile Data
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("ExportProfileData", "OperationManager", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ProfileID, new { @class= "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(m=>m.ProfileID, (SelectList)ViewBag.ProfileList, new { @class = "form-control bs-select", @multiple="multiple" })
+                            @Html.ValidationMessageFor(m=>m.ProfileID,"", new { @class="help-block" })
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Year, new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(m => m.Year, (SelectList)ViewBag.YearList, "Select Year", new { @class = "form-control bs-select" })
+                            @Html.ValidationMessageFor(m => m.Year, "", new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="submit" tabindex="4"> Export </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,185 @@
+﻿@model EIRS.Models.ServiceBillViewModel
+@using EIRS.BOL
+@using EIRS.Common
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Processing Fees";
+    IList<ServiceBill_MDAService> lstMDAServices = (IList<ServiceBill_MDAService>)ViewBag.MDAServiceList;
+}
+
+<section class="alternate">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="portlet light compressed-menu">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Request Personal TCC
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <ul class="nav">
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> Search</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> OTP</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> Tax Payer</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> My Income Streams</a>
+                            </li>
+                            <li class="active">
+                                <a><i class="fa fa-angle-right"></i> Processing Fees</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Tax Payer Summary
+                        </div>
+                    </div>
+                    <div class="row view-form">
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer Type: </label>
+                                <div class="form-control-static">
+                                    Individual
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer TIN: </label>
+                                <div class="form-control-static">
+                                    @Model.TaxPayerTIN
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Mobile Number: </label>
+                                <div class="form-control-static">
+                                    @Model.MobileNumber1
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer Name: </label>
+                                <div class="form-control-static">
+                                    @Model.TaxPayerName
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer RIN: </label>
+                                <div class="form-control-static">
+                                    @Model.TaxPayerRIN
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Contact  Address: </label>
+                                <div class="form-control-static">
+                                    @Model.TaxPayerAddress
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @using (Html.BeginForm("ProcessingFees", "RequestPersonalTCC", FormMethod.Post, new { @id = "frmAddServiceBill" }))
+                {
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                Step 5: Processing Fees
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.TaxPayerID, htmlAttributes: new { @value = Model.TaxPayerID })
+                            @Html.HiddenFor(model => model.TaxPayerTypeID, htmlAttributes: new { @value = Model.TaxPayerTypeID })
+                            @Html.HiddenFor(model => model.TaxPayerRIN, htmlAttributes: new { @value = Model.TaxPayerRIN })
+                            @Html.HiddenFor(model => model.TaxPayerAddress, htmlAttributes: new { @value = Model.TaxPayerAddress })
+                            @Html.HiddenFor(model => model.TaxPayerName, htmlAttributes: new { @value = Model.TaxPayerName })
+
+                            @if (ViewBag.Message != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @ViewBag.Message
+                                </div>
+                            }
+
+                                <div class="list-pane">
+                                    @foreach (var vRule in lstMDAServices)
+                                    {
+                                        <div class="list-item clearfix">
+                                            <div class="col-sm-9 list-left-col">
+                                                <h3>
+                                                    @vRule.MDAServiceName
+                                                    <a onclick="javascript:jsfn_ShowMDAServiceItems(@vRule.RowID)">[View Items]</a>
+                                                </h3>
+                                                <div class="desc-row">
+                                                    Amount Charged: @CommUtil.GetFormatedCurrency(vRule.ServiceAmount) <br />
+                                                    Tax Year: @vRule.TaxYear
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3 list-right-col">
+                                                <h4>Amount to Pay</h4>
+                                                <div class="count">
+                                                    <div class="counter-number">@CommUtil.GetFormatedCurrency(vRule.ServiceAmount)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="row info-row">
+                                        <div class="col-sm-6">
+                                            Total Amount
+                                        </div>
+                                        <div class="col-sm-6 text-right">
+                                            @CommUtil.GetFormatedCurrency(lstMDAServices.Sum(t => t.ServiceAmount))
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                        </div>
+                        <div class="portlet-footer text-right">
+                            <a href="@Url.Action("IncomeStream", "RequestPersonalTCC")" class="btn btn-theme btn-outline">
+                                Previous
+                            </a>
+                            <button type="submit" class="btn btn-theme"> Finish </button>
+
+                        </div>
+                    </div>
+
+                   
+                }
+           </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade custom-modal" id="dvViewMDAServiceItemModal" tabindex="-1" role="dialog" aria-labelledby="dvViewMDAServiceItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewMDAServiceItemModalLabel">View Items in <span id="spViewMDAServiceName"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="dvViewMDAServiceItemModalBody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsAddEditServiceBill.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

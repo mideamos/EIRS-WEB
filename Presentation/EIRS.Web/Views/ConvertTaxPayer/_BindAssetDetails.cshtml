@@ -1,0 +1,28 @@
+﻿@model IList<EIRS.Web.AssetDetails>
+@using EIRS.Common
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Assets</div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAssetListDisplay">
+            <thead class="red-th">
+                <tr>
+                    <th>Asset Type</th>
+                    <th>Asset Name</th>
+                    <th>Tax Payer Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vAsset in Model)
+                {
+                    <tr>
+                        <td>@vAsset.AssetTypeName</td>
+                        <td>@vAsset.AssetName</td>
+                        <td>@vAsset.TaxPayerRoleName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

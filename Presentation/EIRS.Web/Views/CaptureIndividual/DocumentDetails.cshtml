@@ -1,0 +1,161 @@
+﻿@model EIRS.BOL.usp_GetTaxPayerDocumentList_Result
+
+@{
+    ViewBag.Title = "Individual Tax Payer - Document Document";
+    usp_GetIndividualList_Result mObjIndividualData = (usp_GetIndividualList_Result)ViewBag.IndividualData;
+}
+
+<input type="hidden" id="hdnFilePreview" value="/Document/@Model.DocumentPath" />
+<div class="title">
+    <h1>
+        Individual Tax Payer: Document Details
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Individual Tax Payer Information
+        </div>
+        <div class="actions">
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript:jsfn_IndividualInformation(@Model.TaxPayerID)">View Details</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Edit","CaptureIndividual", new { id=Model.TaxPayerID, name =mObjIndividualData.IndividualRIN.ToSeoUrl() })">Edit Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Type: </label>
+                <div class="form-control-static">
+                    @mObjIndividualData.TaxPayerTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer TIN: </label>
+                <div class="form-control-static">
+                    @mObjIndividualData.TIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @mObjIndividualData.MobileNumber1
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @mObjIndividualData.FirstName @mObjIndividualData.LastName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer EIN: </label>
+                <div class="form-control-static">
+                    @mObjIndividualData.IndividualRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Contact  Address: </label>
+                <div class="form-control-static">
+                    @mObjIndividualData.ContactAddress
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Document Details
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label bold">Document Ref No: </label>
+                <div class="form-control-static">
+                    @Model.DocumentRefNo
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Document Date: </label>
+                <div class="form-control-static">
+                    @CommUtil.GetFormatedDate(Model.DocumentDate)
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label class="control-label bold">Document Title: </label>
+                <div class="form-control-static">
+                    @Model.DocumentTitle
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Uploaded By: </label>
+                <div class="form-control-static">
+                    @Model.StaffName
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Document Preview
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="light-card document">
+                    <div class="document-pagination">
+                        <div class="pull-left">
+                            <button id="btnPrev" class="btn btn-primary btn-round"><i class="fa fa-angle-left"></i></button>
+                            <button id="btnNext" class="btn btn-primary btn-round"><i class="fa fa-angle-right"></i></button>
+                        </div>
+                        <div class="pull-right">
+                            <span>Page: <span id="spnCurrentPage"></span> / <span id="spnPageCount"></span></span>
+                        </div>
+                    </div>
+                    <div class="document-load">
+                        <i class="ion-loading-c"></i>
+                    </div>
+                    <div class="text-center">
+                        <canvas id="cnvDocument"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Content/Plugins/PDFJS/pdf.js"></script>
+    <script src="~/Scripts/jsDocumentPreview.js?v=@GlobalDefaultValues.VersionNumber" type="text/javascript"></script>
+
+}

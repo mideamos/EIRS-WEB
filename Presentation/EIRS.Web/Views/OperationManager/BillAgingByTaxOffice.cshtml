@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Operation Manger - Manage Bills Aging by Tax Office";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Manage Bills Aging by Tax Office
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmBillByTaxOffice" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Bill Type:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("cboBillType", (IList<SelectListItem>)ViewBag.BillTypeList, new { @id = "cboBillType", @class = "form-control bs-select", @tabindex = "1" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Stage Type:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("cboStageList", (IList<SelectListItem>)ViewBag.StageList, new { @id = "cboStageList", @class = "form-control bs-select", @tabindex = "2" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Bills Aging by Tax Office</div>
+        <div class="form-actions text-right">
+            <button type="button" id="btnExportToExcel" class="btn btn-theme">Export To Excel</button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBillAgingByTaxOffice">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Office</th>
+                    <th>Amount</th>
+                    <th>Count Of Transaction</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsBillAgingByTaxOfficeList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

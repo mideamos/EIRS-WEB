@@ -1,0 +1,147 @@
+﻿@model EIRS.Models.LandViewModel
+@using EIRS.Common
+@using EIRS.BOL
+@{
+    Layout = "~/Views/Shared/_TaxPayerLayout.cshtml";
+    ViewBag.Title = "Land Details";
+
+    IList<usp_GetTaxPayerAssetList_Result> lstAsset = (IList<usp_GetTaxPayerAssetList_Result>)ViewBag.AssetList;
+
+}
+
+<div class="title">
+    <h1>
+        Land Asset
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Land Asset Information
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript:jsfn_LandInformation(@Model.LandID)">View Details</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Edit","ProfileLand", new { id=Model.LandID, name =Model.LandRIN.ToSeoUrl() })">Edit Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Asset Type: </label>
+                <div class="form-control-static">
+                    @Model.AssetTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Asset RIN: </label>
+                <div class="form-control-static">
+                    @Model.LandRIN
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Asset Name: </label>
+                <div class="form-control-static">
+                    @Model.C_OF_O_Ref
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label bold">Asset LGA: </label>
+                <div class="form-control-static">
+                    @Model.LGAName
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Tax Payers</div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="@Url.Action("SearchCorporate","ProfileLand",new { id=Model.LandID, name =Model.LandRIN.ToSeoUrl() })">Corporates</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchIndividual","ProfileLand",new { id=Model.LandID, name =Model.LandRIN.ToSeoUrl() })">Individuals</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchGovernment","ProfileLand",new { id=Model.LandID, name =Model.LandRIN.ToSeoUrl() })">Governments</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchSpecial","ProfileLand",new { id=Model.LandID, name =Model.LandRIN.ToSeoUrl() })">Specials</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxPayerList">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer Type</th>
+                    <th>Tax Payer RIN</th>
+                    <th>Asset Role</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vAsset in lstAsset)
+                {
+                    <tr>
+                        <td>@vAsset.TaxPayerTypeName</td>
+                        <td>@vAsset.TaxPayerRINNumber</td>
+                        <td>@vAsset.TaxPayerRoleName</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_ShowTaxPayerDetails(@vAsset.TPAID)">Quick View</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@{
+    Html.RenderPartial("_LandDetailPopup");
+    Html.RenderPartial("_IndividualDetailPopup");
+    Html.RenderPartial("_CompanyDetailPopup");
+    Html.RenderPartial("_GovernmentDetailPopup");
+    Html.RenderPartial("_SpecialDetailPopup");
+
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsLandDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

@@ -1,0 +1,82 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manger - Manage Tax Payer Liability Status";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Manage Tax Payer Liability Status
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Ajax.BeginForm("TaxPayerLiabilityStatusSearchData", "OperationManager", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Post", OnSuccess = "jsfn_ShowData", OnBegin = "jsfn_ShowLoading", OnComplete = "jsfn_HideLoading" }, new { @class = "form-horizontal", @id = "frmTaxPayerLiabilityStatus" }))
+        {
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Year:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("cboTaxYear", (SelectList)ViewBag.YearList, "Select Year", new { @class = "form-control bs-select", @id = "cboYear" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">From Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtFromDate", "", new { @class = "form-control", @id = "txtFromDate", @autocomplete = "off", tabindex = "1", @placeholder = "Enter From Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">To Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtToDate", "", new { @class = "form-control", @id = "txtToDate", @autocomplete = "off", tabindex = "2", @placeholder = "Enter To Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tax Payer RIN :</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtTaxPayerRIN", "", new { @class = "form-control", @id = "txtTaxPayerRIN", @autocomplete = "off", tabindex = "2", @placeholder = "Enter To Tax Payer RIN" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            @*<a value="Search" class="btn btn-theme" id="btnSearch">Search</a>*@
+                            <button class="btn btn-theme btn-block" id="btnSearch" tabindex="4"> Search </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Tax Payer Liability Status</div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxPayerLiabilityStatusList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

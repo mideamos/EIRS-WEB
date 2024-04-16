@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Convert Tax Payer Options";
+}
+
+<div class="title">
+    <h1>
+        Operation Managers
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Convert Tax Payers</div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%">
+            <thead class="red-th">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CT001</td>
+                    <td>Individual To Corporate</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("IndividualToCorporate","ConvertTaxPayer")">View</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CT002</td>
+                    <td>Individual To Government</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("IndividualToGovernment","ConvertTaxPayer")">View</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CT003</td>
+                    <td>Corporate To Individual</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("CorporateToIndividual","ConvertTaxPayer")">View</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CT004</td>
+                    <td>Corporate To Government</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("CorporateToGovernment","ConvertTaxPayer")">View</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CT005</td>
+                    <td>Government To Individual</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("GovernmentToIndividual","ConvertTaxPayer")">View</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CT006</td>
+                    <td>Government To Corporate</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("GovernmentToCorporate","ConvertTaxPayer")">View</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

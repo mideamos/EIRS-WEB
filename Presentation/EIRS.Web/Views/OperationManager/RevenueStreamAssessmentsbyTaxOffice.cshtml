@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Operation Manager - Manage Revenue Stream Assessments by Tax Office";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Manage Revenue Stream Assessments by Tax Office
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmRevenueStreamAssessmentsbyTaxOffice" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Year:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("Year", (SelectList)ViewBag.YearList, "Select Year", new { @class = "form-control bs-select", @id = "cboYear" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">From Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtFromDate", "", new { @class = "form-control", @id = "txtFromDate", @autocomplete = "off", tabindex = "2", @placeholder = "Enter From Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">To Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtToDate", "", new { @class = "form-control", @id = "txtToDate", @autocomplete = "off", tabindex = "3", @placeholder = "Enter To Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Revenue Stream:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("cboRevenueStream", (SelectList)ViewBag.RevenueStreamList, "All Revenue Stream", new { @id = "cboRevenueStream", @class = "form-control bs-select", @tabindex = "4" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Revenue Stream Assessments by Tax Office</div>
+        <div class="form-actions text-right">
+            <button type="button" id="btnExportToExcel" class="btn btn-theme">Export To Excel</button>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblRevenueStreamAssessmentsbyTaxOffice">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Office</th>
+                    <th class="none">Tax Payer Count </th>
+                    <th class="none">Asset Count </th>
+                    <th>Assessments</th>
+                    <th>Settlements</th>
+                    <th>PoA</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsRevenueStreamAssessmentsbyTaxOfficeList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

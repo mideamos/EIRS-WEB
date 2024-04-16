@@ -1,0 +1,101 @@
+﻿
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - Manage CallGISApi";
+}
+
+
+
+<div class="title">
+    <h1>
+        Operation Manager - Manage CallGISApi
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmBillByRevenueStream" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-7">
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">From Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtToDate", "", new { @class = "form-control", @id = "txtFromDate", @autocomplete = "off", tabindex = "3", @placeholder = "2022-01-01", @readonly = "true" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">To Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtToDate", "", new { @class = "form-control", @id = "txtToDate", @autocomplete = "off", tabindex = "3", @placeholder = "2022-12-31", @readonly = "true" })
+                        </div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Page Number:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("txtpn", "", new { @class = "form-control", @id = "txtpn", @autocomplete = "off", tabindex = "3", @placeholder = "Enter The Page Number" })
+                        </div>
+                    </div>
+
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@*<script type="text/jscript">
+    $('#btnSearch').click(function () {
+
+        debugger
+        var url = "/OperationManager/CallGISApi/";
+        var txtpn = $('#txtpn').val();
+        $.get(url, { input: txtpn }, function (data) {
+           // $("#rData").html(data);
+        });
+    })
+</script>*@
+<script type="text/javascript">
+    document.getElementById("btnSearch").onclick = myfunction;
+    debugger
+    function myfunction() {
+        debugger
+
+        var PageNo = $("#txtpn").val();
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/OperationManager/CallGISApi',
+            data: { PageNo: PageNo },
+
+            success: function (data) {
+                debugger
+                window.location.href = '@Url.Action("GISSearchParameter", "OperationManager")';
+            },
+            error: function () {
+
+                debugger
+                window.location.href = '@Url.Action("GISSearchParameter", "OperationManager")';
+            }
+        });
+        console.log(PageNo);
+    };
+</script>
+

@@ -1,0 +1,51 @@
+﻿@model IList<EIRS.BOL.usp_GetAwarenessCategoryList_Result>
+@using EIRS.Common
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Tax Education & Awareness Centre";
+    ViewBag.MetaTitle = "Tax Education & Awareness Centre";
+    ViewBag.MetaKeywords = "Tax Education, Awareness Centre";
+    ViewBag.MetaDescription = "Gain access to education and awareness materials, interact with us, submit ideas and obtain the help and assistance you need to work with us in making Edo state greater";
+    ViewBag.MenuID = 6;
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Welcome to Tax Education & Awareness Centre
+            </h1>
+            <hr>
+            <p>
+                Gain access to education and awareness materials, interact with us, submit ideas and obtain the help and assistance you need to work with us in making Edo state greater.
+            </p>
+        </div>
+
+        <div class="row">
+            @if (Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <div class="col-sm-6">
+                        <div class="portlet light">
+                            <div class="dvicon-box clearfix">
+                                <div class="dvicon-block">
+                                    <i class="icon-question"></i>
+                                </div>
+                                <a href="@Url.Action("FAQ","Default",new { @id=item.AwarenessCategoryID,@name=item.AwarenessCategoryName.ToSeoUrl() })" class="dvicon-text">
+                                    <div class="dvicon-text-header">@item.AwarenessCategoryName</div>
+                                    <div class="dvicon-text-desc">
+                                        @item.SectionDescription
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,91 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - Audit Log";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Audit Log
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmAuditLog" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Screen:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("Screen", (SelectList)ViewBag.ALScreenList, "Select Screen", new { @class = "form-control bs-select", @id = "cboScreen" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Staff:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("Staff", (SelectList)ViewBag.StaffList, "Select Staff", new { @class = "form-control bs-select", @id = "cboStaff" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">From Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("FromDate", "", new { @class = "form-control", @id = "txtFromDate", @autocomplete = "off", tabindex = "1", @placeholder = "Enter From Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">To Date:</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("ToDate", "", new { @class = "form-control", @id = "txtToDate", @autocomplete = "off", tabindex = "2", @placeholder = "Enter To Date" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Audit Log</div>
+        <div class="form-actions text-right">
+
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAuditLog">
+            <thead class="red-th">
+                <tr>
+                    <th>Log Date</th>
+                    <th>IP Address</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsAuditLog.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

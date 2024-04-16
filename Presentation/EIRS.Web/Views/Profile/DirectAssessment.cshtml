@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "Direct Assessment";
+}
+
+<div class="title">
+    <h1>Direct Assessment</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Direct Assessment
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblDirectAssessment">
+            <thead class="red-th">
+                <tr>
+                    <th>Profile Name</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Direct Assessment</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("DA","Profile")">View Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Direct Assessment - Formal Business - Self Employed</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("DAFBSE","Profile")">View Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Direct Assessment for Multi Employees Business Owners</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("DAMEBO","Profile")">View Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsDirectAssessmentList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Operation Manager - Manage Certificate Type";
+}
+
+<div class="title">
+    <h1>Operation Manager - Manage Certificate Type</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Certificate Type
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Add","CertificateType")" class="btn btn-theme">
+                Add New
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblCertificateType">
+            <thead class="red-th">
+                <tr>
+                    <th>Certificate Type</th>
+                    <th>Tax Year</th>
+                    <th>Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsCertificateTypeList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

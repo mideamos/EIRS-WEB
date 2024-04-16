@@ -1,0 +1,47 @@
+﻿@model EIRS.Models.CompanyViewModel
+
+@{
+    ViewBag.Title = "Add Corporate Tax Payer";
+}
+
+<div class="title">
+    <h1>
+        Corporate Tax Payer
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add New Corporate
+        </div>
+        <div class="actions">
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Add", "CaptureCorporate", FormMethod.Post, htmlAttributes: new { @id = "frmAddCompany" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            Html.RenderPartial("_BindCompanyForm", Model);
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="20" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

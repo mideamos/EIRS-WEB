@@ -1,0 +1,22 @@
+﻿@model IList<FileUploadData>
+
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td width="80%">
+                        <a href="@item.DocumentLink" target="_blank">@item.DocumentName</a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-default btn-sm" onclick="jsfn_RemoveDocument(@item.FileID)">
+                            <i class="fa fa-times"></i> Remove
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

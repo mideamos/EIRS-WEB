@@ -1,0 +1,156 @@
+﻿@model EIRS.Models.CompanyViewModel
+@using EIRS.Common
+@using EIRS.BOL
+
+@{
+    ViewBag.Title = "Corporate - Search Building";
+}
+
+@Html.Hidden("hdnCompanyID", Model.CompanyID)
+
+<div class="title">
+    <h1>
+        Corporate Tax Payer: Search Building
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Corporate Tax Payer Information
+        </div>
+        <div class="actions">
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript:jsfn_CompanyInformation(@Model.CompanyID)">View Details</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Edit","CorporatePanel", new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })">Edit Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Type: </label>
+                <div class="form-control-static">
+                    @Model.TaxPayerTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer TIN: </label>
+                <div class="form-control-static">
+                    @Model.TIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @Model.MobileNumber1
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @Model.CompanyName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer RIN: </label>
+                <div class="form-control-static">
+                    @Model.CompanyRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Contact  Address: </label>
+                <div class="form-control-static">
+                    @Model.ContactAddress
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Assets - Building
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-7">
+                @using (Ajax.BeginForm("SearchBuilding", "CorporatePanel", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Post", OnSuccess = "jsfn_ShowData", OnBegin = "jsfn_ShowLoading", OnComplete = "jsfn_HideLoading" }, new { @class = "form-horizontal", @id = "frmSearchBuilding" }))
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Building Name</label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("txtBuildingName", "", new { @class = "form-control", @placeholder = "Enter Building Name", @tabindex = "1" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Street Name</label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("txtStreetName", "", new { @class = "form-control", @placeholder = "Enter Street Name", @tabindex = "2" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RIN" class="control-label col-sm-3">RIN</label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("txtRIN", "", new { @class = "form-control", @placeholder = "Enter RIN", @tabindex = "3" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch"> Search </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-sm-5">
+                <p>
+                    Enter name of Building and click on search below. The five most matches results will be returned where available. Select the one that best matches your company name and click on proceed.
+                </p>
+
+                <p>
+                    You will be able to claim one Building at a time and to view details of each company, click on the view link.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Building List</div>
+        <div class="actions">
+            <a href="@Url.Action("AddBuilding","CorporatePanel",new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })" class="btn btn-redtheme"> Add New Building </a>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+
+    </div>
+</div>
+
+@{ Html.RenderPartial("_CompanyDetailPopup");
+    Html.RenderPartial("_BuildingDetailPopup");
+    Html.RenderPartial("_BindLinkAssetPopup");
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsCorporate_SearchBuilding.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+

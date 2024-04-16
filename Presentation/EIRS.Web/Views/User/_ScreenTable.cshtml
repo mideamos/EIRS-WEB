@@ -1,0 +1,37 @@
+﻿@model IList<EIRS.BOL.usp_GetScreenUserList_Result>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblScreen">
+    <thead class="red-th">
+        <tr>
+            <th> Screen Name </th>
+            <th> Screen Url </th>
+            <th class="action-th all"> Action </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ScreenName</td>
+                <td>@item.ScreenUrl</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a onclick="javascript:jsfn_RemoveLink(@item.USID,@item.UserID)">
+                                    Remove Screen
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

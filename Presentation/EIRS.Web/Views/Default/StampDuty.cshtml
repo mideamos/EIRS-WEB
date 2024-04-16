@@ -1,0 +1,152 @@
+﻿@model IList<EIRS.BOL.usp_GetProfileData_Result>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Tax Type - Stamp Duty";
+    ViewBag.MetaTitle = "Tax Type - Stamp Duty";
+    ViewBag.MetaKeywords = "Tax Type,  Stamp Duty";
+    ViewBag.MetaDescription = "All enquires that all written instruments, including where any property is transferred to any person, must be stamped and taxes deducted and paid to government";
+
+    ViewBag.MenuID = 8;
+}
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Welcome to Tax Type Section
+            </h1>
+            <hr>
+            <p>
+                This section covers information relating to tax types and importance
+            </p>
+        </div>
+
+        <div class="row custom-tabs">
+            <div class="col-sm-3">
+                <div class="portlet light compressed-menu">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Tax Type
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <ul class="nav">
+                            <li>
+                                <a href="@Url.Action("Paye","Default")"><i class="fa fa-angle-right"></i> PAYE</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("DirectAssessment","Default")"><i class="fa fa-angle-right"></i> Direct Assessment </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ConsumptionTax","Default")"><i class="fa fa-angle-right"></i> Consumption Tax </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("BusinessPremises","Default")"><i class="fa fa-angle-right"></i> Business Premises </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("LandUseCharge","Default")"><i class="fa fa-angle-right"></i> Land Use Charge</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("WitholdingTax","Default")"><i class="fa fa-angle-right"></i> Withholding Tax</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("WasteManagement","Default")"><i class="fa fa-angle-right"></i> Waste Management </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("PoolsBetting","Default")"><i class="fa fa-angle-right"></i> Pools & Betting </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("VehicleRegistration","Default")"><i class="fa fa-angle-right"></i> Vehicle Registration </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("CapitalGains","Default")"><i class="fa fa-angle-right"></i> Capital Gains </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("LogProduce","Default")"><i class="fa fa-angle-right"></i> Log Produce </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("PresumptiveTax","Default")"><i class="fa fa-angle-right"></i> Presumptive Tax </a>
+                            </li>
+                            <li class="active">
+                                <a href="@Url.Action("StampDuty","Default")"><i class="fa fa-angle-right"></i> Stamp Duty </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Tax Type - Stamp Duty
+                        </div>
+                    </div>
+                    <div class="portlet-body text-justify">
+                        <p>
+                            All enquires that all written instruments, including where any property is transferred to any person, must be stamped and taxes deducted and paid to government
+                        </p>
+
+                        <div class="btn-custom-group">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <a class="btn btn-theme btn-block btn-outline" href="@Url.Action("Special","Default")"> SPECIAL <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a class="btn btn-theme btn-block btn-outline" href="@Url.Action("Individual","Default")"> INDIVIDUAL <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a class="btn btn-theme btn-block btn-outline" href="@Url.Action("Companies","Default")"> CORPORATE <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <table class="table table-bordered v-middle" id="tblProfile">
+                            <thead class="red-th">
+                                <tr>
+                                    <th>REF</th>
+                                    <th>Profile Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.ProfileReferenceNo</td>
+                                        <td>@item.ProfileDescription</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action<span class="caret"></span>
+
+                                                </button><ul class="dropdown-menu">
+                                                    <li>
+                                                        <a onclick="javascript:jsfn_ShowProfileDetails(@item.ProfileID)">
+                                                            Quick View
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@{Html.RenderPartial("_ProfileDetailPopup"); }
+
+
+@section footer{
+    <script type="text/javascript" src="~/Scripts/jsTaxType.js"></script>
+}
+

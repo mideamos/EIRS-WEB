@@ -1,0 +1,50 @@
+﻿
+@model IList<EIRS.BOL.usp_GetRevenueStreamBillByTaxOffice_Result>
+@using EIRS.Common;
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblRevenueStreamBillByTaxOffice">
+    <thead class="red-th">
+        <tr>
+            <th>Tax Office</th>
+            <th class="none">Tax Payer Count </th>
+            <th class="none">Asset Count </th>
+            <th>Assessment</th>
+            <th>Settlement</th>
+            <th>PoA</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+        <tr>
+            <td>@item.TaxOfficeName</td>
+            <td>@item.TaxPayerCount</td>
+            <td>@item.AssetCount</td>
+            <td>@CommUtil.GetFormatedCurrency(item.BillAmount)</td>
+            <td>@CommUtil.GetFormatedCurrency(item.SettlementAmount)</td>
+            <td>@CommUtil.GetFormatedCurrency(item.PoAAmount)</td>
+            <td>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Action <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="@Url.Action("RevenueStreamBillDetailByTaxOffice","OperationManager",new { intTaxOfficeID=item.TaxOfficeID,intRevenueStreamID=ViewBag.RevenueStreamID,FromDate=ViewBag.FromDate,ToDate=ViewBag.ToDate})">View Details</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+

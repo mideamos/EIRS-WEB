@@ -1,0 +1,141 @@
+﻿@model EIRS.Models.BusinessViewModel
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessName, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.TextBoxFor(model => model.BusinessName, htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Business Name", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.BusinessName, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.AssetTypeID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.AssetTypeID, (SelectList)ViewBag.AssetTypeList, "Select Asset Type", htmlAttributes: new { @tabindex = "3", @class = "form-control bs-select", @disabled = "true" })
+            @Html.ValidationMessageFor(model => model.AssetTypeID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessTypeID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.BusinessTypeID, (SelectList)ViewBag.BusinessTypeList, "Select Business Type", htmlAttributes: new { @tabindex = "4", @class = "form-control bs-select", @id = "cboBusinessType" })
+            @Html.ValidationMessageFor(model => model.BusinessTypeID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.LGAID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.LGAID, (SelectList)ViewBag.LGAList, "Select Business LGA", htmlAttributes: new { @tabindex = "5", @id = "cboLGA", @class = "form-control bs-select" })
+            @Html.ValidationMessageFor(model => model.LGAID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.ZoneId, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.ZoneId, (SelectList)ViewBag.ZoneList, "Select Business Zone", htmlAttributes: new { @tabindex = "6", @id = "cboBusinessZone", @class = "form-control bs-select" })
+            @Html.ValidationMessageFor(model => model.ZoneId, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.TaxOfficeId, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.TaxOfficeId, (SelectList)ViewBag.TaxOfficeList, "Select Tax Office ", htmlAttributes: new { @tabindex = "7", @id = "cboTaxOffice", @class = "form-control bs-select", })
+            @Html.ValidationMessageFor(model => model.TaxOfficeId, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessCategoryID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.BusinessCategoryID, (SelectList)ViewBag.BusinessCategoryList, "Select Business Category", htmlAttributes: new { @tabindex = "8", @id = "cboBusinessCategory", @class = "form-control bs-select" })
+            @Html.ValidationMessageFor(model => model.BusinessCategoryID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessSectorID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.BusinessSectorID, (SelectList)ViewBag.BusinessSectorList, "Select Business Sector", htmlAttributes: new { @tabindex = "9", @id = "cboBusinessSector", @class = "form-control bs-select", })
+            @Html.ValidationMessageFor(model => model.BusinessSectorID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessSubSectorID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.BusinessSubSectorID, (SelectList)ViewBag.BusinessSubSectorList, "Select Business Sub Sector", htmlAttributes: new { @tabindex = "10", @id = "cboBusinessSubSector", @class = "form-control bs-select" })
+            @Html.ValidationMessageFor(model => model.BusinessSubSectorID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessStructureID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.BusinessStructureID, (SelectList)ViewBag.BusinessStructureList, "Select Business Structure", htmlAttributes: new { @tabindex = "11", @id = "cboBusinessStructure", @class = "form-control bs-select" })
+            @Html.ValidationMessageFor(model => model.BusinessStructureID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessOperationID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.BusinessOperationID, (SelectList)ViewBag.BusinessOperationList, "Select Business Operation", htmlAttributes: new { @tabindex = "12", @id = "cboBusinessOperation", @class = "form-control bs-select" })
+            @Html.ValidationMessageFor(model => model.BusinessOperationID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.SizeID, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.DropDownListFor(model => model.SizeID, (SelectList)ViewBag.SizeList, "Select Premises Size", htmlAttributes: new { @tabindex = "13", @class = "form-control bs-select" })
+            @Html.ValidationMessageFor(model => model.SizeID, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.TextBoxFor(model => model.ContactName, htmlAttributes: new { @tabindex = "14", @placeholder = "Enter Contact Name", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ContactName, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessNumber, htmlAttributes: new { @class = "control-label required-star" })
+            <div class="input-group">
+                <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                @Html.TextBoxFor(model => model.BusinessNumber, htmlAttributes: new { @tabindex = "15", @placeholder = "Enter Business Number", @class = "form-control" })
+            </div>
+            @Html.ValidationMessageFor(model => model.BusinessNumber, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessAddress, htmlAttributes: new { @class = "control-label required-star" })
+            @Html.TextAreaFor(model => model.BusinessAddress, htmlAttributes: new { @tabindex = "16", @placeholder = "Enter Business Address", @Rows = "5", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.BusinessAddress, "", htmlAttributes: new { @class = "help-block" })
+        </div>
+    </div>
+</div>

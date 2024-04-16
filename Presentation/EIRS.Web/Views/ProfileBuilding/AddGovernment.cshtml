@@ -1,0 +1,135 @@
+﻿@model EIRS.Models.TPGovernmentViewModel
+@using EIRS.Common
+@using EIRS.BOL
+
+@{
+    ViewBag.Title = "Building Assets - Add Government";
+}
+
+<div class="title">
+    <h1>
+        Building Assets: Add New Government
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Building Asset Information
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript:jsfn_BuildingInformation(@Model.AssetID)">View Details</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Edit","ProfileBuilding", new { id=Model.AssetID, name =Model.AssetRIN.ToSeoUrl() })">Edit Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Asset Type: </label>
+                <div class="form-control-static">
+                    @Model.AssetTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Asset RIN: </label>
+                <div class="form-control-static">
+                    @Model.AssetRIN
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Asset Name: </label>
+                <div class="form-control-static">
+                    @Model.AssetName
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label bold">Asset LGA: </label>
+                <div class="form-control-static">
+                    @Model.AssetLGAName
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add Government
+        </div>
+        <div class="actions">
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("AddGovernment", "ProfileBuilding", FormMethod.Post, htmlAttributes: new { @id = "frmAddGovernment" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(m => m.AssetID, new { @Value = Model.AssetID })
+            @Html.HiddenFor(m => m.AssetTypeID, new { @Value = Model.AssetTypeID })
+            @Html.HiddenFor(m => m.AssetTypeName, new { @Value = Model.AssetTypeName })
+            @Html.HiddenFor(m => m.AssetName, new { @Value = Model.AssetName })
+            @Html.HiddenFor(m => m.AssetRIN, new { @Value = Model.AssetRIN })
+            @Html.HiddenFor(m => m.AssetLGAName, new { @Value = Model.AssetLGAName })
+
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TaxPayerRoleID, htmlAttributes: new { @class = "control-label required-star" })
+                            @Html.DropDownListFor(model => model.TaxPayerRoleID, (SelectList)ViewBag.TaxPayerRoleList, "Select Asset Role", htmlAttributes: new { @tabindex = "1", @class = "form-control bs-select" })
+                            @Html.ValidationMessageFor(model => model.TaxPayerRoleID, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BuildingUnitID, htmlAttributes: new { @class = "control-label required-star" })
+                            @Html.DropDownListFor(model => model.BuildingUnitID, (SelectList)ViewBag.BuildingUnitList, "Select Building Unit", htmlAttributes: new { @tabindex = "1", @class = "form-control bs-select" })
+                            @Html.ValidationMessageFor(model => model.BuildingUnitID, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                </div>
+
+            Html.RenderPartial("_BindGovernmentForm", Model);
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="15" />
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("_BuildingDetailPopup");
+}
+
+
+

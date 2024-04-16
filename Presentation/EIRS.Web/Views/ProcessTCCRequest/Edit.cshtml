@@ -1,0 +1,189 @@
+﻿@model usp_GetTCCRequestDetails_Result
+@using EIRS.Common
+@{
+    ViewBag.Title = "Process TCC Request - Update Request";
+    IList<Request_IncomeStream> lstIncomeStream = (IList<Request_IncomeStream>)ViewBag.IncomeStreamList;
+}
+
+<div class="title">
+    <h1>
+        Process TCC Request - Update Request
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Request Information
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","ProcessTCCRequest")" class="btn btn-theme btn-outline">
+                Cancel
+            </a>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Request Ref No: </label>
+                <div class="form-control-static">
+                    @Model.RequestRefNo
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Request Date: </label>
+                <div class="form-control-static">
+                    @CommUtil.GetFormatedDate(Model.RequestDate)
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer TIN: </label>
+                <div class="form-control-static">
+                    @Model.TIN
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @Model.FirstName @Model.LastName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer EIN: </label>
+                <div class="form-control-static">
+                    @Model.IndividualRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @Model.MobileNumber1
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Income Stream</div>
+        <div class="actions">
+            <a class="btn btn-redtheme" id="btnAddNewIncomeStream">New Income Streams</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="form-body" id="dvIncomeStreamData">
+            @{ Html.RenderPartial("_BindIncomeStreamTable", lstIncomeStream); }
+        </div>
+    </div>
+    <div class="portlet-footer text-right">
+        @using (Html.BeginForm("Edit", "ProcessTCCRequest", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("RequestID", Model.TCCRequestID, new { @id = "hdnRequestID" })
+            <button type="submit" class="btn btn-theme">Update</button>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="dvIncomeStreamModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="dvIncomeStreamModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="dvBuildingUnitModalLabel">Add Income Stream</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmAddIncomeStream">
+                    <div id="dvAISMessage"></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Tax Year</label>
+                                @Html.DropDownList("cboTaxYear", (SelectList)ViewBag.YearList, "Select Tax Year", htmlAttributes: new { @tabindex = "1", @class = "form-control bs-select", @id = "cboTaxYear" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Total Income Earned</label>
+                                @Html.TextBox("txtTotalIncomeEarned", "", htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Total Income Earned", @class = "form-control", @id = "txtTotalIncomeEarned" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Tax Payer Role</label>
+                                @Html.DropDownList("cboTaxPayerRoleID", (SelectList)ViewBag.TaxPayerRoleList, "Select Tax Payer Role", htmlAttributes: new { @tabindex = "3", @class = "form-control bs-select", @id = "cboTaxPayerRoleID" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Business Name</label>
+                                @Html.TextBox("txtBusinessName", "", htmlAttributes: new { @tabindex = "4", @placeholder = "Enter Business Name", @class = "form-control", @id= "txtBusinessName" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Business Type</label>
+                                @Html.DropDownList("cboBusinessTypeID", (SelectList)ViewBag.BusinessTypeList, "Select Business Type", htmlAttributes: new { @tabindex = "5", @class = "form-control bs-select", @id= "cboBusinessTypeID" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">LGA</label>
+                                @Html.DropDownList("cboLGAID", (SelectList)ViewBag.LGAList, "Select Business LGA", htmlAttributes: new { @tabindex = "6", @class = "form-control bs-select", @id= "cboLGAID" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Business Operation</label>
+                                @Html.DropDownList("cboBusinessOperationID", Enumerable.Empty<SelectListItem>(), "Select Business Operation", htmlAttributes: new { @tabindex = "7", @class = "form-control bs-select", @id= "cboBusinessOperationID" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Contact Name</label>
+                                @Html.TextBox("txtContactName", "", htmlAttributes: new { @tabindex = "8", @placeholder = "Enter Contact Name", @class = "form-control", @id= "txtContactName" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Business Address</label>
+                                @Html.TextArea("txtBusinessAddress", "", htmlAttributes: new { @tabindex = "9", @placeholder = "Enter Business Address", @Rows = "5", @class = "form-control",@id= "txtBusinessAddress" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Business Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                                    @Html.TextBox("txtBusinessNumber", "", htmlAttributes: new { @tabindex = "10", @placeholder = "Enter Business Number", @class = "form-control", @id= "txtBusinessNumber" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-theme" id="btSaveIncomeStream">Save</button>
+                <a data-dismiss="modal" class="btn btn-redtheme"> Close </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsEditTCCRequest.js"></script>
+}

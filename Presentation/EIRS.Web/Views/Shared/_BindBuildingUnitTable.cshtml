@@ -1,0 +1,30 @@
+﻿@model IList<Building_BuildingUnit>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBuildingUnitList">
+    <thead class="red-th">
+        <tr>
+            <th class="all">Unit Number</th>
+            <th>Unit Purpose</th>
+            <th>Unit Function</th>
+            <th>Unit Occupancy</th>
+            <th>Unit Size</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var vBUnit in Model)
+        {
+            <tr>
+                <td>@vBUnit.UnitNumber</td>
+                <td>@vBUnit.UnitPurposeName</td>
+                <td>@vBUnit.UnitFunctionName</td>
+                <td>@vBUnit.UnitOccupancyName</td>
+                <td>@vBUnit.UnitSizeName</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+

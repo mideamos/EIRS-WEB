@@ -1,0 +1,71 @@
+﻿@model EIRS.BOL.usp_SFTP_GetDataSubmitterList_Result
+
+@{
+    ViewBag.Title = "Data Submitter Details";
+}
+
+<div class="title">
+    <h1>
+        Data Submitter
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Data Submitter Details
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","SFTPDataSubmitter")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">RIN: </label>
+                    <div class="form-control-static">
+                        @Model.RIN
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">User Name: </label>
+                    <div class="form-control-static">
+                        @Model.UserName
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Password: </label>
+                    <div class="form-control-static">
+                        @EncryptDecrypt.Decrypt(Model.Password)
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Data Submission Type: </label>
+                    <div class="form-control-static">
+                        @Model.DataSubmissionTypeNames
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Status: </label>
+                    <div class="form-control-static">
+                        @Model.ActiveText
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

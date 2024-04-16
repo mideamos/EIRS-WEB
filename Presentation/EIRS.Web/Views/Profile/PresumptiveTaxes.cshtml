@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Presumptive Taxes";
+}
+
+<div class="title">
+    <h1>Presumptive Taxes</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Presumptive Taxes
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPresumptiveTaxes">
+            <thead class="red-th">
+                <tr>
+                    <th>Profile Name</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>  Presumptive Taxes</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("PT","Profile")">View Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsPresumptiveTaxes.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

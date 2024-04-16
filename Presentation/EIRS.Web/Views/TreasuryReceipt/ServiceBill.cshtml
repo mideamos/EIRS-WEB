@@ -1,0 +1,552 @@
+﻿@using EIRS.BOL
+@using EIRS.Common
+@model usp_GetServiceBillList_Result
+@{
+    ViewBag.Title = "Issue New Treasury Receipt";
+
+    IList<usp_GetServiceBill_MDAServiceList_Result> lstMAPServiceBillRules = (IList<usp_GetServiceBill_MDAServiceList_Result>)ViewBag.MAPServiceBillRules;
+    IList<usp_GetServiceBillItemList_Result> lstServiceBillItems = (IList<usp_GetServiceBillItemList_Result>)ViewBag.ServiceBillItems;
+    IList<usp_GetMDAServiceBasedSettlement_Result> lstServiceBillRuleSettlement = (IList<usp_GetMDAServiceBasedSettlement_Result>)ViewBag.ServiceBillRuleSettlement;
+    IList<usp_GetSettlementList_Result> lstSettlement = (IList<usp_GetSettlementList_Result>)ViewBag.SettlementList;
+    List<usp_GetTreasuryReceiptList_Result> lstReceipt = (List<usp_GetTreasuryReceiptList_Result>)ViewBag.ReceiptList;
+    IList<usp_GetSettlementWithoutReceipt_Result> lstSettlementWithoutReceipt = (IList<usp_GetSettlementWithoutReceipt_Result>)ViewBag.SettlementWithoutReceipt;
+    IList<usp_GetServiceBillAdjustmentList_Result> lstServiceBillAdjustment = (IList<usp_GetServiceBillAdjustmentList_Result>)ViewBag.AdjustmentList;
+    IList<usp_GetServiceBillLateChargeList_Result> lstServiceBillLateCharge = (IList<usp_GetServiceBillLateChargeList_Result>)ViewBag.LateChargeList;
+
+    //foreach(var ret in lstReceipt)
+    //    if(ret.ReceiptStatusID == 3)
+
+}
+
+<input type="hidden" id="hdnServiceBillID" value="@Model.ServiceBillID" />
+<input type="hidden" id="hdnSettlementAmount" value="@Model.SettlementAmount" />
+<input type="hidden" id="hdnReceiptAmount" value="0" />
+<input type="hidden" id="hdnSettlementIds" value="" />
+
+<div class="title">
+    <h1>
+        Issue New Treasury Receipt
+    </h1>
+    <hr>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="portlet light" style="min-height: 270px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    Record Details
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table border-top-0">
+                    <tbody>
+                        <tr>
+                            <td>Template Type</td>
+                            <td>Service Bill</td>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>@CommUtil.GetFormatedDate(Model.ServiceBillDate)</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Payer Type</td>
+                            <td>@Model.TaxPayerTypeName</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Payer Name</td>
+                            <td>@Model.TaxPayerName</td>
+                        </tr>
+                        <tr>
+                            <td>Due Date</td>
+                            <td>@CommUtil.GetFormatedDate(Model.SettlementDueDate)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="portlet light" style="min-height: 270px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    Notes
+                </div>
+            </div>
+            <div class="portlet-body link-box">
+                <p>@Html.Raw(Model.Notes)</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Reference: @Model.ServiceBillRefNo &nbsp; | &nbsp; Status: @Model.SettlementStatusName
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="list-pane" id="dvRequestList">
+            @foreach (var item in lstMAPServiceBillRules)
+            {
+                <div class="list-item clearfix">
+                    <div class="col-sm-12 list-left-col">
+                        <h3>@item.MDAServiceName <a data-toggle="modal" data-target="#dvViewServiceBillRuleModal_@item.SBSID">[View Items]</a> </h3>
+                        <div class="desc-row">
+                            @*Amount Charged: @CommUtil.GetFormatedCurrency(item.ServiceAmount) <br />
+                            Amount Paid: @CommUtil.GetFormatedCurrency(item.SettledAmount) <a data-toggle="modal" data-target="#dvViewPaymentModal_@item.SBSID">[View Payments]</a> <br />
+                            Outstanding: @CommUtil.GetFormatedCurrency(item.ServiceAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault()) <br />
+                            Tax Year: @item.TaxYear*@
+
+
+                            Amount Charged: @CommUtil.GetFormatedCurrency(lstServiceBillItems.Where(t => t.SBSID == item.SBSID).Sum(t => t.TotalAmount))  <br />
+
+                            Amount Paid: @CommUtil.GetFormatedCurrency(item.SettledAmount) <a data-toggle="modal" data-target="#dvViewPaymentModal_@item.SBSID">[View Payments]</a> <br />
+                            @*Outstanding: @CommUtil.GetFormatedCurrency(item.ServiceAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault()) <br />*@
+                            Outstanding: @CommUtil.GetFormatedCurrency(lstServiceBillItems.Where(t => t.SBSID == item.SBSID).Sum(t => t.TotalAmount)) <br />
+
+                            Tax Year: @item.TaxYear
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade custom-modal" id="dvViewServiceBillRuleModal_@item.SBSID" tabindex="-1" role="dialog" aria-labelledby="dvViewServiceBillRuleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dvViewServiceBillRuleModalLabel">View Items in @item.MDAServiceName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped ">
+                                    <thead class="thead-theme">
+                                        <tr>
+                                            <th>Item Ref</th>
+                                            <th>Item Name</th>
+                                            <th>Computation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (lstServiceBillItems.Where(t => t.SBSID == item.SBSID).Count() > 0)
+                                        {
+                                            foreach (var aitem in lstServiceBillItems.Where(t => t.SBSID == item.SBSID))
+                                            {
+                                                <tr>
+                                                    <td>@aitem.MDAServiceItemReferenceNo</td>
+                                                    <td>@aitem.MDAServiceItemName</td>
+                                                    <td>@aitem.ComputationName</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="3">No Item Found</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal fade custom-modal" id="dvViewPaymentModal_@item.SBSID" tabindex="-1" role="dialog" aria-labelledby="dvViewPaymentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dvViewPaymentModalLabel">View Payments for @item.MDAServiceName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped ">
+                                    <thead class="thead-theme">
+                                        <tr>
+                                            <th>Payment Ref</th>
+                                            <th>Payment Date</th>
+                                            <th>Amount Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (lstServiceBillRuleSettlement != null && lstServiceBillRuleSettlement.Where(t => t.SBSID == item.SBSID).Count() > 0)
+                                        {
+                                            foreach (var aitem in lstServiceBillRuleSettlement.Where(t => t.SBSID == item.SBSID))
+                                            {
+                                                <tr>
+                                                    <td>@aitem.SettlementRefNo</td>
+                                                    <td>@CommUtil.GetFormatedDate(aitem.SettlementDate)</td>
+                                                    <td>@CommUtil.GetFormatedCurrency(aitem.SettlementAmount)</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="3">No Payment Found</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Service Bill Amount
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(lstServiceBillItems.Sum(t => t.ServiceAmount))
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Adjustments <a data-toggle="modal" data-target="#dvViewAdjustmentModal">[View Adjustment]</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(lstServiceBillAdjustment.Sum(t => t.Amount))
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Late Charges <a data-toggle="modal" data-target="#dvViewLateChargeModal">[View Late Charges]</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(lstServiceBillLateCharge.Sum(t => t.TotalAmount))
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Total Amount
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.ServiceBillAmount + lstServiceBillAdjustment.Sum(t => t.Amount))
+                </div>
+            </div>
+            <hr class="margin-0" />
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Total Paid <a data-toggle="modal" data-target="#dvViewSettlementModal">[View Payments]</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.SettlementAmount)
+                </div>
+            </div>
+            <hr class="margin-0" />
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Outstanding
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.ServiceBillAmount.GetValueOrDefault() + lstServiceBillAdjustment.Sum(t => t.Amount) + lstServiceBillLateCharge.Sum(t => t.TotalAmount) - Model.SettlementAmount.GetValueOrDefault())
+                </div>
+            </div>
+            <hr class="margin-0" />
+            <div class="row info-row font-red font-17">
+                <div class="col-sm-6">
+                    Amount to Pay
+                </div>
+                <div class="col-sm-6 text-right" id="dvAmountToPay">
+                    @CommUtil.GetFormatedCurrency(Model.ServiceBillAmount.GetValueOrDefault() + lstServiceBillAdjustment.Sum(t => t.Amount) + lstServiceBillLateCharge.Sum(t => t.TotalAmount) - Model.SettlementAmount.GetValueOrDefault())
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Receipts
+        </div>
+        <div class="actions">
+            @if (lstReceipt.Count == 0)
+            {
+                <a class="btn btn-redtheme" onclick="javascript:jsfn_ShowReceiptModal()">
+                    Generate Receipt
+                </a>
+            }
+            else if (lstReceipt.Count > 0)
+            {
+                foreach (var ret in lstReceipt)
+                {
+                    if (ret.ReceiptStatusID == 2)
+                    {
+                        <a class="btn btn-redtheme" onclick="javascript:jsfn_ShowReceiptModal()">
+                            Generate Receipt
+                        </a>
+                    }
+                }
+
+            }
+            else
+            {
+                <a class="btn btn-redtheme" disabled>
+                    Generate Receipt
+                </a>
+            }
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblReceiptList">
+            <thead class="red-th">
+                <tr>
+                    <th>Date</th>
+                    <th>Ref No</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in lstReceipt)
+                {
+                    <tr>
+                        <td>@CommUtil.GetFormatedDate(item.ReceiptDate)</td>
+                        <td>@item.ReceiptRefNo</td>
+                        <td>@CommUtil.GetFormatedCurrency(item.ReceiptAmount)</td>
+                        <td>@item.ReceiptStatusName</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @if (item.ReceiptStatusID == 3)
+                                    {
+                                        <li>
+
+                                            <a target="_blank" href="@Url.Action("SignReceipt", "TreasuryReceipt", new { id = item.ReceiptID, name = item.ReceiptRefNo })">
+                                                Sign Receipt
+                                            </a>
+
+                                        </li>
+                                    }
+                                    <li>
+                                        <a target="_blank" href="@Url.Action("Details", "TreasuryReceipt", new { id = item.ReceiptID, name = item.ReceiptRefNo })">
+                                            View Receipt
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade custom-modal" id="dvViewSettlementModal" tabindex="-1" role="dialog" aria-labelledby="dvViewSettlementModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewSettlementModalLabel">View Payments for @Model.ServiceBillRefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Payment Ref</th>
+                            <th>Payment Date</th>
+                            <th>Amount Paid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstSettlement != null && lstSettlement.Count() > 0)
+                        {
+                            foreach (var sitem in lstSettlement)
+                            {
+                                <tr>
+                                    <td>@sitem.SettlementRefNo</td>
+                                    <td>@CommUtil.GetFormatedDate(sitem.SettlementDate)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(sitem.SettlementAmount)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">No Payment Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade custom-modal" id="dvViewAdjustmentModal" tabindex="-1" role="dialog" aria-labelledby="dvViewAdjustmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewAdjustmentModalLabel">View Adjustment for @Model.ServiceBillRefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Line</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstServiceBillAdjustment != null && lstServiceBillAdjustment.Count() > 0)
+                        {
+                            foreach (var adj in lstServiceBillAdjustment)
+                            {
+                                <tr>
+                                    <td>@CommUtil.GetFormatedDate(adj.AdjustmentDate)</td>
+                                    <td>@adj.AdjustmentTypeName</td>
+                                    <td>@adj.AdjustmentLine</td>
+                                    <td>@CommUtil.GetFormatedCurrency(adj.Amount)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" align="center">No Adjustment Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade custom-modal" id="dvViewLateChargeModal" tabindex="-1" role="dialog" aria-labelledby="dvViewLateChargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewLateChargeModalLabel">View LateCharge for @Model.ServiceBillRefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Date</th>
+                            <th>Penalty</th>
+                            <th>Interest</th>
+                            <th>Total Charges</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstServiceBillLateCharge != null && lstServiceBillLateCharge.Count() > 0)
+                        {
+                            foreach (var lc in lstServiceBillLateCharge)
+                            {
+                                <tr>
+                                    <td>@CommUtil.GetFormatedDate(lc.ChargeDate)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(lc.Penalty)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(lc.Interest)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(lc.TotalAmount)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" align="center">No Late Charge Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dvGenerateReceiptModal" tabindex="-1" role="dialog" aria-labelledby="dvGenerateReceiptModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dvGenerateReceiptModalLabel">Generate Treasury Receipt for @Model.ServiceBillRefNo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" id="dvShowGenerateReceiptAlert">
+
+                </div>
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Payment Ref</th>
+                            <th>Payment Date</th>
+                            <th>Amount Paid</th>
+                            <th>
+                                @Html.CheckBox("chkAllSettlement", new { @class = "icheck", @data_checkbox = "icheckbox_square-green", @id = "chkAllSettlement" })
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstSettlementWithoutReceipt != null && lstSettlementWithoutReceipt.Count() > 0)
+                        {
+                            foreach (var sitem in lstSettlementWithoutReceipt)
+                            {
+                                <tr>
+                                    <td>@sitem.SettlementRefNo</td>
+                                    <td>@CommUtil.GetFormatedDate(sitem.SettlementDate)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(sitem.SettlementAmount)</td>
+                                    <td>
+                                        @Html.CheckBox("chkSettlement", new { @class = "icheck chksettlement", @data_checkbox = "icheckbox_square-green", @data_stmtid = sitem.SettlementID, @title = "Tick To Select", @data_stmtamt = sitem.SettlementAmount, @id = "chkSettlement_" + sitem.SettlementID })
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" align="center">No Payment Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" align="right">Total</td>
+                            <td>
+                                <label id="lblTotalAmount"></label>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-theme" id="btnGenerateReceipt">Generate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsServiceBillTreasuryReceipt.js"></script>
+}

@@ -1,0 +1,149 @@
+﻿@model EIRS.Models.TPLandViewModel
+@using EIRS.Common
+@using EIRS.BOL
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Add Land";
+}
+
+<section class="alternate">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="portlet light compressed-menu">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Register
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <ul class="nav">
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> Search</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> OTP</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> Tax Payer</a>
+                            </li>
+                            <li class="active">
+                                <a><i class="fa fa-angle-right"></i> Asset</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> Password</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Tax Payer Summary
+                        </div>
+                    </div>
+                    <div class="row view-form">
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer Type: </label>
+                                <div class="form-control-static">
+                                    Individual
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer TIN: </label>
+                                <div class="form-control-static">
+                                    @Model.TaxPayerTIN
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Mobile Number: </label>
+                                <div class="form-control-static">
+                                    @Model.ContactAddress
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer Name: </label>
+                                <div class="form-control-static">
+                                    @Model.TaxPayerName
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer RIN: </label>
+                                <div class="form-control-static">
+                                    @Model.TaxPayerRIN
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Contact  Address: </label>
+                                <div class="form-control-static">
+                                    @Model.ContactAddress
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @using (Html.BeginForm("AddLand", "SignupIndividual", FormMethod.Post, htmlAttributes: new { @id = "frmAddLand" }))
+                {
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                Step 4: Add New Land
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(m => m.TaxPayerID, new { @Value = Model.TaxPayerID })
+                            @Html.HiddenFor(m => m.TaxPayerTypeID, new { @Value = Model.TaxPayerTypeID })
+                            @Html.HiddenFor(m => m.TaxPayerTypeName, new { @Value = Model.TaxPayerTypeName })
+                            @Html.HiddenFor(m => m.TaxPayerName, new { @Value = Model.TaxPayerName })
+                            @Html.HiddenFor(m => m.TaxPayerTIN, new { @Value = Model.TaxPayerTIN })
+                            @Html.HiddenFor(m => m.TaxPayerRIN, new { @Value = Model.TaxPayerRIN })
+                            @Html.HiddenFor(m => m.MobileNumber, new { @Value = Model.MobileNumber })
+                            @Html.HiddenFor(m => m.ContactAddress, new { @Value = Model.ContactAddress })
+
+                            @if (ViewBag.Message != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @ViewBag.Message
+                                </div>
+                            }
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TaxPayerRoleID, htmlAttributes: new { @class = "control-label required-star" })
+                                        @Html.DropDownListFor(model => model.TaxPayerRoleID, (SelectList)ViewBag.TaxPayerRoleList, "Select Tax Payer Role", htmlAttributes: new { @tabindex = "1", @class = "form-control bs-select" })
+                                        @Html.ValidationMessageFor(model => model.TaxPayerRoleID, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            @{
+                                Html.RenderPartial("_BindLandForm", Model);
+                            }
+                        </div>
+                        <div class="portlet-footer text-right">
+                            <a href="@Url.Action("AssetList","SignupIndividual")" class="btn btn-theme btn-outline">
+                                Previous
+                            </a>
+                            <button class="btn btn-theme" type="submit"> Next </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsAddEditLand.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+

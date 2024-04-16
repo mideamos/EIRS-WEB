@@ -1,0 +1,41 @@
+﻿
+@model IList<EIRS.BOL.usp_GetBillAgingByTaxOffice_Result>
+@using EIRS.Common;
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBillAgingByTaxOffice">
+    <thead class="red-th">
+        <tr>
+            <th>Tax Office Name</th>
+            <th>Amount</th>
+            <th>Transaction Count</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    <tbody class="red-th">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TaxOfficeName</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.Amount)</td>
+                    <td>@item.TransactionCount.GetValueOrDefault()</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("BillAgingDetailsByTaxOffice","OperationManager",new {intBillType= ViewBag.BillType,intStageID=ViewBag.StageID,intTaxOfficeID=item.TaxOfficeID})">View Details</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

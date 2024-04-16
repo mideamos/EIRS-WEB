@@ -1,0 +1,49 @@
+﻿@model IList<usp_GetTCCRequestList_Result>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTCCRequest">
+    <thead class="red-th">
+        <tr>
+            <th>Request Ref</th>
+            <th>Tax Year</th>
+            <th>Request Date</th>
+            <th>Request Status</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.RequestRefNo</td>
+                <td>@item.TaxYear</td>
+                <td>@CommUtil.GetFormatedDate(item.RequestDate)</td>
+                <td>@item.StatusName</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            @if (item.StatusID == 14)
+                            {
+                                <li>
+                                    <a href="@Url.Action("Download", "ProcessTCCRequest", new { reqId = item.TCCRequestID })">Download My TCC</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    Your TCC Is In Progress
+                                </li>
+                            }
+                            @*<li>
+                                    <a href="@Url.Action("TCCDetails","CaptureIndividual", new { reqId=item.TCCRequestID })">View Details</a>
+                                </li>*@
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

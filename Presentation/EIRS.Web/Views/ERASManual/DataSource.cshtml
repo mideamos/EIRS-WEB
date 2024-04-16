@@ -1,0 +1,141 @@
+﻿@model IList<usp_EM_GetDataSourceList_Result>
+@using EIRS.Common
+
+@{
+    ViewBag.Title = "ERAS Manual - Data Imports";
+}
+
+<div class="title">
+    <h1>
+        ERAS Manual - Data Imports
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Data Imports</div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblDataSourceList">
+            <thead class="red-th">
+                <tr>
+                    <th>Data Source</th>
+                    <th>Last Import Date</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                <tr>
+                    <td>@item.DataSourceName</td>
+                    <td>@CommUtil.GetFormatedDate(item.LastImportDate)</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @if (item.DataSourceID == 1)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("ImportData","EMPDMainAuthorized")">
+                                            Import Data
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("AddEntry", "EMPDMainAuthorized")">
+                                            Add Entry
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("List", "EMPDMainAuthorized")">
+                                            Manage Data
+                                        </a>
+                                    </li>
+                                }
+                                else if (item.DataSourceID == 2)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("ImportData","EMPDMainPending")">
+                                            Import Data
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("AddEntry", "EMPDMainPending")">
+                                            Add Entry
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("List", "EMPDMainPending")">
+                                            Manage Data
+                                        </a>
+                                    </li>
+                                }
+                                else if (item.DataSourceID == 3)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("ImportData","EMPDMVAAuthorized")">
+                                            Import Data
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("AddEntry", "EMPDMVAAuthorized")">
+                                            Add Entry
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("List", "EMPDMVAAuthorized")">
+                                            Manage Data
+                                        </a>
+                                    </li>
+                                }
+                                else if (item.DataSourceID == 4)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("ImportData","EMPDMVAPending")">
+                                            Import Data
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("AddEntry", "EMPDMVAPending")">
+                                            Add Entry
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("List", "EMPDMVAPending")">
+                                            Manage Data
+                                        </a>
+                                    </li>
+                                }
+                                else if (item.DataSourceID == 5)
+                                {
+                                <li>
+                                    <a href="@Url.Action("ImportData","EMBankStatement")">
+                                        Import Data
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("AddEntry", "EMBankStatement")">
+                                        Add Entry
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("List", "EMBankStatement")">
+                                        Manage Data
+                                    </a>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

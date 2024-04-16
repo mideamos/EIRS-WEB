@@ -1,0 +1,77 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - Tax Office Assessment Summary";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Tax Office Assessment Summary
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmTaxOfficeAssessmentSummary" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Year:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("Year", (SelectList)ViewBag.YearList, "Select Year", new { @class = "form-control bs-select", @id = "cboYear" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Tax Office Assessment Summary</div>
+        <div class="form-actions text-right">
+            <button type="button" id="btnExportToExcel" class="btn btn-theme">Export To Excel</button>
+            @*<a class="btn btn-theme" href="@Url.Action("TaxOfficeAssessmentSummaryExportToExcel","OperationManager")" target="_blank">Export To Excel</a>*@
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxOfficeAssessmentSummary">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Office</th>
+                    <th>Assessment</th>
+                    <th>Settlements</th>
+                    <th>PoA</th>
+                    <th>Outstanding</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxOfficeAssessmentSummary.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

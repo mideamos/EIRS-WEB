@@ -1,0 +1,50 @@
+﻿@model IList<EIRS.BOL.usp_RPT_TaxPayerLiabilityStatus_Result>
+@using EIRS.Common;
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxPayerLiabilityStatus">
+    <thead class="red-th">
+        <tr>
+            <th>Tax Payer RIN</th>
+            <th class="none">Tax Payer Name</th>
+            <th>Tax Payer Type </th>
+            <th>Assessment</th>
+            <th>Payment</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TaxPayerRIN</td>
+                    <td>@item.TaxPayerName</td>
+                    <td>@item.TaxPayerTypeName</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.TotalAssessmentAmount)</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.TotalPaymentAmount)</td>
+
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("TaxPayerLiabilityStatusAssessment","OperationManager",new { TaxPayerID=item.TaxPayerID,TaxPayerTypeID=item.TaxPayerTypeID,TaxYear = ViewBag.TaxYear,FromDate=ViewBag.FromDate,ToDate=ViewBag.ToDate})">Assessments</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("TaxPayerLiabilityStatusPayment","OperationManager",new { TaxPayerID=item.TaxPayerID,TaxPayerTypeID=item.TaxPayerTypeID,TaxYear = ViewBag.TaxYear,FromDate=ViewBag.FromDate,ToDate=ViewBag.ToDate})">Payment on Account</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+

@@ -1,0 +1,54 @@
+﻿@model IList<EIRS.BOL.usp_GetRevenueStreamBillDetailByTaxOffice_Result>
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Revenue Stream Bill Detail By TaxOffice";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Manage Revenue Stream Detail By TaxOffice
+    </h1>
+    <hr>
+</div>
+
+<input type="hidden" value="@ViewBag.RevenueStream" id="hdnRevenueStreamID" />
+<input type="hidden" value="@ViewBag.TaxOffice" id="hdnTaxOfficeID" />
+<input type="hidden" value="@ViewBag.TaxYear" id="hdnTaxYear" />
+<input type="hidden" value="@ViewBag.FromDate" id="hdnFromDate" />
+<input type="hidden" value="@ViewBag.ToDate" id="hdnToDate" />
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Revenue Stream Detail By TaxOffice
+        </div>
+        <div class="form-actions text-right">
+            <a href="@Url.Action("RevenueStreamAssessmentsbyTaxOffice","OperationManager")" class="btn btn-redtheme"> Cancel</a>
+           <a href="@Url.Action("RevenueStreamBillDetailByTaxOfficeExportToExcel","OperationManager",new { TaxOfficeID=ViewBag.TaxOffice,RevenueStreamID=ViewBag.RevenueStream,TaxYear = ViewBag.TaxYear,FromDate=ViewBag.FromDate,ToDate=ViewBag.ToDate})" class="btn btn-theme">Export To Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblRevenueStreamBillDetailByTaxOffice">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer Name </th>
+                    <th class="none">Tax Payer Type</th>
+                    <th class="none">Tax Payer RIN</th>
+                    <th>Asset Name</th>
+                    <th class="none">Asset Type Name</th>
+                    <th class="none">Asset RIN</th>
+                    <th>Assessment</th>
+                    <th>Settlement</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsRevenueStreamBillDetailByTaxOffice.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+

@@ -1,0 +1,48 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - Employer PAYE Liability Report";
+}
+
+<div class="title">
+    <h1>
+        Operation Manager - Employer PAYE Liability Report
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Employer PAYE Liability Report</div>
+        <div class="form-actions text-right">
+            <button type="button" id="btnExportToExcel" class="btn btn-theme">Export To Excel</button>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblEmployerPAYELiabilityReport">
+            <thead class="red-th">
+                <tr>
+                    <th>RIN</th>
+                    <th>Tax Payer Name</th>
+                    <th class="none">Mobile Number</th>
+                    <th>Asset Name</th>
+                    <th>Count of Staff</th>
+                    <th class="none">Count of PAYE Bills</th>
+                    <th class="none">PAYE Bill Amount</th>
+                    <th class="none">PAYE Bill Payment</th>
+                    <th>Liability</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsEmployerPAYELiabilityReport.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

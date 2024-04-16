@@ -1,0 +1,167 @@
+﻿@model EIRS.Models.GovernmentViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Government Details";
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="portlet light compressed-menu">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Register
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <ul class="nav">
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> Search</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> OTP</a>
+                            </li>
+                            <li class="active">
+                                <a><i class="fa fa-angle-right"></i> Tax Payer</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> Asset</a>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-angle-right"></i> Password</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                @using (Html.BeginForm("UpdateDetail", "SignupGovernment", FormMethod.Post, htmlAttributes: new { @id = "frmAddGovernment" }))
+                {
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                Step 3: Enter Tax Payer Details
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.GovernmentID, htmlAttributes: new { @value = Model.GovernmentID })
+                            @Html.HiddenFor(model => model.GovernmentRIN, htmlAttributes: new { @value = Model.GovernmentRIN })
+
+                            @if (ViewBag.Message != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @ViewBag.Message
+                                </div>
+                            }
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.GovernmentName, htmlAttributes: new { @class = "control-label required-star" })
+                                        @Html.TextBoxFor(model => model.GovernmentName, htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Government name", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.GovernmentName, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TIN, htmlAttributes: new { @class = "control-label" })
+                                        @Html.TextBoxFor(model => model.TIN, htmlAttributes: new { @tabindex = "3", @placeholder = "Enter tax identification number from JTB if available", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.TIN, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.GovernmentTypeID, htmlAttributes: new { @class = "control-label" })
+                                        @Html.DropDownListFor(model => model.GovernmentTypeID, (SelectList)ViewBag.GovernmentTypeList, "Select Government Type", htmlAttributes: new { @tabindex = "4", @class = "form-control bs-select" })
+                                        @Html.ValidationMessageFor(model => model.GovernmentTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TaxOfficeID, htmlAttributes: new { @class = "control-label" })
+                                        @Html.DropDownListFor(model => model.TaxOfficeID, (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", htmlAttributes: new { @tabindex = "5", @id = "cboTaxOffice", @class = "form-control bs-select" })
+                                        @Html.ValidationMessageFor(model => model.TaxOfficeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "control-label" })
+                                        @Html.DropDownListFor(model => model.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", htmlAttributes: new { @tabindex = "6", @class = "form-control bs-select", @id = "cboTaxPayerTypeID", @disabled = "true" })
+                                        @Html.ValidationMessageFor(model => model.TaxPayerTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label" })
+                                        @Html.TextBoxFor(model => model.ContactName, htmlAttributes: new { @tabindex = "7", @placeholder = "Enter Contact Name", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.ContactName, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ContactEmail, htmlAttributes: new { @class = "control-label" })
+                                        @Html.TextBoxFor(model => model.ContactEmail, htmlAttributes: new { @tabindex = "8", @placeholder = "Enter Contact Email", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.ContactEmail, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ContactNumber, htmlAttributes: new { @class = "control-label" })
+                                        <div class="input-group">
+                                            <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                                            @Html.TextBoxFor(model => model.ContactNumber, htmlAttributes: new { @tabindex = "9", @placeholder = "Enter Contact Number", @class = "form-control", @readonly="readonly" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.ContactNumber, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.NotificationMethodID, htmlAttributes: new { @class = "control-label required-star" })
+                                        @Html.DropDownListFor(model => model.NotificationMethodID, (SelectList)ViewBag.NotificationMethodList, "Select Notification Method", htmlAttributes: new { @tabindex = "10", @class = "form-control bs-select" })
+                                        @Html.ValidationMessageFor(model => model.NotificationMethodID, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ContactAddress, htmlAttributes: new { @class = "control-label required-star" })
+                                        @Html.TextAreaFor(model => model.ContactAddress, htmlAttributes: new { @class = "form-control", @tabindex = "20", @placeholder = "Enter Contact Address", @Rows = "3" })
+                                        @Html.ValidationMessageFor(model => model.ContactAddress, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="portlet-footer text-right">
+                            <a href="@Url.Action("GenerateOTP","SignupGovernment")" class="btn btn-theme btn-outline">
+                                Previous
+                            </a>
+                            <button type="submit" class="btn btn-theme"> Next </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsUpdateGovernmentDetail.js"></script>
+}

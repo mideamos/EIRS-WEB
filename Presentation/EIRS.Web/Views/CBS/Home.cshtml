@@ -1,0 +1,238 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home";
+    ViewBag.MenuID = 7;
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Welcome to Edo Revenue Services Hub
+            </h1>
+            <hr>
+            <p>
+                Understand the different elements that make up your taxes and other priced government services; look out for how they apply to you and feel free to ask us any question.
+            </p>
+        </div>
+
+        <div class="row custom-tabs">
+            <div class="col-sm-3">
+                <div class="portlet light compressed-menu">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Revenue Services Hub
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <ul class="nav">
+                            <li>
+                                <a href="@Url.Action("PayTaxes","CBS")"><i class="fa fa-angle-right"></i> Pay Your Taxes</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="portlet light" style="display: none">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Pay a Bill
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            @using (Html.BeginForm("SearchBill", "Default", FormMethod.Post))
+                            {
+                                <p>
+                                    If you have received a notification of assessment or a service  bill, please enter the reference number here.
+                                </p>
+                                <div class="form-group">
+                                    <input type="text" autocomplete="off" required class="form-control" id="txtReferenceNumber" name="txtReferenceNumber" placeholder="Enter Assessment or Service Bill ID" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" autocomplete="off" required class="form-control" id="txtMobileNumber" name="txtMobileNumber" placeholder="Tax Payer Mobile Number" />
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-redtheme btn-block">RETRIEVE</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet light" style="display: none">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Payment Matcher
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            <p>
+                                If you don’t have a working reference number, click to make payment against a named tax or government service by using our payment matcher.
+                            </p>
+                            <div class="form-group">
+                                <button class="btn btn-redtheme btn-block"> PROCEED </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Assessment Rules (Top 5)
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            <ul>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  1 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  2 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  3 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  4 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  5 </a>
+                                </li>
+                                <li class="clearfix">
+                                    <a class="btn btn-theme pull-right">
+                                        View All <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            MDA Services (Top 5)
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            <ul>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  1 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  2 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  3 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  4 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  5 </a>
+                                </li>
+                                <li class="clearfix">
+                                    <a class="btn btn-theme pull-right">
+                                        View All <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Revenue Streams (Top 5)
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            <ul>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  1 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  2 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  3 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  4 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> Assessment Rule  5 </a>
+                                </li>
+                                <li class="clearfix">
+                                    <a class="btn btn-theme pull-right">
+                                        View All <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Item Categories (Top 5)
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            <ul>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  1 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  2 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  3 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  4 </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-angle-right"></i>
+                                    <a> MDA Service  5 </a>
+                                </li>
+                                <li class="clearfix">
+                                    <a class="btn btn-theme pull-right">
+                                        View All <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

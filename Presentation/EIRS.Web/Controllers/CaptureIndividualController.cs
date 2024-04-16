@@ -26,6 +26,7 @@ using SelectPdf;
 using EIRS.Web.Utility;
 using static EIRS.Common.EnumList;
 using Twilio.TwiML.Voice;
+using System.Web.Script.Serialization;
 
 namespace EIRS.Web.Controllers
 {
@@ -2343,8 +2344,8 @@ namespace EIRS.Web.Controllers
                     //string[] strArrAssessmentRuleIds = strAssessmentRuleIds.Split(',');
                     if (aruleIds.Contains("{"))
                     {
-                        var assBillIds = JsonConvert.DeserializeObject<List<newServiceBillIdsRequest>>(aruleIds);
-
+                        JavaScriptSerializer js = new();
+                        var assBillIds = (List<newServiceBillIdsRequest>)js.DeserializeObject(aruleIds);
                         foreach (var item in assBillIds)
                         {
                             strArrAssessmentRuleIds.Add(item.ServiceId);
@@ -3058,8 +3059,9 @@ namespace EIRS.Web.Controllers
 
                     if (mdsIds.Contains("{"))
                     {
-                        var serviceBillIds = JsonConvert.DeserializeObject<List<ServiceBillIdsRequest>>(mdsIds);
+                        JavaScriptSerializer js = new JavaScriptSerializer();
 
+                        var serviceBillIds = (List<newServiceBillIdsRequest>)js.DeserializeObject(mdsIds);
                         foreach (var item in serviceBillIds)
                         {
                             strArrMDAServiceIds.Add(item.ServiceId);

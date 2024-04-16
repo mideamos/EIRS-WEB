@@ -458,7 +458,7 @@ namespace EIRS.Web.Controllers
                     intStatus = 1
                 };
 
-                usp_GetGovernmentList_Result mObjGovernmentData  = new BLGovernment().BL_GetGovernmentDetails(mObjGovernment);
+                usp_GetGovernmentList_Result mObjGovernmentData = new BLGovernment().BL_GetGovernmentDetails(mObjGovernment);
 
                 if (mObjGovernmentData != null)
                 {
@@ -2004,7 +2004,7 @@ namespace EIRS.Web.Controllers
                             TaxPayerID = pObjAssessmentModel.TaxPayerID,
                             TaxPayerTypeID = pObjAssessmentModel.TaxPayerTypeID,
                             AssessmentAmount = lstAssessmentRules.Count > 0 ? lstAssessmentRules.Sum(t => t.AssessmentRuleAmount) : 0,
-                          // AssessmentAmount = lstAssessmentItems.Count > 0 ? lstAssessmentItems.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.TaxAmount) : 0,
+                            // AssessmentAmount = lstAssessmentItems.Count > 0 ? lstAssessmentItems.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.TaxAmount) : 0,
                             AssessmentDate = CommUtil.GetCurrentDateTime(),
                             SettlementDueDate = pObjAssessmentModel.SettlementDuedate,
                             SettlementStatusID = (int)EnumList.SettlementStatus.Assessed,
@@ -2018,7 +2018,7 @@ namespace EIRS.Web.Controllers
                         {
 
                             FuncResponse<Assessment> mObjAssessmentResponse = _AssessmentRepository.REP_InsertUpdateAssessment(mObjAssessment, rule.AssessmentRuleID, rule.AssetID);
-                          //  FuncResponse<Assessment> mObjAssessmentResponse = mObjBLAssessment.BL_InsertUpdateAssessment(mObjAssessment);
+                            //  FuncResponse<Assessment> mObjAssessmentResponse = mObjBLAssessment.BL_InsertUpdateAssessment(mObjAssessment);
 
                             if (mObjAssessmentResponse.Success)
                             {
@@ -2575,7 +2575,7 @@ namespace EIRS.Web.Controllers
             }
             else
             {
-                return RedirectToAction("AddServiceBill", new { id = pObjGenerateServiceBillModel.TaxPayerID, name = pObjGenerateServiceBillModel.TaxPayerRIN,mdsIds = pObjGenerateServiceBillModel.MDAServiceIds });
+                return RedirectToAction("AddServiceBill", new { id = pObjGenerateServiceBillModel.TaxPayerID, name = pObjGenerateServiceBillModel.TaxPayerRIN, mdsIds = pObjGenerateServiceBillModel.MDAServiceIds });
             }
         }
 

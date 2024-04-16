@@ -27,6 +27,7 @@ using System.Reflection;
 using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -2044,8 +2045,11 @@ namespace EIRS.Web.Controllers
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
-                    JObject joResponse = JObject.Parse(result);
-                    printObj = JsonConvert.DeserializeObject<ResultModel>(result);
+                    JavaScriptSerializer js = new();
+                   // var com = new RegularLoanReasonToDecline { LoanApplicationId = obj.LoanApplicationId, Comment = obj.Comment };
+                    var re = js.Serialize(result);
+                    //JObject joResponse = JObject.Parse(result);
+                    //printObj = JsonConvert.DeserializeObject<ResultModel>(re);
 
                     lgisNewFile = InsertIntoFile(printObj, PageNo);
 

@@ -16,14 +16,14 @@ namespace EIRS.Web.Controllers
     public class AssessmentRuleController : BaseController
     {
 
-        
+
         [HttpGet]
         public ActionResult List()
         {
             return View();
         }
 
-        
+
         [HttpPost]
         public JsonResult LoadData()
         {
@@ -70,14 +70,14 @@ namespace EIRS.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpGet]
         public ActionResult ListWithExport()
         {
             return View();
         }
 
-        
+
         [HttpPost]
         public JsonResult LoadExportData()
         {
@@ -124,7 +124,7 @@ namespace EIRS.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpGet]
         public ActionResult ExportData()
         {

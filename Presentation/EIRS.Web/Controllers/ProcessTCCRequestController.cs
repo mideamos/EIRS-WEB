@@ -40,6 +40,7 @@ using System.Data.Entity.Migrations;
 using DocumentFormat.OpenXml;
 using Microsoft.Office.Interop.Excel;
 using Vereyon.Web;
+using System.Web.Script.Serialization;
 
 namespace EIRS.Web.Controllers
 {
@@ -2189,7 +2190,8 @@ namespace EIRS.Web.Controllers
                             t.mStrGeneratedDocumentPath = mStrGeneratedDocumentPath;
                             t.mStrGeneratedDocumentPathForPrint = mStrGeneratedDocumentPathForPrint;
                             // Convert the data to JSON
-                            string jsonContent = Newtonsoft.Json.JsonConvert.SerializeObject(t);
+                            JavaScriptSerializer js = new();
+                            string jsonContent = js.Serialize(t);
 
                             // Create a StringContent with the JSON data
                             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
@@ -3595,7 +3597,10 @@ namespace EIRS.Web.Controllers
                 {
                     var result = response.Content.ReadAsStringAsync();
                     string res = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    respObj = JsonConvert.DeserializeObject<PayeApiFullResponse>(res);
+
+                    JavaScriptSerializer js = new();
+                    respObj = (PayeApiFullResponse)js.DeserializeObject(res);
+                    // respObj = JsonConvert.DeserializeObject<PayeApiFullResponse>(res);
                     if (respObj.Result.Count() > 0)
                     {
                         for (int i = 1; i < respObj.Result.Count(); i++)

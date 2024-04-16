@@ -15,7 +15,7 @@ using EIRS.Web.Utility;
 
 namespace EIRS.Web.Controllers
 {
- [SessionTimeout]
+    [SessionTimeout]
     public class APIController : BaseController
     {
         public ActionResult List()

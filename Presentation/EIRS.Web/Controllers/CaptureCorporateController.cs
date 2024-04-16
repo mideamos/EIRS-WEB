@@ -975,7 +975,7 @@ namespace EIRS.Web.Controllers
             UI_FillTaxPayerRoleDropDown(new TaxPayer_Roles() { TaxPayerTypeID = (int)EnumList.TaxPayerType.Companies, AssetTypeID = (int)EnumList.AssetTypes.Business });
             UI_FillAssetTypeDropDown(new Asset_Types() { intStatus = 1, IncludeAssetTypeIds = pObjBusinessViewModel.AssetTypeID.ToString() }, (int)EnumList.AssetTypes.Business);
             UI_FillBusinessTypeDropDown(new Business_Types() { intStatus = 1, IncludeBusinessTypeIds = pObjBusinessViewModel.BusinessTypeID.ToString() });
-            UI_FillLGADropDown(new LGA() { intStatus = 1, IncludeLGAIds = pObjBusinessViewModel.LGAID.ToString() }); 
+            UI_FillLGADropDown(new LGA() { intStatus = 1, IncludeLGAIds = pObjBusinessViewModel.LGAID.ToString() });
             UI_FillZoneDropDown(pObjBusinessViewModel.ZoneId);
             UI_FillTaxOfficeDropDown(pObjBusinessViewModel.TaxOfficeId);
             UI_FillBusinessCategoryDropDown(new Business_Category() { intStatus = 1, IncludeBusinessCategoryIds = pObjBusinessViewModel.BusinessCategoryID.ToString(), BusinessTypeID = pObjBusinessViewModel.BusinessTypeID });
@@ -1012,7 +1012,7 @@ namespace EIRS.Web.Controllers
                         TaxPayerRIN = mObjCompanyData.CompanyRIN,
                         TaxPayerTIN = mObjCompanyData.TIN,
                         TaxPayerName = mObjCompanyData.CompanyName,
-                       // ZoneId = mObjCompanyData.zo
+                        // ZoneId = mObjCompanyData.zo
                         MobileNumber = mObjCompanyData.MobileNumber1,
                         ContactAddress = mObjCompanyData.ContactAddress,
                         AssetTypeID = (int)EnumList.AssetTypes.Business,

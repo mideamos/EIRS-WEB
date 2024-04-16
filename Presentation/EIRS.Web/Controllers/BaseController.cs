@@ -119,7 +119,7 @@ namespace EIRS.Web.Controllers
             }
 
         }
-        public void UI_FillTaxOfficeDropDownForStatic(Tax_Offices pObjTaxOffice = null, bool pblnAddAll = false,int userTaxOffice=0,int loginTaxOffice=0)
+        public void UI_FillTaxOfficeDropDownForStatic(Tax_Offices pObjTaxOffice = null, bool pblnAddAll = false, int userTaxOffice = 0, int loginTaxOffice = 0)
         {
             if (pObjTaxOffice == null)
                 pObjTaxOffice = new Tax_Offices();
@@ -798,8 +798,8 @@ namespace EIRS.Web.Controllers
                 lstZone.Add(new DropDownListResult() { id = item.ZoneId, text = item.ZoneName.ToString() });
             }
             ViewBag.ZoneList = new SelectList(lstZone, "id", "text");
-           // ViewBag.LGAList = new SelectList(lstLGA, "id", "text");
-        }  
+            // ViewBag.LGAList = new SelectList(lstLGA, "id", "text");
+        }
         public void UI_FillTaxOfficeDropDown(int? zoneId)
         {
             List<Tax_Offices> zones = new List<Tax_Offices>();
@@ -817,7 +817,7 @@ namespace EIRS.Web.Controllers
                 lstZone.Add(new DropDownListResult() { id = item.TaxOfficeID, text = item.TaxOfficeName.ToString() });
             }
             ViewBag.TaxOfficeList = new SelectList(lstZone, "id", "text");
-           // ViewBag.LGAList = new SelectList(lstLGA, "id", "text");
+            // ViewBag.LGAList = new SelectList(lstLGA, "id", "text");
         }
 
         //public void UI_FillLGADropDown(LGA pObjLGA = null)

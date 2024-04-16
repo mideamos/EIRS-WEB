@@ -166,7 +166,7 @@ namespace EIRS.Web.Controllers
                 {
                     DataSubmissionTypeID = pObjDataSubmissionTypeModel.DataSubmissionTypeID,
                     DataSubmissionTypeName = pObjDataSubmissionTypeModel.DataSubmissionTypeName.Trim(),
-                    TemplateFilePath  = strTemplateFilePath,
+                    TemplateFilePath = strTemplateFilePath,
                     Active = pObjDataSubmissionTypeModel.Active,
                     ModifiedBy = SessionManager.UserID,
                     ModifiedDate = CommUtil.GetCurrentDateTime()

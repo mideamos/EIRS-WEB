@@ -106,7 +106,7 @@ namespace EIRS.Web.Controllers
             }
             sbSMSContent.Append(", kindly pay "); sbSMSContent.Append(pObjEmailDetails.BillAmount);
             sbSMSContent.Append(" at any of the IGR collecting banks or visit https://tyson.eirs.gov.ng/webpay/");
-           // sbSMSContent.Append(" at any of the IGR collecting banks or visit https://tyson.eirs.gov.ng/webpay/?billRef=");
+            // sbSMSContent.Append(" at any of the IGR collecting banks or visit https://tyson.eirs.gov.ng/webpay/?billRef=");
             sbSMSContent.Append(pObjEmailDetails.BillRefNo);
             sbSMSContent.Append(" to make payment online.");
 

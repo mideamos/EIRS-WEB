@@ -120,7 +120,7 @@ namespace EIRS.Web.Controllers
 
         public ActionResult Edit(int? id, string name)
         {
-           if(id.GetValueOrDefault() > 0)
+            if (id.GetValueOrDefault() > 0)
             {
 
 

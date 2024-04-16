@@ -237,7 +237,7 @@ namespace EIRS.Web.Controllers
                         strContactNumber = mObjAssessmentData.TaxPayerMobile;
                         strContactAddress = mObjAssessmentData.TaxPayerAddress;
                         dcBillAmount = mObjAssessmentData.AssessmentAmount.GetValueOrDefault() + lstAssessmentAdjustment.Sum(o => o.Amount.Value) + lstAssessmentLateCharge.Sum(o => o.TotalAmount.Value);
-                        dcOutstandingAmount = mObjAssessmentData.AssessmentAmount.GetValueOrDefault() + lstAssessmentAdjustment.Sum(o=>o.Amount.Value)+ lstAssessmentLateCharge.Sum(o=>o.TotalAmount.Value) - mObjAssessmentData.SettlementAmount.GetValueOrDefault();
+                        dcOutstandingAmount = mObjAssessmentData.AssessmentAmount.GetValueOrDefault() + lstAssessmentAdjustment.Sum(o => o.Amount.Value) + lstAssessmentLateCharge.Sum(o => o.TotalAmount.Value) - mObjAssessmentData.SettlementAmount.GetValueOrDefault();
                         strTaxYear = lstMAPAssessmentRules.FirstOrDefault().TaxYear.ToString();
 
                         SigBase = BrCode(mObjAssessmentData.AssessmentRefNo, mObjAssessmentData.TaxPayerName, mObjAssessmentData.TaxPayerRIN, dcBillAmount.ToString(), mObjResponse.AdditionalData.ReceiptAmount.ToString(), dcOutstandingAmount.ToString(), 1);
@@ -298,7 +298,7 @@ namespace EIRS.Web.Controllers
                         strContactNumber = mObjServiceBillData.TaxPayerMobile;
                         strContactAddress = mObjServiceBillData.TaxPayerAddress;
                         dcBillAmount = mObjServiceBillData.ServiceBillAmount.GetValueOrDefault() + lstServiceBillAdjustment.Sum(o => o.Amount.Value) + lstServiceBillLateCharge.Sum(o => o.TotalAmount.Value);
-                        dcOutstandingAmount = mObjServiceBillData.ServiceBillAmount.GetValueOrDefault() + lstServiceBillAdjustment .Sum(o=>o.Amount.Value)+ lstServiceBillLateCharge .Sum(o=>o.TotalAmount.Value)- mObjServiceBillData.SettlementAmount.GetValueOrDefault();
+                        dcOutstandingAmount = mObjServiceBillData.ServiceBillAmount.GetValueOrDefault() + lstServiceBillAdjustment.Sum(o => o.Amount.Value) + lstServiceBillLateCharge.Sum(o => o.TotalAmount.Value) - mObjServiceBillData.SettlementAmount.GetValueOrDefault();
                         strTaxYear = lstMAPServiceBillServices.FirstOrDefault().TaxYear.ToString();
                         string mHtmlDirectory = $"{DocumentHTMLLocation}/TreasuryReceipt.html";
                         //string mHtmlDirectory = $"{DocumentHTMLLocation}/newTreasuryReceipt.html";

@@ -22,13 +22,13 @@ namespace EIRS.Web.Controllers
 
     public class SettleController : BaseController
     {
-        
+
         public ActionResult List()
         {
             return View();
         }
 
-        
+
         public JsonResult GetSettleList()
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -93,7 +93,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult Individual()
         {
             Settlement mObjSettlement = new Settlement()
@@ -105,7 +105,7 @@ namespace EIRS.Web.Controllers
             return View(lstSettlement);
         }
 
-        
+
         public ActionResult Corporate()
         {
             Settlement mObjSettlement = new Settlement()
@@ -117,7 +117,7 @@ namespace EIRS.Web.Controllers
             return View(lstSettlement);
         }
 
-        
+
         public ActionResult PaymentAccount()
         {
             return View();
@@ -524,7 +524,7 @@ namespace EIRS.Web.Controllers
             var ObjExcelData = CommUtil.ConvertDataTableToExcel(dt);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DemandNoticeCharge_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
             //byte[] ObjExcelData = CommUtil.ExportToExcel2(lstPaymentCharge, vMemberInfoData, true, strTotalColumns);
-           // return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DemandNoticeCharge_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            // return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DemandNoticeCharge_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         public ActionResult GenerateDemandNoticePDF(int tptid, int tpid)
@@ -564,7 +564,7 @@ namespace EIRS.Web.Controllers
                 string marksheet = string.Empty;
                 marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
                 string sbTableBody = "";
-                foreach(var item in lstPaymentCharge)
+                foreach (var item in lstPaymentCharge)
                 {
                     sbTableBody += "<tr>";
                     sbTableBody += $"<td>{item.TaxYear}</td>";
@@ -578,12 +578,12 @@ namespace EIRS.Web.Controllers
                     sbTableBody += $"<td>{CommUtil.GetFormatedCurrency(item.TotalCharge.GetValueOrDefault() + item.BillAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault())}</td>";
                     sbTableBody += "</tr>";
                 }
-                decimal? totalSettledAmount = lstPaymentCharge.Sum(o=>o.SettledAmount);
-                decimal? totalBilledAmount = lstPaymentCharge.Sum(o=>o.BillAmount);
-                decimal? totalOutstanding = lstPaymentCharge.Sum(o=>o.OutstandingAmount);
-                decimal? totalPenalties = lstPaymentCharge.Sum(o=>o.Penalty);
-                decimal? totalInterest = lstPaymentCharge.Sum(o=>o.Interest);
-                decimal? totalTotal = lstPaymentCharge.Sum(o=>o.TotalCharge);
+                decimal? totalSettledAmount = lstPaymentCharge.Sum(o => o.SettledAmount);
+                decimal? totalBilledAmount = lstPaymentCharge.Sum(o => o.BillAmount);
+                decimal? totalOutstanding = lstPaymentCharge.Sum(o => o.OutstandingAmount);
+                decimal? totalPenalties = lstPaymentCharge.Sum(o => o.Penalty);
+                decimal? totalInterest = lstPaymentCharge.Sum(o => o.Interest);
+                decimal? totalTotal = lstPaymentCharge.Sum(o => o.TotalCharge);
                 decimal? totalAll = totalOutstanding + totalTotal;
                 marksheet = marksheet
                     .Replace("@@DemandNoticeBody@@", sbTableBody)
@@ -600,7 +600,7 @@ namespace EIRS.Web.Controllers
                     .Replace("@@Penalties@@", CommUtil.GetFormatedCurrency(totalPenalties))
                     .Replace("@@Interest@@", CommUtil.GetFormatedCurrency(totalInterest))
                     .Replace("@@Total@@", CommUtil.GetFormatedCurrency(totalAll));
-               
+
                 SelectPdf.PdfDocument doc = pdf.ConvertHtmlString(marksheet);
                 var bytes = doc.Save();
                 System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes);

@@ -147,17 +147,17 @@ namespace EIRS.Web.Controllers
             decimal? totalnewAmount = 0;
             decimal? totalnewAmountLateCharge = 0;
             var lll = new List<long>();
-            int det = 0;
-            using (var _con = new EIRSEntities())
-            {
-                var allTax = _con.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
-                if (!allTax.Any())
-                { allTax = _con.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID); det = 1; }
-                else
-                    det = 2;
-                if (!allTax.Any())
-                    return RedirectToAction("Unauthorised");
-            }
+            //int det = 0;
+            //using (var _con = new EIRSEntities())
+            //{
+            //    var allTax = _con.Tax_Offices.Where(o => o.OfficeManagerID == SessionManager.UserID);
+            //    if (!allTax.Any())
+            //    { allTax = _con.Tax_Offices.Where(o => o.IncomeDirector == SessionManager.UserID); det = 1; }
+            //    else
+            //        det = 2;
+            //    if (!allTax.Any())
+            //        return RedirectToAction("Unauthorised");
+            //}
             var retList = new List<usp_GetAssessmentForPendingOrDeclined_Result>();
 
             retList = getSPList();

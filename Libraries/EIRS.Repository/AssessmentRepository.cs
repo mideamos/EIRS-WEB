@@ -511,6 +511,7 @@ namespace EIRS.Repository
                                            where arule.AssessmentRuleID == pObjAssessmentRule.AssessmentRuleID && arule.AssetID == pObjAssessmentRule.AssetID
                                            && arule.AssetTypeID == pObjAssessmentRule.AssetTypeID && arule.ProfileID == pObjAssessmentRule.ProfileID
                                            && ass.TaxPayerID == pObjAssessmentRule.TaxPayerID && ass.TaxPayerTypeID == pObjAssessmentRule.TaxPayerTypeID
+                                           && ass.Active == true
                                            select ass);
 
                     if (vDuplicateCheck.Count() > 0)

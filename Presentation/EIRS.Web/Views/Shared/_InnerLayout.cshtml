@@ -338,7 +338,6 @@
             <div class="row">
                 <div class="col-sm-3">
                     @if (SessionManager.TaxPayerTypeID == 0)
-                    //@if (SessionManager.TaxPayerTypeID == 0 && SessionManager.DataSubmitterID == 0)
                     {
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 9 });
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 10 });
@@ -347,27 +346,26 @@
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 46 });
                         Html.RenderAction("GetCentralSideMenuList", "Home", new { area = "", pIntParentMenuID = 60 });
 
-
-                        if (SessionManager.CanSeeApproval)
-                        {
-                            <div class="portlet light compressed-menu">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        Approvals
-                                    </div>
+                        <div class="portlet light compressed-menu">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    Approvals
                                 </div>
-                                <div class="portlet-body">
-                                    <ul class="nav">
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="nav">
+                                    @if (SessionManager.CanSeeApproval)
+                                    {
                                         <li>
                                             <a href="@Url.Action("Pending","Home")"> <i class="fa fa-angle-right"></i> Pending</a>
                                         </li>
-                                        <li>
-                                            <a href="@Url.Action("Declined","Home")"> <i class="fa fa-angle-right"></i> Declined</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                    }
+                                    <li>
+                                        <a href="@Url.Action("Declined","Home")"> <i class="fa fa-angle-right"></i> Declined</a>
+                                    </li>
+                                </ul>
                             </div>
-                        }
+                        </div>
                     }
                     else if (SessionManager.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
                     {

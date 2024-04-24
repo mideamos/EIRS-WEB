@@ -517,13 +517,6 @@ namespace EIRS.Web.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult Edit(IndividualViewModel pObjIndividualModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    UI_FillDropDown(pObjIndividualModel);
-            //    return View(pObjIndividualModel);
-            //}
-            //else
-            //{
             Individual mObjIndividual = new Individual()
             {
                 IndividualID = pObjIndividualModel.IndividualID,
@@ -605,7 +598,6 @@ namespace EIRS.Web.Controllers
                 ViewBag.Message = "Error occurred while saving Individual";
                 return View(pObjIndividualModel);
             }
-            //}
         }
         public ActionResult EditTaxOffice(int? id, string name)
         {
@@ -2344,8 +2336,9 @@ namespace EIRS.Web.Controllers
                     //string[] strArrAssessmentRuleIds = strAssessmentRuleIds.Split(',');
                     if (aruleIds.Contains("{"))
                     {
-                        JavaScriptSerializer js = new();
-                        var assBillIds = (List<newServiceBillIdsRequest>)js.DeserializeObject(aruleIds);
+                        JavaScriptSerializer js = new JavaScriptSerializer();
+                        var assBillIds = js.Deserialize<List<newServiceBillIdsRequest>>(aruleIds);
+                        //  var assBillIds = (List<newServiceBillIdsRequest>)js.DeserializeObject(aruleIds);
                         foreach (var item in assBillIds)
                         {
                             strArrAssessmentRuleIds.Add(item.ServiceId);
@@ -3060,8 +3053,8 @@ namespace EIRS.Web.Controllers
                     if (mdsIds.Contains("{"))
                     {
                         JavaScriptSerializer js = new JavaScriptSerializer();
-
-                        var serviceBillIds = (List<newServiceBillIdsRequest>)js.DeserializeObject(mdsIds);
+                        var serviceBillIds = js.Deserialize<List<newServiceBillIdsRequest>>(mdsIds);
+                        // var serviceBillIds = (List<newServiceBillIdsRequest>)js.DeserializeObject(mdsIds);
                         foreach (var item in serviceBillIds)
                         {
                             strArrMDAServiceIds.Add(item.ServiceId);
@@ -3747,6 +3740,8 @@ namespace EIRS.Web.Controllers
 
                         if (mObjAssessmentData != null && mObjAssessmentData.TaxPayerID == mObjIndividualData.IndividualID && mObjAssessmentData.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
                         {
+                            var disaap = _db.MapAssessmentDisapprove_.Where(o => o.AssessmentID == mObjAssessmentData.AssessmentID).ToList();
+
                             IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = mObjBLAssessment.BL_GetAssessmentRules(mObjAssessmentData.AssessmentID.GetValueOrDefault());
                             IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = mObjBLAssessment.BL_GetAssessmentRuleItem(mObjAssessmentData.AssessmentID.GetValueOrDefault());
                             IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = mObjBLAssessment.BL_GetAssessmentRuleBasedSettlement(mObjAssessmentData.AssessmentID.GetValueOrDefault());
@@ -3764,7 +3759,7 @@ namespace EIRS.Web.Controllers
                             ViewBag.SettlementList = lstSettlement;
                             ViewBag.AdjustmentList = lstAssessmentAdjustment;
                             ViewBag.LateChargeList = lstAssessmentLateCharge;
-
+                            ViewBag.disaap = disaap;
                             return View("AssessmentBillDetailFromPending", mObjAssessmentData);
                         }
                         else
@@ -3886,9 +3881,6 @@ namespace EIRS.Web.Controllers
                             ass.SettlementStatusID = 4;
 
                     }
-
-                    _db.SaveChanges();
-                    return RedirectToAction("Details", "CaptureIndividual", new { id = ass.TaxPayerID, name = ass.TaxPayerRIN });
                     break;
                 case 2:
                     ass.SettlementStatusID = 7;
@@ -3899,13 +3891,13 @@ namespace EIRS.Web.Controllers
                     map.TaxOfficerDesignation = SessionManager.UserID.ToString();
                     map.TaxOfficerId = allTax.FirstOrDefault().TaxOfficeID;
                     _db.MapAssessmentDisapprove_.Add(map);
-                    _db.SaveChanges();
-                    return RedirectToAction("Declined", "Home", new { id = ass.TaxPayerID, name = ass.TaxPayerRIN });
                     break;
                 default:
                     break;
             }
-            return View("AssessmentBillDetailFromPending", ass);
+            _db.SaveChanges();
+            return RedirectToAction("Pending", "Home", new { id = ass.TaxPayerID, name = ass.TaxPayerRIN });
+
         }
         public ActionResult GenerateBill(int? id, string name, int? billid, string billrefno)
         {

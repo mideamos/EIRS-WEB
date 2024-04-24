@@ -564,337 +564,354 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GenerateTCC(long? reqid, string imgData, int SignSourceID)
+        public JsonResult GenerateTCC(string reqid, string imgData, string SignSourceID)
         {
+            long? nereqid = Convert.ToInt64(reqid);
+            int? neSignSourceID = Convert.ToInt32(SignSourceID);
             IDictionary<string, object> dcResponse = new Dictionary<string, object>();
-            if (reqid.GetValueOrDefault() > 0)
+            try
             {
-
-                usp_GetUserList_Result mObjUserData = new BLUser().BL_GetUserDetails(new MST_Users() { UserID = SessionManager.UserID, intStatus = 2 });
-
-                if (mObjUserData != null && SignSourceID == 1)
+                if (nereqid.GetValueOrDefault() > 0)
                 {
-                    string imgScrs = !string.IsNullOrWhiteSpace(mObjUserData.SignaturePath) ? mObjUserData.SignaturePath : "";
-                    imgData = ImageConverter(WebConfigurationManager.AppSettings["documentLocation"] + imgScrs);
-                    imgData = "data:image/png;base64," + imgData;
-                }
 
-                BLTCC mObjBLTCC = new BLTCC();
-                var ret = mObjBLTCC.BL_GetTCCRequestGenerateDetails((long)reqid);
-                var retVal = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == reqid);
-                usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
+                    usp_GetUserList_Result mObjUserData = new BLUser().BL_GetUserDetails(new MST_Users() { UserID = SessionManager.UserID, intStatus = 2 });
 
-                if (mObjRequestData.SEDE_OrderID == (long)TCCSigningStage.AwaitingFirstSigner)
-                {
-                    string mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
-                    string mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
-                    string mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
-                    string mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
-                    string mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
-
-                    //ETCC/Print/149726/Temp/Html/149726_template.html
-                    string mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
-                    string mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
-                    string mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
-                    string mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
-                    string mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
-                    if (!Directory.Exists(mStrDirectory))
+                    if (mObjUserData != null && neSignSourceID == 1)
                     {
-                        Directory.CreateDirectory(mStrDirectory);
+                        string imgScrs = !string.IsNullOrWhiteSpace(mObjUserData.SignaturePath) ? mObjUserData.SignaturePath : "";
+                        string fulPath = WebConfigurationManager.AppSettings["documentLocation"] + imgScrs;
+                        if (!System.IO.File.Exists(fulPath))
+                        {
+                            dcResponse["success"] = false;
+                            dcResponse["Message"] = $"Signing eTCC Failed  As User Signature {fulPath} is not found";
+
+                            return Json(dcResponse, JsonRequestBehavior.AllowGet);
+                        }
+                        imgData = ImageConverter(fulPath);
+                        imgData = "data:image/png;base64," + imgData;
                     }
-                    if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+
+                    BLTCC mObjBLTCC = new BLTCC();
+                    var ret = mObjBLTCC.BL_GetTCCRequestGenerateDetails((long)nereqid);
+                    var retVal = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == nereqid);
+                    usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(nereqid.GetValueOrDefault());
+
+                    if (mObjRequestData.SEDE_OrderID == (long)TCCSigningStage.AwaitingFirstSigner)
                     {
-                        Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+                        string mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
+                        string mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+                        string mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
+                        string mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+                        string mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
+
+                        //ETCC/Print/149726/Temp/Html/149726_template.html
+                        string mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
+                        string mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+                        string mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
+                        string mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+                        string mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
+                        if (!Directory.Exists(mStrDirectory))
+                        {
+                            Directory.CreateDirectory(mStrDirectory);
+                        }
+                        if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+                        {
+                            Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+                        }
+                        if (!Directory.Exists(mStrDirectoryForPrint))
+                        {
+                            Directory.CreateDirectory(mStrDirectoryForPrint);
+                        }
+                        if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
+                        {
+                            Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
+                        }
+                        HtmlToPdf pdf = new HtmlToPdf();
+                        // set converter options
+                        pdf.Options.PdfPageSize = PdfPageSize.A4;
+                        pdf.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+
+                        pdf.Options.WebPageWidth = 0;
+                        pdf.Options.WebPageHeight = 0;
+                        pdf.Options.WebPageFixedSize = false;
+
+                        pdf.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
+                        pdf.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
+                        string marksheet = string.Empty;
+                        string marksheetForPrint = string.Empty;
+                        marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
+                        marksheet = marksheet.Replace("@@first@@", imgData);
+                        marksheetForPrint = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
+                        marksheetForPrint = marksheetForPrint.Replace("@@first@@", imgData);
+
+                        System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
+                        PdfDocument doc = pdf.ConvertHtmlString(marksheet);
+                        var bytes = doc.Save();
+                        System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetForPrint);
+                        PdfDocument docII = pdf.ConvertHtmlString(marksheetForPrint);
+                        var bytesII = docII.Save();
+
+                        System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes);
+                        System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytesII);
+                        ViewBag.RequestData = mObjRequestData;
+                        ViewBag.pdf = mStrGeneratedDocumentPath;
+                        GenerateViewModel mObjGenerateTCCModel = new GenerateViewModel()
+                        {
+                            RequestID = mObjRequestData.TCCRequestID,
+                        };
+
+                        TCC_Request mObjUpdateStatus = new TCC_Request()
+                        {
+                            TCCRequestID = mObjRequestData.TCCRequestID,
+                            StatusID = (int)NewTCCRequestStage.Waiting_For_Second_Signature,
+                            ModifiedBy = SessionManager.UserID,
+                            SEDE_DocumentID = SessionManager.UserID,//to holder first signer id
+                            SEDE_OrderID = (long)TCCSigningStage.AwaitingSecondSigner,
+                            GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
+                            ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+
+                            GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+                            ModifiedDate = CommUtil.GetCurrentDateTime()
+                        };
+
+                        mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
+
+                        SessionManager.Path = mStrGeneratedDocumentPath;
+                        SessionManager.Path = mStrGeneratedDocumentPath;
+                        ViewBag.path = mStrGeneratedDocumentPath;
+                        dcResponse["success"] = true;
+                        dcResponse["Message"] = "eTCC Signed Succcessfully";
                     }
-                    if (!Directory.Exists(mStrDirectoryForPrint))
+                    else if (mObjRequestData.SEDE_OrderID == (long)TCCSigningStage.AwaitingSecondSigner)
                     {
-                        Directory.CreateDirectory(mStrDirectoryForPrint);
+                        string mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
+                        string mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+                        string mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
+                        string mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+                        string mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
+
+
+                        string mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
+                        string mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+                        string mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
+                        string mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+                        string mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
+                        if (!Directory.Exists(mStrDirectory))
+                        {
+                            Directory.CreateDirectory(mStrDirectory);
+                        }
+                        if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+                        {
+                            Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+                        }
+                        if (!Directory.Exists(mStrDirectoryForPrint))
+                        {
+                            Directory.CreateDirectory(mStrDirectoryForPrint);
+                        }
+                        if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
+                        {
+                            Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
+                        }
+                        //if (!Directory.Exists(mStrDirectory))
+                        //{
+                        //    Directory.CreateDirectory(mStrDirectory);
+                        //}
+                        //if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+                        //{
+                        //    Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+                        //}
+                        HtmlToPdf pdf = new HtmlToPdf();
+                        // set converter options
+                        pdf.Options.PdfPageSize = PdfPageSize.A4;
+                        pdf.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+
+                        pdf.Options.WebPageWidth = 0;
+                        pdf.Options.WebPageHeight = 0;
+                        pdf.Options.WebPageFixedSize = false;
+
+                        pdf.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
+                        pdf.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
+                        string marksheet = string.Empty;
+                        string marksheetII = string.Empty;
+                        marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
+                        marksheetII = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
+                        marksheet = marksheet.Replace("@@second@@", imgData);
+                        marksheetII = marksheetII.Replace("@@second@@", imgData);
+
+                        System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
+                        PdfDocument doc = pdf.ConvertHtmlString(marksheet);
+                        var bytes = doc.Save();
+                        System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetII);
+                        PdfDocument docII = pdf.ConvertHtmlString(marksheetII);
+                        var bytesII = docII.Save();
+
+                        System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes);
+                        System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytesII);
+                        ViewBag.RequestData = mObjRequestData;
+                        ViewBag.pdf = mStrGeneratedDocumentPath;
+                        GenerateViewModel mObjGenerateTCCModel = new GenerateViewModel()
+                        {
+                            RequestID = mObjRequestData.TCCRequestID,
+                        };
+
+                        TCC_Request mObjUpdateStatus = new TCC_Request()
+                        {
+                            TCCRequestID = mObjRequestData.TCCRequestID,
+                            SEDE_DocumentID = retVal.SEDE_DocumentID,
+                            ServiceBillID = SessionManager.UserID,//to holder second signer id
+                            StatusID = (int)NewTCCRequestStage.Waiting_For_Second_Signature,
+                            ModifiedBy = SessionManager.UserID,
+                            SEDE_OrderID = (long)TCCSigningStage.AwaitingThirdSigner,
+                            GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
+                            ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+                            GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+                            ModifiedDate = CommUtil.GetCurrentDateTime()
+                        };
+
+                        mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
+
+                        SessionManager.Path = mStrGeneratedDocumentPath;
+                        ViewBag.path = mStrGeneratedDocumentPath;
+                        dcResponse["success"] = true;
+                        dcResponse["Message"] = "eTCC Signed Succcessfully";
+
                     }
-                    if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
+                    else if (mObjRequestData.SEDE_OrderID == (long)TCCSigningStage.AwaitingThirdSigner)
                     {
-                        Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
-                    }
-                    HtmlToPdf pdf = new HtmlToPdf();
-                    // set converter options
-                    pdf.Options.PdfPageSize = PdfPageSize.A4;
-                    pdf.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+                        string mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
+                        string mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+                        string mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
+                        string mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+                        string mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
 
-                    pdf.Options.WebPageWidth = 0;
-                    pdf.Options.WebPageHeight = 0;
-                    pdf.Options.WebPageFixedSize = false;
+                        string mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
+                        string mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+                        string mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
+                        string mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+                        string mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
+                        if (!Directory.Exists(mStrDirectory))
+                        {
+                            Directory.CreateDirectory(mStrDirectory);
+                        }
+                        if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+                        {
+                            Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+                        }
+                        if (!Directory.Exists(mStrDirectoryForPrint))
+                        {
+                            Directory.CreateDirectory(mStrDirectoryForPrint);
+                        }
+                        if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
+                        {
+                            Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
+                        }
+                        HtmlToPdf pdf = new HtmlToPdf();
+                        // set converter options
+                        pdf.Options.PdfPageSize = PdfPageSize.A4;
+                        pdf.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
 
-                    pdf.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
-                    pdf.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
-                    string marksheet = string.Empty;
-                    string marksheetForPrint = string.Empty;
-                    marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
-                    marksheet = marksheet.Replace("@@first@@", imgData);
-                    marksheetForPrint = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
-                    marksheetForPrint = marksheetForPrint.Replace("@@first@@", imgData);
+                        pdf.Options.WebPageWidth = 0;
+                        pdf.Options.WebPageHeight = 0;
+                        pdf.Options.WebPageFixedSize = false;
 
-                    System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
-                    PdfDocument doc = pdf.ConvertHtmlString(marksheet);
-                    var bytes = doc.Save();
-                    System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetForPrint);
-                    PdfDocument docII = pdf.ConvertHtmlString(marksheetForPrint);
-                    var bytesII = docII.Save();
+                        pdf.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
+                        pdf.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
+                        string marksheet = string.Empty;
+                        string marksheetForPrint = string.Empty;
+                        marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
+                        marksheetForPrint = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
+                        marksheet = marksheet.Replace("@@third@@", imgData);
+                        marksheetForPrint = marksheetForPrint.Replace("@@third@@", imgData).Replace("₦", "<span>&#8358;</span>");
+                        System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
+                        System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetForPrint);
+                        PdfDocument doc = pdf.ConvertHtmlString(marksheet);
+                        PdfDocument doc2 = pdf.ConvertHtmlString(marksheetForPrint);
+                        var bytes = doc.Save();
+                        var bytes2 = doc2.Save();
 
-                    System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes);
-                    System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytesII);
-                    ViewBag.RequestData = mObjRequestData;
-                    ViewBag.pdf = mStrGeneratedDocumentPath;
-                    GenerateViewModel mObjGenerateTCCModel = new GenerateViewModel()
-                    {
-                        RequestID = mObjRequestData.TCCRequestID,
-                    };
+                        System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes);
+                        System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytes2);
+                        ViewBag.RequestData = mObjRequestData;
+                        ViewBag.pdf = mStrGeneratedDocumentPath;
+                        GenerateViewModel mObjGenerateTCCModel = new GenerateViewModel()
+                        {
+                            RequestID = mObjRequestData.TCCRequestID,
+                        };
 
-                    TCC_Request mObjUpdateStatus = new TCC_Request()
-                    {
-                        TCCRequestID = mObjRequestData.TCCRequestID,
-                        StatusID = (int)NewTCCRequestStage.Waiting_For_Second_Signature,
-                        ModifiedBy = SessionManager.UserID,
-                        SEDE_DocumentID = SessionManager.UserID,//to holder first signer id
-                        SEDE_OrderID = (long)TCCSigningStage.AwaitingSecondSigner,
-                        GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
-                        ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+                        TCC_Request mObjUpdateStatus = new TCC_Request()
+                        {
+                            TCCRequestID = mObjRequestData.TCCRequestID,
+                            StatusID = (int)TCCRequestStatus.Issued_eTCC,
+                            ModifiedBy = SessionManager.UserID,
+                            SEDE_DocumentID = retVal.SEDE_DocumentID,
+                            ServiceBillID = retVal.ServiceBillID,
+                            VisibleSignStatusID = SessionManager.UserID,//to holder third signer id
+                            SEDE_OrderID = (long)TCCSigningStage.Done,
+                            GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
+                            //ETCC\Print\149726
+                            // GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + $"/{mStrGeneratedFileNameForPrint}",
+                            GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
 
-                        GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
-                        ModifiedDate = CommUtil.GetCurrentDateTime()
-                    };
+                            ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+                            ModifiedDate = CommUtil.GetCurrentDateTime()
+                        };
 
-                    mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
+                        var mNewObjFuncResponse = mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
+                        if (mNewObjFuncResponse.Success)
+                        {
+                            using (_db = new EIRSEntities())
+                            {
+                                var holder = _db.MAP_TCCRequest_Stages.Where(o => o.RequestID == mObjRequestData.TCCRequestID).ToList();
+                                foreach (var hol in holder)
+                                {
+                                    hol.ApprovalDate = DateTime.Now;
+                                }
+                                _db.SaveChanges();
+                            }
 
-                    SessionManager.Path = mStrGeneratedDocumentPath;
-                    SessionManager.Path = mStrGeneratedDocumentPath;
-                    ViewBag.path = mStrGeneratedDocumentPath;
-                    dcResponse["success"] = true;
-                    dcResponse["Message"] = "eTCC Signed Succcessfully";
-
-
-                }
-                else if (mObjRequestData.SEDE_OrderID == (long)TCCSigningStage.AwaitingSecondSigner)
-                {
-                    string mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
-                    string mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
-                    string mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
-                    string mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
-                    string mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
-
-
-                    string mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
-                    string mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
-                    string mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
-                    string mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
-                    string mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
-                    if (!Directory.Exists(mStrDirectory))
-                    {
-                        Directory.CreateDirectory(mStrDirectory);
-                    }
-                    if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
-                    {
-                        Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
-                    }
-                    if (!Directory.Exists(mStrDirectoryForPrint))
-                    {
-                        Directory.CreateDirectory(mStrDirectoryForPrint);
-                    }
-                    if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
-                    {
-                        Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
-                    }
-                    //if (!Directory.Exists(mStrDirectory))
-                    //{
-                    //    Directory.CreateDirectory(mStrDirectory);
-                    //}
-                    //if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
-                    //{
-                    //    Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
-                    //}
-                    HtmlToPdf pdf = new HtmlToPdf();
-                    // set converter options
-                    pdf.Options.PdfPageSize = PdfPageSize.A4;
-                    pdf.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
-
-                    pdf.Options.WebPageWidth = 0;
-                    pdf.Options.WebPageHeight = 0;
-                    pdf.Options.WebPageFixedSize = false;
-
-                    pdf.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
-                    pdf.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
-                    string marksheet = string.Empty;
-                    string marksheetII = string.Empty;
-                    marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
-                    marksheetII = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
-                    marksheet = marksheet.Replace("@@second@@", imgData);
-                    marksheetII = marksheetII.Replace("@@second@@", imgData);
-
-                    System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
-                    PdfDocument doc = pdf.ConvertHtmlString(marksheet);
-                    var bytes = doc.Save();
-                    System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetII);
-                    PdfDocument docII = pdf.ConvertHtmlString(marksheetII);
-                    var bytesII = docII.Save();
-
-                    System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes);
-                    System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytesII);
-                    ViewBag.RequestData = mObjRequestData;
-                    ViewBag.pdf = mStrGeneratedDocumentPath;
-                    GenerateViewModel mObjGenerateTCCModel = new GenerateViewModel()
-                    {
-                        RequestID = mObjRequestData.TCCRequestID,
-                    };
-
-                    TCC_Request mObjUpdateStatus = new TCC_Request()
-                    {
-                        TCCRequestID = mObjRequestData.TCCRequestID,
-                        SEDE_DocumentID = retVal.SEDE_DocumentID,
-                        ServiceBillID = SessionManager.UserID,//to holder second signer id
-                        StatusID = (int)NewTCCRequestStage.Waiting_For_Second_Signature,
-                        ModifiedBy = SessionManager.UserID,
-                        SEDE_OrderID = (long)TCCSigningStage.AwaitingThirdSigner,
-                        GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
-                        ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
-                        GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
-                        ModifiedDate = CommUtil.GetCurrentDateTime()
-                    };
-
-                    mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
-
-                    SessionManager.Path = mStrGeneratedDocumentPath;
-                    ViewBag.path = mStrGeneratedDocumentPath;
-                    dcResponse["success"] = true;
-                    dcResponse["Message"] = "eTCC Signed Succcessfully";
-
-                }
-                else if (mObjRequestData.SEDE_OrderID == (long)TCCSigningStage.AwaitingThirdSigner)
-                {
-                    string mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
-                    string mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
-                    string mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
-                    string mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
-                    string mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
-
-                    string mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
-                    string mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
-                    string mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
-                    string mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
-                    string mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
-                    if (!Directory.Exists(mStrDirectory))
-                    {
-                        Directory.CreateDirectory(mStrDirectory);
-                    }
-                    if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
-                    {
-                        Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
-                    }
-                    if (!Directory.Exists(mStrDirectoryForPrint))
-                    {
-                        Directory.CreateDirectory(mStrDirectoryForPrint);
-                    }
-                    if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
-                    {
-                        Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
-                    }
-                    HtmlToPdf pdf = new HtmlToPdf();
-                    // set converter options
-                    pdf.Options.PdfPageSize = PdfPageSize.A4;
-                    pdf.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
-
-                    pdf.Options.WebPageWidth = 0;
-                    pdf.Options.WebPageHeight = 0;
-                    pdf.Options.WebPageFixedSize = false;
-
-                    pdf.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
-                    pdf.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
-                    string marksheet = string.Empty;
-                    string marksheetForPrint = string.Empty;
-                    marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
-                    marksheetForPrint = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
-                    marksheet = marksheet.Replace("@@third@@", imgData);
-                    marksheetForPrint = marksheetForPrint.Replace("@@third@@", imgData).Replace("₦", "<span>&#8358;</span>");
-                    System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
-                    System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetForPrint);
-                    PdfDocument doc = pdf.ConvertHtmlString(marksheet);
-                    PdfDocument doc2 = pdf.ConvertHtmlString(marksheetForPrint);
-                    var bytes = doc.Save();
-                    var bytes2 = doc2.Save();
-
-                    System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes);
-                    System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytes2);
-                    ViewBag.RequestData = mObjRequestData;
-                    ViewBag.pdf = mStrGeneratedDocumentPath;
-                    GenerateViewModel mObjGenerateTCCModel = new GenerateViewModel()
-                    {
-                        RequestID = mObjRequestData.TCCRequestID,
-                    };
-
-                    TCC_Request mObjUpdateStatus = new TCC_Request()
-                    {
-                        TCCRequestID = mObjRequestData.TCCRequestID,
-                        StatusID = (int)TCCRequestStatus.Issued_eTCC,
-                        ModifiedBy = SessionManager.UserID,
-                        SEDE_DocumentID = retVal.SEDE_DocumentID,
-                        ServiceBillID = retVal.ServiceBillID,
-                        VisibleSignStatusID = SessionManager.UserID,//to holder third signer id
-                        SEDE_OrderID = (long)TCCSigningStage.Done,
-                        GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
-                        //ETCC\Print\149726
-                        // GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + $"/{mStrGeneratedFileNameForPrint}",
-                        GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
-
-                        ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
-                        ModifiedDate = CommUtil.GetCurrentDateTime()
-                    };
-
-                    var mNewObjFuncResponse = mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
-                    if (mNewObjFuncResponse.Success)
-                    {
+                        }
+                        Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
+                        string file = Convert.ToBase64String(bytesArray);
                         using (_db = new EIRSEntities())
                         {
-                            var holder = _db.MAP_TCCRequest_Stages.Where(o => o.RequestID == mObjRequestData.TCCRequestID).ToList();
-                            foreach (var hol in holder)
+                            var existingTcc = _db.ValidateTccs.FirstOrDefault(o => o.TccRequestId == nereqid);
+                            if (existingTcc != null)
                             {
-                                hol.ApprovalDate = DateTime.Now;
+                                existingTcc.TCCpdf = file;
+                                existingTcc.DateofTCCissued = DateTime.Now;
+                                existingTcc.DateModified = DateTime.Now;
+
+
+                                _db.SaveChanges();
                             }
-                            _db.SaveChanges();
                         }
 
+                        SessionManager.Path = mStrGeneratedDocumentPath;
+                        ViewBag.path = mStrGeneratedDocumentPath;
+                        dcResponse["success"] = true;
+                        dcResponse["Message"] = "eTCC Signed Succcessfully";
+
                     }
-                    Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
-                    string file = Convert.ToBase64String(bytesArray);
-                    using (_db = new EIRSEntities())
+                    else
                     {
-                        var existingTcc = _db.ValidateTccs.FirstOrDefault(o => o.TccRequestId == reqid);
-                        if (existingTcc != null)
-                        {
-                            existingTcc.TCCpdf = file;
-                            existingTcc.DateofTCCissued = DateTime.Now;
-                            existingTcc.DateModified = DateTime.Now;
+                        dcResponse["success"] = false;
+                        dcResponse["Message"] = " eTCC As been Signed";
 
-
-                            _db.SaveChanges();
-                        }
                     }
-
-                    SessionManager.Path = mStrGeneratedDocumentPath;
-                    ViewBag.path = mStrGeneratedDocumentPath;
-                    dcResponse["success"] = true;
-                    dcResponse["Message"] = "eTCC Signed Succcessfully";
-
+                    //dcResponse["success"] = true;
+                    //dcResponse["Message"] = "eTCC Signed Succcessfully";
                 }
                 else
                 {
                     dcResponse["success"] = false;
-                    dcResponse["Message"] = " eTCC As been Signed";
-
+                    dcResponse["Message"] = "Signing eTCC Failed";
                 }
-                dcResponse["success"] = true;
-                dcResponse["Message"] = "eTCC Signed Succcessfully";
             }
-            else
+            catch (Exception ex)
             {
+                var errors = ex.StackTrace;
                 dcResponse["success"] = false;
-                dcResponse["Message"] = "Signing eTCC Failed";
+                dcResponse["Message"] = $"{errors} AND {ex.Message}";
             }
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }

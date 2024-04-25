@@ -2202,19 +2202,19 @@ namespace EIRS.Web.Controllers
                             HttpResponseMessage response = await client.PostAsync(url, content);
 
                             // Check if the request was successful
-                            if (response.IsSuccessStatusCode)
-                            {
-                                // Read and display the response content
-                                var result = await response.Content.ReadAsStringAsync();
-                                if (Convert.ToBoolean(result) == false)
-                                {
-                                    return RedirectToAction("List", "ProcessTCCRequest");
-                                }
-                            }
-                            else
-                            {
-                                return RedirectToAction("List", "ProcessTCCRequest");
-                            }
+                            //if (response.IsSuccessStatusCode)
+                            //{
+                            //    // Read and display the response content
+                            //    var result = await response.Content.ReadAsStringAsync();
+                            //    if (Convert.ToBoolean(result) == false)
+                            //    {
+                            //        return RedirectToAction("List", "ProcessTCCRequest");
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    return RedirectToAction("List", "ProcessTCCRequest");
+                            //}
                         }
                         catch (Exception ex)
                         {
@@ -2251,8 +2251,8 @@ namespace EIRS.Web.Controllers
                         ModifiedDate = CommUtil.GetCurrentDateTime()
                     };
                     mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
-                    Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
-                    string file = Convert.ToBase64String(bytesArray);
+                    //Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
+                    //string file = Convert.ToBase64String(bytesArray);
                     ValidateTcc tcc = new ValidateTcc()
                     {
                         DateCreated = DateTime.Now,
@@ -2262,9 +2262,10 @@ namespace EIRS.Web.Controllers
                         TaxpayerTIN = tin,
                         TCCCertificateNumber = certificateNumber,
                         DateofTCCissued = DateTime.Now,
-                        TCCpdf = file,
+                        TCCpdf = "file",
                         TccRequestId = mObjRequestData.TCCRequestID
                     };
+
                     using (_db = new EIRSEntities())
                     {
                         _db.ValidateTccs.Add(tcc);

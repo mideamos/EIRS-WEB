@@ -41,6 +41,7 @@ using DocumentFormat.OpenXml;
 using Microsoft.Office.Interop.Excel;
 using Vereyon.Web;
 using System.Web.Script.Serialization;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace EIRS.Web.Controllers
 {
@@ -1259,7 +1260,13 @@ namespace EIRS.Web.Controllers
                             });
                         }
                         List<BalanceHolder> lstb = new List<BalanceHolder>();
-                        IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
+                        //  IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
+
+                        var bnLst = new List<BusinessName>();
+
+                        var bnLstII = _db.BusinessNames.Where(o => o.TccRequestId == pobjValidateTaxPayerIncomeModel.RequestID);
+                        if (bnLstII != null)
+                            _db.BusinessNames.RemoveRange(bnLstII);
                         MAP_TCCRequest_IncomeStream mObjIncomeStream;
                         foreach (var item in lstErasDetail)
                         {
@@ -1275,9 +1282,9 @@ namespace EIRS.Web.Controllers
                                 TotalIncomeEarned = item.TotalIncomeEarned,
                                 LGA = item.LGAName
                             });
-
-                            BusinessNameHolder bn = new BusinessNameHolder();
-                            bn.BusinessName = item.BusinessName;
+                            BusinessName bn = new BusinessName();
+                            bn.BusinessName1 = item.BusinessName;
+                            bn.TccRequestId = pobjValidateTaxPayerIncomeModel.RequestID;
                             bnLst.Add(bn);
                             if (item.intTrack == EnumList.Track.INSERT)
                             {
@@ -1559,7 +1566,22 @@ namespace EIRS.Web.Controllers
                                 FuncResponse<MAP_TCCRequest_Generate> mNewObjFuncResponse = mObjBLTCC.BL_InsertUpdateTCCRequestGenerate(mObjGenerate);
                                 if (pobjValidateTaxPayerIncomeModel.needBusinessName == true)
                                 {
-                                    SessionManager.businessNameHolderList = bnLst;
+                                    bnLst.RemoveAll(item => item.BusinessName1 == null);
+
+                                    if (bnLst.Any())
+                                    {
+                                        List<BusinessName> nameLst = new List<BusinessName>();
+
+                                        foreach (var b in bnLst)
+                                        {
+                                            BusinessName name = new BusinessName();
+                                            name.BusinessName1 = b.BusinessName1;
+                                            name.TccRequestId = pobjValidateTaxPayerIncomeModel.RequestID;
+                                            nameLst.Add(name);
+                                        }
+                                        _db.BusinessNames.AddRange(nameLst);
+                                        //SessionManager.businessNameHolderList = bnLst;
+                                    }
                                 }
                             }
                             SessionManager.LstTicketRef = ticketRefs;
@@ -1966,16 +1988,18 @@ namespace EIRS.Web.Controllers
                 var last2year1 = new usp_GetTCCDetail_Result();
                 var last3year1 = new usp_GetTCCDetail_Result();
                 var txxx = new TaxClearanceCertificate();
+
+                 var bnLst = new List<BusinessName>();
                 using (var ddd = new EIRSEntities())
                 {
+                    bnLst = ddd.BusinessNames.Where(o => o.TccRequestId == reqid).ToList();
                     txxx = ddd.TaxClearanceCertificates.FirstOrDefault(o => o.SerialNumber == reqid.ToString());
                 }
                 string busiName = "";
 
-                IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
                 if (bnLst.Any())
                 {
-                    var distinctStrings = bnLst.GroupBy(v => v.BusinessName).ToList();
+                    var distinctStrings = bnLst.GroupBy(v => v.BusinessName1).ToList();
                     if (distinctStrings.Count > 1)
                     {
                         foreach (var item in distinctStrings)

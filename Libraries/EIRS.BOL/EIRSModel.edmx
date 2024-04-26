@@ -393,6 +393,14 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="BusinessNames">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TccRequestId" Type="bigint" />
+          <Property Name="BusinessName" Type="varchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="Certificate_Types">
           <Key>
             <PropertyRef Name="CertificateTypeID" />
@@ -8187,6 +8195,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="Business_Structure" EntityType="Self.Business_Structure" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Business_SubSector" EntityType="Self.Business_SubSector" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Business_Types" EntityType="Self.Business_Types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BusinessNames" EntityType="Self.BusinessNames" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Certificate_Types" EntityType="Self.Certificate_Types" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Certificates" EntityType="Self.Certificates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
@@ -12903,6 +12912,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="MapAssessmentDisapprove_" EntityType="EIRSModel.MapAssessmentDisapprove_" />
           <EntitySet Name="DA_And_PAYE_TCC_Details" EntityType="EIRSModel.DA_And_PAYE_TCC_Details" />
           <EntitySet Name="NewTCCDetailsHolds" EntityType="EIRSModel.NewTCCDetailsHold" />
+          <EntitySet Name="BusinessNames" EntityType="EIRSModel.BusinessName" />
           <!--<EntitySet Name="TestingNEWTAB" EntityType="EIRSModel.TestingNEWTAB" />
           <EntitySet Name="vw_ServiceBillNew" EntityType="EIRSModel.vw_ServiceBillNew" />-->
           </EntityContainer>
@@ -24001,6 +24011,14 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="Tax_receipt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IndividualRIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="BusinessName">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TccRequestId" Type="Int64" />
+          <Property Name="BusinessName1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
        
         </Schema>
     </edmx:ConceptualModels>
@@ -33626,6 +33644,15 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
                 <ScalarProperty Name="TBKID" ColumnName="TBKID" />
                 <ScalarProperty Name="RowID" ColumnName="RowID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusinessNames">
+            <EntityTypeMapping TypeName="EIRSModel.BusinessName">
+              <MappingFragment StoreEntitySet="BusinessNames">
+                <ScalarProperty Name="BusinessName1" ColumnName="BusinessName" />
+                <ScalarProperty Name="TccRequestId" ColumnName="TccRequestId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

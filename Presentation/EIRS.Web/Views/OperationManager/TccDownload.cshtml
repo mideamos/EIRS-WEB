@@ -14,12 +14,10 @@
         <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTccDownloaded">
             <thead class="red-th">
                 <tr>
+                    <th>DownloadStatus</th>
                     <th>Tcc Ref No</th>
                     <th>Individual RIn</th>
                     <th>Full Name</th>
-                    <th>Date Issued</th>
-                    <th>TccId</th>
-                    <th>DownloadStatus</th>
                     <th class="action-th all">Action</th>
                 </tr>
             </thead>
@@ -27,12 +25,11 @@
                 @foreach (var ret in Model)
                 {
                     <tr>
+                        <td>@ret.DownloadStatus</td>
                         <td>@ret.TccRefNo</td>
                         <td>@ret.IndividualRIn</td>
                         <td>@ret.FullName</td>
-                        <td>@ret.RequestDate</td>
-                        <td>@ret.TccId</td>
-                        <td>@ret.DownloadStatus</td>
+
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -58,7 +55,7 @@
 @section Footer {
     <script type="text/javascript">
         $(document).ready(function () {
-            jsfn_ConvertToDatableWithCustomSort($('#tblTccDownloaded'), [{ "orderable": true }, { "orderable": true }, { "orderable": false }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Record Found',5);
+            jsfn_ConvertToDatableWithCustomSort($('#tblTccDownloaded'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Record Found');
         });
     </script>
 }

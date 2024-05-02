@@ -1989,7 +1989,7 @@ namespace EIRS.Web.Controllers
                 var last3year1 = new usp_GetTCCDetail_Result();
                 var txxx = new TaxClearanceCertificate();
 
-                 var bnLst = new List<BusinessName>();
+                var bnLst = new List<BusinessName>();
                 using (var ddd = new EIRSEntities())
                 {
                     bnLst = ddd.BusinessNames.Where(o => o.TccRequestId == reqid).ToList();
@@ -3222,7 +3222,70 @@ namespace EIRS.Web.Controllers
 
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult DeletePayeIncomeStream(int RowID)
+        {
+            IDictionary<string, object> dcResponse = new Dictionary<string, object>();
 
+            if (!ModelState.IsValid)
+            {
+                dcResponse["success"] = false;
+                dcResponse["Message"] = "All Fields are required";
+            }
+            else
+            {
+                int mIntOldTaxYear = 0;
+                double fomalTax = 0, formalAssessedIncome = 0;
+                IList<Request_IncomeStream> lstIncomeStream = SessionManager.LstIncomeStream ?? new List<Request_IncomeStream>();
+                IList<PayeApiResponse> lstPayeApiResponse = SessionManager.LstPayeApiResponse ?? new List<PayeApiResponse>();
+                Request_IncomeStream mObjIncomeStream;
+                PayeApiResponse paye = new PayeApiResponse();
+                paye = lstPayeApiResponse.Where(t => t.RowID == RowID).FirstOrDefault();
+                if (paye == null)
+                {
+                    dcResponse["success"] = false;
+                    dcResponse["Message"] = "Row Not Found";
+                }
+                
+
+                IList<Request_TCCDetail> lstTCCDetails = SessionManager.LstTCCDetail ?? new List<Request_TCCDetail>();
+                //Search if Row for Tax Year Exists
+                Request_TCCDetail mObjOldTCCDetail, mObjTCCDetail;
+
+                mObjTCCDetail = lstTCCDetails.FirstOrDefault(t => t.TaxYear == Convert.ToInt32(paye.AssessmentYear));
+
+                if (mObjTCCDetail != null)
+                {
+                    mObjTCCDetail.AssessableIncome = (mObjTCCDetail.AssessableIncome - Convert.ToDecimal(paye.ChargeableIncome));
+                    mObjTCCDetail.ERASAssessed = (mObjTCCDetail.ERASAssessed - Convert.ToDecimal(paye.AnnualTax));
+                    mObjTCCDetail.ERASTaxPaid = (mObjTCCDetail.ERASTaxPaid - Convert.ToDecimal(paye.AnnualTaxII));
+                    mObjTCCDetail.Tax_receipt = "";
+                }
+
+                lstPayeApiResponse.Remove(paye);
+                paye.intTrack = EnumList.Track.UPDATE;
+                mIntOldTaxYear = Convert.ToInt32(paye.AssessmentYear);
+                paye.ChargeableIncome = Convert.ToDouble(0);
+                paye.AnnualTaxII = Convert.ToDouble(0);
+                paye.AnnualTax = Convert.ToDouble(0);
+                paye.ReceiptRef = string.Empty;
+                paye.ReceiptDate = string.Empty;
+                paye.ReceiptDetail = string.Empty;
+                lstPayeApiResponse.Add(paye);
+
+                dcResponse["success"] = true;
+                dcResponse["Message"] = "Paye Income Stream Deleted Successfully";
+
+                dcResponse["PayeIncomeStreamData"] = CommUtil.RenderPartialToString("_BindPayeIncomeStreamTable", lstPayeApiResponse.Where(t => t.intTrack != EnumList.Track.DELETE).OrderBy(x => x.AssessmentYear).ToList(), this.ControllerContext);
+
+                SessionManager.LstPayeApiResponse = lstPayeApiResponse.OrderBy(o => o.AssessmentYear).ToList();
+
+                dcResponse["TCCDetailData"] = CommUtil.RenderPartialToString("_BindTCCDetailTable", lstTCCDetails.Where(t => t.intTrack != EnumList.Track.DELETE).ToList(), this.ControllerContext);
+                SessionManager.LstTCCDetail = lstTCCDetails;
+            }
+
+            return Json(dcResponse, JsonRequestBehavior.AllowGet);
+        }
         public IDictionary<decimal, decimal> getTaxPaidAssessed(int year, int individualid, byte TaxPayerTypeID)
         {
             var respValue = new Dictionary<decimal, decimal>();

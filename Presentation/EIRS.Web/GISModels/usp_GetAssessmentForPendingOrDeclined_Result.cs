@@ -8,10 +8,10 @@ namespace EIRS.Web.GISModels
     public class usp_GetTccDownloadByYearResult
     {
         public Nullable<long> TccId { get; set; }
-        public string? FullName { get; set; }
-        public string? IndividualRIn { get; set; }
-        public string? TccRefNo { get; set; }
-        public string? DownloadStatus { get; set; }
+        public string FullName { get; set; }
+        public string IndividualRIn { get; set; }
+        public string TccRefNo { get; set; }
+        public string DownloadStatus { get; set; }
         public Nullable<System.DateTime> RequestDate { get; set; }
         public Nullable<bool> IsDownloaded { get; set; }
     }

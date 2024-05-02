@@ -370,7 +370,6 @@ namespace EIRS.Web.Controllers
                           ex.TaxPayerID equals ue.IndividualID
                           select new
                           {
-                              Fusername = ue.IndividualID,
                               TCCRequestID = ex.TCCRequestID,
                               GeneratedPath = ex.GeneratedPath,
                               RequestRefNo = ex.RequestRefNo,
@@ -379,39 +378,38 @@ namespace EIRS.Web.Controllers
                               TaxFName = ue.FirstName,
                               TaxYear = ex.TaxYear,
                               TaxLName = ue.LastName,
+                              modifiedDate = ex.ModifiedDate,
                               modifiedBy = ex.ModifiedBy,
                               sedeDoc = ex.SEDE_DocumentID,
                               serviceBillid = ex.ServiceBillID,
                               VisibleSignStatusID = ex.VisibleSignStatusID,
                               sedeId = ex.SEDE_OrderID
-                          }).OrderByDescending(o => o.RequestDate);
+                          }).OrderByDescending(o => o.modifiedDate).ToList();
 
-                foreach (var ret in ee)
+                for (int i = 0; i < ee.Count; i++)
                 {
-
                     NewTccViewModel tccVm = new NewTccViewModel();
-                    if (ret.sedeId == 10000)
+                    if (ee[i].sedeId == 10000)
                         tccVm.BillStatus = "Awaiting First Signer";
-                    else if (ret.sedeId == 10001)
+                    else if (ee[i].sedeId == 10001)
                         tccVm.BillStatus = "Awaiting Second Signer";
-                    else if (ret.sedeId == 10002)
+                    else if (ee[i].sedeId == 10002)
                         tccVm.BillStatus = "Awaiting Third Signer";
                     else
                         tccVm.BillStatus = "TCC Signed Successfully";
-                    if (ret.sedeDoc == userId || ret.serviceBillid == userId || ret.VisibleSignStatusID == userId)
+                    if (ee[i].sedeDoc == userId || ee[i].serviceBillid == userId || ee[i].VisibleSignStatusID == userId)
                         tccVm.IsSigned = true;
-                    tccVm.TCCRequestID = ret.TCCRequestID;
-                    tccVm.GeneratedPath = ret.GeneratedPath;
-                    tccVm.RequestRefNo = ret.RequestRefNo;
-                    tccVm.MobileNumber = ret.MobileNumber;
-                    tccVm.RequestDate = ret.RequestDate;
-                    tccVm.TaxFName = ret.TaxFName;
-                    tccVm.TaxLName = ret.TaxLName;
-                    tccVm.TaxYear = ret.TaxYear;
-                    tccVm.ModifiedBy = ret.modifiedBy;
-
+                    tccVm.TCCRequestID = ee[i].TCCRequestID;
+                    tccVm.GeneratedPath = ee[i].GeneratedPath;
+                    tccVm.RequestRefNo = ee[i].RequestRefNo;
+                    tccVm.MobileNumber = ee[i].MobileNumber;
+                    tccVm.RequestDate = ee[i].modifiedDate;
+                    tccVm.TaxFName = ee[i].TaxFName;
+                    tccVm.TaxLName = ee[i].TaxLName;
+                    tccVm.TaxYear = ee[i].TaxYear;
+                    tccVm.TaxPayerID = i+1;
+                    tccVm.ModifiedBy = ee[i].modifiedBy;
                     listTccVm.Add(tccVm);
-
                 }
             }
             return View(listTccVm);
@@ -669,7 +667,7 @@ namespace EIRS.Web.Controllers
                             SEDE_OrderID = (long)TCCSigningStage.AwaitingSecondSigner,
                             GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
                             ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
-
+                            //  RequestDate = CommUtil.GetCurrentDateTime(),
                             GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
                             ModifiedDate = CommUtil.GetCurrentDateTime()
                         };
@@ -762,6 +760,7 @@ namespace EIRS.Web.Controllers
                             StatusID = (int)NewTCCRequestStage.Waiting_For_Second_Signature,
                             ModifiedBy = SessionManager.UserID,
                             SEDE_OrderID = (long)TCCSigningStage.AwaitingThirdSigner,
+                            //  RequestDate = CommUtil.GetCurrentDateTime(),
                             GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
                             ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
                             GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",

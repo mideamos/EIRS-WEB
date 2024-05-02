@@ -2272,7 +2272,8 @@ namespace EIRS.Web.Controllers
                         ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
                         GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
                         GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/" + mStrGeneratedFileName,
-                        ModifiedDate = CommUtil.GetCurrentDateTime()
+                        ModifiedDate = CommUtil.GetCurrentDateTime(),
+                        RequestDate = CommUtil.GetCurrentDateTime()
                     };
                     mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
                     //Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);

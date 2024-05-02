@@ -2781,6 +2781,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="GeneratePathForPrint" Type="varchar(max)" />
+          <Property Name="IsDownloaded" Type="bit" />
         </EntityType>
         <EntityType Name="TCCDetails">
           <Key>
@@ -7023,6 +7024,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="RequestRefNo" Type="varchar" Mode="In" />
         </Function>
         <Function Name="usp_GetTccDownloadByYear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        
         <Function Name="usp_GetTCCRequestDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RequestID" Type="bigint" Mode="In" />
         </Function>
@@ -21466,6 +21468,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <NavigationProperty Name="MAP_TCCRequest_ValidateTaxPayerInformation" Relationship="EIRSModel.FK_MAP_TCCRequest_ValidateTaxPayerInformation_TCC_Request" FromRole="TCC_Request" ToRole="MAP_TCCRequest_ValidateTaxPayerInformation" />
           <NavigationProperty Name="MAP_TCCRequest_Revoke" Relationship="EIRSModel.FK_MAP_TCCRequest_Revoke_TCC_Request" FromRole="TCC_Request" ToRole="MAP_TCCRequest_Revoke" />
           <Property Name="GeneratePathForPrint" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDownloaded" Type="Boolean" />
         </EntityType>
         <Association Name="FK_MAP_TCCRequest_Generate_TCC_Request">
           <End Type="EIRSModel.TCC_Request" Role="TCC_Request" Multiplicity="0..1" />
@@ -31211,6 +31214,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySetMapping Name="TCC_Request">
             <EntityTypeMapping TypeName="EIRSModel.TCC_Request">
               <MappingFragment StoreEntitySet="TCC_Request">
+                <ScalarProperty Name="IsDownloaded" ColumnName="IsDownloaded" />
                 <ScalarProperty Name="GeneratePathForPrint" ColumnName="GeneratePathForPrint" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />

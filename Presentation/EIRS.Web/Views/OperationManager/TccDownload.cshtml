@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EIRS.BOL.usp_GetTccDownloadByYear_Result>
+﻿@using EIRS.Web.GISModels
 @{
     ViewBag.Title = "Tcc Downloaded";
 }
@@ -19,6 +19,7 @@
                     <th>Full Name</th>
                     <th>Date Issued</th>
                     <th>TccId</th>
+                    <th>DownloadStatus</th>
                     <th class="action-th all">Action</th>
                 </tr>
             </thead>
@@ -29,8 +30,9 @@
                         <td>@ret.TccRefNo</td>
                         <td>@ret.IndividualRIn</td>
                         <td>@ret.FullName</td>
-                        <td>@ret.DateIssued</td>
+                        <td>@ret.RequestDate</td>
                         <td>@ret.TccId</td>
+                        <td>@ret.DownloadStatus</td>
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,7 +40,8 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a target="_blank" href="@Url.Action("Print", "ProcessTCCRequest",new {reqid= ret.TccId})">Print
+                                        <a target="_blank" href="@Url.Action("Print", "ProcessTCCRequest",new {reqid= ret.TccId})">
+                                            Print
                                         </a>
                                         <a href="@Url.Action("Download", "ProcessTCCRequest",new {reqid= ret.TccId})">Download</a>
                                     </li>
@@ -55,7 +58,7 @@
 @section Footer {
     <script type="text/javascript">
         $(document).ready(function () {
-            jsfn_ConvertToDatableWithCustomSort($('#tblTccDownloaded'), [{ "orderable": true }, { "orderable": true },{ "orderable": false }, { "orderable": true },{ "orderable": true }, { "orderable": false }], 'No Record Found');
+            jsfn_ConvertToDatableWithCustomSort($('#tblTccDownloaded'), [{ "orderable": true }, { "orderable": true }, { "orderable": false }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Record Found',5);
         });
     </script>
 }

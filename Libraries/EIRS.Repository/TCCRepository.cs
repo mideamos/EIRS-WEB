@@ -486,6 +486,7 @@ namespace EIRS.Repository
                         mObjUpdateRequest.GeneratePathForPrint = pObjRequest.GeneratePathForPrint;
                         mObjUpdateRequest.SEDE_DocumentID = pObjRequest.SEDE_DocumentID;
                         mObjUpdateRequest.ModifiedDate = pObjRequest.ModifiedDate;
+                        mObjUpdateRequest.RequestDate = pObjRequest.RequestDate;
 
                         try
                         {

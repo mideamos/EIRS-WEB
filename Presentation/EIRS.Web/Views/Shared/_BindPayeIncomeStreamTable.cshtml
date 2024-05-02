@@ -13,6 +13,7 @@
             <th data-hide="phone,tablet"> Balance</th>
             <th data-hide="phone,tablet"> Reciept Detail</th>
             <th data-hide="phone,tablet"> Action</th>
+
            
         </tr>
     </thead>
@@ -38,7 +39,9 @@
                                 <li>
                                     <a onclick="javascript:jsfn_EditPAYEIncomeStream(@item.RowID)">Edit</a>
                                 </li>
-
+                                <li>
+                                    <a onclick="jsfn_DeletePayeIncomeStream(@item.RowID)">Remove</a>
+                                </li>
                             </ul>
                         </div>
                     </td>

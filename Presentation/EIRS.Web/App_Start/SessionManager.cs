@@ -562,9 +562,8 @@ namespace EIRS.Web
         [JsonProperty("endMonth")]
         public string EndMonth { get; set; } = null;
         public string ReceiptRef { get; set; }
-        public string ReceiptDate { get; set; }//[NotMapped]
-                                               //public string? FullName => $"{FirstName} {OtherName} {Surname}";
-        public string ReceiptDetail { get; set; }//=> $"{ReceiptRef} -- {ReceiptDate}";
+        public string ReceiptDate { get; set; }
+        public string ReceiptDetail { get; set; }
         //[JsonProperty("id")]
         //public int Id { get; set; } = 0;
         //[JsonProperty("apiId")]

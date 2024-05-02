@@ -245,6 +245,27 @@ function jsfn_DeleteIncomeStreamResponse(data) {
         jsfn_ShowAlert(data.Message, 'danger');
     }
 }
+function jsfn_DeletePayeIncomeStream(RowID) {
+    var vData = {
+        RowID: RowID === '' ? 0 : RowID
+    };
+
+    jsfn_ajaxPost('/ProcessTCCRequest/DeletePayeIncomeStream', vData, jsfn_DeletePayeIncomeStreamResponse);
+}
+
+function jsfn_DeletePayeIncomeStreamResponse(data) {
+    if (data.success === true) {
+        $("#dvPayeIncomeStreamData").html(data.PayeIncomeStreamData);
+        jsfn_ConvertToDatableWithCustomSort($('#tblPayeIncomeStream'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Income Streams Found');
+
+       
+        $("#dvTCCDetailData").html(data.TCCDetailData);
+        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": true }], 'No TCC Detail Found');
+    }
+    else {
+        jsfn_ShowAlert(data.Message, 'danger');
+    }
+}
 
 function jsfn_AssessmentRuleDetails(aruleID) {
     var vData = {

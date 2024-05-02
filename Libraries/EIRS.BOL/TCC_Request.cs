@@ -51,6 +51,7 @@ namespace EIRS.BOL
         public Nullable<int> ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string GeneratePathForPrint { get; set; }
+        public Nullable<bool> IsDownloaded { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MAP_TCCRequest_Generate> MAP_TCCRequest_Generate { get; set; }

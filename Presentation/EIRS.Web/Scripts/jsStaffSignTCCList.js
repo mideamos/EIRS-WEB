@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
     console.log("i reach here ty");
-    jsfn_ConvertToDatableWithCustomSort($('#tblNewRequest'), [{ "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Tcc Record Found');
+    var vSortOrder = [];
+    var vColumnsList = [{ "orderable": true },{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }];
+    jsfn_ConvertToDatableWithCustomSort($('#tblNewRequest'), vColumnsList, 'No Tcc Record Found',0);
 
 });

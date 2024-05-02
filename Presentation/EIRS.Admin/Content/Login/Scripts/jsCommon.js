@@ -139,6 +139,7 @@ function jsfn_ConvertToDatableWithCustomSort(p_Table, p_ColumnsList, p_EmptyTabl
     //    }
     //});
 
+    console.log(p_SortOrder);
     p_Table.dataTable({
 
         // Internationalisation. For more info refer to http://datatables.net/manual/i18n
@@ -180,7 +181,7 @@ function jsfn_ConvertToDatableWithCustomSort(p_Table, p_ColumnsList, p_EmptyTabl
             }
         },
         "columnDefs": p_columnDefs,
-        "order": p_SortOrder // set first column as a default sort by asc
+       "order": p_SortOrder // set first column as a default sort by asc
     });
 }
 

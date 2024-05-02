@@ -140,6 +140,7 @@ namespace EIRS.Web.Controllers
                     StatusID = (int)TCCRequestStatus.In_Progess,
                     CreatedBy = SessionManager.UserID,
                     CreatedDate = CommUtil.GetCurrentDateTime(),
+                    IsDownloaded = false,
                 };
 
                 FuncResponse<TCC_Request> mObjICFuncResponse = mObjBLTCC.BL_GetIncompleteRequest(mObjRequest);

@@ -822,6 +822,21 @@ namespace EIRS.Web.Controllers
                             });
                     }
                     var finalnewpai = newpai.OrderBy(x => x.AssessmentYear).ToList();
+                    finalnewpai = finalnewpai.Select(entry =>
+                    {
+                        if ((int)entry.RowID != 0)
+                        {
+                            entry.RowID = 0;
+                        }
+                        return entry;
+                    }).ToList();
+                    for (int i = 0; i < finalnewpai.Count; i++)
+                    {
+                        var e = finalnewpai[i];
+                        e.RowID = i + 1;
+                    }
+
+
                     ViewBag.PAYEIncomeStreamList = finalnewpai;
                     SessionManager.LstPayeApiResponse = finalnewpai;
                     //check for Eras record first if doesnt exist in the table then go to the api
@@ -3247,7 +3262,7 @@ namespace EIRS.Web.Controllers
                     dcResponse["success"] = false;
                     dcResponse["Message"] = "Row Not Found";
                 }
-                
+
 
                 IList<Request_TCCDetail> lstTCCDetails = SessionManager.LstTCCDetail ?? new List<Request_TCCDetail>();
                 //Search if Row for Tax Year Exists
@@ -3271,6 +3286,7 @@ namespace EIRS.Web.Controllers
                 paye.AnnualTax = Convert.ToDouble(0);
                 paye.ReceiptRef = string.Empty;
                 paye.ReceiptDate = string.Empty;
+                paye.EmployerName = string.Empty;
                 paye.ReceiptDetail = string.Empty;
                 lstPayeApiResponse.Add(paye);
 
@@ -3690,13 +3706,38 @@ namespace EIRS.Web.Controllers
                     var result = response.Content.ReadAsStringAsync();
                     string res = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     respObj = JsonConvert.DeserializeObject<PayeApiFullResponse>(res);
+                    int currentYear = DateTime.Now.Year;
                     if (respObj.Result.Count() > 0)
                     {
-                        for (int i = 1; i < respObj.Result.Count(); i++)
+                        var lastYr = respObj.Result.Where(o => o.AssessmentYear == (currentYear - 1).ToString()).ToList();
+                        var last2Yr = respObj.Result.Where(o => o.AssessmentYear == (currentYear - 2).ToString()).ToList();
+                        var last3Yr = respObj.Result.Where(o => o.AssessmentYear == (currentYear - 3).ToString()).ToList();
+
+                        if (lastYr.Count > 0)
                         {
-                            var item = respObj.Result[i];
-                            item.RowID = i;
-                            item.AnnualTaxII = item.AnnualTax;
+                            var item = new PayeApiResponse();
+                            item.RowID = 1;
+                            item.EmployerName = lastYr.FirstOrDefault().EmployerName;
+                            item.AnnualTaxII = lastYr.Sum(o => o.AnnualTax);
+                            item.AssessmentYear = lastYr.FirstOrDefault().AssessmentYear;
+                            respObjList.Add(item);
+                        }
+                        if (last2Yr.Count > 0)
+                        {
+                            var item = new PayeApiResponse();
+                            item.RowID = 2;
+                            item.EmployerName = last2Yr.FirstOrDefault().EmployerName;
+                            item.AssessmentYear = last2Yr.FirstOrDefault().AssessmentYear;
+                            item.AnnualTaxII = last2Yr.Sum(o => o.AnnualTax);
+                            respObjList.Add(item);
+                        }
+                        if (last3Yr.Count > 0)
+                        {
+                            var item = new PayeApiResponse();
+                            item.RowID = 3;
+                            item.EmployerName = last3Yr.FirstOrDefault().EmployerName;
+                            item.AssessmentYear = last3Yr.FirstOrDefault().AssessmentYear;
+                            item.AnnualTaxII = last3Yr.Sum(o => o.AnnualTax);
                             respObjList.Add(item);
                         }
                     }

@@ -1059,7 +1059,9 @@ namespace EIRS.Web.Controllers
                             RowID = 1,
                             TBKID = 1,
                             TaxYear = (currentYear - 1),
+                            //income amount from paye + TotalIncomeEarned
                             AssessableIncome = Convert.ToDecimal(tccDetailPaye.ChargeableIncome) + Convert.ToDecimal(tccDetailEras.TotalIncomeEarned),
+                            //annultax + DA
                             TCCTaxPaid = Convert.ToDecimal(tccDetailPaye.AnnualTax),
                             ERASAssessed = Convert.ToDecimal(tccDetailPaye.AnnualTax),
                             ERASTaxPaid = Convert.ToDecimal(tccDetailPaye.AnnualTaxII),
@@ -3719,6 +3721,11 @@ namespace EIRS.Web.Controllers
                             item.RowID = 1;
                             item.EmployerName = lastYr.FirstOrDefault().EmployerName;
                             item.AnnualTaxII = lastYr.Sum(o => o.AnnualTax);
+                            item.ChargeableIncome = lastYr.Sum(o => o.AnnualGross);
+                            item.AnnualTax = lastYr.Sum(o => o.AnnualTax);
+                            //anual gros ==> income amount
+                            //anual tax ==> assed amount
+                            //anual tax ==> tax paid
                             item.AssessmentYear = lastYr.FirstOrDefault().AssessmentYear;
                             respObjList.Add(item);
                         }
@@ -3727,6 +3734,8 @@ namespace EIRS.Web.Controllers
                             var item = new PayeApiResponse();
                             item.RowID = 2;
                             item.EmployerName = last2Yr.FirstOrDefault().EmployerName;
+                            item.ChargeableIncome = last2Yr.Sum(o => o.AnnualGross);
+                            item.AnnualTax = last2Yr.Sum(o => o.AnnualTax);
                             item.AssessmentYear = last2Yr.FirstOrDefault().AssessmentYear;
                             item.AnnualTaxII = last2Yr.Sum(o => o.AnnualTax);
                             respObjList.Add(item);
@@ -3736,6 +3745,8 @@ namespace EIRS.Web.Controllers
                             var item = new PayeApiResponse();
                             item.RowID = 3;
                             item.EmployerName = last3Yr.FirstOrDefault().EmployerName;
+                            item.AnnualTax = last3Yr.Sum(o => o.AnnualTax);
+                            item.ChargeableIncome = last3Yr.Sum(o => o.AnnualGross);
                             item.AssessmentYear = last3Yr.FirstOrDefault().AssessmentYear;
                             item.AnnualTaxII = last3Yr.Sum(o => o.AnnualTax);
                             respObjList.Add(item);

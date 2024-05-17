@@ -1,4 +1,5 @@
 ﻿
+using DocumentFormat.OpenXml.Spreadsheet;
 using EIRS.BLL;
 using EIRS.BOL;
 using EIRS.Common;
@@ -137,6 +138,76 @@ namespace EIRS.Web.Controllers
             }
         }
 
+
+        public JsonResult AddABAdjustmentII(MAP_Assessment_LateCharge pObjAdjustment, int AssessmentID, int AdjustmentTypeID)
+        {
+            IDictionary<string, object> dcResponse = new Dictionary<string, object>();
+            try
+            {
+                FuncResponse mObjResponse = new FuncResponse();
+                string pen = "", inter = "", totalAmount = "";
+                BLAssessment mObjBLAssessment = new BLAssessment();
+                IList<usp_GetAssessmentLateChargeList_Result> lstAssessmentLateCharge = mObjBLAssessment.BL_GetAssessmentLateCharge(AssessmentID);
+
+
+                decimal? Amountholder = 0, sumPointA = 0, sumPointB = 0;
+                List<int?> lstOfProfiles = new List<int?>();
+                List<MAP_Assessment_AssessmentItem> retValAssessmentItem = new List<MAP_Assessment_AssessmentItem>();
+                List<MAP_Assessment_Adjustment> retValAdjustment = new List<MAP_Assessment_Adjustment>();
+                List<MAP_Assessment_LateCharge> retValLateCharge = new List<MAP_Assessment_LateCharge>();
+                List<MAP_Settlement_SettlementItem> retValsettlementitem = new List<MAP_Settlement_SettlementItem>();
+                Assessment retVal = new Assessment();
+                using (_db = new EIRSEntities())
+                {
+                    retVal = _db.Assessments.FirstOrDefault(o => o.AssessmentID == AssessmentID);
+                    Amountholder = retVal.AssessmentAmount;
+                    retValAssessmentItem = _db.MAP_Assessment_AssessmentItem.Where(o => o.AAIID == pObjAdjustment.AAIID).ToList();
+                    retValAdjustment = _db.MAP_Assessment_Adjustment.Where(o => o.AAIID == pObjAdjustment.AAIID).ToList();
+                    retValLateCharge = _db.MAP_Assessment_LateCharge.Where(o => o.AAIID == pObjAdjustment.AAIID).ToList();
+                    retValsettlementitem = _db.MAP_Settlement_SettlementItem.Where(o => o.AAIID == pObjAdjustment.AAIID).ToList();
+
+                    sumPointA = (retValAdjustment.Sum(o => o.Amount) + retValLateCharge.Sum(o => o.TotalAmount)
+                        + retValAssessmentItem.Sum(o => o.TaxAmount));
+
+                    sumPointB = retValsettlementitem.Sum(o => o.SettlementAmount);
+                    //retValAssessmentItem.
+                    //////
+                    ///
+                    if (sumPointA == sumPointB)
+                    {
+                        foreach (var updatedItem in retValAssessmentItem)
+                        {
+                            var item = retValAssessmentItem.FirstOrDefault(i => i.AssessmentItemID == updatedItem.AssessmentItemID);
+                            item.PaymentStatusID = 3;
+                        }
+                        retVal.SettlementStatusID = 4;
+                    }
+                    else if (sumPointA > sumPointB || sumPointB == 0)
+                    {
+                        foreach (var updatedItem in retValAssessmentItem)
+                        {
+                            var item = retValAssessmentItem.FirstOrDefault(i => i.AssessmentItemID == updatedItem.AssessmentItemID);
+                            item.PaymentStatusID = 2;
+                        }
+                        if (sumPointA > sumPointB)
+                            retVal.SettlementStatusID = 3;
+                        else
+                            retVal.SettlementStatusID = 1;
+
+                    }
+                    _db.SaveChanges();
+                }
+         
+                dcResponse["success"] = mObjResponse.Success;
+                dcResponse["Message"] = mObjResponse.Message;
+
+            }
+            catch (Exception ex)
+            {
+                Logger.SendErrorToText(ex);
+            }
+            return Json(dcResponse, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult AddABAdjustment(MAP_Assessment_Adjustment pObjAdjustment, int AssessmentID)
         {
             IDictionary<string, object> dcResponse = new Dictionary<string, object>();

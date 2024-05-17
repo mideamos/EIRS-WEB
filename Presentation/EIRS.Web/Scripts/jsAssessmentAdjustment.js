@@ -51,6 +51,57 @@
                 .closest('.input').removeClass('error'); // set error class to the control group
         }
     });
+    var vfrmAddAdjustmentII = $("#frmAddAdjustmentII");
+    vfrmAddAdjustmentII.validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-inline', // default input error message class
+        focusInvalid: false,
+        ignore: ":hidden",
+        rules: {
+            cboAssessmentItem: {
+                required: true
+            },
+            txtAdjustmentLine: {
+                required: true
+            },
+            cboAdjustmentType: {
+                required: true
+            },
+            txtAdjustmentAmount: {
+                required: true
+            }
+
+        },
+        messages: {
+            cboAssessmentItem: {
+                required: "Select Assessment Item"
+            },
+            txtAdjustmentLine: {
+                required: "Enter Adjustment Line"
+            },
+            cboAdjustmentType: {
+                required: "Select Adjustment Type"
+            },
+            txtAdjustmentAmount: {
+                required: "Enter Adjustment Amount"
+            }
+        },
+        errorPlacement: function (error, element) {
+            if (element.is('select')) {
+                error.insertAfter(element[0].parentElement);
+            }
+            else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (element) { // hightlight error inputs
+            $(element).closest('.input').addClass('error'); // set error class to the control group
+        },
+        unhighlight: function (element) { // revert the change dony by hightlight
+            $(element)
+                .closest('.input').removeClass('error'); // set error class to the control group
+        }
+    });
 
     var vfrmPoA = $("#frmPoA");
     vfrmPoA.validate({
@@ -147,6 +198,42 @@
             }
         }
     });
+    $("#btnSaveAdjustmentII").click(function (e) {
+
+        e.preventDefault();
+        if (vfrmAddAdjustmentII.valid()) {
+            var vItemAmountCharged = $("#hdnItemAmountCharged").val();
+            var vSettlementAmount = $("#hdnItemAmountPaid").val();
+            var vAdjustmentAmount = $("#txtAdjustmentAmount").val();
+            var vAdjustmentNote = $("#txtAdjustmentNote").val();
+            var vAdjustmentType = $("#cboAdjustmentType").val();
+            var totalPen = $("#Value1").val();
+            var totalInt = $("#Value1I").val();
+            var totalTotal = $("#Value1II").val();
+            var vId = $("#cboAssessmentItem").val();
+            if (vAdjustmentNote === null && vAdjustmentNote.trim() === '') {
+                jsfn_ShowAlert('Note is required', 'danger', true);
+
+            }
+            if (vAdjustmentType === '2') {
+                totalInt = 0 - parseFloat(totalInt);
+                totalPen = 0 - parseFloat(totalPen);
+                totalTotal = 0 - parseFloat(totalTotal);
+            }
+            var vData = {
+                AssessmentID: $("#hdnAssessmentID").val(),
+                AAIID: $("#cboAssessmentItem").val(),
+                AdjustmentLine: $("#txtAdjustmentLine").val(),
+                AdjustmentTypeID: $("#cboAdjustmentType").val(),
+                Penalty : totalPen,
+                Interest: totalInt,
+                TotalAmount: totalTotal,
+            };
+            console.log(vData);
+            jsfn_ShowLoading();
+            jsfn_ajaxPost('/Adjustment/AddABAdjustmentII', vData, jsfn_PostAdjustmentResponse);
+        }
+    });
 
     $("#btnSaveAdjustmentWithPoA").click(function (e) {
         e.preventDefault();
@@ -176,6 +263,19 @@
     $('#cboRevenueStream').on("change", jsfn_onRevenueStreamChange);
 });
 
+function jsfn_PostAdjustmentII() {
+    var vAdjustmentAmount = $("#txtAdjustmentAmount").val();
+    var vData = {
+        AssessmentID: $("#hdnAssessmentID").val(),
+        AAIID: $("#cboAssessmentItem").val(),
+        AdjustmentLine: $("#txtAdjustmentLine").val(),
+        AdjustmentTypeID: $("#cboAdjustmentType").val(),
+        Amount: $("#cboAdjustmentType").val() === '2' ? 0 - parseFloat(vAdjustmentAmount) : parseFloat(vAdjustmentAmount),
+    };
+    jsfn_ShowLoading();
+    //jsfn_ajaxPost('/Adjustment/Temitayo', vData, jsfn_PostAdjustmentResponse);
+    jsfn_ajaxPost('/Adjustment/AddABAdjustment', vData, jsfn_PostAdjustmentResponse);
+}
 function jsfn_PostAdjustment() {
     var vAdjustmentAmount = $("#txtAdjustmentAmount").val();
     var vData = {

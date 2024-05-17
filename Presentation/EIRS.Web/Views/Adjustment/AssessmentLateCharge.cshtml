@@ -15,6 +15,9 @@
 }
 
 <input type="hidden" id="hdnAssessmentID" value="@Model.AssessmentID" />
+<input type="hidden" id="totalPen" value="@lstAssessmentLateCharge.Sum(t => t.Penalty)" />
+<input type="hidden" id="totalInt" value="@lstAssessmentLateCharge.Sum(t => t.Interest)" />
+<input type="hidden" id="totalTot" value="@lstAssessmentLateCharge.Sum(t => t.TotalAmount)" />
 <input type="hidden" id="hdnAssessmentAmount" value="@Model.AssessmentAmount" />
 <input type="hidden" id="hdnSettlementAmount" value="@Model.SettlementAmount" />
 <div class="title">
@@ -88,12 +91,14 @@
                     <div class="col-sm-12 list-left-col">
                         <h3>@item.AssessmentRuleName <a data-toggle="modal" data-target="#dvViewAssessmentRuleModal_@item.AARID">[View Items]</a> </h3>
                         <div class="desc-row">
+
+
+
                             <!--Amount Charged: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Sum(t => t.TotalAmount)) <br />-->
                             @*Amount Charged: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount) <br />*@
                             <!--Amount Paid: @CommUtil.GetFormatedCurrency(item.SettledAmount) <a data-toggle="modal" data-target="#dvViewPaymentModal_@item.AARID">[View Payments]</a> <br />-->
                             @*Outstanding: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault()) <br />*@
                             <!--Outstanding: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Sum(t => t.TotalAmount)) <br />-->
-
                             Amount Charged: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Where(t => t.AARID == item.AARID).Sum(t => t.TotalAmount)) <br />
                             @*Amount Charged: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount) <br />*@
 
@@ -226,7 +231,7 @@
                     Total Amount
                 </div>
                 <div class="col-sm-6 text-right">
-                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount + lstAssessmentAdjustment.Sum(t => t.Amount)+ lstAssessmentLateCharge.Sum(t => t.TotalAmount))
+                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount + lstAssessmentAdjustment.Sum(t => t.Amount) + lstAssessmentLateCharge.Sum(t => t.TotalAmount))
                 </div>
             </div>
             <hr class="margin-0">
@@ -268,17 +273,10 @@
         </div>
     </div>
     <div class="portlet-body">
-        <form id="frmAddAdjustment">
+        <form id="frmAddAdjustmentII">
             <input type="hidden" id="hdnItemAmountCharged" value="0" />
             <input type="hidden" id="hdnItemAmountPaid" value="0" />
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="control-label required-star">Assessment Item</label>
-                        @Html.DropDownList("cboAssessmentItem", (SelectList)ViewBag.AssessmentItemList, "Select Assessment Item", htmlAttributes: new { @tabindex = "1", @class = "form-control bs-select", @id = "cboAssessmentItem" })
-                    </div>
-                </div>
-            </div>
+
             <div class="row" id="dvItemDetails">
                 <div class="col-sm-6">
                     <div class="form-group">
@@ -296,29 +294,85 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label class="control-label required-star">Adjustment Line</label>
-                        @Html.TextBox("txtAdjustmentLine", "", htmlAttributes: new { @tabindex = "2", @class = "form-control", @id = "txtAdjustmentLine", @placeholder = "Enter Adjustment Line" })
+                        <label class="control-label required-star">Adjustment Note</label>
+                        @Html.TextBox("txtAdjustmentNote", "", htmlAttributes: new { @tabindex = "2", @class = "form-control", @id = "txtAdjustmentNote", @placeholder = "Enter Adjustment Note" })
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="form-group">
                         <label class="control-label required-star">Adjustment Type</label>
                         @Html.DropDownList("cboAdjustmentType", (IList<SelectListItem>)ViewBag.AdjustmentTypeList, "Select Adjustment Type", htmlAttributes: new { @tabindex = "3", @class = "form-control bs-select", @id = "cboAdjustmentType" })
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="control-label required-star">Adjustment Amount</label>
-                        @Html.TextBox("txtAdjustmentAmount", "", htmlAttributes: new { @tabindex = "4", @class = "form-control", @id = "txtAdjustmentAmount", @placeholder = "Enter Amount" })
-                    </div>
-                </div>
+
             </div>
+            <div class="row">
+
+                <table class="table border-top-0">
+                    <tbody>
+                        <tr>
+                            <td>Item</td>
+                            <td>Current Amount</td>
+                            <td>Adjusted Amount</td>
+                            <td>New Amount</td>
+                        </tr>
+                        <tr>
+                            <td>Penalty</td>
+                            <td>
+
+                                @CommUtil.GetFormatedCurrency(lstAssessmentLateCharge.Sum(t => t.Penalty))
+                            </td>
+                            <td>
+
+                                <input type="text" id="Value1" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" onchange="calculateSum()">
+                            </td>
+                            <td>
+
+                                <input type="text" id="Sum" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Interest</td>
+                            <td>
+
+                                @CommUtil.GetFormatedCurrency(lstAssessmentLateCharge.Sum(t => t.Interest))
+                            </td>
+                            <td>
+
+                                <input type="text" id="Value1I" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" onchange="calculateSumI()">
+                            </td>
+                            <td>
+
+                                <input type="text" id="SumI" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td>
+
+                                @CommUtil.GetFormatedCurrency(lstAssessmentLateCharge.Sum(t => t.TotalAmount))
+                            </td>
+                            <td>
+
+                                <input type="text" id="Value1II" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" onchange="calculateSumII()">
+                            </td>
+                            <td>
+
+                                <input type="text" id="SumII" readonly>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+
             <div class="row">
                 <div class="text-right col-sm-12">
                     <div class="form-group">
-                        <button class="btn-theme btn" tabindex="5" id="btnSaveAdjustment">Save</button>
+                        <button class="btn-theme btn" tabindex="5" id="btnSaveAdjustmentII">Save</button>
                     </div>
                 </div>
             </div>
@@ -530,5 +584,90 @@
 </div>
 
 @section Footer {
+    <script>
+        function calculateSum() {
+            debugger;
+            var det = document.getElementById("cboAdjustmentType").value;
+            var sum = 0;
+            var value1 = parseFloat(document.getElementById("totalPen").value) || 0;
+            var value2 = parseFloat(document.getElementById("Value1").value) || 0;
+
+            // Calculate the sum
+            if (det == 1) {
+
+                sum = value1 + value2;
+            }
+            else if (det == 2) {
+                if (value2 > value1) {
+
+                    alert('Decreased Adjustment Amount Cant Be greater Than Current Amount');
+                }
+                else {
+                    sum = value1 - value2;
+                }
+
+            }
+            else {
+                alert('Adjustment Type is Not Selected');
+
+            }
+            // Display the sum in the Sum textbox
+            document.getElementById("Sum").value = sum;
+
+        }
+        function calculateSumI() {
+            // Get the values from the textboxes
+            var det = document.getElementById("cboAdjustmentType").value;
+            var sumI = 0;
+            var value1 = parseFloat(document.getElementById("Value1I").value) || 0;
+            var value2 = parseFloat(document.getElementById("totalInt").value) || 0;
+
+            // Calculate the sum
+            if (det == 1) {
+
+                sumI = value1 + value2;
+            }
+            else if (det == 2) {
+                if (value2 > value1) {
+
+                    alert('Decreased Adjustment Amount Cant Be greater Than Current Amount');
+                }
+                else {
+                    sumI = value1 - value2;
+                }
+            } else {
+                alert('Adjustment Type is Not Selected');
+
+            }
+            // Display the sum in the Sum textbox
+            document.getElementById("SumI").value = sumI;
+        }
+        function calculateSumII() {
+            var det = document.getElementById("cboAdjustmentType").value;
+            debugger;
+            var sumII = 0;
+            var value1 = parseFloat(document.getElementById("Value1II").value) || 0;
+            var value2 = parseFloat(document.getElementById("totalTot").value) || 0;
+            if (det == 1) {
+
+                sumII = value1 + value2;
+            }
+            else if (det == 2) {
+                if (value2 > value1) {
+
+                    alert('Decreased Adjustment Amount Cant Be greater Than Current Amount');
+                }
+                else {
+                    sumII = value1 - value2;
+                }
+            }
+            else {
+                alert('Adjustment Type is Not Selected');
+
+            }
+            // Display the sum in the Sum textbox
+            document.getElementById("SumII").value = sumII;
+        }
+    </script>
     <script type="text/javascript" src="~/Scripts/jsAssessmentAdjustment.js"></script>
 }

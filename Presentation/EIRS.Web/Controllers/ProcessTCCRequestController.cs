@@ -845,7 +845,7 @@ namespace EIRS.Web.Controllers
                         IList<usp_GetRequestIncomeStreamList_Result> lstRequestIncomeStream = mObjBLTCC.BL_GetIncomeStreamList(mObjRequestData.TCCRequestID);
                         if (lstRequestIncomeStream.Count > 0)
                         {
-                            foreach (var item in lstRequestIncomeStream)
+                            foreach (usp_GetRequestIncomeStreamList_Result item in lstRequestIncomeStream)
                             {
                                 mObjRequestIncomeStream = new Request_IncomeStream()
                                 {
@@ -3056,7 +3056,11 @@ namespace EIRS.Web.Controllers
             //Update or Add TCC Details
             IList<Request_TCCDetail> lstTCCDetails = SessionManager.LstTCCDetail ?? new List<Request_TCCDetail>();
             IList<usp_GetTaxPayerLiabilityForTCC_Result> lstTCCDetailsliability = SessionManager.lstLaibility ?? new List<usp_GetTaxPayerLiabilityForTCC_Result>();
-            IList<usp_GetTCCDetail_Result> lstTCCDetailsNew = SessionManager.LstTCCDetailNew ?? new List<usp_GetTCCDetail_Result>();
+          IList<usp_GetTCCDetail_Result> lstTCCDetailsNew = SessionManager.LstTCCDetailNew ?? new List<usp_GetTCCDetail_Result>();
+
+           // BLTCC mObjBLTCC = new BLTCC();
+            // IList<usp_GetTCCDetail_Result> lstTCCDetailsNew = mObjBLTCC.BL_GetTCCDetail(mObjBusinessData.IndividualID, (int)EnumList.TaxPayerType.Individual, mIntOldTaxYear);
+
             //Search if Row for Tax Year Exists
             Request_TCCDetail mObjOldTCCDetail, mObjTCCDetail;
             IList<usp_GetTaxPayerPaymentForTCCNEW_Result> lstTaxPayerPayment = SessionManager.LstTCCTaxPayerPayment ?? new List<usp_GetTaxPayerPaymentForTCCNEW_Result>();

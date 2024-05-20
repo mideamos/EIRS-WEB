@@ -51,6 +51,11 @@ namespace EIRS.Web
             get { return TrynParse.parseInt(HttpContext.Current.Session["UserTypeID"]); }
             set { HttpContext.Current.Session["UserTypeID"] = value; }
         }
+               public static long GetAAIID
+        {
+            get { return TrynParse.parseInt(HttpContext.Current.Session["aaiid"]); }
+            set { HttpContext.Current.Session["aaiid"] = value; }
+        }
 
         public static int TaxPayerTypeID
         {
@@ -105,6 +110,13 @@ namespace EIRS.Web
         {
             get { return HttpContext.Current.Session["lstPOS"] != null ? JsonConvert.DeserializeObject<IList<NewPoASettlementViewModel>>(HttpContext.Current.Session["lstPOS"].ToString()) : null; }
             set { HttpContext.Current.Session["lstPOS"] = JsonConvert.SerializeObject(value); ; }
+        }
+
+       
+        public static IList<MAP_Assessment_LateCharge> LstLa
+        {
+            get { return HttpContext.Current.Session["LstLa"] != null ? JsonConvert.DeserializeObject<IList<MAP_Assessment_LateCharge>>(HttpContext.Current.Session["LstLa"].ToString()) : null; }
+            set { HttpContext.Current.Session["LstLa"] = JsonConvert.SerializeObject(value); }
         }
 
         public static IList<Assessment_AssessmentRule> lstAssessmentRule

@@ -2074,7 +2074,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="TotalIncomeEarned" Type="decimal" Precision="18" Scale="2" />
           <Property Name="AssessmentYear" Type="int" />
           <Property Name="Role" Type="varchar" MaxLength="50" />
-          <Property Name="BusinessName" Type="varchar" MaxLength="50" />
+          <Property Name="BusinessName" Type="varchar" MaxLength="200" />
           <Property Name="LGA" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="NewTCCDetailsHold">
@@ -7024,7 +7024,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="RequestRefNo" Type="varchar" Mode="In" />
         </Function>
         <Function Name="usp_GetTccDownloadByYear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        
         <Function Name="usp_GetTCCRequestDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RequestID" Type="bigint" Mode="In" />
         </Function>
@@ -23815,7 +23814,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="TotalIncomeEarned" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AssessmentYear" Type="Int32" />
           <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BusinessName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="LGA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TccRefHolder">

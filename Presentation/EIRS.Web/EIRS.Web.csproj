@@ -2013,6 +2013,7 @@
     <Content Include="Scripts\LateCharge.js" />
     <Content Include="Views\OperationManager\ManageLateCharge.cshtml" />
     <Content Include="Views\Adjustment\AssessmentLateCharge.cshtml" />
+    <Content Include="Views\Adjustment\AssessmentLateChargeNext.cshtml" />
     <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
     <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
     <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />
@@ -2026,6 +2027,7 @@
     <Content Include="Views\CaptureIndividual\AssessmentBillDetailFromPending.cshtml" />
     <Content Include="Views\CaptureIndividual\BillDetailFromDecline.cshtml" />
     <Content Include="Views\CaptureIndividual\EditTaxOffice.cshtml" />
+    <Content Include="Views\Staff\SignTCCListBulk.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

@@ -211,7 +211,7 @@
             var totalInt = $("#Value1I").val();
             var totalTotal = $("#Value1II").val();
             var vId = $("#cboAssessmentItem").val();
-            if (vAdjustmentNote === null && vAdjustmentNote.trim() === '') {
+            if (vAdjustmentNote === null || vAdjustmentNote.trim() === '') {
                 jsfn_ShowAlert('Note is required', 'danger', true);
 
             }
@@ -225,13 +225,14 @@
                 AAIID: $("#cboAssessmentItem").val(),
                 AdjustmentLine: $("#txtAdjustmentLine").val(),
                 AdjustmentTypeID: $("#cboAdjustmentType").val(),
+                AdjustmentNote: vAdjustmentNote,
                 Penalty : totalPen,
                 Interest: totalInt,
                 TotalAmount: totalTotal,
             };
             console.log(vData);
             jsfn_ShowLoading();
-            jsfn_ajaxPost('/Adjustment/AddABAdjustmentII', vData, jsfn_PostAdjustmentResponse);
+            jsfn_ajaxPost('/Adjustment/AddABAdjustmentII', vData, jsfn_PostAdjustmentResponseII);
         }
     });
 
@@ -298,16 +299,31 @@ function jsfn_PostAdjustmentResponse(data) {
         jsfn_ShowAlert(data.Message, 'danger', true);
     }
 }
+function jsfn_PostAdjustmentResponseII(data) {
+    debugger;
+    if (data.success) {
+        location.reload(true);
+        jsfn_HideLoading()
+    }
+    else {
+        jsfn_ShowAlert(data.Message, 'danger', true);
+
+        jsfn_HideLoading()
+    }
+
+    jsfn_HideLoading()
+}
 
 function jsfn_onAssessmentItemChange() {
     var vData = {
         AAIID: $("#cboAssessmentItem").val(),
     };
-
+    debugger;
     jsfn_ajaxPost('/Adjustment/GetAssessmentItemDetails', vData, jsfn_onAssessmentItemChangeResponse);
 }
 
 function jsfn_onAssessmentItemChangeResponse(data) {
+    debugger;
     $("#spnAmountCharged").html(data.TotalAmount.formatMoney());
     $("#spnAmountPaid").html(data.SettlementAmount.formatMoney());
     $("#hdnItemAmountCharged").val(data.TotalAmount);

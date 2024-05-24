@@ -160,6 +160,10 @@ namespace EIRS.Web.Controllers
                         };
 
                         new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
+                        var taxDetail = _db.Individuals.FirstOrDefault(o => o.IndividualID == mObjReqResponse.AdditionalData.TaxPayerID);
+
+                        string msg = $"Your TCC Application with request Reference number {mObjReqResponse.AdditionalData.RequestRefNo} has been received and under process";
+                        bool blnSMSSent = UtilityController.SendSMS(taxDetail.MobileNumber1, msg);
 
                         return RedirectToAction("List", "ProcessTCCRequest");
                     }

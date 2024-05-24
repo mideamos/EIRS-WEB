@@ -9,7 +9,6 @@ using System.Text;
 using System.Transactions;
 using System.Web.Configuration;
 using System.Web.Mvc;
-//using DocumentFormat.OpenXml.Vml;
 using EIRS.BLL;
 using EIRS.BOL;
 using EIRS.Common;
@@ -688,6 +687,10 @@ namespace EIRS.Web.Controllers
                                 };
 
                                 mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus1);
+                                var taxDetail = _db.Individuals.FirstOrDefault(o => o.IndividualID == mObjRequestData.IndividualID);
+
+                                string msg = $"Your TCC request is awaiting final approval";
+                                bool blnSMSSent = UtilityController.SendSMS(taxDetail.MobileNumber1, msg);
 
                                 SessionManager.Path = mStrGeneratedDocumentPath;
                                 ViewBag.path = mStrGeneratedDocumentPath;
@@ -778,38 +781,37 @@ namespace EIRS.Web.Controllers
                                 var mNewObjFuncResponse = mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus2);
                                 if (mNewObjFuncResponse.Success)
                                 {
-                                    using (_db = new EIRSEntities())
+
+                                    var holder = _db.MAP_TCCRequest_Stages.Where(o => o.RequestID == mObjRequestData.TCCRequestID).ToList();
+                                    foreach (var hol in holder)
                                     {
-                                        var holder = _db.MAP_TCCRequest_Stages.Where(o => o.RequestID == mObjRequestData.TCCRequestID).ToList();
-                                        foreach (var hol in holder)
-                                        {
-                                            hol.ApprovalDate = DateTime.Now;
-                                        }
-                                        _db.SaveChanges();
+                                        hol.ApprovalDate = DateTime.Now;
                                     }
 
                                 }
                                 Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
                                 string file = Convert.ToBase64String(bytesArray);
-                                using (_db = new EIRSEntities())
+
+                                var existingTcc = _db.ValidateTccs.FirstOrDefault(o => o.TccRequestId == nereqid);
+                                if (existingTcc != null)
                                 {
-                                    var existingTcc = _db.ValidateTccs.FirstOrDefault(o => o.TccRequestId == nereqid);
-                                    if (existingTcc != null)
-                                    {
-                                        existingTcc.TCCpdf = file;
-                                        existingTcc.DateofTCCissued = DateTime.Now;
-                                        existingTcc.DateModified = DateTime.Now;
+                                    existingTcc.TCCpdf = file;
+                                    existingTcc.DateofTCCissued = DateTime.Now;
+                                    existingTcc.DateModified = DateTime.Now;
 
-
-                                        _db.SaveChanges();
-                                    }
                                 }
 
+                                //Your TCC request has been approved and ready for issuance. Kindly visit closest EIRS office for collection
                                 SessionManager.Path = mStrGeneratedDocumentPath;
                                 ViewBag.path = mStrGeneratedDocumentPath;
                                 dcResponse["success"] = true;
                                 dcResponse["Message"] = "eTCC Signed Succcessfully";
+                                var taxDetailKK = _db.Individuals.FirstOrDefault(o => o.IndividualID == mObjRequestData.IndividualID);
 
+                                string msgKK = $"Your TCC request has been approved and ready for issuance. Kindly visit closest EIRS office for collection";
+                                bool blnSMSSentKK = UtilityController.SendSMS(taxDetailKK.MobileNumber1, msgKK);
+
+                                _db.SaveChanges();
                                 break;
                             default:
                                 dcResponse["success"] = false;
@@ -824,10 +826,305 @@ namespace EIRS.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                Logger.SendErrorToText(ex);
                 throw ex;
             }
         }
+        //private string signer()
+        //{
+
+        //    switch (mObjRequestData.SEDE_OrderID)
+        //    {
+        //        case (long)TCCSigningStage.AwaitingFirstSigner:
+        //            mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
+        //            mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+        //            mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
+        //            mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+        //            mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
+
+        //            //ETCC/Print/149726/Temp/Html/149726_template.html
+        //            mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
+        //            mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+        //            mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
+        //            mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+        //            mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
+        //            if (!Directory.Exists(mStrDirectory))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectory);
+        //            }
+        //            if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+        //            }
+        //            if (!Directory.Exists(mStrDirectoryForPrint))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectoryForPrint);
+        //            }
+        //            if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
+        //            }
+        //            HtmlToPdf pdf = new HtmlToPdf();
+        //            // set converter options
+        //            pdf.Options.PdfPageSize = PdfPageSize.A4;
+        //            pdf.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+
+        //            pdf.Options.WebPageWidth = 0;
+        //            pdf.Options.WebPageHeight = 0;
+        //            pdf.Options.WebPageFixedSize = false;
+
+        //            pdf.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
+        //            pdf.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
+        //            string marksheet = string.Empty;
+        //            string marksheetForPrint = string.Empty;
+        //            marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
+        //            marksheet = marksheet.Replace("@@first@@", imgData);
+        //            marksheetForPrint = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
+        //            marksheetForPrint = marksheetForPrint.Replace("@@first@@", imgData);
+
+        //            System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
+        //            PdfDocument doc = pdf.ConvertHtmlString(marksheet);
+        //            var bytes = doc.Save();
+        //            System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetForPrint);
+        //            PdfDocument docII = pdf.ConvertHtmlString(marksheetForPrint);
+        //            var bytesII = docII.Save();
+
+        //            System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes);
+        //            System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytesII);
+        //            ViewBag.RequestData = mObjRequestData;
+        //            ViewBag.pdf = mStrGeneratedDocumentPath;
+        //            GenerateViewModel mObjGenerateTCCModel = new GenerateViewModel()
+        //            {
+        //                RequestID = mObjRequestData.TCCRequestID,
+        //            };
+
+        //            TCC_Request mObjUpdateStatus = new TCC_Request()
+        //            {
+        //                TCCRequestID = mObjRequestData.TCCRequestID,
+        //                StatusID = (int)NewTCCRequestStage.Waiting_For_Second_Signature,
+        //                ModifiedBy = SessionManager.UserID,
+        //                SEDE_DocumentID = SessionManager.UserID,//to holder first signer id
+        //                SEDE_OrderID = (long)TCCSigningStage.AwaitingSecondSigner,
+        //                GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
+        //                ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+        //                //  RequestDate = CommUtil.GetCurrentDateTime(),
+        //                GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+        //                ModifiedDate = CommUtil.GetCurrentDateTime()
+        //            };
+
+        //            mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
+
+        //            SessionManager.Path = mStrGeneratedDocumentPath;
+        //            SessionManager.Path = mStrGeneratedDocumentPath;
+        //            ViewBag.path = mStrGeneratedDocumentPath;
+        //            dcResponse["success"] = true;
+        //            dcResponse["Message"] = "eTCC Signed Succcessfully";
+        //            break;
+        //        case (long)TCCSigningStage.AwaitingSecondSigner:
+        //            mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
+        //            mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+        //            mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
+        //            mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+        //            mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
+        //            mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
+        //            mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+        //            mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
+        //            mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+        //            mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
+        //            if (!Directory.Exists(mStrDirectory))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectory);
+        //            }
+        //            if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+        //            }
+        //            if (!Directory.Exists(mStrDirectoryForPrint))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectoryForPrint);
+        //            }
+        //            if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
+        //            }
+
+        //            HtmlToPdf pdf1 = new HtmlToPdf();
+        //            // set converter options
+        //            pdf1.Options.PdfPageSize = PdfPageSize.A4;
+        //            pdf1.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+
+        //            pdf1.Options.WebPageWidth = 0;
+        //            pdf1.Options.WebPageHeight = 0;
+        //            pdf1.Options.WebPageFixedSize = false;
+
+        //            pdf1.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
+        //            pdf1.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
+        //            string marksheet1 = string.Empty;
+        //            string marksheetII = string.Empty;
+        //            marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
+        //            marksheetII = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
+        //            marksheet = marksheet.Replace("@@second@@", imgData);
+        //            marksheetII = marksheetII.Replace("@@second@@", imgData);
+
+        //            System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
+        //            PdfDocument doc1 = pdf1.ConvertHtmlString(marksheet);
+        //            var bytes1 = doc1.Save();
+        //            System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetII);
+        //            PdfDocument docII1 = pdf1.ConvertHtmlString(marksheetII);
+        //            var bytesII1 = docII1.Save();
+
+        //            System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes1);
+        //            System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytesII1);
+        //            ViewBag.RequestData = mObjRequestData;
+        //            ViewBag.pdf = mStrGeneratedDocumentPath;
+        //            GenerateViewModel mObjGenerateTCCModel1 = new GenerateViewModel()
+        //            {
+        //                RequestID = mObjRequestData.TCCRequestID,
+        //            };
+
+        //            TCC_Request mObjUpdateStatus1 = new TCC_Request()
+        //            {
+        //                TCCRequestID = mObjRequestData.TCCRequestID,
+        //                SEDE_DocumentID = retVal.SEDE_DocumentID,
+        //                ServiceBillID = SessionManager.UserID,//to holder second signer id
+        //                StatusID = (int)NewTCCRequestStage.Waiting_For_Second_Signature,
+        //                ModifiedBy = SessionManager.UserID,
+        //                SEDE_OrderID = (long)TCCSigningStage.AwaitingThirdSigner,
+        //                //  RequestDate = CommUtil.GetCurrentDateTime(),
+        //                GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
+        //                ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+        //                GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+        //                ModifiedDate = CommUtil.GetCurrentDateTime()
+        //            };
+
+        //            mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus1);
+        //            var taxDetail = _db.Individuals.FirstOrDefault(o => o.IndividualID == mObjRequestData.IndividualID);
+
+        //            string msg = $"Your TCC request is awaiting final approval";
+        //            bool blnSMSSent = UtilityController.SendSMS(taxDetail.MobileNumber1, msg);
+
+        //            SessionManager.Path = mStrGeneratedDocumentPath;
+        //            ViewBag.path = mStrGeneratedDocumentPath;
+        //            dcResponse["success"] = true;
+        //            dcResponse["Message"] = "eTCC Signed Succcessfully";
+
+        //            break;
+        //        case (long)TCCSigningStage.AwaitingThirdSigner:
+
+        //            mStrDirectory = $"{GlobalDefaultValues.DocumentLocation}/ETCC/{mObjRequestData.IndividualID}/Signed/";
+        //            mStrGeneratedFileName = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+        //            mStrGeneratedDocumentPath = Path.Combine(mStrDirectory, mStrGeneratedFileName);
+        //            mStrGeneratedHtmlPath = Path.Combine(mStrDirectory + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+        //            mHtmlDirectory = $"{GlobalDefaultValues.DocumentLocation}/{mObjRequestData.ValidatedPath}";
+
+        //            mStrDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/ETCC/Print/{mObjRequestData.IndividualID}";
+        //            mStrGeneratedFileNameForPrint = $"{mObjRequestData.IndividualID}_{DateTime.Now:ddMMyyyy}_Generated.pdf";//mObjTreasuryData.ReceiptRefNo + "_" + DateTime.Now.ToString("_ddMMyyyy") + "_TR.pdf";
+        //            mStrGeneratedDocumentPathForPrint = Path.Combine(mStrDirectoryForPrint, mStrGeneratedFileNameForPrint);
+        //            mStrGeneratedHtmlPathForPrint = Path.Combine(mStrDirectoryForPrint + "/Temp/Html", mObjRequestData.IndividualID + "_template.html");
+        //            mHtmlDirectoryForPrint = $"{GlobalDefaultValues.DocumentLocation}/{retVal.GeneratePathForPrint}";
+        //            if (!Directory.Exists(mStrDirectory))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectory);
+        //            }
+        //            if (!Directory.Exists(mStrDirectory + "/Temp/Html"))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectory + "/Temp/Html");
+        //            }
+        //            if (!Directory.Exists(mStrDirectoryForPrint))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectoryForPrint);
+        //            }
+        //            if (!Directory.Exists(mStrDirectoryForPrint + "/Temp/Html"))
+        //            {
+        //                Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
+        //            }
+        //            HtmlToPdf pdf2 = new HtmlToPdf();
+        //            // set converter options
+        //            pdf2.Options.PdfPageSize = PdfPageSize.A4;
+        //            pdf2.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+
+        //            pdf2.Options.WebPageWidth = 0;
+        //            pdf2.Options.WebPageHeight = 0;
+        //            pdf2.Options.WebPageFixedSize = false;
+
+        //            pdf2.Options.AutoFitWidth = HtmlToPdfPageFitMode.NoAdjustment;
+        //            pdf2.Options.AutoFitHeight = HtmlToPdfPageFitMode.NoAdjustment;
+        //            string marksheet2 = string.Empty;
+        //            string marksheetForPrint2 = string.Empty;
+        //            marksheet = System.IO.File.ReadAllText(mHtmlDirectory);
+        //            marksheetForPrint = System.IO.File.ReadAllText(mHtmlDirectoryForPrint);
+        //            marksheet = marksheet.Replace("@@third@@", imgData);
+        //            marksheetForPrint = marksheetForPrint.Replace("@@third@@", imgData).Replace("₦", "<span>&#8358;</span>");
+        //            System.IO.File.WriteAllText(mStrGeneratedHtmlPath, marksheet);
+        //            System.IO.File.WriteAllText(mStrGeneratedHtmlPathForPrint, marksheetForPrint);
+        //            PdfDocument doc2 = pdf2.ConvertHtmlString(marksheet);
+        //            PdfDocument doc22 = pdf2.ConvertHtmlString(marksheetForPrint);
+        //            var bytes2 = doc2.Save();
+        //            var bytes22 = doc22.Save();
+
+        //            System.IO.File.WriteAllBytes(mStrGeneratedDocumentPath, bytes2);
+        //            System.IO.File.WriteAllBytes(mStrGeneratedDocumentPathForPrint, bytes22);
+        //            ViewBag.RequestData = mObjRequestData;
+        //            ViewBag.pdf = mStrGeneratedDocumentPath;
+        //            GenerateViewModel mObjGenerateTCCModel2 = new GenerateViewModel()
+        //            {
+        //                RequestID = mObjRequestData.TCCRequestID,
+        //            };
+
+        //            TCC_Request mObjUpdateStatus2 = new TCC_Request()
+        //            {
+        //                TCCRequestID = mObjRequestData.TCCRequestID,
+        //                StatusID = (int)TCCRequestStatus.Issued_eTCC,
+        //                ModifiedBy = SessionManager.UserID,
+        //                SEDE_DocumentID = retVal.SEDE_DocumentID,
+        //                ServiceBillID = retVal.ServiceBillID,
+        //                VisibleSignStatusID = SessionManager.UserID,//to holder third signer id
+        //                SEDE_OrderID = (long)TCCSigningStage.Done,
+        //                GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/" + mStrGeneratedFileName,
+        //                //ETCC\Print\149726
+        //                // GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + $"/{mStrGeneratedFileNameForPrint}",
+        //                GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+
+        //                ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Signed/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
+        //                ModifiedDate = CommUtil.GetCurrentDateTime()
+        //            };
+
+        //            var mNewObjFuncResponse = mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus2);
+        //            if (mNewObjFuncResponse.Success)
+        //            {
+
+        //                var holder = _db.MAP_TCCRequest_Stages.Where(o => o.RequestID == mObjRequestData.TCCRequestID).ToList();
+        //                foreach (var hol in holder)
+        //                {
+        //                    hol.ApprovalDate = DateTime.Now;
+        //                }
+
+        //            }
+        //            Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
+        //            string file = Convert.ToBase64String(bytesArray);
+
+        //            var existingTcc = _db.ValidateTccs.FirstOrDefault(o => o.TccRequestId == nereqid);
+        //            if (existingTcc != null)
+        //            {
+        //                existingTcc.TCCpdf = file;
+        //                existingTcc.DateofTCCissued = DateTime.Now;
+        //                existingTcc.DateModified = DateTime.Now;
+
+        //            }
+
+
+        //            SessionManager.Path = mStrGeneratedDocumentPath;
+        //            ViewBag.path = mStrGeneratedDocumentPath;
+        //            dcResponse["success"] = true;
+        //            dcResponse["Message"] = "eTCC Signed Succcessfully";
+        //            _db.SaveChanges();
+        //            break;
+        //        default:
+        //            dcResponse["success"] = false;
+        //            dcResponse["Message"] = " eTCC As been Signed";
+        //            break;
+        //    }
+        //}
         public ActionResult SignTCCDetails(long? reqId)
         {
             if (reqId.GetValueOrDefault() > 0)

@@ -1,4 +1,5 @@
-﻿using EIRS.BLL;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using EIRS.BLL;
 using EIRS.BOL;
 using EIRS.Common;
 using EIRS.Models;
@@ -600,6 +601,17 @@ namespace EIRS.Web.Controllers
             }
 
             ViewBag.YearList = new SelectList(lstYear, "id", "text");
+
+        }
+        public void UI_FillTCCStatusDropDown()
+        {
+            IList<DropDownListResult> lstYear = new List<DropDownListResult>()
+        {
+            new DropDownListResult { id = 1, text = "Pending TCC" },
+            new DropDownListResult { id = 2, text = "Downloaded" },
+            new DropDownListResult { id = 3, text = "Issued" }
+        };
+            ViewBag.TCCStatusList = new SelectList(lstYear, "id", "text");
 
         }
 

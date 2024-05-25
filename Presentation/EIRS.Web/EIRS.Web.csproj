@@ -2014,6 +2014,7 @@
     <Content Include="Views\OperationManager\ManageLateCharge.cshtml" />
     <Content Include="Views\Adjustment\AssessmentLateCharge.cshtml" />
     <Content Include="Views\Adjustment\AssessmentLateChargeNext.cshtml" />
+    <Content Include="Views\OperationManager\TCCReports.cshtml" />
     <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
     <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
     <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />
@@ -2188,6 +2189,7 @@
     <Compile Include="Models\TaxPayerPasswordViewModel.cs" />
     <Compile Include="Models\TaxPayerOTPViewModel.cs" />
     <Compile Include="Models\TaxPayerReportViewModel.cs" />
+    <Compile Include="Models\TaxReportModel.cs" />
     <Compile Include="Models\TCCDetailViewModel.cs" />
     <Compile Include="Models\TCCRequestViewModel.cs" />
     <Compile Include="Models\ServiceBillIdsRequest.cs" />

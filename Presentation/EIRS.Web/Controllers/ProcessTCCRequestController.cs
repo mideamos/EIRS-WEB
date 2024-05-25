@@ -22,26 +22,9 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using static EIRS.Web.Controllers.Filters;
-using RestSharp;
-using IronPdf;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using System.Windows.Controls;
-using static EIRS.Web.Controllers.ProcessTCCRequestController;
 using EIRS.Web.Utility;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
-using PagedList;
-using DocumentFormat.OpenXml.Bibliography;
 using Title = EIRS.BOL.Title;
-using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using iTextSharp.text.pdf;
-using System.Data.Entity.Migrations;
-using DocumentFormat.OpenXml;
-using Microsoft.Office.Interop.Excel;
 using Vereyon.Web;
-using System.Web.Script.Serialization;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace EIRS.Web.Controllers
 {
@@ -131,8 +114,10 @@ namespace EIRS.Web.Controllers
             {
                 BLTCC mObjBLTCC = new BLTCC();
 
+                var userDet = _db.Individuals.FirstOrDefault(o => o.IndividualID == pObjRequestModel.TaxPayerID);
                 TCC_Request mObjRequest = new TCC_Request()
                 {
+                    TaxOfficeId = userDet != null ? userDet.TaxOfficeID : 0,
                     RequestDate = CommUtil.GetCurrentDateTime(),
                     TaxPayerID = pObjRequestModel.TaxPayerID,
                     TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
@@ -3060,9 +3045,9 @@ namespace EIRS.Web.Controllers
             //Update or Add TCC Details
             IList<Request_TCCDetail> lstTCCDetails = SessionManager.LstTCCDetail ?? new List<Request_TCCDetail>();
             IList<usp_GetTaxPayerLiabilityForTCC_Result> lstTCCDetailsliability = SessionManager.lstLaibility ?? new List<usp_GetTaxPayerLiabilityForTCC_Result>();
-          IList<usp_GetTCCDetail_Result> lstTCCDetailsNew = SessionManager.LstTCCDetailNew ?? new List<usp_GetTCCDetail_Result>();
+            IList<usp_GetTCCDetail_Result> lstTCCDetailsNew = SessionManager.LstTCCDetailNew ?? new List<usp_GetTCCDetail_Result>();
 
-           // BLTCC mObjBLTCC = new BLTCC();
+            // BLTCC mObjBLTCC = new BLTCC();
             // IList<usp_GetTCCDetail_Result> lstTCCDetailsNew = mObjBLTCC.BL_GetTCCDetail(mObjBusinessData.IndividualID, (int)EnumList.TaxPayerType.Individual, mIntOldTaxYear);
 
             //Search if Row for Tax Year Exists

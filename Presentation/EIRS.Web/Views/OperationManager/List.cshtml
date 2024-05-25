@@ -1088,7 +1088,7 @@
                             </ul>
                         </div>
                     </td>
-                </tr>  
+                </tr>
                 <tr>
                     <td>OM064</td>
                     <td>TCC Download</td>
@@ -1105,7 +1105,7 @@
                             </ul>
                         </div>
                     </td>
-                </tr> 
+                </tr>
                 <tr>
                     <td>OM065</td>
                     <td>Review Late Charge</td>
@@ -1123,38 +1123,24 @@
                         </div>
                     </td>
                 </tr>
-                @*<tr>
-                        <td>OM003</td>
-                        <td>Convert Tax Payers</td>
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Action <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="@Url.Action("List","ConvertTaxPayer")"> View</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>OM004</td>
-                        <td>Transfer Assets</td>
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Action <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="@Url.Action("List","TransferAsset")"> View</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>*@
+                <tr>
+                    <td>OM066</td>
+                    <td>TCC Reports</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("TCCReports", "OperationManager",new {taxYear =0,status =0,txoffId=0 })"> View</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+
             </tbody>
         </table>
     </div>

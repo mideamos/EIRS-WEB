@@ -1,0 +1,119 @@
+﻿@using EIRS.Web.Models
+@{
+    ViewBag.Title = "TCC Reports";
+
+    IList<TaxReportModel> lstAsset = (IList<TaxReportModel>)ViewBag.Taxxx;
+    int det = ViewBag.Det;
+}
+
+<div class="portlet light">
+
+
+    <div class="portlet-title">
+        <div class="caption">TCCReports</div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        @if(det == 1){
+        <form id="frmPaymentByRevenueStream" class="form-horizontal">
+            <div class="col-sm-7">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Year:</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("Year", (SelectList)ViewBag.YearList, "Select Year", new { @class = "form-control bs-select", @id = "cboYear" })
+                    </div>
+                    <label class="col-md-4 control-label">Status:</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("Status", (SelectList)ViewBag.TCCStatusList, "Select Status", new { @class = "form-control bs-select", @id = "cboStatus" })
+                    </div>
+                </div>
+                <div class="form-group text-right row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTccReports">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Office</th>
+                    <th>Total Request</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ret in Model)
+                {
+                    <tr>
+                        <td>@ret.TaxOffice</td>
+                        <td>@ret.TotalRequest</td>
+
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="@Url.Action("TCCReports", "OperationManager",new {taxYear=0,status=0,txoffId= ret.TaxOfficeId})">View</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+        else
+        {
+
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTccReportsII">
+            <thead class="red-th">
+                <tr>
+                    <th>Request Ref</th>
+                    <th>Tax Year</th>
+                    <th>Tax Payer Name</th>
+                    <th>Request Date</th>
+                    <th>Request Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ret in lstAsset)
+                {
+                    <tr>
+                        <td>@ret.RequestRef</td>
+                        <td>@ret.TaxYear</td>
+                        <td>@ret.Taxpayername</td>
+                        <td>@CommUtil.GetFormatedDate(ret.RequestDate)</td>
+                        <td>@ret.StatusName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#btnSearch').click(function () {
+                var selectedYear = $('#cboYear').val() || 0;
+                var selectedStatus = $('#cboStatus').val() || 0;
+
+                var url = '/OperationManager/TCCReports?taxYear=' + selectedYear + '&status=' + selectedStatus + '&txoffId=' + 0;
+                window.location.href = url;
+            });
+            jsfn_ConvertToDatableWithCustomSort($('#tblTccReports'), [{ "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Record Found');
+            jsfn_ConvertToDatableWithCustomSort($('#tblTccReportsII'), [{ "orderable": true }, { "orderable": true },{ "orderable": true },{ "orderable": true }, { "orderable": false }], 'No Record Found');
+        });
+
+    </script>
+}
+

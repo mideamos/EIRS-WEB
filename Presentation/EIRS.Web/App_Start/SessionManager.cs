@@ -100,6 +100,16 @@ namespace EIRS.Web
         {
             get { return HttpContext.Current.Session["lstBuildingUnit"] != null ? JsonConvert.DeserializeObject<IList<Building_BuildingUnit>>(HttpContext.Current.Session["lstBuildingUnit"].ToString()) : null; }
             set { HttpContext.Current.Session["lstBuildingUnit"] = JsonConvert.SerializeObject(value); ; }
+        }   
+        public static string detHolder
+        {
+            get { return HttpContext.Current.Session["detHolder"] != null ? HttpContext.Current.Session["detHolder"].ToString() : ""; }
+            set { HttpContext.Current.Session["detHolder"] = JsonConvert.SerializeObject(value); ; }
+        }    
+        public static IList<TaxReportModel> LstTaxReportModel
+        {
+            get { return HttpContext.Current.Session["lstTaxReportModel"] != null ? JsonConvert.DeserializeObject<IList<TaxReportModel>>(HttpContext.Current.Session["lstTaxReportModel"].ToString()) : null; }
+            set { HttpContext.Current.Session["lstTaxReportModel"] = JsonConvert.SerializeObject(value); ; }
         }
         public static List<LateChargeResponse> LateChargeResponse
         {

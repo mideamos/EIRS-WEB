@@ -37,6 +37,7 @@ using System.Web.UI.WebControls;
 using Twilio.TwiML.Voice;
 using Vereyon.Web;
 using static EIRS.Web.Controllers.Filters;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace EIRS.Web.Controllers
 {
@@ -137,6 +138,7 @@ namespace EIRS.Web.Controllers
 
             return results;
         }
+
         [HttpGet]
         public ActionResult Download(long? reqid)
         {
@@ -7144,6 +7146,164 @@ namespace EIRS.Web.Controllers
                 }
             }
         }
+        public ActionResult TCCReports(int taxYear, int status, int txoffId)
+        {
+            var fullUrl = Request.Url.ToString();
+            UI_FillYearDropDown();
+            UI_FillTCCStatusDropDown();
+
+            var finalRes = new List<TaxReportReturn>();
+            var rec = SessionManager.LstTaxReportModel ?? new List<TaxReportModel>();
+            if (rec.Count() <= 1)
+            {
+                rec = GetReport();
+            }
+            if (taxYear == 0 && status == 0 && txoffId != 0)
+            {
+                string body = SessionManager.detHolder.ToString();
+                if (!String.IsNullOrEmpty(body))
+                {
+                    var ye = body.Split('@');
+                    var cc = ye[0].Replace('"', ' ');
+                    var dd = ye[1].Replace('"', ' ');
+                    int yr = cc==""?0:Convert.ToInt32(cc);
+                    int st = dd == "" ? 0 : Convert.ToInt32(dd);
+                    if (yr != 0)
+                    {
+                        rec = rec.Where(o => o.TaxOfficeId == txoffId && o.TaxYear == yr).ToList();
+                    }
+                    else
+                    {
+                        rec = rec.Where(o => o.TaxOfficeId == txoffId).ToList();
+                    }
+
+                    switch (st)
+                    {
+                        case 1:
+                            rec = rec.Where(o => o.StatusId != 14).ToList();
+                            break;
+                        case 2:
+                            rec = rec.Where(o => o.IsDownload == true).ToList();
+                            break;
+                        case 3:
+
+                            rec = rec.Where(o => o.StatusId == 14).ToList();
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    rec = rec.Where(o => o.TaxOfficeId == txoffId).ToList();
+                }
+                ViewBag.Taxxx = rec;
+                ViewBag.Det = 2;
+            }
+            else
+            {
+                if (taxYear == 0)
+                {
+                    if (status != 0)
+                    {
+                        switch (status)
+                        {
+                            case 1:
+                                rec = rec.Where(o => o.StatusId != 14).ToList();
+                                break;
+                            case 2:
+                                rec = rec.Where(o => o.IsDownload == true).ToList();
+                                break;
+                            case 3:
+
+                                rec = rec.Where(o => o.StatusId == 14).ToList();
+                                break;
+
+                            default:
+                                break;
+                        }
+
+                    }
+                    finalRes = rec.GroupBy(o => o.TaxOfficeId)
+                          .Select(g => new TaxReportReturn
+                          {
+                              TaxOfficeId = g.Key,
+                              TaxOffice = g.First().TaxOffice,
+                              TotalRequest = g.Count().ToString()
+                          }).ToList();
+
+                    ViewBag.Det = 1;
+                    SessionManager.detHolder = $"{taxYear}@{status}";
+                }
+                else
+                {
+                    rec = SessionManager.LstTaxReportModel.Where(o => o.TaxYear == taxYear).ToList();
+                    switch (status)
+                    {
+                        case 1:
+                            rec = rec.Where(o => o.StatusId != 14).ToList();
+                            break;
+                        case 2:
+                            rec = rec.Where(o => o.IsDownload == true).ToList();
+                            break;
+                        case 3:
+
+                            rec = rec.Where(o => o.StatusId == 14).ToList();
+                            break;
+
+                        default:
+                            break;
+                    }
+                    finalRes = rec.GroupBy(o => o.TaxOfficeId)
+                     .Select(g => new TaxReportReturn
+                     {
+                         TaxOfficeId = g.Key,
+                         TaxOffice = g.First().TaxOffice,
+                         TotalRequest = g.Count().ToString()
+                     }).ToList();
+
+                    ViewBag.Det = 1;
+
+                    SessionManager.detHolder = $"{taxYear}@{status}";
+                }
+            }
+            return View(finalRes);
+        }
+
+        private List<TaxReportModel> GetReport()
+        {
+            var rec = (from d in _db.TCC_Request
+                       join t in _db.Tax_Offices
+                       on d.TaxOfficeId equals t.TaxOfficeID
+                       join i in _db.Individuals
+                       on d.TaxPayerID equals i.IndividualID
+                       join s in _db.MST_TCCRequestStatus
+                       on d.StatusID equals s.StatusID
+                       select new TaxReportModel
+                       {
+                           TaxOfficeId = d.TaxOfficeId,
+                           TaxOffice = t.TaxOfficeName,
+                           Taxpayername = i.FirstName + " " + i.LastName,
+                           TaxpayerId = d.TaxPayerID,
+                           StatusId = d.StatusID,
+                           IsDownload = d.IsDownloaded,
+                           TaxYear = d.TaxYear,
+                           RequestDate = d.RequestDate,
+                           StatusName = s.StatusName,
+                           RequestRef = d.RequestRefNo
+                       }
+                     ).AsNoTracking().ToList();
+
+
+            SessionManager.LstTaxReportModel = rec;
+            return rec;
+        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken()]
+
+
+
         public ActionResult ManageLateCharge()
         {
             //string url = getUrl();
@@ -8204,5 +8364,6 @@ namespace EIRS.Web.Controllers
         {
             return View();
         }
+
     }
 }

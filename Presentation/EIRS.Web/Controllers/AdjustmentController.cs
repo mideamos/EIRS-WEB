@@ -143,12 +143,12 @@ namespace EIRS.Web.Controllers
             Assessment newRec = new Assessment();
             using (_db = new EIRSEntities())
             {
-                 newRec = (from d in _db.MAP_Assessment_AssessmentItem
+                newRec = (from d in _db.MAP_Assessment_AssessmentItem
                           where d.AAIID == AAIID
                           join b in _db.MAP_Assessment_AssessmentRule on d.AARID equals b.AARID
                           join c in _db.Assessments on b.AssessmentID equals c.AssessmentID
                           select c).FirstOrDefault();
-           
+
                 retValLateCharge = _db.MAP_Assessment_LateCharge.Where(o => o.AAIID == AAIID).ToList();
                 SessionManager.GetAAIID = AAIID;
             }
@@ -167,7 +167,7 @@ namespace EIRS.Web.Controllers
                     IList<usp_GetAssessmentAdjustmentList_Result> lstAssessmentAdjustment = mObjBLAssessment.BL_GetAssessmentAdjustment(mObjAssessmentData.AssessmentID.GetValueOrDefault());
                     IList<usp_GetAssessmentLateChargeList_Result> lstAssessmentLateCharge = mObjBLAssessment.BL_GetAssessmentLateCharge(mObjAssessmentData.AssessmentID.GetValueOrDefault());
                     IList<usp_GetSettlementList_Result> lstSettlement = new BLSettlement().BL_GetSettlementList(new Settlement() { ServiceBillID = -1, AssessmentID = mObjAssessmentData.AssessmentID.GetValueOrDefault() });
-                   
+
                     ViewBag.MAPAssessmentRules = lstMAPAssessmentRules;
                     ViewBag.AssessmentItems = lstAssessmentItems;
                     ViewBag.AssessmentRuleSettlement = lstAssessmentRuleSettlement;
@@ -190,8 +190,8 @@ namespace EIRS.Web.Controllers
 
                     ViewBag.AdjustmentTypeList = lstAdjustmentType;
                     UI_FillDropDown();
-                   // return PartialView("AssessmentLateChargeNext", mObjAssessmentData); // Use PartialView for AJAX response
-                     return View(mObjAssessmentData);
+                    // return PartialView("AssessmentLateChargeNext", mObjAssessmentData); // Use PartialView for AJAX response
+                    return View(mObjAssessmentData);
                 }
                 else
                 {
@@ -225,17 +225,20 @@ namespace EIRS.Web.Controllers
                 IList<usp_GetAssessmentLateChargeList_Result> lstAssessmentLateCharge = mObjBLAssessment.BL_GetAssessmentLateCharge(AssessmentID);
 
 
-                decimal? Amountholder = 0, sumPointA = 0, sumPointB = 0;
+                decimal? Amountholder = 0, Settleholder = 0, sumPointA = 0, sumPointB = 0;
                 List<int?> lstOfProfiles = new List<int?>();
                 List<MAP_Assessment_AssessmentItem> retValAssessmentItem = new List<MAP_Assessment_AssessmentItem>();
                 List<MAP_Assessment_Adjustment> retValAdjustment = new List<MAP_Assessment_Adjustment>();
                 List<MAP_Assessment_LateCharge> retValLateCharge = new List<MAP_Assessment_LateCharge>();
                 List<MAP_Settlement_SettlementItem> retValsettlementitem = new List<MAP_Settlement_SettlementItem>();
                 Assessment retVal = new Assessment();
+                Settlement retSet = new Settlement();
                 using (_db = new EIRSEntities())
                 {
                     retVal = _db.Assessments.FirstOrDefault(o => o.AssessmentID == AssessmentID);
                     Amountholder = retVal.AssessmentAmount;
+                    Settleholder = _db.Settlements.Where(o => o.AssessmentID == AssessmentID).Sum(o => o.SettlementAmount);
+
                     var newRec = (from d in _db.Assessments
                                   where d.AssessmentID == AssessmentID
                                   join b in _db.MAP_Assessment_AssessmentRule on d.AssessmentID equals b.AssessmentID
@@ -260,7 +263,14 @@ namespace EIRS.Web.Controllers
                             var item = retValAssessmentItem.FirstOrDefault(i => i.AssessmentItemID == updatedItem.AssessmentItemID);
                             item.PaymentStatusID = 3;
                         }
-                        retVal.SettlementStatusID = 4;
+                        if (Amountholder == Settleholder || Settleholder > Amountholder)
+                            retVal.SettlementStatusID = 4;
+                        else if (Amountholder > Settleholder)
+                            if (Settleholder > 0)
+                                retVal.SettlementStatusID = 3;
+                            else
+                                retVal.SettlementStatusID = 1;
+
                     }
                     else if (sumPointA > sumPointB || sumPointB == 0)
                     {
@@ -337,7 +347,7 @@ namespace EIRS.Web.Controllers
                         //              select c).FirstOrDefault();
                         retValAssessmentItem = _db.MAP_Assessment_AssessmentItem.Where(o => o.AAIID == aaiid).ToList();
                         retValAdjustment = _db.MAP_Assessment_Adjustment.Where(o => o.AAIID == aaiid).ToList();
-                      //  retValLateCharge = _db.MAP_Assessment_LateCharge.Where(o => o.AAIID == newRec.AAIID).ToList();
+                        //  retValLateCharge = _db.MAP_Assessment_LateCharge.Where(o => o.AAIID == newRec.AAIID).ToList();
                         retValsettlementitem = _db.MAP_Settlement_SettlementItem.Where(o => o.AAIID == aaiid).ToList();
 
                         sumPointA = (retValAdjustment.Sum(o => o.Amount) + retValLateCharge.Sum(o => o.TotalAmount)

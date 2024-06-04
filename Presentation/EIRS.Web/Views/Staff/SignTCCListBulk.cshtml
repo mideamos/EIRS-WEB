@@ -28,56 +28,55 @@
 
             <div id="divLoader" style="display:none;">
                 <img src="~/Content/Images/microsoft-loading.gif" alt="Loader" />
-                <h2>Hold On While We Fetch Your Records</h2>
+                <h2>Please hold, your request is being processed.</h2>
             </div>
-
-            @if (ViewBag.Message != null)
-            {
-                <div class="alert alert-danger">
-                    @ViewBag.Message
-                </div>
-            }
-            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblNewRequest">
-                <thead class="red-th">
-                    <tr>
-                        <th>SN</th>
-                        <th>Request Ref</th>
-                        <th>Tax Payer Name</th>
-                        <th class="none">Mobile Number</th>
-                        <th>Request Date</th>
-                        <th>Tax Year</th>
-                        <th class="none">Bill Status</th>
-                        <th class="action-th all">
-                            Check All
-                            <input type="checkbox" id="checkAll" />
-
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+            <div id="divLoaderPage">
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.Message
+                    </div>
+                }
+                <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblNewRequest">
+                    <thead class="red-th">
                         <tr>
-                            <td>@item.TaxPayerID</td>
-                            <td>@item.RequestRefNo</td>
-                            <td>@item.TaxFName  @item.TaxLName</td>
-                            <td>@item.MobileNumber</td>
-                            <td>@CommUtil.GetFormatedFullDate(item.RequestDate)</td>
-                            <td>@item.TaxYear</td>
-                            <td>@item.BillStatus</td>
-                            <td>
-                                <input type="checkbox" class="rowCheckbox" value="@item.TCCRequestID" />
-                            </td>
+                            <th>SN</th>
+                            <th>Request Ref</th>
+                            <th>Tax Payer Name</th>
+                            <th class="none">Mobile Number</th>
+                            <th>Request Date</th>
+                            <th>Tax Year</th>
+                            <th class="none">Bill Status</th>
+                            <th class="action-th all">
+                                Check All
+                                <input type="checkbox" id="checkAll" />
+
+                            </th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.TaxPayerID</td>
+                                <td>@item.RequestRefNo</td>
+                                <td>@item.TaxFName  @item.TaxLName</td>
+                                <td>@item.MobileNumber</td>
+                                <td>@CommUtil.GetFormatedFullDate(item.RequestDate)</td>
+                                <td>@item.TaxYear</td>
+                                <td>@item.BillStatus</td>
+                                <td>
+                                    <input type="checkbox" class="rowCheckbox" value="@item.TCCRequestID" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
 
 
         </div>
-          
-            
-    </div>
 </form>
 @section Footer {
 
@@ -110,6 +109,7 @@
             });
 
             $('#requestForm').submit(function (event) {
+                debugger;
                 var selectedIds = [];
                 $('.rowCheckbox:checked').each(function () {
                     selectedIds.push($(this).val());
@@ -128,6 +128,7 @@
                 }
 
 
+                $("#divLoaderPage").hide();
                 $("#divLoader").show();
             });
 

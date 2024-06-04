@@ -4185,15 +4185,13 @@ namespace EIRS.Web.Controllers
         }
         public JsonResult AddTCCRequest(int TaxYear, int TaxPayerID)
         {
-            //string url = getUrl();
-            //bool itCan = new UtilityController().CheckAccess(url);
-            //if (!itCan) { return RedirectToAction("AccessDenied", "Utility"); }
             IDictionary<string, object> dcResponse = new Dictionary<string, object>();
-
             BLTCC mObjBLTCC = new BLTCC();
+            var userDet = _db.Individuals.FirstOrDefault(o => o.IndividualID == TaxPayerID);
 
             TCC_Request mObjRequest = new TCC_Request()
             {
+                TaxOfficeId = userDet != null ? userDet.TaxOfficeID : 0,
                 RequestDate = CommUtil.GetCurrentDateTime(),
                 TaxPayerID = TaxPayerID,
                 TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
@@ -4220,6 +4218,9 @@ namespace EIRS.Web.Controllers
                     };
 
                     new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
+
+                    //string msg = $"Your TCC Application with request Reference number {mObjReqResponse.AdditionalData.RequestRefNo} has been received and under process";
+                  //  bool blnSMSSent = UtilityController.SendSMS(userDet.MobileNumber1, msg);
 
                     //Get List
                     dcResponse["success"] = true;

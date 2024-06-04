@@ -145,11 +145,8 @@ namespace EIRS.Web.Controllers
                         };
 
                         new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
-                        var taxDetail = _db.Individuals.FirstOrDefault(o => o.IndividualID == mObjReqResponse.AdditionalData.TaxPayerID);
-
-                        string msg = $"Your TCC Application with request Reference number {mObjReqResponse.AdditionalData.RequestRefNo} has been received and under process";
-                        bool blnSMSSent = UtilityController.SendSMS(taxDetail.MobileNumber1, msg);
-
+                        
+                      
                         return RedirectToAction("List", "ProcessTCCRequest");
                     }
                     else
@@ -508,6 +505,8 @@ namespace EIRS.Web.Controllers
                         };
 
                         mObjBLTCCC.BL_UpdateRequestStage(mObjRequestStage);
+                        string msg = $"Your TCC application with request reference number {mObjRequestData.RequestRefNo} has been received and under process";
+                        bool blnSMSSent = UtilityController.SendSMS(mObjIndividual.MobileNumber1, msg);
 
                         return RedirectToAction("Details", "ProcessTCCRequest", new { reqid = pobjValidateTaxPayerInformationModel.RequestID });
 

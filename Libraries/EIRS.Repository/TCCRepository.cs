@@ -437,6 +437,7 @@ namespace EIRS.Repository
                     mObjInsertTCC_Requests.TaxPayerID = pObjRequest.TaxPayerID;
                     mObjInsertTCC_Requests.TaxYear = pObjRequest.TaxYear;
                     mObjInsertTCC_Requests.StatusID = pObjRequest.StatusID;
+                    mObjInsertTCC_Requests.TaxOfficeId = pObjRequest.TaxOfficeId;
 
 
                     _db.TCC_Request.Add(mObjInsertTCC_Requests);

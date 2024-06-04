@@ -213,6 +213,9 @@ namespace EIRS.Web.Controllers
         }
         public static bool SendSMS(string pStrToNumber, string pStrBody)
         {
+            try
+            {
+
             var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://app.multitexter.com/v2/app/sms");
             httpWebRequest.ContentType = "application/json"; httpWebRequest.Method = "POST";
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
@@ -236,6 +239,12 @@ namespace EIRS.Web.Controllers
             }
 
             return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
         }
         // GET: Utility
 

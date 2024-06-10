@@ -58,7 +58,7 @@ namespace EIRS.Repository
 
         IList<usp_RPT_MonthlyTaxOfficeTarget_Result> REP_GetMonthlyTaxOfficeTarget(int TaxOfficeID, int Year);
         IList<usp_RPT_TaxOfficeByRevenueStreamTarget_Result> REP_GetTaxOfficeByRevenueStreamTarget(int TaxOfficeID, int Year, int Month);
-        IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> REP_GetRevenueStreamByTaxOfficeTarget(int RevenueStreamID, int Year, int Month);
+        IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> REP_GetRevenueStreamByTaxOfficeTarget(int RevenueStreamID, int Year, int Month,int taxofficeId);
 
         IList<usp_RPT_GetRevenueStreamByPaymentChannel_Result> REP_GetRevenueStreamByPaymentChannel(int SettlementMethodID, int Year, DateTime? FromDate, DateTime? ToDate);
         IList<usp_RPT_GetPaymentChannelByRevenueStream_Result> REP_GetPaymentChannelByRevenueStream(int RevenueStreamID, int Year, DateTime? FromDate, DateTime? ToDate);

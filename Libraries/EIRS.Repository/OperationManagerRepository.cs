@@ -339,11 +339,11 @@ namespace EIRS.Repository
             }
         }
 
-        public IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> REP_GetRevenueStreamByTaxOfficeTarget(int RevenueStreamID, int Year, int Month)
+        public IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> REP_GetRevenueStreamByTaxOfficeTarget(int RevenueStreamID, int Year, int Month,int taxofficeId)
         {
             using (_db = new EIRSEntities())
             {
-                return _db.usp_RPT_RevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month).ToList();
+                return _db.usp_RPT_RevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month, taxofficeId).ToList();
             }
         }
 

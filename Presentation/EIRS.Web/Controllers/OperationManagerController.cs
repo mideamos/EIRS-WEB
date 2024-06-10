@@ -4394,11 +4394,12 @@ namespace EIRS.Web.Controllers
             UI_FillRevenueStreamDropDown();
             UI_FillYearDropDown();
             UI_FillMonthDropDown();
+            UI_FillTaxOfficeDropDown();
             return View();
         }
 
 
-        public JsonResult RevenueStreamByTaxOfficeTargetLoadData(int RevenueStreamID, int Year, int Month)
+        public JsonResult RevenueStreamByTaxOfficeTargetLoadData(int RevenueStreamID, int Year, int Month,int taxofficeId)
         {
             //Get parameters
 
@@ -4415,7 +4416,7 @@ namespace EIRS.Web.Controllers
             int IntTotalRecords = 0;
 
 
-            IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month);
+            IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month, taxofficeId);
             //Filtering/Searching data 
             if (!string.IsNullOrEmpty(vFilter))
             {
@@ -4437,6 +4438,55 @@ namespace EIRS.Web.Controllers
             var data = lstSummary.Skip(IntSkip).Take(IntPageSize).ToList();
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
         }
+      
+        public ActionResult RevenueStreamByTaxOfficeTargetII()
+        {
+            UI_FillRevenueStreamDropDown();
+            UI_FillYearDropDown();
+            UI_FillMonthDropDown();
+            return View();
+        }
+
+
+        //public JsonResult RevenueStreamByTaxOfficeTargetLoadDataII(int RevenueStreamID, int Year, int Month)
+        //{
+        //    //Get parameters
+
+        //    // get Start (paging start index) and length (page size for paging)
+        //    var vDraw = Request.Form.GetValues("draw").FirstOrDefault();
+        //    var vStart = Request.Form.GetValues("start").FirstOrDefault();
+        //    var vLength = Request.Form.GetValues("length").FirstOrDefault();
+        //    //Get Sort columns value
+        //    var vSortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
+        //    var vSortColumnDir = Request.Form.GetValues("order[0][dir]")[0];
+        //    var vFilter = Request.Form.GetValues("search[value]")[0];
+        //    int IntPageSize = vLength != null ? Convert.ToInt32(vLength) : 0;
+        //    int IntSkip = vStart != null ? Convert.ToInt32(vStart) : 0;
+        //    int IntTotalRecords = 0;
+
+
+        //    IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month);
+        //    //Filtering/Searching data 
+        //    if (!string.IsNullOrEmpty(vFilter))
+        //    {
+        //        lstSummary = lstSummary.Where(t =>
+        //        t.TargetAmount != null && t.TargetAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
+        //        t.AssessedAmount != null && t.AssessedAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
+        //        t.RevenueAmount != null && t.RevenueAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
+        //        t.TaxOfficeName != null && t.TaxOfficeName.ToLower().Trim().Contains(vFilter.ToLower().Trim())).ToList();
+        //    }
+
+
+        //    //Purpose Sorting Data 
+        //    if (!string.IsNullOrEmpty(vSortColumn) && !string.IsNullOrEmpty(vSortColumnDir))
+        //    {
+        //        lstSummary = lstSummary.OrderBy(vSortColumn + " " + vSortColumnDir).ToList();
+        //    }
+
+        //    IntTotalRecords = lstSummary.Count();
+        //    var data = lstSummary.Skip(IntSkip).Take(IntPageSize).ToList();
+        //    return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
+        //}
 
         #endregion
 
@@ -7166,7 +7216,7 @@ namespace EIRS.Web.Controllers
                     var ye = body.Split('@');
                     var cc = ye[0].Replace('"', ' ');
                     var dd = ye[1].Replace('"', ' ');
-                    int yr = cc==""?0:Convert.ToInt32(cc);
+                    int yr = cc == "" ? 0 : Convert.ToInt32(cc);
                     int st = dd == "" ? 0 : Convert.ToInt32(dd);
                     if (yr != 0)
                     {

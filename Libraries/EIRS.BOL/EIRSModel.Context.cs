@@ -6168,7 +6168,7 @@ namespace EIRS.BOL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_RPT_MonthlyTaxOfficeTarget_Result>("usp_RPT_MonthlyTaxOfficeTarget", taxOfficeIDParameter, yearParameter);
         }
     
-        public virtual ObjectResult<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> usp_RPT_RevenueStreamByTaxOfficeTarget(Nullable<int> revenueStreamID, Nullable<int> year, Nullable<int> month)
+        public virtual ObjectResult<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> usp_RPT_RevenueStreamByTaxOfficeTarget(Nullable<int> revenueStreamID, Nullable<int> year, Nullable<int> month, Nullable<int> taxOfficeID)
         {
             var revenueStreamIDParameter = revenueStreamID.HasValue ?
                 new ObjectParameter("RevenueStreamID", revenueStreamID) :
@@ -6182,7 +6182,11 @@ namespace EIRS.BOL
                 new ObjectParameter("Month", month) :
                 new ObjectParameter("Month", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_RPT_RevenueStreamByTaxOfficeTarget_Result>("usp_RPT_RevenueStreamByTaxOfficeTarget", revenueStreamIDParameter, yearParameter, monthParameter);
+            var taxOfficeIDParameter = taxOfficeID.HasValue ?
+                new ObjectParameter("TaxOfficeID", taxOfficeID) :
+                new ObjectParameter("TaxOfficeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_RPT_RevenueStreamByTaxOfficeTarget_Result>("usp_RPT_RevenueStreamByTaxOfficeTarget", revenueStreamIDParameter, yearParameter, monthParameter, taxOfficeIDParameter);
         }
     
         public virtual ObjectResult<usp_RPT_TaxOfficeByRevenueStreamTarget_Result> usp_RPT_TaxOfficeByRevenueStreamTarget(Nullable<int> taxOfficeID, Nullable<int> year, Nullable<int> month)

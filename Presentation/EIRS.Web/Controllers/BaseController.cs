@@ -594,7 +594,7 @@ namespace EIRS.Web.Controllers
         public void UI_FillYearDropDown()
         {
             IList<DropDownListResult> lstYear = new List<DropDownListResult>();
-            int mIntCurrentYear = 2017;//CommUtil.GetCurrentDateTime().AddYears(-1).Year;
+            int mIntCurrentYear = 2019;//CommUtil.GetCurrentDateTime().AddYears(-1).Year;
             for (int i = mIntCurrentYear; i <= DateTime.Now.AddYears(1).Year; i++)
             {
                 lstYear.Add(new DropDownListResult() { id = i, text = i.ToString() });

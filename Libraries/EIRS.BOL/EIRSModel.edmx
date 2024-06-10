@@ -7334,6 +7334,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="RevenueStreamID" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="TaxOfficeID" Type="int" Mode="In" />
         </Function>
         <Function Name="usp_RPT_ReviewStatusSummary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaxOfficeID" Type="int" Mode="In" />
@@ -11889,6 +11890,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
             <Parameter Name="RevenueStreamID" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="TaxOfficeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="usp_RPT_TaxOfficeByRevenueStreamTarget" ReturnType="Collection(EIRSModel.usp_RPT_TaxOfficeByRevenueStreamTarget_Result)">
             <Parameter Name="TaxOfficeID" Mode="In" Type="Int32" />

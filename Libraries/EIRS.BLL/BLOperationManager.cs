@@ -194,9 +194,9 @@ namespace EIRS.BLL
             return _OperationManagerRepository.REP_GetTaxOfficeByRevenueStreamTarget(TaxOfficeID, Year, Month);
         }
 
-        public IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> BL_GetRevenueStreamByTaxOfficeTarget(int RevenueStreamID, int Year, int Month)
+        public IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> BL_GetRevenueStreamByTaxOfficeTarget(int RevenueStreamID, int Year, int Month,int taxofficeId)
         {
-            return _OperationManagerRepository.REP_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month);
+            return _OperationManagerRepository.REP_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month,taxofficeId);
         }
 
         public IList<usp_RPT_GetRevenueStreamByPaymentChannel_Result> BL_GetRevenueStreamByPaymentChannel(int SettlementMethodID, int Year, DateTime? FromDate, DateTime? ToDate)

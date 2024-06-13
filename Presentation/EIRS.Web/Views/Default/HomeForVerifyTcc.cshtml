@@ -1,0 +1,157 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home";
+    ViewBag.MenuID = 5;
+    var det = ViewBag.sus;
+    var res = ViewBag.Rec;
+}
+
+<section class="banner">
+    <div class="container">
+        <h1 class="heading wow fadeInDown">
+            Smarter, Clearer, Simpler
+        </h1>
+        <hr style="display: none" />
+        <p class="wow fadeInUp">
+            ERAS is the best way to know and manage your Edo State Government taxes and services.
+        </p>
+        @if (det == 0)
+        {
+            <p class="wow fadeInUp">
+                Verify TCC Status
+            </p>
+            using (Html.BeginForm("HomeForVerifyTcc", "Default", FormMethod.Post, new { @class = "form-horizontal", @id = "frmSearchIndividual" }))
+            {
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Mobile Number :</label>
+                    <div class="col-sm-6">
+                        @Html.TextBox("txtName", "", new { @class = "form-control", @placeholder = "Enter Individual Phone Number", @tabindex = "1" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <button class="btn btn-redtheme btn-lg" id="btnSearch">Verify</button>
+                </div>
+            }
+        }
+        else
+        {
+            if (det == 1)
+            {
+                <p class="wow fadeInUp">
+                    User Record Not Found For This Phone Number
+                </p>
+            }
+            else if (det == 2)
+            {
+                <p class="wow fadeInUp">
+                    You do not have pending TCC request
+                </p>
+            }
+            else if (det == 3)
+            {
+                <p class="wow fadeInUp">
+                    Your TCC Is Presently In @res stage
+                </p>
+            }
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-secondary btn-lg" onclick="cancelAction()">Cancel</button>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="alternate">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="portlet light" style="min-height: 280px">
+                    <div class="portlet-title">
+                        <div class="caption">Get to Know More</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            <p>
+                                Edo State Internal Revenue Service is here to help you understand and pay your taxes.
+                            </p>
+                            <ul>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Awareness", "Default")">What are taxes and available types</a></li>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Awareness", "Default")">How do I register to pay taxes</a></li>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Awareness", "Default")">How do I make payment</a></li>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Awareness", "Default")">I need to speak with someone in EIRS</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="portlet light" style="min-height: 280px">
+                    <div class="portlet-title">
+                        <div class="caption">Search and Register</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            <p>
+                                Search our database and register to obtain your own Revenue Identification Number (RIN)
+                            </p>
+                            <ul>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Search", "SignupIndividual")">I am an Individual, Self Employed or Employed</a></li>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Search", "SignupCorporate")">I am a Company or Institution</a></li>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Search", "SignupGovernment")">I am a Government Body</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="portlet light" style="min-height: 280px">
+                    <div class="portlet-title">
+                        <div class="caption">Pay Taxes and Services</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="link-box-data">
+                            <p>
+                                With or without a bill, you can pay your taxes or for a government service.
+                            </p>
+                            <ul>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Home", "CBS")">I received a bill and want to pay</a></li>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Home", "CBS")">I don't have a bill but want to pay</a></li>
+                                <li><i class="fa fa-angle-right"></i> <a href="@Url.Action("Home", "CBS")">I want to find out how much I owe</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Loading indicator -->
+<div id="loadingIndicator" style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%, -50%);">
+    <img src="~/Content/Images/ajax-loader-modal-spin.gif" alt="Loading..." />
+</div>
+@section Footer {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#btnSearch').click(function () {
+                $('#loadingIndicator').show(); // Show loading indicator
+                var formData = $('#frmSearchIndividual').serialize();
+                $.ajax({
+                    url: '@Url.Action("HomeForVerifyTcc", "Default")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        $('#loadingIndicator').hide(); 
+                        alert(response.message);
+                    },
+                    error: function () {
+                        $('#loadingIndicator').hide(); 
+                        alert(response.message);
+                    }
+                });
+            });
+        });
+
+
+    </script>
+}
+

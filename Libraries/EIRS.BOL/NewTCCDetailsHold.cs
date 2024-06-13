@@ -24,5 +24,6 @@ namespace EIRS.BOL
         public Nullable<decimal> ERASAssessed { get; set; }
         public string Tax_receipt { get; set; }
         public string IndividualRIN { get; set; }
+        public Nullable<long> TCCRequestID { get; set; }
     }
 }

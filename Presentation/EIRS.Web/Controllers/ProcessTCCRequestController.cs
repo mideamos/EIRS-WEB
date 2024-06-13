@@ -145,8 +145,8 @@ namespace EIRS.Web.Controllers
                         };
 
                         new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
-                        
-                      
+
+
                         return RedirectToAction("List", "ProcessTCCRequest");
                     }
                     else
@@ -505,7 +505,7 @@ namespace EIRS.Web.Controllers
                         };
 
                         mObjBLTCCC.BL_UpdateRequestStage(mObjRequestStage);
-                        string msg = $"Your TCC application with request reference number {mObjRequestData.RequestRefNo} has been received and under process";
+                        string msg = $"Your TCC application with request reference number {mObjRequestData.RequestRefNo} has been received and under process, click on http://eras.eirs.vip/Default/HomeForVerifyTcc to verify your status ";
                         bool blnSMSSent = UtilityController.SendSMS(mObjIndividual.MobileNumber1, msg);
 
                         return RedirectToAction("Details", "ProcessTCCRequest", new { reqid = pobjValidateTaxPayerInformationModel.RequestID });
@@ -1386,6 +1386,7 @@ namespace EIRS.Web.Controllers
                                 _db.NewTCCDetailsHolds.Add(new NewTCCDetailsHold
                                 {
                                     RowID = item.RowID,
+                                    TCCRequestID = mObjRequestData.TCCRequestID,
                                     TaxYear = item.TaxYear,
                                     TBKID = item.TBKID,
                                     AssessableIncome = item.AssessableIncome,
@@ -2092,42 +2093,42 @@ namespace EIRS.Web.Controllers
                     TicketRef streciptand = new TicketRef();
                     TicketRef ndreciptand = new TicketRef();
                     TicketRef rdreciptand = new TicketRef();
-                    if (trf.Count > 0)
-                    {
-                        streciptand = trf.Where(o => o.TaxYear == mObjRequestData.TaxYear.ToString()).FirstOrDefault();
-                        if (streciptand != null)
-                            if ((streciptand.TickRefNo != null) && (streciptand.PaymentDate != null))
-                                streciptanddate = $"{streciptand.TickRefNo} || {streciptand.PaymentDate}";
-                            else
-                                streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
-                        else
-                            streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
-                        ndreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 1).ToString()).FirstOrDefault();
-                        if (ndreciptand != null)
-                            if ((ndreciptand.TickRefNo != null) && (ndreciptand.PaymentDate != null))
-                                ndreciptanddate = $"{ndreciptand.TickRefNo} || {ndreciptand.PaymentDate}";
-                            else
-                                ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
-                        else
-                            ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
-                        rdreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 2).ToString()).FirstOrDefault();
-                        if (rdreciptand != null)
-                            if ((rdreciptand.TickRefNo != null) && (rdreciptand.PaymentDate != null))
-                                rdreciptanddate = $"{rdreciptand.TickRefNo} || {rdreciptand.PaymentDate}";
-                            else
-                                rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
-                        else
-                            rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
-                    }
-                    else
-                    {
-                        var allRef = _db.TccRefHolders.OrderByDescending(o => o.ReqId == reqid.ToString()).ToList();
+                    //if (trf.Count > 0)
+                    //{
+                    //    streciptand = trf.Where(o => o.TaxYear == mObjRequestData.TaxYear.ToString()).FirstOrDefault();
+                    //    if (streciptand != null)
+                    //        if ((streciptand.TickRefNo != null) && (streciptand.PaymentDate != null))
+                    //            streciptanddate = $"{streciptand.TickRefNo} || {streciptand.PaymentDate}";
+                    //        else
+                    //            streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
+                    //    else
+                    //        streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
+                    //    ndreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 1).ToString()).FirstOrDefault();
+                    //    if (ndreciptand != null)
+                    //        if ((ndreciptand.TickRefNo != null) && (ndreciptand.PaymentDate != null))
+                    //            ndreciptanddate = $"{ndreciptand.TickRefNo} || {ndreciptand.PaymentDate}";
+                    //        else
+                    //            ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
+                    //    else
+                    //        ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
+                    //    rdreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 2).ToString()).FirstOrDefault();
+                    //    if (rdreciptand != null)
+                    //        if ((rdreciptand.TickRefNo != null) && (rdreciptand.PaymentDate != null))
+                    //            rdreciptanddate = $"{rdreciptand.TickRefNo} || {rdreciptand.PaymentDate}";
+                    //        else
+                    //            rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
+                    //    else
+                    //        rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
+                    //}
+                    //else
+                    //{
+                    var allRef = _db.TccRefHolders.Where(o => o.ReqId == reqid.ToString()).ToList();
 
-                        // var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 1)).ToList();
-                        streciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
-                        ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
-                        rdreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).ReciptRef : "";
-                    }
+                    // var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 1)).ToList();
+                    streciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
+                    ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear-1).ReciptRef : "";
+                    rdreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).ReciptRef : "";
+                    //}
                     string money1 = "", money2 = "", money3 = "";
                     string money1a = "", money2a = "", money3a = "";
                     string money1b = "", money2b = "", money3b = "", senty = "";
@@ -3650,6 +3651,7 @@ namespace EIRS.Web.Controllers
 
         public JsonResult Revoke(MAP_TCCRequest_Revoke pObjRevoke)
         {
+            string gp = "", gpd = "";
             IDictionary<string, object> dcResponse = new Dictionary<string, object>();
 
             BLTCC mObjBLTCCC = new BLTCC();
@@ -3660,10 +3662,26 @@ namespace EIRS.Web.Controllers
             {
                 using (_db = new EIRSEntities())
                 {
+                    var tccPath = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == pObjRevoke.RequestID);
+                    gp = tccPath.GeneratedPath;
+
+                    gpd = tccPath.GeneratePathForPrint;
+                    if (System.IO.File.Exists(gp))
+                    {
+                        System.IO.File.Delete(gp);
+                    }
+                    if (System.IO.File.Exists(gpd))
+                    {
+                        System.IO.File.Delete(gpd);
+                    }
+                    var refHolderToDelete = _db.TccRefHolders.Where(o=> o.ReqId == pObjRevoke.RequestID.ToString()).ToList();
+                    var recToDelete = _db.NewTCCDetailsHolds.Where(o => o.TCCRequestID == pObjRevoke.RequestID).ToList();
                     var detailsToRemove = _db.ValidateTccs.FirstOrDefault(o => o.TccRequestId == pObjRevoke.RequestID);
                     if (detailsToRemove != null)
                     {
+                        _db.NewTCCDetailsHolds.RemoveRange(recToDelete);
                         var deleteFromValidateTccTable = _db.ValidateTccs.Remove(detailsToRemove);
+                        _ = _db.TccRefHolders.RemoveRange(refHolderToDelete);
                         _db.SaveChanges();
                     }
                 }

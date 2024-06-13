@@ -305,34 +305,6 @@ namespace EIRS.Web.Controllers
 
                     lstAvr.Add(avr);
 
-
-                    //Ass = (from a in _db.Assessments
-                    //       join m in _db.MAP_Assessment_AssessmentRule
-                    //       on a.AssessmentID equals m.AssessmentID
-                    //       join t in _db.MAP_Assessment_AssessmentItem
-                    //       on m.AARID equals t.AARID
-                    //       join i in _db.Individuals
-                    //       on a.TaxPayerID equals i.IndividualID
-                    //       where t.AAIID == r.AAIID 
-                    //       select new LateChargeResponse
-                    //       {
-
-                    //           TotalAmount = r.TotalAmount.Value,
-                    //           AssessmentRefNo = a.AssessmentRefNo,
-                    //           TaxPayerId = a.TaxPayerID.ToString(),
-                    //           TaxPayerName = i.FirstName + " " + i.LastName,
-                    //           TaxPayerRIN = i.IndividualRIN
-                    //       }).FirstOrDefault();
-                    //if (!lstlateChargeResponses.Any(o => o.AssessmentRefNo == Ass.AssessmentRefNo) && Ass.AssessmentItemID != 2569))
-                    //{
-                    //    Ass.AAIID = r.AAIID.Value;
-                    //    Ass.PendingAmount = avr.PendingAmount.Value;
-                    //    Ass.SettlementAmount = r.SettlementAmount.Value;
-                    //    Ass.LateChargeAmount = avr.LC_Interest.Value + avr.LC_Penatly.Value;
-                    //    Ass.LC_Penatly = avr.LC_Penatly.Value;
-                    //    Ass.LC_Interest = avr.LC_Interest.Value;
-                    //    lstlateChargeResponses.Add(Ass);
-                    //}
                     Ass = (from a in _db.Assessments
                            join m in _db.MAP_Assessment_AssessmentRule
                            on a.AssessmentID equals m.AssessmentID

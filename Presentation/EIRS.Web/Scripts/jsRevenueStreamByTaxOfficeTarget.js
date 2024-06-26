@@ -107,8 +107,7 @@ function jsfn_bindTable() {
                 {
                     "data": null, "orderable": false, "width": "20%", "render": function (data, type, st) {
                         return '<button class="btn btn-primary" onclick="viewDetails(' + st.taxofficeId + ')">View Details</button>';
-                    }
-                }
+                    }     }
             ],
             "order": [[1, "asc"]]
         });

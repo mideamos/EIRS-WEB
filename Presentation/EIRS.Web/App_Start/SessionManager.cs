@@ -11,7 +11,15 @@ namespace EIRS.Web
 {
     public class SessionManager
     {
-        public static int TaxOfficeID
+        public static int DefualtCher
+        {
+            get { return TrynParse.parseInt(HttpContext.Current.Session["DefualtCher"]); }
+            set { HttpContext.Current.Session["DefualtCher"] = value; }
+        }  public static string DefualtRes
+        {
+            get { return TrynParse.parseString(HttpContext.Current.Session["DefualtRes"]); }
+            set { HttpContext.Current.Session["DefualtRes"] = value; }
+        }  public static int TaxOfficeID
         {
             get { return TrynParse.parseInt(HttpContext.Current.Session["TaxOfficeID"]); }
             set { HttpContext.Current.Session["TaxOfficeID"] = value; }

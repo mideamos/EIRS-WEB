@@ -1900,6 +1900,7 @@
     <Content Include="Scripts\jsTCCMonthlySummaryDetail.js" />
     <Content Include="Scripts\jsTCCRequestDetail.js" />
     <Content Include="Scripts\jsTCCRequestList.js" />
+    <Content Include="Scripts\jsTccVerifyStatus.js" />
     <Content Include="Scripts\jsTransfer.js" />
     <Content Include="Scripts\jsTreasuryReceiptByRevenueStreamDetails.js" />
     <Content Include="Scripts\jsTreasuryReceiptByRevenueStreamList.js" />
@@ -2015,8 +2016,8 @@
     <Content Include="Views\Adjustment\AssessmentLateCharge.cshtml" />
     <Content Include="Views\Adjustment\AssessmentLateChargeNext.cshtml" />
     <Content Include="Views\OperationManager\TCCReports.cshtml" />
-    <Content Include="Views\Default\HomeForVerifyTcc.cshtml" />
-    <Content Include="Views\Default\HomeForVerifyTccRes.cshtml" />
+    <None Include="Views\Default\VerifyTccRequestStatus.cshtml" />
+    <Content Include="Views\Default\VerifyTccRequestStatusRes.cshtml" />
     <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
     <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
     <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />

@@ -2,6 +2,15 @@
 
 namespace EIRS.Models
 {
+    public class IndividualViewModelForTCCSTATUS
+    {
+
+        [Display(Name = "Mobile Number")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Enter mobile phone number of individual")]
+        [RegularExpression(@"^[1-9][0-9]{9}$", ErrorMessage = "Looks like you entered invalid mobile number")]
+        [MaxLength(10, ErrorMessage = "Only 10 numbers allowed.")]
+        public string phonenumber { get; set; }
+    }
     public class IndividualViewModel
     {
         public int IndividualID { get; set; }

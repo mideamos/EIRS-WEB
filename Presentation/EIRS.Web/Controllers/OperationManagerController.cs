@@ -7321,11 +7321,7 @@ namespace EIRS.Web.Controllers
             SessionManager.LstTaxReportModel = rec;
             return rec;
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken()]
-
-
-
+      
         public ActionResult ManageLateCharge()
         {
             //string url = getUrl();
@@ -8313,8 +8309,6 @@ namespace EIRS.Web.Controllers
             byte[] ObjExcelData = CommUtil.ExportToExcel2(lstDetails, vMemberInfoData, true, strTotalColumns);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficeAssessmentDetail_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
-
-
 
         public ActionResult GenerateTLRPDF(int tpid)
         {

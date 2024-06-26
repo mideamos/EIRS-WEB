@@ -1,6 +1,7 @@
 ﻿using EIRS.BLL;
 using EIRS.BOL;
 using EIRS.Common;
+using EIRS.Models;
 using EIRS.Web.Models;
 using EIRS.Web.Utility;
 using Elmah;
@@ -28,28 +29,34 @@ namespace EIRS.Web.Controllers
         {
             return View();
         }
-        public ActionResult HomeForVerifyTcc()
+
+        public ActionResult VerifyTccRequestStatus()
         {
             ViewBag.sus = 0;
             ViewBag.Rec = "detB";
             return View();
-        }      
-       
+        }
+        public ActionResult VerifyTccRequestStatusRes()
+        {
+            ViewBag.sus = SessionManager.DefualtCher;
+            ViewBag.Rec = SessionManager.DefualtRes;
+            return View();
+        }
+
         [HttpPost]
-        public ActionResult HomeForVerifyTcc(FormCollection pObjCollection)
+        public ActionResult VerifyTccRequestStatus(IndividualViewModelForTCCSTATUS pObjCollection)
         {
             ViewBag.Rec = 0;
-            string mStrName = pObjCollection.Get("txtName");
-            if (mStrName.Length < 10)
-                return Json(new { success = false, message = "Phone number must contain at least 10 digits." });
 
+            string phoneNumber = pObjCollection.phonenumber;
             int previousYear = DateTime.Now.Year - 1;
-            var phoneNumber = GetLast10Digits(mStrName);
             var checker = _db.Individuals.FirstOrDefault(o => o.MobileNumber1 == phoneNumber);
 
             if (checker == null)
             {
-                return Json(new { success = false, message = "User Record Not Found For This Phone Number" });
+                SessionManager.DefualtCher = 1;
+
+                return RedirectToAction("VerifyTccRequestStatusRes", "Default");
             }
 
             var query = (from t in _db.TCC_Request
@@ -60,17 +67,49 @@ namespace EIRS.Web.Controllers
 
             if (query == null)
             {
-                return Json(new { success = false, message = "You do not have pending TCC request" });
+                SessionManager.DefualtCher = 2;
+                return RedirectToAction("VerifyTccRequestStatusRes", "Default");
             }
             else
             {
+
+                SessionManager.DefualtCher = 3;
                 NewTCCRequestStage status = (NewTCCRequestStage)Enum.ToObject(typeof(NewTCCRequestStage), query.StatusID);
-                ViewBag.Rec = status;
-                return Json(new { success = true, message = "Your TCC Is Presently In " + status.ToString() + " stage" });
+                var enumDesc = GetEnumDescription(status);
+                ViewBag.Rec = enumDesc;
+                SessionManager.DefualtRes = enumDesc;
+                return RedirectToAction("VerifyTccRequestStatusRes", "Default");
             }
         }
 
-        
+        string GetEnumDescription(NewTCCRequestStage stage)
+        {
+            switch (stage)
+            {
+                case NewTCCRequestStage.Validate_Tax_Payer_Information:
+                    return "Your request is under information and income validation stage";
+
+                case NewTCCRequestStage.Validate_Tax_Payer_Income:
+                    return "Your request is under information and income validation stage";
+                case NewTCCRequestStage.Generate_TCC_Detail:
+                    return "Your request is under TCC validation stage";
+                case NewTCCRequestStage.Prepare_TCC_Draft:
+                    return "Your TCC is on approval Stage";
+                case NewTCCRequestStage.Generate_eTCC:
+                    return "Your request is on approval stage";
+                case NewTCCRequestStage.Waiting_For_First_Signature:
+                    return "Your TCC is on approval Stage";
+                case NewTCCRequestStage.Waiting_For_Second_Signature:
+                    return "Your TCC is on approval Stage";
+                case NewTCCRequestStage.Waiting_For_Last_Signature:
+                    return "Your TCC is approved and ready for collection. Visit closest EIRS office to you.";
+                case NewTCCRequestStage.Issue_eTCC:
+                    return "Your TCC has been Issued";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(stage), stage, null);
+            }
+        }
+
         string GetLast10Digits(string phoneNumber)
         {
             if (string.IsNullOrEmpty(phoneNumber))

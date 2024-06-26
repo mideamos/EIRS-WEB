@@ -243,71 +243,7 @@ namespace EIRS.Web.Controllers
                 return RedirectToAction("List", "ProcessTCCRequest");
             }
         }
-        //[HttpGet]
-        //public ActionResult Details(long? reqid, string name)
-        //{
-        //    if (reqid.GetValueOrDefault() > 0)
-        //    {
-        //        BLTCC mObjBLTCCC = new BLTCC();
-
-        //        usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
-
-        //        if (mObjRequestData != null)
-        //        {
-        //            //Get Stage List
-        //            IList<usp_GetAdminRequestStageList_Result> lstRequestStage = mObjBLTCCC.BL_GetAdminRequestStageList(mObjRequestData.TCCRequestID);
-        //            foreach (var ret in lstRequestStage)
-        //            {
-        //                if (ret.StageID > 5)
-        //                    ret.ShowButton = false;
-        //                if (mObjRequestData.SEDE_OrderID == 10003)
-        //                {
-        //                    if (ret.StageID > 5)
-        //                    {
-        //                        ret.StatusName = "Completed";
-        //                    }
-        //                }
-        //                else if (mObjRequestData.SEDE_OrderID == 10000)
-        //                {
-        //                    if (ret.StageID == 5)
-        //                    {
-        //                        ret.StatusName = "Completed";
-        //                    }
-        //                }
-        //                else if (mObjRequestData.SEDE_OrderID == 10001)
-        //                {
-        //                    if (ret.StageID < 7)
-        //                    {
-        //                        ret.StatusName = "Completed";
-        //                    }
-        //                }
-        //                else if (mObjRequestData.SEDE_OrderID == 10002)
-        //                {
-        //                    if (ret.StageID <= 12)
-        //                    {
-        //                        ret.StatusName = "Completed";
-        //                    }
-        //                }
-        //            }
-        //            ViewBag.RequestStageList = lstRequestStage;
-
-        //            IList<usp_GetRequestNotesList_Result> lstNotes = mObjBLTCCC.BL_GetRequestNotesList(new MAP_TCCRequest_Notes() { RequestID = mObjRequestData.TCCRequestID });
-        //            ViewBag.RequestNotesList = lstNotes;
-
-
-        //            return View(mObjRequestData);
-        //        }
-        //        else
-        //        {
-        //            return RedirectToAction("List", "ProcessTCCRequest");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("List", "ProcessTCCRequest");
-        //    }
-        //}
-
+     
         private void UI_FillDropDown(ValidateTaxPayerInformationViewModel pObjIndividualViewModel = null)
         {
             if (pObjIndividualViewModel != null)
@@ -505,7 +441,7 @@ namespace EIRS.Web.Controllers
                         };
 
                         mObjBLTCCC.BL_UpdateRequestStage(mObjRequestStage);
-                        string msg = $"Your TCC application with request reference number {mObjRequestData.RequestRefNo} has been received and under process, click on http://eras.eirs.vip/Default/HomeForVerifyTcc to verify your status ";
+                        string msg = $"Your TCC application with request reference number {mObjRequestData.RequestRefNo} has been received and under process, click on http://eras.eirs.vip/Default/VerifyTccRequestStatus to verify your status ";
                         bool blnSMSSent = UtilityController.SendSMS(mObjIndividual.MobileNumber1, msg);
 
                         return RedirectToAction("Details", "ProcessTCCRequest", new { reqid = pobjValidateTaxPayerInformationModel.RequestID });
@@ -2126,7 +2062,7 @@ namespace EIRS.Web.Controllers
 
                     // var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 1)).ToList();
                     streciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
-                    ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear-1).ReciptRef : "";
+                    ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).ReciptRef : "";
                     rdreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).ReciptRef : "";
                     //}
                     string money1 = "", money2 = "", money3 = "";
@@ -2815,28 +2751,7 @@ namespace EIRS.Web.Controllers
                 return Content("Document Not Found");
             }
         }
-        //[HttpGet]
-        //public FileResult Print(long? reqid)
-        //{
-        //    if (reqid.GetValueOrDefault() > 0)
-        //    {
-        //        BLTCC mObjBLTCC = new BLTCC();
-        //        usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
-        //        if (mObjRequestData != null)
-        //        {
-        //            var db = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == mObjRequestData.TCCRequestID);
-        //            var fname = GlobalDefaultValues.DocumentLocation + db.GeneratePathForPrint.Trim();
-        //            byte[] FileBytes = System.IO.File.ReadAllBytes(fname);
-
-        //            return File(FileBytes, "application/pdf");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return File("", "NoDocumentFOund");
-        //    }
-        //    return File("", "NoDocumentFOund");
-        //}
+ 
         [HttpGet]
         public ActionResult Print(long? reqid)
         {
@@ -3674,16 +3589,19 @@ namespace EIRS.Web.Controllers
                     {
                         System.IO.File.Delete(gpd);
                     }
-                    var refHolderToDelete = _db.TccRefHolders.Where(o=> o.ReqId == pObjRevoke.RequestID.ToString()).ToList();
+                    var refHolderToDelete = _db.TccRefHolders.Where(o => o.ReqId == pObjRevoke.RequestID.ToString()).ToList();
                     var recToDelete = _db.NewTCCDetailsHolds.Where(o => o.TCCRequestID == pObjRevoke.RequestID).ToList();
                     var detailsToRemove = _db.ValidateTccs.FirstOrDefault(o => o.TccRequestId == pObjRevoke.RequestID);
                     if (detailsToRemove != null)
                     {
-                        _db.NewTCCDetailsHolds.RemoveRange(recToDelete);
                         var deleteFromValidateTccTable = _db.ValidateTccs.Remove(detailsToRemove);
-                        _ = _db.TccRefHolders.RemoveRange(refHolderToDelete);
-                        _db.SaveChanges();
                     }
+                    if(recToDelete.Any())
+                        _db.NewTCCDetailsHolds.RemoveRange(recToDelete);
+                    if (refHolderToDelete.Any())
+                        _ = _db.TccRefHolders.RemoveRange(refHolderToDelete);
+                    _db.SaveChanges();
+                    
                 }
                 pObjRevoke.CreatedDate = CommUtil.GetCurrentDateTime();
                 pObjRevoke.CreatedBy = SessionManager.UserID;

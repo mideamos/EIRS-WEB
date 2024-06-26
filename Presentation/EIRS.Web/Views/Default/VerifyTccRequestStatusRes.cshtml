@@ -15,48 +15,50 @@
         <p class="wow fadeInUp">
             ERAS is the best way to know and manage your Edo State Government taxes and services.
         </p>
-        @if (det == 0)
+
+        @if (det == 1)
+        {
+            <p class="wow fadeInUp" style="color: red;">
+                Record Not Found For This Phone Number
+                <button type="button" class="btn btn-secondary btn-lg" onclick="cancelAction()">Cancel</button>
+
+            </p>
+        }
+        else if (det == 2)
         {
             <p class="wow fadeInUp">
-                Verify TCC Status
-            </p>
-            using (Html.BeginForm("HomeForVerifyTcc", "Default", FormMethod.Post, new { @class = "form-horizontal", @id = "frmSearchIndividual" }))
-            {
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Mobile Number :</label>
-                    <div class="col-sm-6">
-                        @Html.TextBox("txtName", "", new { @class = "form-control", @placeholder = "Enter Individual Phone Number", @tabindex = "1" })
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <button class="btn btn-redtheme btn-lg" id="btnSearch">Verify</button>
-                </div>
-            }
-        }
-        else
-        {
-            if (det == 1)
-            {
-                <p class="wow fadeInUp">
-                    User Record Not Found For This Phone Number
-                </p>
-            }
-            else if (det == 2)
-            {
-                <p class="wow fadeInUp">
-                    You do not have pending TCC request
-                </p>
-            }
-            else if (det == 3)
-            {
-                <p class="wow fadeInUp">
-                    Your TCC Is Presently In @res stage
-                </p>
-            }
-            <div class="col-sm-6">
+                You do not have pending TCC request
                 <button type="button" class="btn btn-secondary btn-lg" onclick="cancelAction()">Cancel</button>
-            </div>
+
+            </p>
         }
+        else if (det == 3)
+        {
+            <p class="wow fadeInUp">
+                @res
+                <button type="button" class="btn btn-secondary btn-lg" onclick="cancelAction()">Cancel</button>
+
+            </p>
+        }
+        else if (det == 4)
+        {
+            <p class="wow fadeInUp" style="color: red;">
+
+                Enter your valid 11 digits mobile number!!!
+                <button type="button" class="btn btn-secondary btn-lg" onclick="cancelAction()">Cancel</button>
+
+            </p>
+        }
+        else if (det == 5)
+        {
+            <p class="wow fadeInUp" style="color: red;">
+
+                Enter your valid 11 digits mobile number!!!
+                <button type="button" class="btn btn-secondary btn-lg" onclick="cancelAction()">Cancel</button>
+
+            </p>
+        }
+
     </div>
 </section>
 
@@ -124,34 +126,12 @@
         </div>
     </div>
 </section>
-<!-- Loading indicator -->
-<div id="loadingIndicator" style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%, -50%);">
-    <img src="~/Content/Images/ajax-loader-modal-spin.gif" alt="Loading..." />
-</div>
+<style>
+    .text-red {
+        color: red;
+    }
+</style>
 @section Footer {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#btnSearch').click(function () {
-                $('#loadingIndicator').show(); // Show loading indicator
-                var formData = $('#frmSearchIndividual').serialize();
-                $.ajax({
-                    url: '@Url.Action("HomeForVerifyTcc", "Default")',
-                    type: 'POST',
-                    data: formData,
-                    success: function (response) {
-                        $('#loadingIndicator').hide(); 
-                        alert(response.message);
-                    },
-                    error: function () {
-                        $('#loadingIndicator').hide(); 
-                        alert(response.message);
-                    }
-                });
-            });
-        });
-
-
-    </script>
+    <script type="text/javascript" src="~/Scripts/jsTccVerifyStatus.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
 }
 

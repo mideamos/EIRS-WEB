@@ -77,6 +77,9 @@
     <Compile Include="AL_Screen.cs">
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ApproverType.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Assessment.cs">
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>

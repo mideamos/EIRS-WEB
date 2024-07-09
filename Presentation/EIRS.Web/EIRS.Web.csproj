@@ -2018,6 +2018,8 @@
     <Content Include="Views\OperationManager\TCCReports.cshtml" />
     <None Include="Views\Default\VerifyTccRequestStatus.cshtml" />
     <Content Include="Views\Default\VerifyTccRequestStatusRes.cshtml" />
+    <Content Include="Views\OperationManager\NewTaxOfficeTarget.cshtml" />
+    <Content Include="Views\OperationManager\NewTaxOfficeTargetByMonth.cshtml" />
     <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
     <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
     <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />
@@ -2200,6 +2202,7 @@
     <Compile Include="Models\UpdateBusinessViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\AllQueries.cs" />
     <Compile Include="Utility\Logger.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,7 @@ using System.Net;
 using System.Reflection;
 using System.Transactions;
 using System.Configuration;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -4368,10 +4368,23 @@ namespace EIRS.Web.Controllers
             UI_FillMonthDropDown();
             UI_FillTaxOfficeDropDown();
             return View();
+        } 
+        public ActionResult NewTaxOfficeTarget()
+        {
+            UI_FillYearDropDown();
+            UI_FillMonthDropDown();
+            UI_FillTaxOfficeDropDown();
+            return View();
+        } 
+        public ActionResult NewTaxOfficeTargetByMonth()
+        {
+            UI_FillYearDropDown();
+            UI_FillTaxOfficeDropDown();
+            return View();
         }
 
 
-        public JsonResult RevenueStreamByTaxOfficeTargetLoadData(int RevenueStreamID, int Year, int Month,int taxofficeId)
+        public JsonResult RevenueStreamByTaxOfficeTargetLoadData(int? RevenueStreamID, int? Year, int? Month, int? taxofficeId)
         {
             //Get parameters
 
@@ -4388,15 +4401,18 @@ namespace EIRS.Web.Controllers
             int IntTotalRecords = 0;
 
 
-            IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month, taxofficeId);
+            var lstSummary = _appDbContext.usp_RPT_RevenueStreamForAllPurpose(RevenueStreamID.GetValueOrDefault(), Year.GetValueOrDefault(), Month.GetValueOrDefault(), taxofficeId.GetValueOrDefault()).ToList();
+            // IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month, taxofficeId);
             //Filtering/Searching data 
+
             if (!string.IsNullOrEmpty(vFilter))
             {
                 lstSummary = lstSummary.Where(t =>
-                t.TargetAmount != null && t.TargetAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
-                t.AssessedAmount != null && t.AssessedAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
-                t.RevenueAmount != null && t.RevenueAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
-                t.TaxOfficeName != null && t.TaxOfficeName.ToLower().Trim().Contains(vFilter.ToLower().Trim())).ToList();
+                      (t.TargetAmount != null && t.TargetAmount.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.AssessedAmount != null && t.AssessedAmount.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.RevenueAmount != null && t.RevenueAmount.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.TaxOfficeName != null && t.TaxOfficeName.ToLower().Trim().Contains(vFilter.ToLower().Trim()))
+                  ).ToList();
             }
 
 
@@ -4410,7 +4426,7 @@ namespace EIRS.Web.Controllers
             var data = lstSummary.Skip(IntSkip).Take(IntPageSize).ToList();
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
         }
-      
+
         public ActionResult RevenueStreamByTaxOfficeTargetII()
         {
             UI_FillRevenueStreamDropDown();
@@ -7321,7 +7337,7 @@ namespace EIRS.Web.Controllers
             SessionManager.LstTaxReportModel = rec;
             return rec;
         }
-      
+
         public ActionResult ManageLateCharge()
         {
             //string url = getUrl();

@@ -46,6 +46,13 @@
         }
     });
 
+    $("#btnSearchII").click(function () {
+        if (vfrmRevenueStreamByTaxOfficeTarget.valid()) {
+            $('#dvSearchData').show();
+            jsfn_bindTableII();
+            return false;
+        }
+    });
     $("#btnSearch").click(function () {
         if (vfrmRevenueStreamByTaxOfficeTarget.valid()) {
             $('#dvSearchData').show();
@@ -56,6 +63,63 @@
 });
 
 var vRevenueStreamByTaxOfficeTarget;
+function jsfn_bindTableII() {
+    if (vRevenueStreamByTaxOfficeTarget !== undefined) {
+        vRevenueStreamByTaxOfficeTarget.draw();
+    } else {
+        vRevenueStreamByTaxOfficeTarget = $("#tblRevenueStreamByTaxOfficeTarget").DataTable({
+            "processing": true, // show progress bar
+            "serverSide": true, // process server side
+            "filter": true,
+            "orderMulti": false, // disable multiple column ordering
+            "ajax": {
+                "url": "/OperationManager/RevenueStreamByTaxOfficeTargetLoadData",
+                "type": "POST",
+                "datatype": "json",
+                "data": function (data) {
+                    data.RevenueStreamID = $("#cboRevenueStream").val() !== '' ? $("#cboRevenueStream").val() : '0';
+                    data.Year = $("#cboYear").val() !== '' ? $("#cboYear").val() : '0';
+                    data.Month = $("#cboMonth").val() !== '' ? $("#cboMonth").val() : '0';
+                    data.taxofficeId = $("#cboTaxOfficeList").val() !== '' ? $("#cboTaxOfficeList").val() : '0';
+                },
+                "error": function (jqXHR, exception) {
+                    if (jqXHR.status === 401) {
+                        window.location.href = '/Login/Individual';
+                    }
+                }
+            },
+            "columns": [
+                { "data": "TaxMonth", "orderable": true, "name": "TaxMonth", "width": "20%" },
+                {
+                    "data": "TargetAmount", "orderable": true, "name": "TargetAmount", "width": "20%", "render": function (data, type, st) {
+                        return st.TargetAmount.formatMoney();
+                    }
+                },
+                {
+                    "data": "RevenueAmount", "orderable": true, "name": "RevenueAmount", "width": "20%", "render": function (data, type, st) {
+                        return st.RevenueAmount.formatMoney();
+                    }
+                },
+                {
+                    "data": "Differential", "orderable": true, "name": "Differential", "width": "20%", "render": function (data, type, st) {
+                        return st.Differential.formatMoney();
+                    }
+                },
+                {
+                    "data": "Performance", "orderable": true, "name": "Performance", "width": "20%", "render": function (data, type, st) {
+                        // Assuming Performance is a percentage or similar calculation, format as needed
+                        return st.Performance.toString();
+                    }
+                },
+                {
+                    "data": null, "orderable": false, "width": "20%", "render": function (data, type, st) {
+                        return '<button class="btn btn-primary" onclick="viewDetails(' + st.taxofficeId + ')">View Details</button>';
+                    }     }
+            ],
+            "order": [[1, "asc"]]
+        });
+    }
+}
 function jsfn_bindTable() {
     if (vRevenueStreamByTaxOfficeTarget !== undefined) {
         vRevenueStreamByTaxOfficeTarget.draw();
@@ -95,13 +159,13 @@ function jsfn_bindTable() {
                 },
                 {
                     "data": "Differential", "orderable": true, "name": "Differential", "width": "20%", "render": function (data, type, st) {
-                        return (st.RevenueAmount - st.TargetAmount).formatMoney();
+                        return st.Differential.formatMoney();
                     }
                 },
                 {
                     "data": "Performance", "orderable": true, "name": "Performance", "width": "20%", "render": function (data, type, st) {
                         // Assuming Performance is a percentage or similar calculation, format as needed
-                        return (st.RevenueAmount / st.TargetAmount * 100).toFixed(2) + '%';
+                        return st.Performance.toString();
                     }
                 },
                 {

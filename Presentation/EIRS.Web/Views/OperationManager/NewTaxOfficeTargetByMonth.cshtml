@@ -1,11 +1,12 @@
-﻿@using EIRS.Common;
+﻿
+@using EIRS.Common;
 @{
-    ViewBag.Title = "Operation Manger - Revenue Stream By Tax Office Target";
+    ViewBag.Title = "Operation Manger -  Tax Office Target By Months";
 }
 
 <div class="title">
     <h1>
-        Operation Manger - Revenue Stream By Tax Office Target
+        Operation Manger -  Tax Office Target By Months
     </h1>
 
     <hr>
@@ -21,12 +22,7 @@
         <form id="frmRevenueStreamByTaxOfficeTarget" class="form-horizontal">
             <div class="row">
                 <div class="col-sm-7">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Revenue Stream:</label>
-                        <div class="col-md-8">
-                            @Html.DropDownList("RevenueStream", (SelectList)ViewBag.RevenueStreamList, "Select Revenue Stream", new { @class = "form-control bs-select", @id = "cboRevenueStream" })
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <label class="col-md-4 control-label">Year:</label>
                         <div class="col-md-8">
@@ -38,26 +34,23 @@
                         <div class="col-md-8">
                             @Html.DropDownList("TaxOfficeList", (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", new { @class = "form-control bs-select", @id = "cboTaxOfficeList" })
                         </div>
-                    </div>   <div class="form-group">
-                        <label class="col-md-4 control-label">Month:</label>
-                        <div class="col-md-8">
-                            @Html.DropDownList("Month", (SelectList)ViewBag.MonthList, "Select Month", new { @class = "form-control bs-select", @id = "cboMonth" })
-                        </div>
-                    </div>
-                    <div class="form-group text-right row">
-                        <div class="col-sm-6"></div>
-                        <div class="col-sm-6">
-                            <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-5">
-
                     </div>
                 </div>
+                <div class="form-group text-right row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-theme btn-block" id="btnSearchII" type="button" tabindex="4"> Search </button>
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+
+                </div>
             </div>
+
         </form>
     </div>
+</div>
 </div>
 
 <div class="portlet light" id="dvSearchData">
@@ -71,7 +64,7 @@
         <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblRevenueStreamByTaxOfficeTarget">
             <thead class="red-th">
                 <tr>
-                    <th>Tax Office</th>
+                    <th>Months</th>
                     <th>Target Amount</th>
                     <th>Collection</th>
                     <th>Differential</th>
@@ -86,8 +79,8 @@
 
 
 @section Footer {
-   
-    
+
+
     <script type="text/javascript" src="~/Scripts/jsRevenueStreamByTaxOfficeTarget.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
 }
 

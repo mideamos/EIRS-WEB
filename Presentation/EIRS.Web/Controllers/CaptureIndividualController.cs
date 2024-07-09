@@ -355,105 +355,105 @@ namespace EIRS.Web.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult AddWithoutNumber(IndividualViewModel pObjIndividualModel)
         {
-            if (!ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            //    UI_FillDropDown(pObjIndividualModel);
+            //    return View(pObjIndividualModel);
+            //}
+            //else
+            //{
+            Individual mObjIndividual = new Individual()
             {
-                UI_FillDropDown(pObjIndividualModel);
-                return View(pObjIndividualModel);
-            }
-            else
+                IndividualID = 0,
+                GenderID = pObjIndividualModel.GenderID,
+                TitleID = pObjIndividualModel.TitleID,
+                FirstName = pObjIndividualModel.FirstName,
+                LastName = pObjIndividualModel.LastName,
+                MiddleName = pObjIndividualModel.MiddleName,
+                DOB = TrynParse.parseNullableDate(pObjIndividualModel.DOB),
+                TIN = pObjIndividualModel.TIN,
+                MobileNumber1 = pObjIndividualModel.MobileNumber1,
+                MobileNumber2 = pObjIndividualModel.MobileNumber2,
+                EmailAddress1 = pObjIndividualModel.EmailAddress1,
+                EmailAddress2 = pObjIndividualModel.EmailAddress2,
+                BiometricDetails = pObjIndividualModel.BiometricDetails,
+                TaxOfficeID = pObjIndividualModel.TaxOfficeID,
+                MaritalStatusID = pObjIndividualModel.MaritalStatusID,
+                NationalityID = pObjIndividualModel.NationalityID,
+                TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
+                EconomicActivitiesID = pObjIndividualModel.EconomicActivitiesID,
+                NotificationMethodID = pObjIndividualModel.NotificationMethodID,
+                ContactAddress = pObjIndividualModel.ContactAddress,
+                Active = true,
+                CreatedBy = SessionManager.UserID,
+                CreatedDate = CommUtil.GetCurrentDateTime()
+            };
+
+            try
             {
-                Individual mObjIndividual = new Individual()
+
+                FuncResponse<Individual> mObjResponse = new BLIndividual().BL_InsertUpdateIndividual(mObjIndividual, true, true);
+
+                if (mObjResponse.Success)
                 {
-                    IndividualID = 0,
-                    GenderID = pObjIndividualModel.GenderID,
-                    TitleID = pObjIndividualModel.TitleID,
-                    FirstName = pObjIndividualModel.FirstName,
-                    LastName = pObjIndividualModel.LastName,
-                    MiddleName = pObjIndividualModel.MiddleName,
-                    DOB = TrynParse.parseNullableDate(pObjIndividualModel.DOB),
-                    TIN = pObjIndividualModel.TIN,
-                    MobileNumber1 = pObjIndividualModel.MobileNumber1,
-                    MobileNumber2 = pObjIndividualModel.MobileNumber2,
-                    EmailAddress1 = pObjIndividualModel.EmailAddress1,
-                    EmailAddress2 = pObjIndividualModel.EmailAddress2,
-                    BiometricDetails = pObjIndividualModel.BiometricDetails,
-                    TaxOfficeID = pObjIndividualModel.TaxOfficeID,
-                    MaritalStatusID = pObjIndividualModel.MaritalStatusID,
-                    NationalityID = pObjIndividualModel.NationalityID,
-                    TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
-                    EconomicActivitiesID = pObjIndividualModel.EconomicActivitiesID,
-                    NotificationMethodID = pObjIndividualModel.NotificationMethodID,
-                    ContactAddress = pObjIndividualModel.ContactAddress,
-                    Active = true,
-                    CreatedBy = SessionManager.UserID,
-                    CreatedDate = CommUtil.GetCurrentDateTime()
-                };
-
-                try
-                {
-
-                    FuncResponse<Individual> mObjResponse = new BLIndividual().BL_InsertUpdateIndividual(mObjIndividual, true, true);
-
-                    if (mObjResponse.Success)
+                    if (GlobalDefaultValues.SendNotification)
                     {
-                        if (GlobalDefaultValues.SendNotification)
+                        //Send Notification
+                        EmailDetails mObjEmailDetails = new EmailDetails()
                         {
-                            //Send Notification
-                            EmailDetails mObjEmailDetails = new EmailDetails()
-                            {
-                                TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
-                                TaxPayerTypeName = "Individual",
-                                TaxPayerID = mObjIndividual.IndividualID,
-                                TaxPayerName = mObjIndividual.FirstName + " " + mObjIndividual.LastName,
-                                TaxPayerRIN = mObjIndividual.IndividualRIN,
-                                TaxPayerMobileNumber = mObjIndividual.MobileNumber1,
-                                TaxPayerEmail = mObjIndividual.EmailAddress1,
-                                ContactAddress = mObjIndividual.ContactAddress,
-                                TaxPayerTIN = mObjIndividual.TIN,
-                                LoggedInUserID = SessionManager.UserID,
-                            };
-
-                            if (!string.IsNullOrWhiteSpace(mObjIndividual.EmailAddress1))
-                            {
-                                BLEmailHandler.BL_TaxPayerCreated(mObjEmailDetails);
-                            }
-
-                            if (!string.IsNullOrWhiteSpace(mObjIndividual.MobileNumber1))
-                            {
-                                UtilityController.BL_TaxPayerCreated(mObjEmailDetails);
-                            }
-                        }
-
-                        Audit_Log mObjAuditLog = new Audit_Log()
-                        {
-                            LogDate = CommUtil.GetCurrentDateTime(),
-                            ASLID = (int)EnumList.ALScreen.Capture_Individual_Add,
-                            Comment = $"New Individual Added Without Number - {mObjResponse.AdditionalData.IndividualRIN}",
-                            IPAddress = CommUtil.GetIPAddress(),
-                            StaffID = SessionManager.UserID,
+                            TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
+                            TaxPayerTypeName = "Individual",
+                            TaxPayerID = mObjIndividual.IndividualID,
+                            TaxPayerName = mObjIndividual.FirstName + " " + mObjIndividual.LastName,
+                            TaxPayerRIN = mObjIndividual.IndividualRIN,
+                            TaxPayerMobileNumber = mObjIndividual.MobileNumber1,
+                            TaxPayerEmail = mObjIndividual.EmailAddress1,
+                            ContactAddress = mObjIndividual.ContactAddress,
+                            TaxPayerTIN = mObjIndividual.TIN,
+                            LoggedInUserID = SessionManager.UserID,
                         };
 
-                        new BLAuditLog().BL_InsertAuditLog(mObjAuditLog);
+                        if (!string.IsNullOrWhiteSpace(mObjIndividual.EmailAddress1))
+                        {
+                            BLEmailHandler.BL_TaxPayerCreated(mObjEmailDetails);
+                        }
 
-                        FlashMessage.Info(mObjResponse.Message);
-                        return RedirectToAction("Details", "CaptureIndividual", new { id = mObjResponse.AdditionalData.IndividualID, name = (mObjResponse.AdditionalData.FirstName + " " + mObjResponse.AdditionalData.LastName).ToSeoUrl() });
+                        if (!string.IsNullOrWhiteSpace(mObjIndividual.MobileNumber1))
+                        {
+                            UtilityController.BL_TaxPayerCreated(mObjEmailDetails);
+                        }
                     }
-                    else
+
+                    Audit_Log mObjAuditLog = new Audit_Log()
                     {
-                        UI_FillDropDown(pObjIndividualModel);
-                        ViewBag.Message = mObjResponse.Message;
-                        return View(pObjIndividualModel);
-                    }
+                        LogDate = CommUtil.GetCurrentDateTime(),
+                        ASLID = (int)EnumList.ALScreen.Capture_Individual_Add,
+                        Comment = $"New Individual Added Without Number - {mObjResponse.AdditionalData.IndividualRIN}",
+                        IPAddress = CommUtil.GetIPAddress(),
+                        StaffID = SessionManager.UserID,
+                    };
+
+                    new BLAuditLog().BL_InsertAuditLog(mObjAuditLog);
+
+                    FlashMessage.Info(mObjResponse.Message);
+                    return RedirectToAction("Details", "CaptureIndividual", new { id = mObjResponse.AdditionalData.IndividualID, name = (mObjResponse.AdditionalData.FirstName + " " + mObjResponse.AdditionalData.LastName).ToSeoUrl() });
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.SendErrorToText(ex);
-                    ErrorSignal.FromCurrentContext().Raise(ex);
                     UI_FillDropDown(pObjIndividualModel);
-                    ViewBag.Message = "Error occurred while saving Individual";
+                    ViewBag.Message = mObjResponse.Message;
                     return View(pObjIndividualModel);
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.SendErrorToText(ex);
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                UI_FillDropDown(pObjIndividualModel);
+                ViewBag.Message = "Error occurred while saving Individual";
+                return View(pObjIndividualModel);
+            }
+            //}
         }
         public ActionResult Edit(int? id, string name)
         {
@@ -4220,7 +4220,7 @@ namespace EIRS.Web.Controllers
                     new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
 
                     //string msg = $"Your TCC Application with request Reference number {mObjReqResponse.AdditionalData.RequestRefNo} has been received and under process";
-                  //  bool blnSMSSent = UtilityController.SendSMS(userDet.MobileNumber1, msg);
+                    //  bool blnSMSSent = UtilityController.SendSMS(userDet.MobileNumber1, msg);
 
                     //Get List
                     dcResponse["success"] = true;

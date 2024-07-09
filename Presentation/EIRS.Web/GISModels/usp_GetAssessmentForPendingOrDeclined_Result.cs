@@ -5,6 +5,17 @@ using System.Web;
 
 namespace EIRS.Web.GISModels
 {
+    public class RevenueStreamResult
+    {
+        public int TaxOfficeID { get; set; }
+        public string TaxOfficeName { get; set; }
+        public string TaxMonth { get; set; }
+        public decimal TargetAmount { get; set; }
+        public decimal AssessedAmount { get; set; }
+        public decimal RevenueAmount { get; set; }
+        public decimal Differential { get; set; }
+        public decimal Performance { get; set; }
+    }
     public class usp_GetTccDownloadByYearResult
     {
         public Nullable<long> TccId { get; set; }

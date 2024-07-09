@@ -336,87 +336,87 @@ namespace EIRS.Web.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult AddWithoutNumber(CompanyViewModel pObjCompanyModel)
         {
-            if (!ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            //    UI_FillDropDown(pObjCompanyModel);
+            //    return View(pObjCompanyModel);
+            //}
+            //else
+            //{
+            Company mObjCompany = new Company()
             {
-                UI_FillDropDown(pObjCompanyModel);
-                return View(pObjCompanyModel);
-            }
-            else
+                CompanyID = 0,
+                CompanyName = pObjCompanyModel.CompanyName,
+                TIN = pObjCompanyModel.TIN,
+                MobileNumber1 = pObjCompanyModel.MobileNumber1,
+                MobileNumber2 = pObjCompanyModel.MobileNumber2,
+                EmailAddress1 = pObjCompanyModel.EmailAddress1,
+                EmailAddress2 = pObjCompanyModel.EmailAddress2,
+                TaxOfficeID = pObjCompanyModel.TaxOfficeID,
+                CompanyRIN = pObjCompanyModel.CompanyRIN,
+                TaxPayerTypeID = (int)EnumList.TaxPayerType.Companies,
+                EconomicActivitiesID = pObjCompanyModel.EconomicActivitiesID,
+                NotificationMethodID = pObjCompanyModel.NotificationMethodID,
+                ContactAddress = pObjCompanyModel.ContactAddress,
+                CACRegistrationNumber = pObjCompanyModel.CACRegistrationNumber,
+                Active = true,
+                CreatedBy = SessionManager.UserID,
+                CreatedDate = CommUtil.GetCurrentDateTime()
+            };
+
+            try
             {
-                Company mObjCompany = new Company()
+
+                FuncResponse<Company> mObjResponse = new BLCompany().BL_InsertUpdateCompany(mObjCompany, true, true);
+
+                if (mObjResponse.Success)
                 {
-                    CompanyID = 0,
-                    CompanyName = pObjCompanyModel.CompanyName,
-                    TIN = pObjCompanyModel.TIN,
-                    MobileNumber1 = pObjCompanyModel.MobileNumber1,
-                    MobileNumber2 = pObjCompanyModel.MobileNumber2,
-                    EmailAddress1 = pObjCompanyModel.EmailAddress1,
-                    EmailAddress2 = pObjCompanyModel.EmailAddress2,
-                    TaxOfficeID = pObjCompanyModel.TaxOfficeID,
-                    CompanyRIN = pObjCompanyModel.CompanyRIN,
-                    TaxPayerTypeID = (int)EnumList.TaxPayerType.Companies,
-                    EconomicActivitiesID = pObjCompanyModel.EconomicActivitiesID,
-                    NotificationMethodID = pObjCompanyModel.NotificationMethodID,
-                    ContactAddress = pObjCompanyModel.ContactAddress,
-                    CACRegistrationNumber = pObjCompanyModel.CACRegistrationNumber,
-                    Active = true,
-                    CreatedBy = SessionManager.UserID,
-                    CreatedDate = CommUtil.GetCurrentDateTime()
-                };
-
-                try
-                {
-
-                    FuncResponse<Company> mObjResponse = new BLCompany().BL_InsertUpdateCompany(mObjCompany, true, true);
-
-                    if (mObjResponse.Success)
+                    if (GlobalDefaultValues.SendNotification)
                     {
-                        if (GlobalDefaultValues.SendNotification)
+                        //Send Notification
+                        EmailDetails mObjEmailDetails = new EmailDetails()
                         {
-                            //Send Notification
-                            EmailDetails mObjEmailDetails = new EmailDetails()
-                            {
-                                TaxPayerTypeID = (int)EnumList.TaxPayerType.Companies,
-                                TaxPayerTypeName = "Company",
-                                TaxPayerID = pObjCompanyModel.CompanyID,
-                                TaxPayerName = pObjCompanyModel.CompanyName,
-                                TaxPayerRIN = pObjCompanyModel.CompanyRIN,
-                                TaxPayerMobileNumber = pObjCompanyModel.MobileNumber1,
-                                TaxPayerEmail = pObjCompanyModel.EmailAddress1,
-                                ContactAddress = pObjCompanyModel.ContactAddress,
-                                TaxPayerTIN = pObjCompanyModel.TIN,
-                                LoggedInUserID = SessionManager.UserID,
-                            };
+                            TaxPayerTypeID = (int)EnumList.TaxPayerType.Companies,
+                            TaxPayerTypeName = "Company",
+                            TaxPayerID = pObjCompanyModel.CompanyID,
+                            TaxPayerName = pObjCompanyModel.CompanyName,
+                            TaxPayerRIN = pObjCompanyModel.CompanyRIN,
+                            TaxPayerMobileNumber = pObjCompanyModel.MobileNumber1,
+                            TaxPayerEmail = pObjCompanyModel.EmailAddress1,
+                            ContactAddress = pObjCompanyModel.ContactAddress,
+                            TaxPayerTIN = pObjCompanyModel.TIN,
+                            LoggedInUserID = SessionManager.UserID,
+                        };
 
-                            if (!string.IsNullOrWhiteSpace(pObjCompanyModel.EmailAddress1))
-                            {
-                                BLEmailHandler.BL_TaxPayerCreated(mObjEmailDetails);
-                            }
-
-                            if (!string.IsNullOrWhiteSpace(pObjCompanyModel.MobileNumber1))
-                            {
-                                UtilityController.BL_TaxPayerCreated(mObjEmailDetails);
-                            }
+                        if (!string.IsNullOrWhiteSpace(pObjCompanyModel.EmailAddress1))
+                        {
+                            BLEmailHandler.BL_TaxPayerCreated(mObjEmailDetails);
                         }
-                        FlashMessage.Info(mObjResponse.Message);
-                        return RedirectToAction("Details", "CaptureCorporate", new { id = mObjResponse.AdditionalData.CompanyID, name = mObjResponse.AdditionalData.CompanyName.ToSeoUrl() });
+
+                        if (!string.IsNullOrWhiteSpace(pObjCompanyModel.MobileNumber1))
+                        {
+                            UtilityController.BL_TaxPayerCreated(mObjEmailDetails);
+                        }
                     }
-                    else
-                    {
-                        UI_FillDropDown(pObjCompanyModel);
-                        ViewBag.Message = mObjResponse.Message;
-                        return View(pObjCompanyModel);
-                    }
+                    FlashMessage.Info(mObjResponse.Message);
+                    return RedirectToAction("Details", "CaptureCorporate", new { id = mObjResponse.AdditionalData.CompanyID, name = mObjResponse.AdditionalData.CompanyName.ToSeoUrl() });
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.SendErrorToText(ex);
-                    ErrorSignal.FromCurrentContext().Raise(ex);
                     UI_FillDropDown(pObjCompanyModel);
-                    ViewBag.Message = "Error occurred while saving corporate";
+                    ViewBag.Message = mObjResponse.Message;
                     return View(pObjCompanyModel);
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.SendErrorToText(ex);
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                UI_FillDropDown(pObjCompanyModel);
+                ViewBag.Message = "Error occurred while saving corporate";
+                return View(pObjCompanyModel);
+            }
+            // }
         }
 
 

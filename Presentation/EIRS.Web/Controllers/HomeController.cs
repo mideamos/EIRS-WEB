@@ -4,6 +4,7 @@ using EIRS.Common;
 using EIRS.Models;
 using EIRS.Repository;
 using EIRS.Web.GISModels;
+using EIRS.Web.Utility;
 using Google.Protobuf.WellKnownTypes;
 using SixLabors.ImageSharp.Drawing;
 using System;
@@ -354,8 +355,7 @@ namespace EIRS.Web.Controllers
         [NonAction]
         private List<usp_GetAssessmentForPendingOrDeclined_Result> getSPList()
         {
-            var rawQuery = "SELECT ast.AssessmentID,ss.SettlementStatusID,office.UserID, ast.AssessmentRefNo,ast.assessmentamount as Amount,ss.SettlementStatusName as Status,office.ContactName as TaxOfficerName,ast.TaxPayerID as ID,dbo.GetTaxPayerName(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxPayerName,dbo.GetTaxPayerRIN(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxPayerRIN,dbo.GetTaxPayerTaxOfficeName(ast.TaxPayerID,ast.TaxPayerTypeID) as TaxOfficeName FROM Assessment ast left JOIN Settlement_Status ss  ON ast.SettlementStatusID = ss.SettlementStatusID left JOIN TaxPayer_Types tptype ON ast.TaxPayerTypeID = tptype.TaxPayerTypeID   left JOIN ERAS.DBO.MST_Users  office ON ast.CreatedBy = office.UserID where ast.SettlementStatusID = 6  or ast.SettlementStatusID =8 or ast.SettlementStatusID =7";
-            // List to hold the results
+            var rawQuery = AllQueries.getSPList;
             List<usp_GetAssessmentForPendingOrDeclined_Result> results = new List<usp_GetAssessmentForPendingOrDeclined_Result>();
 
             string con = ConfigurationManager.ConnectionStrings["DbEntities"].ConnectionString;

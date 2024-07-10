@@ -756,6 +756,7 @@ namespace EIRS.Web
         public decimal ERASTaxPaid { get; set; }
         public decimal ERASAssessed { get; set; }
         public string Tax_receipt { get; set; }
+        public string RevenueType { get; set; }
         public EnumList.Track intTrack { get; set; }
     }
 

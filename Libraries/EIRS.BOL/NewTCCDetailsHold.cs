@@ -25,5 +25,6 @@ namespace EIRS.BOL
         public string Tax_receipt { get; set; }
         public string IndividualRIN { get; set; }
         public Nullable<long> TCCRequestID { get; set; }
+        public string RevenueType { get; set; }
     }
 }

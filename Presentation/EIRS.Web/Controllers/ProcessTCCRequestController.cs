@@ -243,7 +243,7 @@ namespace EIRS.Web.Controllers
                 return RedirectToAction("List", "ProcessTCCRequest");
             }
         }
-     
+
         private void UI_FillDropDown(ValidateTaxPayerInformationViewModel pObjIndividualViewModel = null)
         {
             if (pObjIndividualViewModel != null)
@@ -971,57 +971,119 @@ namespace EIRS.Web.Controllers
                                 ERASAssessed = rec.ERASAssessed.Value,
                                 ERASTaxPaid = rec.ERASTaxPaid.Value,
                                 Tax_receipt = rec.Tax_receipt,
-                                intTrack = EnumList.Track.INSERT
+                                intTrack = EnumList.Track.INSERT,
+                                RevenueType =rec.RevenueType
                             };
                             lstTCCDetail.Add(mObjRequest1TCCDetail);
                         }
                     }
                     else
                     {
+
+                        var tccDetailEras2 = lstIncomeStream.Where(o => o.TaxYear == (currentYear - 2)).FirstOrDefault();
+
+                        var tccDetailEra3 = lstIncomeStream.Where(o => o.TaxYear == (currentYear - 3)).FirstOrDefault();
+
+                        decimal chargeableIncome = Convert.ToDecimal(tccDetailPaye.ChargeableIncome);
+                        decimal totalIncomeEarned = Convert.ToDecimal(tccDetailEras.TotalIncomeEarned);
+                        decimal chargeableIncome2 = Convert.ToDecimal(tccDetailPay2e.ChargeableIncome);
+                        decimal totalIncomeEarned2 = Convert.ToDecimal(tccDetailEras2.TotalIncomeEarned);
+                        decimal chargeableIncome3 = Convert.ToDecimal(tccDetailPay3e.ChargeableIncome);
+                        decimal totalIncomeEarned3 = Convert.ToDecimal(tccDetailEra3.TotalIncomeEarned);
+
+                        // Calculate the sum
+                        decimal totalIncome = chargeableIncome + totalIncomeEarned;
+                        decimal totalIncome2 = chargeableIncome2 + totalIncomeEarned2;
+                        decimal totalIncome3 = chargeableIncome3 + totalIncomeEarned3;
+
+                        // Determine the revenue type based on the values of chargeableIncome and totalIncomeEarned
+                        string revenueType = string.Empty;
+
+                        if (chargeableIncome == 0 && totalIncomeEarned == 0)
+                        {
+                            revenueType = "";
+                        }
+                        else if (chargeableIncome == 0)
+                        {
+                            revenueType = "DA";
+                        }
+                        else if (totalIncomeEarned == 0)
+                        {
+                            revenueType = "PAYE";
+                        }
+
+
                         mObjRequest1TCCDetail = new Request_TCCDetail()
                         {
                             RowID = 1,
                             TBKID = 1,
                             TaxYear = (currentYear - 1),
                             //income amount from paye + TotalIncomeEarned
-                            AssessableIncome = Convert.ToDecimal(tccDetailPaye.ChargeableIncome) + Convert.ToDecimal(tccDetailEras.TotalIncomeEarned),
-                            //annultax + DA
+                            AssessableIncome = totalIncome,
                             TCCTaxPaid = Convert.ToDecimal(tccDetailPaye.AnnualTax),
                             ERASAssessed = Convert.ToDecimal(tccDetailPaye.AnnualTax),
                             ERASTaxPaid = Convert.ToDecimal(tccDetailPaye.AnnualTaxII),
                             Tax_receipt = tckRef1,
+                            RevenueType = revenueType,
                             intTrack = EnumList.Track.INSERT
                         };
                         lstTCCDetail.Add(mObjRequest1TCCDetail);
+                        revenueType = string.Empty;
 
-                        var tccDetailEras2 = lstIncomeStream.Where(o => o.TaxYear == (currentYear - 2)).FirstOrDefault();
+                        if (chargeableIncome2 == 0 && totalIncomeEarned2 == 0)
+                        {
+                            revenueType = "";
+                        }
+                        else if (chargeableIncome2 == 0)
+                        {
+                            revenueType = "DA";
+                        }
+                        else if (totalIncomeEarned2 == 0)
+                        {
+                            revenueType = "PAYE";
+                        }
+
                         var newlstTaxPayerPayment2 = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 2)).ToList();
                         mObjRequest2TCCDetail = new Request_TCCDetail()
                         {
                             RowID = 2,
                             TBKID = 2,
                             TaxYear = (currentYear - 2),
-                            AssessableIncome = Convert.ToDecimal(tccDetailPay2e.ChargeableIncome) + Convert.ToDecimal(tccDetailEras2.TotalIncomeEarned),
+                            AssessableIncome = totalIncome2,
                             TCCTaxPaid = Convert.ToDecimal(tccDetailPay2e.AnnualGross),
                             ERASAssessed = Convert.ToDecimal(tccDetailPay2e.AnnualTax),
                             ERASTaxPaid = Convert.ToDecimal(tccDetailPay2e.AnnualTaxII),
                             Tax_receipt = tckRef2,
+                            RevenueType = revenueType,
                             intTrack = EnumList.Track.INSERT
                         };
                         lstTCCDetail.Add(mObjRequest2TCCDetail);
+                        revenueType = string.Empty;
 
-                        var tccDetailEra3 = lstIncomeStream.Where(o => o.TaxYear == (currentYear - 3)).FirstOrDefault();
+                        if (chargeableIncome3 == 0 && totalIncomeEarned3 == 0)
+                        {
+                            revenueType = "";
+                        }
+                        else if (chargeableIncome3 == 0)
+                        {
+                            revenueType = "DA";
+                        }
+                        else if (totalIncomeEarned3 == 0)
+                        {
+                            revenueType = "PAYE";
+                        }
                         var newlstTaxPayerPayment3 = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 3)).ToList();
                         mObjRequest3TCCDetail = new Request_TCCDetail()
                         {
                             RowID = 3,
                             TBKID = 3,
                             TaxYear = (currentYear - 3),
-                            AssessableIncome = Convert.ToDecimal(tccDetailPay3e.ChargeableIncome) + Convert.ToDecimal(tccDetailEra3.TotalIncomeEarned),
+                            AssessableIncome = totalIncome3,
                             TCCTaxPaid = Convert.ToDecimal(tccDetailPay3e.AnnualGross),
                             ERASAssessed = Convert.ToDecimal(tccDetailPay3e.AnnualTax),
                             ERASTaxPaid = Convert.ToDecimal(tccDetailPay3e.AnnualTaxII),
                             Tax_receipt = tckRef3,
+                            RevenueType = revenueType,
                             intTrack = EnumList.Track.INSERT
                         };
                         lstTCCDetail.Add(mObjRequest3TCCDetail);
@@ -1099,6 +1161,7 @@ namespace EIRS.Web.Controllers
                 return RedirectToAction("List", "ProcessTCCRequest");
             }
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
@@ -1293,7 +1356,7 @@ namespace EIRS.Web.Controllers
                             NewTCCDetailsHold removeFormal = _db.NewTCCDetailsHolds.FirstOrDefault(o => o.TaxYear == item.TaxYear && o.IndividualRIN == mObjRequestData.IndividualRIN);
                             if (removeFormal != null)
                                 _db.NewTCCDetailsHolds.Remove(removeFormal);
-                            NewTCCDetailsHold neth = new NewTCCDetailsHold();
+                          //  NewTCCDetailsHold neth = new NewTCCDetailsHold();
                             string refDate = "";
                             var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == item.TaxYear).ToList();
                             if (newlstTaxPayerPayment.Count > 0)
@@ -1330,6 +1393,7 @@ namespace EIRS.Web.Controllers
                                     ERASAssessed = item.ERASAssessed,
                                     ERASTaxPaid = item.ERASTaxPaid,
                                     Tax_receipt = item.Tax_receipt,
+                                    RevenueType = item.RevenueType,
                                     IndividualRIN = mObjRequestData.IndividualRIN
                                 });
 
@@ -2751,7 +2815,7 @@ namespace EIRS.Web.Controllers
                 return Content("Document Not Found");
             }
         }
- 
+
         [HttpGet]
         public ActionResult Print(long? reqid)
         {
@@ -3596,12 +3660,12 @@ namespace EIRS.Web.Controllers
                     {
                         var deleteFromValidateTccTable = _db.ValidateTccs.Remove(detailsToRemove);
                     }
-                    if(recToDelete.Any())
+                    if (recToDelete.Any())
                         _db.NewTCCDetailsHolds.RemoveRange(recToDelete);
                     if (refHolderToDelete.Any())
                         _ = _db.TccRefHolders.RemoveRange(refHolderToDelete);
                     _db.SaveChanges();
-                    
+
                 }
                 pObjRevoke.CreatedDate = CommUtil.GetCurrentDateTime();
                 pObjRevoke.CreatedBy = SessionManager.UserID;

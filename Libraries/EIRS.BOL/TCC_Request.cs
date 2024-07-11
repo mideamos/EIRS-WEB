@@ -53,7 +53,7 @@ namespace EIRS.BOL
         public string GeneratePathForPrint { get; set; }
         public Nullable<bool> IsDownloaded { get; set; }
         public Nullable<int> TaxOfficeId { get; set; }
-        public Nullable<int> ApproverTypeId { get; set; }
+        public string ApproverLevelId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MAP_TCCRequest_Generate> MAP_TCCRequest_Generate { get; set; }

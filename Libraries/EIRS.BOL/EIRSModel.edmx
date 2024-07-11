@@ -2795,7 +2795,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="GeneratePathForPrint" Type="varchar(max)" />
           <Property Name="IsDownloaded" Type="bit" />
           <Property Name="TaxOfficeId" Type="int" />
-          <Property Name="ApproverLevelId" Type="varchar" MaxLength="10" />
+          <Property Name="ApproverTypeId" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="TCCDetails">
           <Key>
@@ -21521,7 +21521,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <NavigationProperty Name="TCC_Request2" Relationship="EIRSModel.FK_TCC_Request_Approvaltype" FromRole="TCC_Request1" ToRole="TCC_Request" />
           <NavigationProperty Name="TCC_Request11" Relationship="EIRSModel.FK_TCC_Request_TCC_Request" FromRole="TCC_Request" ToRole="TCC_Request1" />
           <NavigationProperty Name="TCC_Request3" Relationship="EIRSModel.FK_TCC_Request_TCC_Request" FromRole="TCC_Request1" ToRole="TCC_Request" />
-          <Property Name="ApproverLevelId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ApproverTypeId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_MAP_TCCRequest_Generate_TCC_Request">
           <End Type="EIRSModel.TCC_Request" Role="TCC_Request" Multiplicity="0..1" />
@@ -31301,7 +31301,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySetMapping Name="TCC_Request">
             <EntityTypeMapping TypeName="EIRSModel.TCC_Request">
               <MappingFragment StoreEntitySet="TCC_Request">
-                <ScalarProperty Name="ApproverLevelId" ColumnName="ApproverLevelId" />
+                <ScalarProperty Name="ApproverTypeId" ColumnName="ApproverTypeId" />
                 <ScalarProperty Name="TaxOfficeId" ColumnName="TaxOfficeId" />
                 <ScalarProperty Name="IsDownloaded" ColumnName="IsDownloaded" />
                 <ScalarProperty Name="GeneratePathForPrint" ColumnName="GeneratePathForPrint" />

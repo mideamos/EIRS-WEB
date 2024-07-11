@@ -476,7 +476,7 @@ namespace EIRS.Repository
 
                 if (mObjUpdateRequest != null)
                 {
-                    mObjUpdateRequest.ApproverLevelId = appId.ToString();
+                    mObjUpdateRequest.ApproverTypeId = appId.ToString();
 
                     try
                     {

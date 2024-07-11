@@ -26,6 +26,8 @@ using EIRS.Web.Utility;
 using Title = EIRS.BOL.Title;
 using Vereyon.Web;
 using System.Linq.Dynamic;
+using DocumentFormat.OpenXml.Bibliography;
+using Google.Protobuf.WellKnownTypes;
 
 namespace EIRS.Web.Controllers
 {
@@ -1007,7 +1009,8 @@ namespace EIRS.Web.Controllers
                         else if (chargeableIncome != 0 && totalIncomeEarned != 0)
                         {
                             revenueType = "DA and PAYE";
-                        }else if (chargeableIncome == 0)
+                        }
+                        else if (chargeableIncome == 0)
                         {
                             revenueType = "DA";
                         }
@@ -1541,16 +1544,12 @@ namespace EIRS.Web.Controllers
 
                         if (mObjFuncResponse.Success)
                         {
-                            using (var _dbII = new EIRSEntities())
-                            {
-                                var tttt = _dbII.TCC_Request.FirstOrDefault(o => o.TCCRequestID == pobjValidateTaxPayerIncomeModel.RequestID);
-                                if (lstTCCDetail.Any(o => o.RevenueType.Contains("DA")))
-                                    tttt.ApproverTypeId = 1;
-                                else
-                                    tttt.ApproverTypeId = 2;
-
-                                _dbII.SaveChanges();
-                            }
+                            int appId = 0;
+                            if (lstTCCDetail.Any(o => o.RevenueType.Contains("DA")))
+                                appId = 1;
+                            else
+                                appId = 2;
+                            mObjFuncResponse = mObjBLTCC.BL_UpdateRequestStatus(appId, pobjValidateTaxPayerIncomeModel.RequestID);
 
                             if (strAction != "Save")
                             {
@@ -3240,14 +3239,14 @@ namespace EIRS.Web.Controllers
                     //    refref = mObjTCCDetail.Tax_receipt;
 
                     string revenueType = "";
-                   // decimal totalIncomeEarned3 = pObjIncomeStreamModel.TotalIncomeEarned;
+                    // decimal totalIncomeEarned3 = pObjIncomeStreamModel.TotalIncomeEarned;
                     decimal chargeableIncome3 = mObjTCCDetail.AssessableIncome - Convert.ToDecimal(formalAssessedIncome);
-                    
+
                     if (chargeableIncome3 == 0)
                     {
                         revenueType = "PAYE";
                     }
-                    else 
+                    else
                     {
                         revenueType = "DA and PAYE";
                     }

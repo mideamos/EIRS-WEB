@@ -462,6 +462,40 @@ namespace EIRS.Repository
             }
         }
 
+        public FuncResponse REP_UpdateRequestStatus(int appId, long tccId)
+        {
+            using (_db = new EIRSEntities())
+            {
+                TCC_Request mObjUpdateRequest;
+                FuncResponse mObjFuncResponse = new FuncResponse();
+
+
+                mObjUpdateRequest = (from req in _db.TCC_Request
+                                     where req.TCCRequestID == tccId
+                                     select req).FirstOrDefault();
+
+                if (mObjUpdateRequest != null)
+                {
+                    mObjUpdateRequest.ApproverTypeId = appId;
+
+                    try
+                    {
+                        _db.SaveChanges();
+                        mObjFuncResponse.Success = true;
+                        mObjFuncResponse.Message = "Request Updated Successfully";
+                    }
+                    catch (Exception Ex)
+                    {
+                        mObjFuncResponse.Success = false;
+                        mObjFuncResponse.Exception = Ex;
+                        mObjFuncResponse.Message = "Request Updation Failed";
+                    }
+                }
+
+
+                return mObjFuncResponse;
+            }
+        }
         public FuncResponse REP_UpdateRequestStatus(TCC_Request pObjRequest)
         {
             using (_db = new EIRSEntities())

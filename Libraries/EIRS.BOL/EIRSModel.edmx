@@ -2795,7 +2795,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="GeneratePathForPrint" Type="varchar(max)" />
           <Property Name="IsDownloaded" Type="bit" />
           <Property Name="TaxOfficeId" Type="int" />
-          <Property Name="ApproverTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApproverTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="TCCDetails">
           <Key>

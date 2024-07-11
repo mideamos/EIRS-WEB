@@ -2893,6 +2893,11 @@ namespace EIRS.Web.Controllers
                     mObjTCCDetail.ERASAssessed = Convert.ToDecimal(pp.AnnualTax);
                     mObjTCCDetail.Tax_receipt = "";
                     mObjTCCDetail.AssessableIncome = Convert.ToDecimal(pp.ChargeableIncome);
+
+                    if (mObjTCCDetail.AssessableIncome > 0)
+                        mObjTCCDetail.RevenueType = "PAYE";
+                    else
+                        mObjTCCDetail.RevenueType = "";
                     mObjTCCDetail.intTrack = lstIncomeStream.Where(t => t.TaxYear == mObjIncomeStreamModel.TaxYear && t.intTrack != EnumList.Track.DELETE).Any() ? EnumList.Track.UPDATE : EnumList.Track.DELETE;
                 }
                 lstTCCDetails.Add(mObjTCCDetail);
@@ -3309,6 +3314,10 @@ namespace EIRS.Web.Controllers
                     mObjTCCDetail.ERASAssessed = (mObjTCCDetail.ERASAssessed - Convert.ToDecimal(paye.AnnualTax));
                     mObjTCCDetail.ERASTaxPaid = (mObjTCCDetail.ERASTaxPaid - Convert.ToDecimal(paye.AnnualTaxII));
                     mObjTCCDetail.Tax_receipt = "";
+                    if (mObjTCCDetail.AssessableIncome > 0)
+                        mObjTCCDetail.RevenueType = "DA";
+                    else
+                        mObjTCCDetail.RevenueType = "";
                 }
 
                 lstPayeApiResponse.Remove(paye);

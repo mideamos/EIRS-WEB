@@ -1541,11 +1541,16 @@ namespace EIRS.Web.Controllers
 
                         if (mObjFuncResponse.Success)
                         {
-                            var tttt = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == pobjValidateTaxPayerIncomeModel.RequestID);
-                            if (lstTCCDetail.Any(o => o.RevenueType == "DA"))
-                                tttt.ApproverTypeId = 1;
-                            else
-                                tttt.ApproverTypeId = 2;
+                            using (var _dbII = new EIRSEntities())
+                            {
+                                var tttt = _dbII.TCC_Request.FirstOrDefault(o => o.TCCRequestID == pobjValidateTaxPayerIncomeModel.RequestID);
+                                if (lstTCCDetail.Any(o => o.RevenueType.Contains("DA")))
+                                    tttt.ApproverTypeId = 1;
+                                else
+                                    tttt.ApproverTypeId = 2;
+
+                                _dbII.SaveChanges();
+                            }
 
                             if (strAction != "Save")
                             {

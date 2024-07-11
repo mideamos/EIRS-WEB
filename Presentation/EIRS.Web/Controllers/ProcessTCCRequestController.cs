@@ -25,6 +25,7 @@ using static EIRS.Web.Controllers.Filters;
 using EIRS.Web.Utility;
 using Title = EIRS.BOL.Title;
 using Vereyon.Web;
+using System.Linq.Dynamic;
 
 namespace EIRS.Web.Controllers
 {
@@ -972,7 +973,7 @@ namespace EIRS.Web.Controllers
                                 ERASTaxPaid = rec.ERASTaxPaid.Value,
                                 Tax_receipt = rec.Tax_receipt,
                                 intTrack = EnumList.Track.INSERT,
-                                RevenueType =rec.RevenueType
+                                RevenueType = rec.ReveuneType
                             };
                             lstTCCDetail.Add(mObjRequest1TCCDetail);
                         }
@@ -1003,7 +1004,10 @@ namespace EIRS.Web.Controllers
                         {
                             revenueType = "";
                         }
-                        else if (chargeableIncome == 0)
+                        else if (chargeableIncome != 0 && totalIncomeEarned != 0)
+                        {
+                            revenueType = "DA and PAYE";
+                        }else if (chargeableIncome == 0)
                         {
                             revenueType = "DA";
                         }
@@ -1034,6 +1038,10 @@ namespace EIRS.Web.Controllers
                         {
                             revenueType = "";
                         }
+                        else if (chargeableIncome2 != 0 && totalIncomeEarned2 != 0)
+                        {
+                            revenueType = "DA and PAYE";
+                        }
                         else if (chargeableIncome2 == 0)
                         {
                             revenueType = "DA";
@@ -1063,6 +1071,10 @@ namespace EIRS.Web.Controllers
                         if (chargeableIncome3 == 0 && totalIncomeEarned3 == 0)
                         {
                             revenueType = "";
+                        }
+                        else if (chargeableIncome3 != 0 && totalIncomeEarned3 != 0)
+                        {
+                            revenueType = "DA and PAYE";
                         }
                         else if (chargeableIncome3 == 0)
                         {
@@ -1356,7 +1368,7 @@ namespace EIRS.Web.Controllers
                             NewTCCDetailsHold removeFormal = _db.NewTCCDetailsHolds.FirstOrDefault(o => o.TaxYear == item.TaxYear && o.IndividualRIN == mObjRequestData.IndividualRIN);
                             if (removeFormal != null)
                                 _db.NewTCCDetailsHolds.Remove(removeFormal);
-                          //  NewTCCDetailsHold neth = new NewTCCDetailsHold();
+                            //  NewTCCDetailsHold neth = new NewTCCDetailsHold();
                             string refDate = "";
                             var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == item.TaxYear).ToList();
                             if (newlstTaxPayerPayment.Count > 0)
@@ -1393,7 +1405,7 @@ namespace EIRS.Web.Controllers
                                     ERASAssessed = item.ERASAssessed,
                                     ERASTaxPaid = item.ERASTaxPaid,
                                     Tax_receipt = item.Tax_receipt,
-                                    RevenueType = item.RevenueType,
+                                    ReveuneType = item.RevenueType,
                                     IndividualRIN = mObjRequestData.IndividualRIN
                                 });
 
@@ -1529,8 +1541,15 @@ namespace EIRS.Web.Controllers
 
                         if (mObjFuncResponse.Success)
                         {
+                            var tttt = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == pobjValidateTaxPayerIncomeModel.RequestID);
+                            if (lstTCCDetail.Any(o => o.RevenueType == "DA"))
+                                tttt.ApproverTypeId = 1;
+                            else
+                                tttt.ApproverTypeId = 2;
+
                             if (strAction != "Save")
                             {
+
                                 MAP_TCCRequest_Stages mObjRequestStage1 = new MAP_TCCRequest_Stages()
                                 {
                                     ApprovalDate = CommUtil.GetCurrentDateTime(),
@@ -3061,6 +3080,7 @@ namespace EIRS.Web.Controllers
                         ERASAssessed = newmObjOldTCCDetail == null ? 0 : newmObjOldTCCDetail.ERASAssessed.GetValueOrDefault(),
                         ERASTaxPaid = newmObjOldTCCDetail == null ? 0 : newmObjOldTCCDetail.ERASTaxPaid.GetValueOrDefault(),
                         Tax_receipt = tickRefNo,
+                        RevenueType = formalTccRecord.TotalIncomeEarned != 0 ? "DA" : "",
                         intTrack = EnumList.Track.INSERT,
                     };
                     lstTCCDetails.Add(mObjOldTCCDetail);
@@ -3077,6 +3097,7 @@ namespace EIRS.Web.Controllers
                         ERASAssessed = newmObjOldTCCDetail == null ? 0 : newmObjOldTCCDetail.ERASAssessed.GetValueOrDefault(),
                         ERASTaxPaid = newmObjOldTCCDetail == null ? 0 : newmObjOldTCCDetail.ERASTaxPaid.GetValueOrDefault(),
                         Tax_receipt = tickRefNo,
+                        RevenueType = formalTccRecord.TotalIncomeEarned != 0 ? "DA" : "",
                         intTrack = EnumList.Track.INSERT,
                     };
                     lstTCCDetails.Add(mObjOldTCCDetail);
@@ -3103,12 +3124,32 @@ namespace EIRS.Web.Controllers
                         liaby = liab.AssessmentAmount.Value;
                         liabz = liab.PaymentAmount.Value;
                     }
+                    string revenueType = "";
+                    decimal totalIncomeEarned3 = pObjIncomeStreamModel.TotalIncomeEarned;
+                    decimal chargeableIncome3 = Convert.ToDecimal(newPayeRec.ChargeableIncome);
+                    if (chargeableIncome3 == 0 && totalIncomeEarned3 == 0)
+                    {
+                        revenueType = "";
+                    }
+                    else if (chargeableIncome3 != 0 && totalIncomeEarned3 != 0)
+                    {
+                        revenueType = "DA and PAYE";
+                    }
+                    else if (chargeableIncome3 == 0)
+                    {
+                        revenueType = "DA";
+                    }
+                    else if (totalIncomeEarned3 == 0)
+                    {
+                        revenueType = "PAYE";
+                    }
                     x = ((pObjIncomeStreamModel.TotalIncomeEarned) + (Convert.ToDecimal(newPayeRec.ChargeableIncome)));
                     y = (liaby + (Convert.ToDecimal(newPayeRec.AnnualTax)));
                     z = (liabz + (Convert.ToDecimal(newPayeRec.AnnualTaxII)));
                     mObjTCCDetail.AssessableIncome = x;
                     mObjTCCDetail.ERASAssessed = y;
                     mObjTCCDetail.ERASTaxPaid = z;
+                    mObjTCCDetail.RevenueType = revenueType;
                     mObjTCCDetail.Tax_receipt = refref;
                     lstTCCDetails.Add(mObjTCCDetail);
                 }
@@ -3192,10 +3233,24 @@ namespace EIRS.Web.Controllers
                     refref = paye.ReceiptDetail;
                     //else
                     //    refref = mObjTCCDetail.Tax_receipt;
+
+                    string revenueType = "";
+                   // decimal totalIncomeEarned3 = pObjIncomeStreamModel.TotalIncomeEarned;
+                    decimal chargeableIncome3 = mObjTCCDetail.AssessableIncome - Convert.ToDecimal(formalAssessedIncome);
+                    
+                    if (chargeableIncome3 == 0)
+                    {
+                        revenueType = "PAYE";
+                    }
+                    else 
+                    {
+                        revenueType = "DA and PAYE";
+                    }
                     mObjTCCDetail.AssessableIncome = (mObjTCCDetail.AssessableIncome - Convert.ToDecimal(formalAssessedIncome)) + pObjIncomeStreamModel.TotalIncomeEarned;
                     mObjTCCDetail.ERASAssessed = (mObjTCCDetail.ERASAssessed - Convert.ToDecimal(fomalTax)) + pObjIncomeStreamModel.payeAssessedIncome;
                     mObjTCCDetail.ERASTaxPaid = (mObjTCCDetail.ERASTaxPaid - Convert.ToDecimal(fomalTax)) + pObjIncomeStreamModel.payeTaxPaid;
                     mObjTCCDetail.Tax_receipt = refref;
+                    mObjTCCDetail.RevenueType = revenueType;
                 }
 
 

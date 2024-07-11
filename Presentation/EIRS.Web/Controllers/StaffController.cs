@@ -359,12 +359,17 @@ namespace EIRS.Web.Controllers
             {
                 var retHolder = checkAppLevel.FirstOrDefault();
 
-                if (retHolder.Approver1 == userId)
+                if (retHolder.Approver1 == userId && retHolder.PAYE_ApproverID == userId)
                     holder = (long)TCCSigningStage.AwaitingFirstSigner;
-                else if (retHolder.Approver2 == userId)
+                else if (retHolder.Approver2 == userId && retHolder.PAYE_ApproverID == userId)
                     holder = (long)TCCSigningStage.AwaitingSecondSigner;
-                else
+                else if (retHolder.Approver3 == userId && retHolder.PAYE_ApproverID == userId)
                     holder = (long)TCCSigningStage.AwaitingThirdSigner;
+                else
+                {
+                    ViewBag.Message = "You Are Not An Approving Officer As You Are Not PAYE APPROVAL";
+                    return View(listTccVm);
+                }
                 var ee = (from ex in _db.TCC_Request.Where(o => o.SEDE_OrderID == holder || o.SEDE_DocumentID == userId || o.ServiceBillID == userId || o.VisibleSignStatusID == userId)
                           join ue in _db.Individuals on
                           ex.TaxPayerID equals ue.IndividualID

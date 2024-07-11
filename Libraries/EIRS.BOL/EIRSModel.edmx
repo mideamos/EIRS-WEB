@@ -2101,6 +2101,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="TCCRequestID" Type="bigint" />
           <Property Name="Tax_receipt" Type="nvarchar" MaxLength="100" />
           <Property Name="IndividualRIN" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReveuneType" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Notification_Method">
           <Key>
@@ -24082,6 +24083,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="Tax_receipt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IndividualRIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TCCRequestID" Type="Int64" />
+          <Property Name="ReveuneType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="BusinessName">
           <Key>
@@ -33741,6 +33743,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySetMapping Name="NewTCCDetailsHolds">
             <EntityTypeMapping TypeName="EIRSModel.NewTCCDetailsHold">
               <MappingFragment StoreEntitySet="NewTCCDetailsHold">
+                <ScalarProperty Name="ReveuneType" ColumnName="ReveuneType" />
                 <ScalarProperty Name="TCCRequestID" ColumnName="TCCRequestID" />
                 <ScalarProperty Name="IndividualRIN" ColumnName="IndividualRIN" />
                 <ScalarProperty Name="Tax_receipt" ColumnName="Tax_receipt" />

@@ -1088,7 +1088,7 @@ namespace EIRS.Admin.Controllers
                 intStatus = 1
             };
 
-            IList<usp_GetBusinessList_Result> lstBusiness = new BLBusiness().BL_GetBusinessList(mObjBusiness);
+            IList<usp_GetBusinessListNewTy_Result> lstBusiness = new BLBusiness().BL_GetBusinessList(mObjBusiness);
             dcResponse["success"] = true;
             dcResponse["BusinessList"] = CommUtil.RenderPartialToString("_BindBusinessTable_SingleSelect", lstBusiness, this.ControllerContext);
             return Json(dcResponse, JsonRequestBehavior.AllowGet);

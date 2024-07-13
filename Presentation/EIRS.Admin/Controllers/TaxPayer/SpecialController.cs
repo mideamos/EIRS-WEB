@@ -824,7 +824,7 @@ namespace EIRS.Admin.Controllers
                     intStatus = 2
                 };
 
-                IList<usp_GetBusinessList_Result> lstBusiness = new BLBusiness().BL_GetBusinessList(mObjBusiness);
+                IList<usp_GetBusinessListNewTy_Result> lstBusiness = new BLBusiness().BL_GetBusinessList(mObjBusiness);
                 dcResponse["success"] = true;
                 dcResponse["AssetList"] = CommUtil.RenderPartialToString("_BindBusinessTable", lstBusiness, this.ControllerContext);
             }

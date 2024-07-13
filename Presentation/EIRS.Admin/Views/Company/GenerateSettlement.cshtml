@@ -1,0 +1,72 @@
+﻿@using EIRS.Common
+
+@{
+    ViewBag.Title = "Generate Settlement";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Settlement for @ViewBag.TaxPayerName
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6" id="artGenerateSettlement">
+                <div class="jarviswidget jarviswidget-color-green" id="dvGenerateSettlement">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Generate Settlement</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <form class="smart-form" id="frmGenerateSettlement">
+                                <input type="hidden" id="hdnTaxPayerID" value="@ViewBag.TaxPayerID" />
+                                <input type="hidden" id="hdnTaxPayerRIN" value="@ViewBag.TaxPayerRIN" />
+                                <input type="hidden" id="hdnASID" value="" />
+                                <input type="hidden" id="hdnASRefNo" value="" />
+                                <header>
+                                    Settlement Details
+                                    <button id="btnGenerate" class="btn btn-primary pull-right">
+                                        Generate Settlement
+                                    </button>
+                                    <button id="btnBack" class="btn btn-default pull-right margin-right-5">
+                                        Back
+                                    </button>
+                                </header>
+                                <fieldset id="fsStep1">
+                                    <section>
+                                        @Html.Label("Settlement Type", htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownList("SettlementType", (SelectList)ViewBag.SettlementTypeList, "Select Settlement Type", htmlAttributes: new { @tabindex = "1", @id = "cboSettlementType", @class = "select2", @width = "100%" })
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <fieldset id="fsStep2"></fieldset>
+                                <footer id="dvFooter">
+                                    <a id="btnNext" class="btn btn-primary">Next</a>
+                                    <a id="btnMainBack" href="@Url.Action("List", "Settlement")" class="btn btn-default">
+                                        Cancel
+                                    </a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsCompany_GenerateSettlement.js"></script>
+
+}

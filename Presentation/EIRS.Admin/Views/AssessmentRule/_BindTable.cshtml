@@ -1,0 +1,57 @@
+﻿@model IList<EIRS.BOL.usp_GetAssessmentRuleList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.AssessmentRuleCode</td>
+            <td>@item.ProfileReferenceNo</td>
+            <td>@item.AssessmentRuleName</td>
+            <td>@item.RuleRunName</td>
+            <td>@item.PaymentFrequencyName</td>
+            <td>@item.AssessmentItemNames</td>
+            <td>@item.AssessmentAmount.GetValueOrDefault().ToString("N2")</td>
+            <td>@item.TaxYear</td>
+            <td>@item.SettlementMethodNames</td>
+            <td>@item.PaymentOptionName</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="@Url.Action("Details","AssessmentRule", new { id = item.AssessmentRuleID, name=item.AssessmentRuleName.ToSeoUrl()})">
+                                View Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Edit", "AssessmentRule", new { id = item.AssessmentRuleID, name=item.AssessmentRuleName.ToSeoUrl() })">
+                                Edit Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ProfileDetails", "AssessmentRule", new { id = item.AssessmentRuleID, name=item.AssessmentRuleName.ToSeoUrl() })">
+                                View Profile Info
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AssessmentItemDetails", "AssessmentRule", new { id = item.AssessmentRuleID, name=item.AssessmentRuleName.ToSeoUrl() })">
+                                View Assessment Item Info
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ChangeStatus(@item.AssessmentRuleID)">
+                                Mark @(item.Active.GetValueOrDefault() ? "Inactive" : "Active")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}

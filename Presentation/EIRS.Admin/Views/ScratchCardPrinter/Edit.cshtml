@@ -1,0 +1,111 @@
+﻿@model EIRS.Models.ScratchCardPrinterViewModel
+
+@{
+    ViewBag.Title = "Edit Scratch Card Printer";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-th-list"></i>
+                Scratch Card Printers
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditScratchCardPrinter">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Edit Scratch Card Printer</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Edit", "ScratchCardPrinter", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id = "frmScratchCardPrinter" }))
+                            {
+                                <header>
+                                    Scratch Card Printer Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.ScratchCardPrinterID, htmlAttributes: new { @value = Model.ScratchCardPrinterID })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.ScratchCardPrinterName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.ScratchCardPrinterName, htmlAttributes: new { @tabindex = "1", @placeholder = "Enter Scratch Card Printer" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Scratch Card Printer
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.ScratchCardPrinterName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.DropDownListFor(model => model.CompanyID, (SelectList)ViewBag.CompanyList, "Select Company", htmlAttributes: new { @tabindex = "2", @class = "select2", @width = "100%" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Select Company
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.CompanyID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.AgreedUnitPrice, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.AgreedUnitPrice, htmlAttributes: new { @tabindex = "3", @placeholder = "Enter Agreed Unit Price" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Agreed Unit Price
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.AgreedUnitPrice, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "label" })
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @tabindex = "4" })
+                                            <i></i> Active
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnSubmit" class="btn btn-primary">
+                                        Submit
+                                    </a>
+                                    <a href="@Url.Action("List","ScratchCardPrinter")" class="btn btn-default">
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsScratchCardPrinterDetails.js"></script>
+}

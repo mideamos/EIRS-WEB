@@ -1,0 +1,168 @@
+@model EIRS.Models.VehicleInsuranceViewModel
+
+@{
+    ViewBag.Title = "Edit Vehicle Insurance";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-taxi"></i>
+                Vehicle Insurance
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditVehicleInsurance">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Edit Vehicle Insurance</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Edit", "VehicleInsurance", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id="frmVehicleInsurance" }))
+                            {
+                                <header>
+                                    Vehicle Insurance Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.VehicleInsuranceID, htmlAttributes: new { @value = Model.VehicleInsuranceID })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.VehicleID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.VehicleID, (SelectList)ViewBag.VehicleList, "Select Vehicle", htmlAttributes: new { @tabindex = "1", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VehicleID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.InsuranceCertificateNumber, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.InsuranceCertificateNumber, htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Insurance Certificate Number" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter insurance certificate number
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.InsuranceCertificateNumber, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        <label class="label required">Start Date</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.StartDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @tabindex = "3", @class = "form-control datepicker", @data_dateformat = "dd/mm/yy", @placeholder = "Enter Start Date" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Start Date
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.StartDate, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        <label class="label required">Expiry Date</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.ExpiryDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @tabindex = "4", @class = "form-control datepicker", @data_dateformat = "dd/mm/yy", @placeholder = "Enter Expiry Date" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Expiry Date
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.ExpiryDate, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.CoverTypeID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.CoverTypeID, (SelectList)ViewBag.CoverTypeList, "Select Cover Type", htmlAttributes: new { @tabindex = "5", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.CoverTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.InsuranceStatusID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.InsuranceStatusID, (SelectList)ViewBag.InsuranceStatusList, "Select Insurance Status", htmlAttributes: new { @tabindex = "6", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.InsuranceStatusID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        <label class="label required">Premium Amount</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.PremiumAmount, htmlAttributes: new { @tabindex = "7", @class = "form-control", @placeholder = "Enter Premium Amount" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Premium Amount
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.PremiumAmount, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        <label class="label required">Verification Amount</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.VerificationAmount, htmlAttributes: new { @tabindex = "8", @class = "form-control", @placeholder = "Enter Verification Amount" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Verification Amount
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.VerificationAmount, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        <label class="label required">Broker Amount</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.BrokerAmount, htmlAttributes: new { @tabindex = "9", @class = "form-control", @placeholder = "Enter Broker Amount" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Broker Amount
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.BrokerAmount, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "label" })
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @tabindex = "10" })
+                                            <i></i> Active
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnSubmit" class="btn btn-primary">
+                                        Submit
+                                    </a>
+                                    <a href="@Url.Action("List","VehicleInsurance")" class="btn btn-default" >
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsVehicleInsuranceDetails.js"></script>
+    }

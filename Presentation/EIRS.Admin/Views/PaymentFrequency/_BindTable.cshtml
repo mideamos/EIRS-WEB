@@ -1,0 +1,38 @@
+﻿@model IList<EIRS.BOL.usp_GetPaymentFrequencyList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.PaymentFrequencyName</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="@Url.Action("Details","PaymentFrequency", new { id = item.PaymentFrequencyID, name=item.PaymentFrequencyName.ToSeoUrl()})">
+                                View Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Edit", "PaymentFrequency", new { id = item.PaymentFrequencyID, name=item.PaymentFrequencyName.ToSeoUrl() })">
+                                Edit Details
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ChangeStatus(@item.PaymentFrequencyID)">
+                                Mark @(item.Active.GetValueOrDefault() ? "Inactive" : "Active")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}

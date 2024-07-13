@@ -1,0 +1,31 @@
+﻿@model IList<EIRS.BOL.usp_GetProfileList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProfileReferenceNo</td>
+            <td>@item.AssetTypeName</td>
+            <td>@item.ProfileSectorNames</td>
+            <td>@item.ProfileSubSectorNames</td>
+            <td>@item.ProfileGroupNames</td>
+            <td>@item.ProfileSubGroupNames</td>
+            <td>@item.ProfileSectorElementNames</td>
+            <td>@item.ProfileSectorSubElementNames</td>
+            <td>@item.ProfileAttributeNames</td>
+            <td>@item.ProfileSubAttributeNames</td>
+            <td>@item.TaxPayerTypeNames</td>
+            <td>@item.TaxPayerRoleNames</td>
+            <td>@item.ProfileDescription</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <a onclick="javascript:jsfn_AddAssessmentRuleProfile(@item.ProfileID,'@item.ProfileReferenceNo','@item.AssetTypeName')">
+                    Select Profile
+                </a>
+            </td>
+        </tr>
+    }
+}
+

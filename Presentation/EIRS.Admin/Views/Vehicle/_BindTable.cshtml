@@ -1,0 +1,52 @@
+﻿@model IList<EIRS.BOL.usp_GetVehicleList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.VehicleRIN</td>
+            <td>@item.VehicleRegNumber</td>
+            <td>@item.VIN</td>
+            <td>@item.VehicleTypeName</td>
+            <td>@item.VehicleSubTypeName</td>
+            <td>@item.LGAName</td>
+            <td>@item.VehiclePurposeName</td>
+            <td>@item.VehicleFunctionName</td>
+            <td>@item.VehicleOwnershipName</td>
+            <td>@item.VehicleDescription</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="@Url.Action("Details","Vehicle", new { id = item.VehicleID, name=item.VehicleRegNumber.ToSeoUrl()})">
+                                View Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Edit", "Vehicle", new { id = item.VehicleID, name=item.VehicleRegNumber.ToSeoUrl() })">
+                                Edit Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("TaxPayerList", "Vehicle", new { id = item.VehicleID, name=item.VehicleRIN.ToSeoUrl() })">
+                                Tax Payer Information
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ChangeStatus(@item.VehicleID)">
+                                Mark @(item.Active.GetValueOrDefault() ? "Inactive" : "Active")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}

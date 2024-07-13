@@ -1,0 +1,87 @@
+﻿@model EIRS.Models.SizeViewModel
+
+@{
+    ViewBag.Title = "Edit Size";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-th-list"></i>
+                Sizes
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditSize">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Edit Size</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Edit", "Size", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id="frmSize" }))
+                            {
+                                <header>
+                                    Size Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.SizeID, htmlAttributes: new { @value = Model.SizeID })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.SizeName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.SizeName, htmlAttributes: new { @tabindex = "1", @placeholder = "Enter Size" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter asset type - defines the highest level of tax entities.
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.SizeName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "label" })
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @tabindex = "2" })
+                                            <i></i> Active
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnSubmit" class="btn btn-primary">
+                                        Submit
+                                    </a>
+                                    <a href="@Url.Action("List","Size")" class="btn btn-default" >
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsSizeDetails.js"></script>
+    }

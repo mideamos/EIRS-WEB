@@ -1,0 +1,39 @@
+﻿@model IList<EIRS.BOL.usp_GetLGAList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.LGAName</td>
+            <td>@item.LGAClassName</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="@Url.Action("Details","LGA", new { id = item.LGAID, name=item.LGAName.ToSeoUrl()})">
+                                View Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Edit", "LGA", new { id = item.LGAID, name=item.LGAName.ToSeoUrl() })">
+                                Edit Details
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ChangeStatus(@item.LGAID)">
+                                Mark @(item.Active.GetValueOrDefault() ? "Inactive" : "Active")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}

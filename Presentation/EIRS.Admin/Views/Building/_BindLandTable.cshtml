@@ -1,0 +1,35 @@
+﻿@model IList<EIRS.BOL.usp_GetBuildingLandList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.LandRIN</td>
+            <td>@item.C_OF_O_Ref</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a onclick="javascript:jsfn_ShowDetails(@item.BLID)">
+                                View Details
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_RemoveLink(@item.BLID,@item.BuildingID)">
+                                Remove Land
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}
+
+

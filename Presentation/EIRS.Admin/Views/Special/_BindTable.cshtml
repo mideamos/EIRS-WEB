@@ -1,0 +1,72 @@
+﻿@model IList<EIRS.BOL.usp_GetSpecialList_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.SpecialRIN</td>
+            <td>@item.SpecialTaxPayerName</td>
+            <td>@item.TIN</td>
+            <td>@item.TaxOfficeName</td>
+            <td>@item.TaxPayerTypeName</td>
+            <td>@item.ContactName</td>
+            <td>@item.ContactEmail</td>
+            <td>@item.ContactNumber</td>
+            <td>@item.Description</td>
+            <td>@item.NotificationMethodName</td>
+            <td>@item.ActiveText</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="@Url.Action("Details","Special", new { id = item.SpecialID, name=item.SpecialTaxPayerName.ToSeoUrl()})">
+                                View Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Edit", "Special", new { id = item.SpecialID, name=item.SpecialTaxPayerName.ToSeoUrl() })">
+                                Edit Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AddressInformationList", "Special", new { id = item.SpecialID, name=item.SpecialTaxPayerName.ToSeoUrl() })">
+                                Address Information
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AssetList", "Special", new { id = item.SpecialID, name=item.SpecialRIN.ToSeoUrl() })">
+                                Asset Information
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ShowProfileInformation(@item.SpecialID,'@item.SpecialRIN','@item.SpecialTaxPayerName')">
+                                Profile Information
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ShowAssessmentRuleInformation(@item.SpecialID,'@item.SpecialRIN','@item.SpecialTaxPayerName')">
+                                Assessment Rule Information
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AssessmentList", "Special", new { id = item.SpecialID, name=item.SpecialRIN.ToSeoUrl() })">
+                                Assessment Information
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_ChangeStatus(@item.SpecialID)">
+                                Mark @(item.Active.GetValueOrDefault() ? "Inactive" : "Active")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}

@@ -1,0 +1,102 @@
+﻿@model IList<EIRS.BOL.usp_GetVehicleList_Result>
+
+@{
+    ViewBag.Title = "Vehicle List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-automobile"></i>
+                Vehicles
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("Add","Vehicle")" class="btn btn-default">
+                Add Vehicle
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data-id="dvVehicleList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Vehicle List </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Add","Vehicle")" class="btn btn-primary">Add Vehicle </a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbVehicle" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Vehicle RIN" id="txtVehicleRIN"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Vehicle Reg Number" id="txtVehicleRegNumber"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter VIN" id="txtVIN"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Vehicle Type" id="txtVehicleTypeName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Vehicle Sub Type" id="txtVehicleSubTypeName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter LGA" id="txtLGAName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Vehicle Purpose" id="txtPurposeName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Vehicle Function" id="txtVehicleFunctionName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Vehicle Ownership" id="txtVehicleOwnershipName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Vehicle Description" id="txtVehicleDescription"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Status" id="txtStatus"/>
+                                        </th>
+                                        <th style="width:10%"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Vehicle RIN</th>
+                                        <th>Vehicle Reg Number</th>
+                                        <th>VIN</th>
+                                        <th>Vehicle Type</th>
+                                        <th>Vehicle Sub Type</th>
+                                        <th>LGA</th>
+                                        <th>Vehicle Purpose</th>
+                                        <th>Vehicle Function</th>
+                                        <th>Vehicle Ownership</th>
+                                        <th>Vehicle Description</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script Completion="text/javascript" src="~/Scripts/jsVehicleList.js"></script>
+}
+

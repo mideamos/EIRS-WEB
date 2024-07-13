@@ -1,0 +1,173 @@
+﻿@model EIRS.Models.CompanyViewModel
+
+@{
+    ViewBag.Title = "Add Company";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-archive"></i>
+                Company
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvAddCompany">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Add Company</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Add", "Company", FormMethod.Post, htmlAttributes: new { @class = "smart-form" }))
+                            {
+                                <header>
+                                    Company Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.CompanyName, htmlAttributes: new { @tabindex = "1", @placeholder = "Enter Company name" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter company name
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.CompanyName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TIN, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.TIN, htmlAttributes: new { @tabindex = "7", @placeholder = "enter JTB TIN number of company" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                enter JTB TIN number of company
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TIN, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.MobileNumber1, htmlAttributes: new { @class = "label required" })
+                                        <div class="input-group">
+                                            <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                                            <label class="input">
+                                                <i class="icon-append fa fa-question-circle"></i>
+                                                @Html.TextBoxFor(model => model.MobileNumber1, htmlAttributes: new { @tabindex = "8", @placeholder = "Enter mobile phone number of Company" })
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-warning txt-color-teal"></i>
+                                                    Enter mobile phone number of Company
+                                                </b>
+                                            </label>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.MobileNumber1, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.MobileNumber2, htmlAttributes: new { @class = "label" })
+                                        <div class="input-group">
+                                            <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                                            <label class="input">
+                                                <i class="icon-append fa fa-question-circle"></i>
+                                                @Html.TextBoxFor(model => model.MobileNumber2, htmlAttributes: new { @tabindex = "9", @placeholder = "Enter alternative mobile phone number of Company" })
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-warning txt-color-teal"></i>
+                                                    Enter alternative mobile phone number of Company
+                                                </b>
+                                            </label>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.MobileNumber2, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.EmailAddress1, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.EmailAddress1, htmlAttributes: new { @tabindex = "10", @placeholder = "Enter Company email address" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Company email address
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.EmailAddress1, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.EmailAddress2, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.EmailAddress2, htmlAttributes: new { @tabindex = "11", @placeholder = "Enter Company alternative email address" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Company alternative email address
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.EmailAddress2, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxOfficeID, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TaxOfficeID, (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", htmlAttributes: new { @tabindex = "13", @id = "cboTaxOffice", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxOfficeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "label" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", htmlAttributes: new { @tabindex = "16", @class = "select2", @id = "cboTaxPayerTypeID", @width = "100%", @disabled = "true" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.TaxPayerTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.EconomicActivitiesID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.EconomicActivitiesID, (SelectList)ViewBag.EconomicActivitiesList, "Select Economic Activities", htmlAttributes: new { @tabindex = "17", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.EconomicActivitiesID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.NotificationMethodID, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.NotificationMethodID, (SelectList)ViewBag.NotificationMethodList, "Select Notification Method", htmlAttributes: new { @tabindex = "18", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.NotificationMethodID, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" class="btn btn-primary" tabindex="18">
+                                        Submit
+                                    </button>
+                                    <a href="@Url.Action("List","Company")" class="btn btn-default" tabindex="19">
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsCompanyDetails.js"></script>
+}

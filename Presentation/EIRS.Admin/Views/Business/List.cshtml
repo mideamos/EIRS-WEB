@@ -1,0 +1,102 @@
+﻿@model IList<EIRS.BOL.usp_GetBusinessList_Result>
+
+@{
+    ViewBag.Title = "Business List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-briefcase"></i>
+                Businesses
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("Add","Business")" class="btn btn-default">
+                Add Business
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data-id="dvBusinessList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Business List </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Add","Business")" class="btn btn-primary">Add Business </a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbBusiness" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business RIN" id="txtBusinessRIN"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business Name" id="txtBusinessName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business Type" id="txtBusinessType"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business LGA" id="txtLGAName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business Category" id="txtBusinessCategoryName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business Sector" id="txtBusinessSectorName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business Sub Sector" id="txtBusinessSubSectorName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business Structure" id="txtBusinessStructureName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Business Operations" id="txtBusinessOperationName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Premises Size" id="txtSizeName"/>
+                                        </th>
+                                        <th class="hasinput" style="width:10%">
+                                            <input type="text" class="form-control" placeholder="Filter Status" id="txtStatus"/>
+                                        </th>
+                                        <th style="width:10%"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Business RIN</th>
+                                        <th>Business Name</th>
+                                        <th>Business Type</th>
+                                        <th>LGA</th>
+                                        <th>Business Category</th>
+                                        <th>Business Sector</th>
+                                        <th>Business Sub Sector</th>
+                                        <th>Business Structure</th>
+                                        <th>Business Operations</th>
+                                        <th>Premises Size</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Footer {
+    <script Completion="text/javascript" src="~/Scripts/jsBusinessList.js"></script>
+}
+

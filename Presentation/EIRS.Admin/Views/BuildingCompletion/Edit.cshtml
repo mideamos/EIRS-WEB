@@ -1,0 +1,87 @@
+﻿@model EIRS.Models.BuildingCompletionViewModel
+
+@{
+    ViewBag.Title = "Edit Building Completion";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-building"></i>
+                Building Completion
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvEditBuildingCompletion">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Edit Building Completion</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("Edit", "BuildingCompletion", FormMethod.Post, htmlAttributes: new { @class = "smart-form", @id="frmBuildingCompletion" }))
+                            {
+                                <header>
+                                    Building Completion Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(model => model.BuildingCompletionID, htmlAttributes: new { @value = Model.BuildingCompletionID })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        @Html.LabelFor(model => model.BuildingCompletionName, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.BuildingCompletionName, htmlAttributes: new { @tabindex = "1", @placeholder = "Enter level of building completion" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter level of building completion.
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.BuildingCompletionName, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "label" })
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @tabindex = "2" })
+                                            <i></i> Active
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <footer>
+                                    <a id="btnSubmit" class="btn btn-primary">
+                                        Submit
+                                    </a>
+                                    <a href="@Url.Action("List","BuildingCompletion")" class="btn btn-default" >
+                                        Back
+                                    </a>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Footer {
+    <script Completion="text/javascript" src="~/Scripts/jsBuildingCompletionDetails.js"></script>
+    }

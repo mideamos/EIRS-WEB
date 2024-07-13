@@ -1,0 +1,128 @@
+@model EIRS.Admin.Models.MDAServiceItemViewModel
+
+@{
+    ViewBag.Title = "MDA Service Item Details";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                MDA Service Item
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvMDAServiceItemDetails">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
+                        <h2>MDA Service Item </h2>
+                    </header>
+                    <div class="content">
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-horizontal">
+                                <fieldset>
+                                    <legend>MDA Service Item Details</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">MDA Service Item Reference No</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.MDAServiceRefNo
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Revenue Stream</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.RevenueStreamName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Revenue Sub Stream</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.RevenueSubStreamName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Item Category</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.AssessmentItemCategoryName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Item Sub Category</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.AssessmentItemSubCategoryName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Revenue Agency</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.AgencyName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">MDA Service Item Name</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.MDAServiceItemName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Computation</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ComputationName
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Service Base Amount</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ServiceBaseAmount.ToString("N2")
+                                        </div>
+                                    </div>
+                                    @if (Model.ComputationID == 2)
+                                    {
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Percentage (%)</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @Model.Percentage.GetValueOrDefault().ToString("N2")
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Service Amount</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ServiceAmount.GetValueOrDefault().ToString("N2")
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label control-label-static">Status</label>
+                                        <div class="col-md-10 form-control-static">
+                                            @Model.ActiveText
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-default" href="@Url.Action("List","MDAServiceItem")">
+                                                Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

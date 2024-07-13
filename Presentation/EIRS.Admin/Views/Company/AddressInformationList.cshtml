@@ -1,0 +1,84 @@
+﻿@model IList<EIRS.BOL.usp_GetCompanyAddressInformation_Result>
+
+@{
+    ViewBag.Title = "Address Information List";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-th-list"></i>
+                Address Information for @ViewBag.TaxPayerName
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+            <a href="@Url.Action("List","Company")" class="btn btn-default margin-right-5">
+                Back
+            </a>
+            <a href="@Url.Action("AddAddressInformation","Company", new { id= ViewBag.TaxPayerID,name=ViewBag.TaxPayerRIN })" class="btn btn-primary">
+                Add Address Information
+            </a>
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-green" data- id="dvIAddressInformationList">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Address Information </h2>
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("AddAddressInformation","Company", new { id= ViewBag.TaxPayerID,name=ViewBag.TaxPayerRIN })" class="btn btn-primary">Add Address Information </a>
+                        </div>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="tbAddressInformation" class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Address Type" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Building RIN" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter Building Name" />
+                                        </th>
+                                        <th class="hasinput">
+                                            <input type="text" class="form-control" placeholder="Filter LGA" />
+                                        </th>
+                                        <th style="width:25%"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-class="expand">Address Type</th>
+                                        <th>Building RIN</th>
+                                        <th>Building Name</th>
+                                        <th>LGA</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                    @{Html.RenderPartial("_BindAddressTable", Model);}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@{
+    Html.RenderPartial("_BuildingDetailPopup");
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsCompanyAddressList.js"></script>
+}
+

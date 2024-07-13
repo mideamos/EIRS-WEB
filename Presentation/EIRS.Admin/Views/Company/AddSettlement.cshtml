@@ -1,0 +1,275 @@
+﻿@model EIRS.Models.SettlementViewModel
+@using EIRS.BOL
+@using EIRS.Common
+
+@{
+    ViewBag.Title = "Add New Settlement";
+
+    usp_GetAssessmentList_Result mObjAssessmentData = (usp_GetAssessmentList_Result)ViewBag.AssessmentData;
+    usp_GetServiceBillList_Result mObjServiceBillData = (usp_GetServiceBillList_Result)ViewBag.ServiceBillData;
+    IList<Settlement_ASBItem> lstSettlementItems = (IList<Settlement_ASBItem>)ViewBag.SettlementItemList;
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-th-list"></i>
+                Settlement for @Model.TaxPayerName
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget jarviswidget-color-green" id="dvAddSettlement">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Add New Settlement</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("AddSettlement", "Company", FormMethod.Post, htmlAttributes: new { @class = "smart-form" }))
+                            {
+                                <header>
+                                    Settlement Details
+                                </header>
+
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationBootstrap()
+                                @Html.HiddenFor(m => m.AssessmentID, new { @id = "hdnAssessmentID", @value = Model.AssessmentID })
+                                @Html.HiddenFor(m => m.ServiceBillID, new { @id = "hdnServiceBillID", @value = Model.ServiceBillID })
+                                @Html.HiddenFor(m => m.TaxPayerID, new { @value = Model.TaxPayerID, @id = "hdnTaxPayerID" })
+                                @Html.HiddenFor(m => m.TaxPayerName, new { @value = Model.TaxPayerName })
+                                @Html.HiddenFor(m => m.TaxPayerRIN, new { @value = Model.TaxPayerRIN })
+
+                                if (ViewBag.Message != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.Message
+                                    </div>
+                                }
+
+                                <fieldset>
+                                    <section>
+                                        <label class="label required">Settlement Date</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextBoxFor(model => model.SettlementDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @tabindex = "1", @class = "form-control datepicker", @data_dateformat = "dd/mm/yy", @placeholder = "Enter Settlement Date", @id = "txtSettlementDate" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Settlement Date
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.SettlementDate, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.SettlementMethod, htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownListFor(model => model.SettlementMethod, (SelectList)ViewBag.SettlementMethodList, "Select Settlement Method", htmlAttributes: new { @tabindex = "2", @class = "select2", @width = "100%" })
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.SettlementMethod, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section>
+                                        @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "label" })
+                                        <label class="textarea">
+                                            <i class="icon-append fa fa-question-circle"></i>
+                                            @Html.TextAreaFor(model => model.Notes, htmlAttributes: new { @tabindex = "3", @id = "txtSettlementNotes", @placeholder = "Enter Settlement Notes" })
+                                            <b class="tooltip tooltip-top-right">
+                                                <i class="fa fa-warning txt-color-teal"></i>
+                                                Enter Settlement Notes
+                                            </b>
+                                        </label>
+                                        @Html.ValidationMessageFor(model => model.Notes, "", htmlAttributes: new { @class = "help-block" })
+                                    </section>
+                                    <section id="scSettlementItemList">
+                                        @{ Html.RenderPartial("_BindSettlementItem", lstSettlementItems);}
+                                    </section>
+                                </fieldset>
+                                <footer id="dvFooter">
+                                    <button type="submit" class="btn btn-primary">
+                                        Submit
+                                    </button>
+                                    <a href="@Url.Action("SettlementList", "Company", new { id = Model.TaxPayerID, name = Model.TaxPayerRIN })" class="btn btn-default">
+                                        Back
+                                    </a>
+                                </footer>
+                                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+            @if (mObjAssessmentData != null)
+            {
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="jarviswidget jarviswidget-color-green" id="dvAssessmentDetails">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
+                            <h2>Assessment</h2>
+                        </header>
+                        <div class="content">
+                            <div class="jarviswidget-editbox">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="widget-body">
+                                <div class="form-horizontal">
+                                    <fieldset>
+                                        <legend>Assessment Details</legend>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Assessment Ref No</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjAssessmentData.AssessmentRefNo
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Assessment Date</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @CommUtil.GetFormatedDate(mObjAssessmentData.AssessmentDate)
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Tax Payer Type Name</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjAssessmentData.TaxPayerTypeName
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Tax Payer Name</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjAssessmentData.TaxPayerName
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Assessment Amount</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjAssessmentData.AssessmentAmount.GetValueOrDefault().ToString("N2")
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Settlement Due Date</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @CommUtil.GetFormatedDate(mObjAssessmentData.SettlementDueDate)
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Settlement Status</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjAssessmentData.SettlementStatusName
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Settlement Date</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @CommUtil.GetFormatedDate(mObjAssessmentData.SettlementDate)
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Assessment Notes</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjAssessmentData.AssessmentNotes
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            }
+            @if (mObjServiceBillData != null)
+            {
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6 @(mObjServiceBillData != null ? "" : "hide")">
+                    <div class="jarviswidget jarviswidget-color-green" id="dvServiceBillDetails">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-eye"></i> </span>
+                            <h2>Service Bill</h2>
+                        </header>
+                        <div class="content">
+                            <div class="jarviswidget-editbox">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="widget-body">
+                                <div class="form-horizontal">
+                                    <fieldset>
+                                        <legend>Service Bill Details</legend>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Service Bill Ref No</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjServiceBillData.ServiceBillRefNo
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Service Bill Date</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @CommUtil.GetFormatedDate(mObjServiceBillData.ServiceBillDate)
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Tax Payer Type Name</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjServiceBillData.TaxPayerTypeName
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Tax Payer Name</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjServiceBillData.TaxPayerName
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Service Bill Amount</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjServiceBillData.ServiceBillAmount.GetValueOrDefault().ToString("N2")
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Settlement Due Date</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @CommUtil.GetFormatedDate(mObjServiceBillData.SettlementDueDate)
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Settlement Status</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @mObjServiceBillData.SettlementStatusName
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label control-label-static">Settlement Date</label>
+                                            <div class="col-md-10 form-control-static">
+                                                @CommUtil.GetFormatedDate(mObjServiceBillData.SettlementDate)
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+</div>
+
+<div id="dvEditSettlementAmount" title="Edit Settlement Amount">
+    <input type="hidden" id="hdnSettlementItemRowID" value="0" />
+    <input type="hidden" id="hdnUnSettledAmount" value="0" />
+    <form class="smart-form" id="frmSettlementItem">
+        <section>
+            <label class="label required">Settlement Amount</label>
+            <label class="input">
+                <input class="form-control" placeholder="Enter Settlement Amount" type="text" id="txtSettlementAmount" name="SettlementAmount">
+            </label>
+        </section>
+    </form>
+</div>
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsSettlementDetails.js"></script>
+}

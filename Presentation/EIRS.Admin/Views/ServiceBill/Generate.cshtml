@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Generate Service Bill";
+}
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-lg fa-fw fa-life-saver"></i>
+                Service Bill
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 text-right">
+        </div>
+    </div>
+    <section id="widget-grid">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6" id="artGenerateServiceBill">
+                <div class="jarviswidget jarviswidget-color-green" id="dvGenerateServiceBill">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                        <h2>Generate Service Bill</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <form class="smart-form" id="frmGenerateServiceBill">
+                                <input type="hidden" id="hdnTaxPayerId" value="" />
+                                <input type="hidden" id="hdnTaxPayerRIN" value="" />
+                                <header>
+                                    Service Bill Details
+                                    <button id="btnGenerate" class="btn btn-primary pull-right">
+                                        Generate Service Bill
+                                    </button>
+                                    <button id="btnBack" class="btn btn-default pull-right margin-right-5">
+                                        Back
+                                    </button>
+                                </header>
+                                <fieldset id="fsStep1">
+                                    <section>
+                                        @Html.Label("Tax Payer Type", htmlAttributes: new { @class = "label required" })
+                                        <label class="input">
+                                            @Html.DropDownList("TaxPayerType", (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", htmlAttributes: new { @tabindex = "1", @id = "cboTaxPayerType", @class = "select2", @width = "100%" })
+                                        </label>
+                                    </section>
+                                </fieldset>
+                                <fieldset id="fsStep2"></fieldset>
+                                <footer id="dvFooter">
+                                    <a id="btnNext" class="btn btn-primary">Next</a>
+                                    <a id="btnMainBack" href="@Url.Action("List", "ServiceBill")" class="btn btn-default">
+                                        Cancel
+                                    </a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsGenerateServiceBill.js"></script>
+
+    }

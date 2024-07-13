@@ -1,0 +1,36 @@
+﻿@model IList<EIRS.BOL.usp_GetIndividualAddressInformation_Result>
+@using EIRS.Common
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.AddressTypeName</td>
+            <td>@item.BuildingRIN</td>
+            <td>@item.BuildingName</td>
+            <td>@item.LGAName</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a onclick="javascript:jsfn_ShowDetails(@item.BuildingID)">
+                                View Building Details
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="javascript:jsfn_RemoveAddress(@item.IAIID, @item.IndividualID)">
+                                Remove Address Information
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+}
+

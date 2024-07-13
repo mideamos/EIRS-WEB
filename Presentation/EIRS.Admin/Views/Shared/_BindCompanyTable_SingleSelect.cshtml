@@ -1,0 +1,86 @@
+﻿@model IList<EIRS.BOL.usp_GetCompanyList_Result>
+@using EIRS.Common
+
+<table id="tbTaxPayer" class="table table-striped table-bordered" width="100%">
+    <thead>
+        <tr>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Company RIN" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Company Name" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter TIN" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Mobile Number 1" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Mobile Number 2" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Email Address 1" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Email Address 2" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Tax Office" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Tax Payer Type" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Economic Activity" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Status" />
+            </th>
+            <th style="width:10%"></th>
+        </tr>
+        <tr>
+            <th data-class="expand">Company RIN</th>
+            <th>Company Name</th>
+            <th>TIN</th>
+            <th>Mobile Number 1</th>
+            <th>Mobile Number 2</th>
+            <th>Email Address 1</th>
+            <th>Email address 2</th>
+            <th>Tax Office</th>
+            <th>Tax Payer Type</th>
+            <th>Economic Activity</th>
+            <th>Tax Payer Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+       @if (Model != null && Model.Count > 0)
+       {
+           foreach (var item in Model)
+           {
+            <tr>
+                <td>@item.CompanyRIN</td>
+                <td>@item.CompanyName</td>
+                <td>@item.TIN</td>
+                <td>@item.MobileNumber1</td>
+                <td>@item.MobileNumber2</td>
+                <td>@item.EmailAddress1</td>
+                <td>@item.EmailAddress2</td>
+                <td>@item.TaxOfficeName</td>
+                <td>@item.TaxPayerTypeName</td>
+                <td>@item.EconomicActivitiesName</td>
+                <td>@item.ActiveText</td>
+                <td>
+                    <label class="radio">
+                        @Html.RadioButton("rbTaxPayer", item.CompanyID, new { @onChange = "jsfn_SelectSingleTaxPayer(this)", @data_taxpayerid = item.CompanyID, @data_taxpayerrin = item.CompanyRIN, @title = "Tick To Select" })
+                        <i></i>
+                    </label>
+                </td>
+            </tr>
+           }
+       }
+
+    </tbody>
+</table>
+

@@ -1,0 +1,77 @@
+﻿@model IList<EIRS.BOL.usp_GetServiceBillList_Result>
+@using EIRS.Common
+
+<table id="tbServiceBill" class="table table-striped table-bordered" width="100%">
+    <thead>
+        <tr>
+            <th class="hasinput">
+                <input type="text" class="form-control" placeholder="Filter Service Bill Ref No" />
+            </th>
+            <th class="hasinput">
+                <input type="text" class="form-control" placeholder="Filter Service Bill Date" />
+            </th>
+            <th class="hasinput">
+                <input type="text" class="form-control" placeholder="Filter Tax Payer Type" />
+            </th>
+            <th class="hasinput">
+                <input type="text" class="form-control" placeholder="Filter Tax Payer RIN" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Service Bill Amount" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Settlement Due Date" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Settlement Status" />
+            </th>
+            <th class="hasinput" style="width:10%">
+                <input type="text" class="form-control" placeholder="Filter Settlement Date" />
+            </th>
+            <th class="hasinput">
+                <input type="text" class="form-control" placeholder="Filter Status" />
+            </th>
+            <th style="width:10%"></th>
+        </tr>
+        <tr>
+            <th data-class="expand">Service Bill Ref No</th>
+            <th>Service Bill Date</th>
+            <th>Tax Payer Type</th>
+            <th>Tax Payer RIN</th>
+            <th>Service Bill Amount</th>
+            <th>Settlement Due Date</th>
+            <th>Settlement Status</th>
+            <th>Settlement Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ServiceBillRefNo</td>
+                    <td>@CommUtil.GetFormatedDate(item.ServiceBillDate)</td>
+                    <td>@item.TaxPayerTypeName</td>
+                    <td>@item.TaxPayerRIN</td>
+                    <td>@item.ServiceBillAmount.GetValueOrDefault().ToString("N2")</td>
+                    <td>@CommUtil.GetFormatedDate(item.SettlementDueDate)</td>
+                    <td>@item.SettlementStatusName</td>
+                    <td>@CommUtil.GetFormatedDate(item.SettlementDate)</td>
+                    <td>@item.ActiveText</td>
+                    <td>
+                        @if (item.SettlementStatusID != 4)
+                        {
+                            <label class="radio">
+                                @Html.RadioButton("rbASB", item.ServiceBillID, new { @onChange = "jsfn_SelectSingleASB(this)", @data_asbid = item.ServiceBillID, @data_asbref = item.ServiceBillRefNo, @title = "Tick To Select" })
+                                <i></i>
+                            </label>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

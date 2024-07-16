@@ -1544,8 +1544,11 @@ namespace EIRS.Web.Controllers
 
                         if (mObjFuncResponse.Success)
                         {
+
+                            var used = lstTCCDetail.Where(o => o.RevenueType != null).ToList();
+                            var fused = used.Where(o => o.RevenueType.ToLower() == "paye").ToList();
                             int appId = 0;
-                            if (lstTCCDetail.Any(o => o.RevenueType.Contains("DA")))
+                            if (used.Count() > fused.Count())
                                 appId = 1;
                             else
                                 appId = 2;

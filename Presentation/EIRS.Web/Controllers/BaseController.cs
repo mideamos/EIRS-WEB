@@ -2940,7 +2940,7 @@ namespace EIRS.Web.Controllers
                     .Select(pi => (MemberInfo)pi.memberInfo)
                     .ToArray();
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstData, vMemberInfoData, blnShowTotal, strTotalColumns);
+            byte[] ObjExcelData = CommUtil.ToExcel(lstData, AppendExcelName);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", routeData.ToExcelName(AppendExcelName));
         }
 
@@ -2953,7 +2953,7 @@ namespace EIRS.Web.Controllers
                     .Select(pi => (MemberInfo)pi.memberInfo)
                     .ToArray();
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstData, vMemberInfoData);
+            byte[] ObjExcelData = CommUtil.ToExcel(lstData, AppendExcelName);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", routeData.ToExcelName(AppendExcelName));
         }
 

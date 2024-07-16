@@ -415,52 +415,108 @@ namespace EIRS.Repository
                 return mObjFuncResponse;
             }
         }
-
         public FuncResponse<TCC_Request> REP_InsertTCCRequest(TCC_Request pObjRequest)
         {
             using (_db = new EIRSEntities())
             {
-                using (_db = new EIRSEntities())
+                FuncResponse<TCC_Request> mObjFuncResponse = new FuncResponse<TCC_Request>(); // Return Object
+
+                long maxTCCRequestID = _db.TCC_Request.Any() ? _db.TCC_Request.Max(t => t.TCCRequestID) : 0;
+                TCC_Request mObjInsertTCC_Requests; // TCC Details Insert Object
+                mObjInsertTCC_Requests = new TCC_Request
                 {
-                    FuncResponse<TCC_Request> mObjFuncResponse = new FuncResponse<TCC_Request>(); //Return Object
+                    CreatedBy = pObjRequest.CreatedBy,
+                    CreatedDate = pObjRequest.CreatedDate,
+                    RequestDate = pObjRequest.RequestDate,
+                    TaxPayerTypeID = pObjRequest.TaxPayerTypeID,
+                    TaxPayerID = pObjRequest.TaxPayerID,
+                    TaxYear = pObjRequest.TaxYear,
+                    StatusID = pObjRequest.StatusID,
+                    TaxOfficeId = pObjRequest.TaxOfficeId
+                };
 
-                    TCC_Request mObjInsertTCC_Requests; //TCC Details Insert Object
-                    mObjInsertTCC_Requests = new TCC_Request
-                    {
-                        CreatedBy = pObjRequest.CreatedBy,
-                        CreatedDate = pObjRequest.CreatedDate
-                    };
+                maxTCCRequestID += 1;
+                mObjInsertTCC_Requests.TCCRequestID = maxTCCRequestID;
 
-
-                    mObjInsertTCC_Requests.RequestDate = pObjRequest.RequestDate;
-                    mObjInsertTCC_Requests.TaxPayerTypeID = pObjRequest.TaxPayerTypeID;
-                    mObjInsertTCC_Requests.TaxPayerID = pObjRequest.TaxPayerID;
-                    mObjInsertTCC_Requests.TaxYear = pObjRequest.TaxYear;
-                    mObjInsertTCC_Requests.StatusID = pObjRequest.StatusID;
-                    mObjInsertTCC_Requests.TaxOfficeId = pObjRequest.TaxOfficeId;
-
-
-                    _db.TCC_Request.Add(mObjInsertTCC_Requests);
-
+                using (var transaction = _db.Database.BeginTransaction())
+                {
                     try
                     {
+                        // Enable IDENTITY_INSERT for the table
+                        _db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request ON");
+
+                        // Add the new TCC_Request object
+                        _db.TCC_Request.Add(mObjInsertTCC_Requests);
                         _db.SaveChanges();
+
+                        // Disable IDENTITY_INSERT for the table
+                        _db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request OFF");
+
+                        // Commit the transaction
+                        transaction.Commit();
+
                         mObjFuncResponse.Success = true;
                         mObjFuncResponse.Message = "TCC Request Added Successfully";
-
                         mObjFuncResponse.AdditionalData = mObjInsertTCC_Requests;
                     }
                     catch (Exception Ex)
                     {
+                        // Rollback the transaction if an error occurs
+                        transaction.Rollback();
+
                         mObjFuncResponse.Success = false;
                         mObjFuncResponse.Exception = Ex;
                         mObjFuncResponse.Message = "TCC Request Addition Failed";
                     }
-
-                    return mObjFuncResponse;
                 }
+
+                return mObjFuncResponse;
             }
         }
+
+        //public FuncResponse<TCC_Request> REP_InsertTCCRequest(TCC_Request pObjRequest)
+        //{
+        //    using (_db = new EIRSEntities())
+        //    {
+        //        FuncResponse<TCC_Request> mObjFuncResponse = new FuncResponse<TCC_Request>(); //Return Object
+        //        long maxTCCRequestID = _db.TCC_Request.Any() ? _db.TCC_Request.Max(t => t.TCCRequestID) : 0;
+        //        TCC_Request mObjInsertTCC_Requests; //TCC Details Insert Object
+        //        mObjInsertTCC_Requests = new TCC_Request
+        //        {
+        //            CreatedBy = pObjRequest.CreatedBy,
+        //            CreatedDate = pObjRequest.CreatedDate
+        //        };
+
+        //        maxTCCRequestID += 1;
+        //        mObjInsertTCC_Requests.TCCRequestID = maxTCCRequestID;
+        //        mObjInsertTCC_Requests.RequestDate = pObjRequest.RequestDate;
+        //        mObjInsertTCC_Requests.TaxPayerTypeID = pObjRequest.TaxPayerTypeID;
+        //        mObjInsertTCC_Requests.TaxPayerID = pObjRequest.TaxPayerID;
+        //        mObjInsertTCC_Requests.TaxYear = pObjRequest.TaxYear;
+        //        mObjInsertTCC_Requests.StatusID = pObjRequest.StatusID;
+        //        mObjInsertTCC_Requests.TaxOfficeId = pObjRequest.TaxOfficeId;
+
+
+        //        _db.TCC_Request.Add(mObjInsertTCC_Requests);
+
+        //        try
+        //        {
+        //            _db.SaveChanges();
+        //            mObjFuncResponse.Success = true;
+        //            mObjFuncResponse.Message = "TCC Request Added Successfully";
+
+        //            mObjFuncResponse.AdditionalData = mObjInsertTCC_Requests;
+        //        }
+        //        catch (Exception Ex)
+        //        {
+        //            mObjFuncResponse.Success = false;
+        //            mObjFuncResponse.Exception = Ex;
+        //            mObjFuncResponse.Message = "TCC Request Addition Failed";
+        //        }
+
+        //        return mObjFuncResponse;
+        //    }
+        //}
 
         public FuncResponse REP_UpdateRequestStatus(int appId, long tccId)
         {

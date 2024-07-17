@@ -2931,7 +2931,7 @@ namespace EIRS.Web.Controllers
             return Json(lstDataSubmissionType, JsonRequestBehavior.AllowGet);
         }
 
-        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, bool blnShowTotal, string[] strTotalColumns = null, string AppendExcelName = "")
+        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, bool blnShowTotal, string[] strTotalColumns = null, string AppendExcelName="")
         {
             var vMemberInfoData = typeof(T)
                     .GetProperties()
@@ -2944,7 +2944,7 @@ namespace EIRS.Web.Controllers
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", routeData.ToExcelName(AppendExcelName));
         }
 
-        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, string AppendExcelName = "")
+        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, string AppendExcelName)
         {
             var vMemberInfoData = typeof(T)
                     .GetProperties()

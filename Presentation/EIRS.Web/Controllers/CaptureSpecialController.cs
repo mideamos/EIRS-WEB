@@ -3294,8 +3294,10 @@ namespace EIRS.Web.Controllers
                     .ToArray();
 
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstSpecialData, vMemberInfoData, false);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SpecialList_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            string method ="SPecialList_";
+
+            byte[] ObjExcelData = CommUtil.ToExcel(lstSpecialData, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
         private IList<vw_Special> SortByColumnWithOrder(string order, string orderDir, IList<vw_Special> data)

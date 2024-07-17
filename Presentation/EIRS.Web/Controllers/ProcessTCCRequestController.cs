@@ -3716,6 +3716,7 @@ namespace EIRS.Web.Controllers
                     gp = tccPath.GeneratedPath;
 
                     gpd = tccPath.GeneratePathForPrint;
+                    tccPath.ApproverTypeId = "0";
                     if (System.IO.File.Exists(gp))
                     {
                         System.IO.File.Delete(gp);

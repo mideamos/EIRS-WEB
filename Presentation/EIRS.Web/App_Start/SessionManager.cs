@@ -11,7 +11,15 @@ namespace EIRS.Web
 {
     public class SessionManager
     {
-        public static int TaxOfficeID
+        public static int DefualtCher
+        {
+            get { return TrynParse.parseInt(HttpContext.Current.Session["DefualtCher"]); }
+            set { HttpContext.Current.Session["DefualtCher"] = value; }
+        }  public static string DefualtRes
+        {
+            get { return TrynParse.parseString(HttpContext.Current.Session["DefualtRes"]); }
+            set { HttpContext.Current.Session["DefualtRes"] = value; }
+        }  public static int TaxOfficeID
         {
             get { return TrynParse.parseInt(HttpContext.Current.Session["TaxOfficeID"]); }
             set { HttpContext.Current.Session["TaxOfficeID"] = value; }
@@ -50,6 +58,11 @@ namespace EIRS.Web
         {
             get { return TrynParse.parseInt(HttpContext.Current.Session["UserTypeID"]); }
             set { HttpContext.Current.Session["UserTypeID"] = value; }
+        }
+               public static long GetAAIID
+        {
+            get { return TrynParse.parseInt(HttpContext.Current.Session["aaiid"]); }
+            set { HttpContext.Current.Session["aaiid"] = value; }
         }
 
         public static int TaxPayerTypeID
@@ -95,6 +108,16 @@ namespace EIRS.Web
         {
             get { return HttpContext.Current.Session["lstBuildingUnit"] != null ? JsonConvert.DeserializeObject<IList<Building_BuildingUnit>>(HttpContext.Current.Session["lstBuildingUnit"].ToString()) : null; }
             set { HttpContext.Current.Session["lstBuildingUnit"] = JsonConvert.SerializeObject(value); ; }
+        }   
+        public static string detHolder
+        {
+            get { return HttpContext.Current.Session["detHolder"] != null ? HttpContext.Current.Session["detHolder"].ToString() : ""; }
+            set { HttpContext.Current.Session["detHolder"] = JsonConvert.SerializeObject(value); ; }
+        }    
+        public static IList<TaxReportModel> LstTaxReportModel
+        {
+            get { return HttpContext.Current.Session["lstTaxReportModel"] != null ? JsonConvert.DeserializeObject<IList<TaxReportModel>>(HttpContext.Current.Session["lstTaxReportModel"].ToString()) : null; }
+            set { HttpContext.Current.Session["lstTaxReportModel"] = JsonConvert.SerializeObject(value); ; }
         }
         public static List<LateChargeResponse> LateChargeResponse
         {
@@ -105,6 +128,13 @@ namespace EIRS.Web
         {
             get { return HttpContext.Current.Session["lstPOS"] != null ? JsonConvert.DeserializeObject<IList<NewPoASettlementViewModel>>(HttpContext.Current.Session["lstPOS"].ToString()) : null; }
             set { HttpContext.Current.Session["lstPOS"] = JsonConvert.SerializeObject(value); ; }
+        }
+
+       
+        public static IList<MAP_Assessment_LateCharge> LstLa
+        {
+            get { return HttpContext.Current.Session["LstLa"] != null ? JsonConvert.DeserializeObject<IList<MAP_Assessment_LateCharge>>(HttpContext.Current.Session["LstLa"].ToString()) : null; }
+            set { HttpContext.Current.Session["LstLa"] = JsonConvert.SerializeObject(value); }
         }
 
         public static IList<Assessment_AssessmentRule> lstAssessmentRule
@@ -562,9 +592,8 @@ namespace EIRS.Web
         [JsonProperty("endMonth")]
         public string EndMonth { get; set; } = null;
         public string ReceiptRef { get; set; }
-        public string ReceiptDate { get; set; }//[NotMapped]
-                                               //public string? FullName => $"{FirstName} {OtherName} {Surname}";
-        public string ReceiptDetail { get; set; }//=> $"{ReceiptRef} -- {ReceiptDate}";
+        public string ReceiptDate { get; set; }
+        public string ReceiptDetail { get; set; }
         //[JsonProperty("id")]
         //public int Id { get; set; } = 0;
         //[JsonProperty("apiId")]
@@ -727,6 +756,7 @@ namespace EIRS.Web
         public decimal ERASTaxPaid { get; set; }
         public decimal ERASAssessed { get; set; }
         public string Tax_receipt { get; set; }
+        public string RevenueType { get; set; }
         public EnumList.Track intTrack { get; set; }
     }
 

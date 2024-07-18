@@ -30,7 +30,7 @@ namespace EIRS.Web.Controllers
             return View();
         }
 
-        
+
         public JsonResult GetAllBills()
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -89,7 +89,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult Unsettled()
         {
             string url = getUrl();
@@ -156,13 +156,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult Settled()
         {
             return View();
         }
 
-        
+
         public JsonResult GetSettled()
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -220,13 +220,13 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult PartialSettled()
         {
             return View();
         }
 
-       
+
         public JsonResult GetPartialSettled()
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();

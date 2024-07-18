@@ -76,6 +76,10 @@ namespace EIRS.BLL
         {
             return _TCCRepository.REP_UpdateRequestStatus(pObjRequest);
         }
+        public FuncResponse BL_UpdateRequestStatus(int appId, long tccId)
+        {
+            return _TCCRepository.REP_UpdateRequestStatus(appId,tccId);
+        }
 
         public IList<usp_GetRequestIncomeStreamList_Result> BL_GetIncomeStreamList(long plngRequestID)
         {

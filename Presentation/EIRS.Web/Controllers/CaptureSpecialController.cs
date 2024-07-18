@@ -41,7 +41,7 @@ namespace EIRS.Web.Controllers
             return View();
         }
 
-        
+
         public ActionResult ListWithExport()
         {
             string url = getUrl();
@@ -50,7 +50,7 @@ namespace EIRS.Web.Controllers
             return View();
         }
 
-        
+
         public ActionResult Search()
         {
             string url = getUrl();
@@ -60,7 +60,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult Search(FormCollection pObjCollection)
         {
             string mStrSpecialTaxPayerName = pObjCollection.Get("txtSpecialTaxPayerName");
@@ -95,7 +95,7 @@ namespace EIRS.Web.Controllers
             UI_FillNotificationMethodDropDown(new Notification_Method() { intStatus = 1, IncludeNotificationMethodIds = pObjSpecialViewModel.NotificationMethodID.ToString() });
         }
 
-        
+
         public ActionResult Add()
         {
             string url = getUrl();
@@ -106,7 +106,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult Add(SpecialViewModel pObjSpecialModel)
         {
@@ -190,7 +190,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult Edit(int? id, string name)
         {
             string url = getUrl();
@@ -239,7 +239,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost()]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult Edit(SpecialViewModel pObjSpecialModel)
         {
@@ -295,7 +295,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult Details(int? id, string name)
         {
             string url = getUrl();
@@ -349,7 +349,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult SearchBuilding(int? id, string name)
         {
             string url = getUrl();
@@ -415,7 +415,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindBuildingTable_SingleSelect", lstBuilding.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchBusiness(int? id, string name)
         {
             string url = getUrl();
@@ -546,7 +546,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindLandTable_SingleSelect", lstLand.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchVehicle(int? id, string name)
         {
             string url = getUrl();
@@ -636,7 +636,7 @@ namespace EIRS.Web.Controllers
             UI_FillSizeDropDown(new Size() { intStatus = 1, IncludeSizeIds = pObjBusinessViewModel.SizeID.ToString() });
         }
 
-        
+
         public ActionResult AddBusiness(int? id, string name)
         {
             string url = getUrl();
@@ -682,7 +682,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddBusiness(TPBusinessViewModel pObjBusinessModel)
         {
@@ -830,7 +830,7 @@ namespace EIRS.Web.Controllers
             UI_FillLandStreetConditionDropDown(new Land_StreetCondition() { intStatus = 1, IncludeLandStreetConditionIds = pObjLandViewModel.LandStreetConditionID.ToString() });
         }
 
-        
+
         public ActionResult AddLand(int? id, string name)
         {
             string url = getUrl();
@@ -876,7 +876,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddLand(TPLandViewModel pObjLandModel)
         {
@@ -1026,7 +1026,7 @@ namespace EIRS.Web.Controllers
             UI_FillVehicleOwnershipDropDown(new Vehicle_Ownership() { intStatus = 1, IncludeVehicleOwnershipIds = pObjVehicleViewModel.VehicleOwnershipID.ToString() });
         }
 
-        
+
         public ActionResult AddVehicle(int? id, string name)
         {
             string url = getUrl();
@@ -1072,7 +1072,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddVehicle(TPVehicleViewModel pObjVehicleModel)
         {
@@ -1161,10 +1161,10 @@ namespace EIRS.Web.Controllers
                             //        {
                             //            UtilityController.BL_AssetProfileLinked(mObjEmailDetails);
                             //        }
-                               // }
-                                mObjScope.Complete();
-                                FlashMessage.Info("Vehicle Created Successfully and Linked to Tax Payer");
-                                return RedirectToAction("Details", "CaptureSpecial", new { id = pObjVehicleModel.TaxPayerID, name = pObjVehicleModel.TaxPayerRIN });
+                            // }
+                            mObjScope.Complete();
+                            FlashMessage.Info("Vehicle Created Successfully and Linked to Tax Payer");
+                            return RedirectToAction("Details", "CaptureSpecial", new { id = pObjVehicleModel.TaxPayerID, name = pObjVehicleModel.TaxPayerRIN });
                             //}
                             //else
                             //{
@@ -1222,7 +1222,7 @@ namespace EIRS.Web.Controllers
             ViewBag.BuildingUnitList = SessionManager.LstBuildingUnit;
         }
 
-        
+
         public ActionResult AddBuilding(int? id, string name)
         {
             string url = getUrl();
@@ -1270,7 +1270,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddBuilding(TPBuildingViewModel pObjBuildingModel)
         {
@@ -1459,7 +1459,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult GenerateAssessment(int? id, string name)
         {
             string url = getUrl();
@@ -1505,7 +1505,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult GenerateAssessment(GenerateAssessmentViewModel pObjGenerateAssessmentModel)
         {
@@ -1522,7 +1522,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult AddAssessment(int? id, string name, string aruleIds)
         {
             string url = getUrl();
@@ -1639,7 +1639,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddAssessment(AssessmentViewModel pObjAssessmentModel)
         {
@@ -1829,7 +1829,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult EditAssessment(int? id, string name, int? aid)
         {
             string url = getUrl();
@@ -1936,7 +1936,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult EditAssessment(AssessmentViewModel pObjAssessmentModel)
         {
@@ -2171,7 +2171,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult GenerateServiceBill(int? id, string name)
         {
             string url = getUrl();
@@ -2218,7 +2218,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult GenerateServiceBill(GenerateServiceBillViewModel pObjGenerateServiceBillModel)
         {
@@ -2235,7 +2235,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult AddServiceBill(int? id, string name, string mdsIds = null)
         {
             string url = getUrl();
@@ -2343,7 +2343,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddServiceBill(ServiceBillViewModel pObjServiceBillModel)
         {
@@ -2511,7 +2511,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult EditServiceBill(int? id, string name, int? sbid)
         {
             string url = getUrl();
@@ -2615,7 +2615,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult EditServiceBill(ServiceBillViewModel pObjServiceBillModel)
         {
@@ -2782,7 +2782,7 @@ namespace EIRS.Web.Controllers
                                     IList<usp_GetServiceBill_MDAServiceList_Result> lstMAPServiceBillServices = mObjBLServiceBill.BL_GetMDAServiceList(mObjServiceBillData.ServiceBillID.GetValueOrDefault());
 
                                     string MDAServicesNames = string.Join(",", lstMAPServiceBillServices.Select(t => t.MDAServiceName).ToArray());
-                                   
+
                                     if (mObjSpecialData != null && mObjServiceBillData != null)
                                     {
                                         EmailDetails mObjEmailDetails = new EmailDetails()
@@ -2840,7 +2840,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult BillDetail(int? id, string name, int? billid, string billrefno)
         {
             string url = getUrl();
@@ -2942,7 +2942,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult GenerateBill(int? id, string name, int? billid, string billrefno)
         {
             string url = getUrl();
@@ -3138,7 +3138,7 @@ namespace EIRS.Web.Controllers
                                 System.IO.File.Delete(strExportFilePath);
                             }
 
-                           // //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
+                            // //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
 
                             //Send email to assessment@eras.eirs.gov.ng
                             string strSubject = $"Service Bill Generated : {mObjServiceBillData.ServiceBillRefNo}";
@@ -3172,7 +3172,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public JsonResult GetData()
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -3226,7 +3226,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public JsonResult LoadData()
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -3280,7 +3280,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult ExportData()
         {
             IList<usp_SearchSpecialForRDMLoad_Result> lstSpecialData = new BLSpecial().BL_SearchSpecialDetails(new Special() { });
@@ -3294,8 +3294,10 @@ namespace EIRS.Web.Controllers
                     .ToArray();
 
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstSpecialData, vMemberInfoData, false);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SpecialList_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            string method ="SPecialList_";
+
+            byte[] ObjExcelData = CommUtil.ToExcel(lstSpecialData, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
         private IList<vw_Special> SortByColumnWithOrder(string order, string orderDir, IList<vw_Special> data)
@@ -3341,7 +3343,7 @@ namespace EIRS.Web.Controllers
 
 
         //Getting Tax Payer Data through json
-        
+
         public JsonResult GetTaxPayerAsset(int TaxPayerID)
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -3404,7 +3406,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public JsonResult GetAssessmentRuleInformation(int TaxPayerID)
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -3462,7 +3464,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public JsonResult GetTaxPayerBill(int TaxPayerID)
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -3521,7 +3523,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public JsonResult GetMDAServiceInformation(int TaxPayerID)
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -3579,7 +3581,7 @@ namespace EIRS.Web.Controllers
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public JsonResult GetTaxPayerPayment(int TaxPayerID)
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();

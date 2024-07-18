@@ -16,7 +16,7 @@ namespace EIRS.Web.Controllers
     [SessionTimeout]
     public class NotifyController : BaseController
     {
-        
+
         public ActionResult List()
         {
             return View();
@@ -117,7 +117,7 @@ namespace EIRS.Web.Controllers
             return lst;
         }
 
-        
+
         public ActionResult NotificationCapture()
         {
             UI_FillTaxPayerTypeDropDown();
@@ -127,7 +127,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult NotificationCapture(NotificationViewModel pObjNotifyModel)
         {
             if (!ModelState.IsValid)
@@ -139,7 +139,7 @@ namespace EIRS.Web.Controllers
             }
             else
             {
-                bool SuccessCheck= false;
+                bool SuccessCheck = false;
                 foreach (var item in pObjNotifyModel.NotificationMethodId)
                 {
                     Notification mObjNotification = new Notification()
@@ -162,7 +162,7 @@ namespace EIRS.Web.Controllers
                         {
                             //FlashMessage.Info(mObjResponse.Message);
                             SuccessCheck = true;
-                           
+
                         }
                         else
                         {

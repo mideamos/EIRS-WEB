@@ -1,4 +1,5 @@
-﻿using EIRS.BLL;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using EIRS.BLL;
 using EIRS.BOL;
 using EIRS.Common;
 using EIRS.Models;
@@ -119,7 +120,7 @@ namespace EIRS.Web.Controllers
             }
 
         }
-        public void UI_FillTaxOfficeDropDownForStatic(Tax_Offices pObjTaxOffice = null, bool pblnAddAll = false,int userTaxOffice=0,int loginTaxOffice=0)
+        public void UI_FillTaxOfficeDropDownForStatic(Tax_Offices pObjTaxOffice = null, bool pblnAddAll = false, int userTaxOffice = 0, int loginTaxOffice = 0)
         {
             if (pObjTaxOffice == null)
                 pObjTaxOffice = new Tax_Offices();
@@ -593,13 +594,24 @@ namespace EIRS.Web.Controllers
         public void UI_FillYearDropDown()
         {
             IList<DropDownListResult> lstYear = new List<DropDownListResult>();
-            int mIntCurrentYear = 2017;//CommUtil.GetCurrentDateTime().AddYears(-1).Year;
+            int mIntCurrentYear = 2019;//CommUtil.GetCurrentDateTime().AddYears(-1).Year;
             for (int i = mIntCurrentYear; i <= DateTime.Now.AddYears(1).Year; i++)
             {
                 lstYear.Add(new DropDownListResult() { id = i, text = i.ToString() });
             }
 
             ViewBag.YearList = new SelectList(lstYear, "id", "text");
+
+        }
+        public void UI_FillTCCStatusDropDown()
+        {
+            IList<DropDownListResult> lstYear = new List<DropDownListResult>()
+        {
+            new DropDownListResult { id = 1, text = "Pending TCC" },
+            new DropDownListResult { id = 2, text = "Downloaded" },
+            new DropDownListResult { id = 3, text = "Issued" }
+        };
+            ViewBag.TCCStatusList = new SelectList(lstYear, "id", "text");
 
         }
 
@@ -798,8 +810,8 @@ namespace EIRS.Web.Controllers
                 lstZone.Add(new DropDownListResult() { id = item.ZoneId, text = item.ZoneName.ToString() });
             }
             ViewBag.ZoneList = new SelectList(lstZone, "id", "text");
-           // ViewBag.LGAList = new SelectList(lstLGA, "id", "text");
-        }  
+            // ViewBag.LGAList = new SelectList(lstLGA, "id", "text");
+        }
         public void UI_FillTaxOfficeDropDown(int? zoneId)
         {
             List<Tax_Offices> zones = new List<Tax_Offices>();
@@ -817,7 +829,7 @@ namespace EIRS.Web.Controllers
                 lstZone.Add(new DropDownListResult() { id = item.TaxOfficeID, text = item.TaxOfficeName.ToString() });
             }
             ViewBag.TaxOfficeList = new SelectList(lstZone, "id", "text");
-           // ViewBag.LGAList = new SelectList(lstLGA, "id", "text");
+            // ViewBag.LGAList = new SelectList(lstLGA, "id", "text");
         }
 
         //public void UI_FillLGADropDown(LGA pObjLGA = null)
@@ -2919,7 +2931,7 @@ namespace EIRS.Web.Controllers
             return Json(lstDataSubmissionType, JsonRequestBehavior.AllowGet);
         }
 
-        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, bool blnShowTotal, string[] strTotalColumns = null, string AppendExcelName = "")
+        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, bool blnShowTotal, string[] strTotalColumns = null, string AppendExcelName="")
         {
             var vMemberInfoData = typeof(T)
                     .GetProperties()
@@ -2928,11 +2940,11 @@ namespace EIRS.Web.Controllers
                     .Select(pi => (MemberInfo)pi.memberInfo)
                     .ToArray();
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstData, vMemberInfoData, blnShowTotal, strTotalColumns);
+            byte[] ObjExcelData = CommUtil.ToExcel(lstData, AppendExcelName);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", routeData.ToExcelName(AppendExcelName));
         }
 
-        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, string AppendExcelName = "")
+        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, string AppendExcelName)
         {
             var vMemberInfoData = typeof(T)
                     .GetProperties()
@@ -2941,7 +2953,7 @@ namespace EIRS.Web.Controllers
                     .Select(pi => (MemberInfo)pi.memberInfo)
                     .ToArray();
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstData, vMemberInfoData);
+            byte[] ObjExcelData = CommUtil.ToExcel(lstData, AppendExcelName);
             return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", routeData.ToExcelName(AppendExcelName));
         }
 

@@ -1,0 +1,559 @@
+﻿@model usp_GetAssessmentList_Result
+@using EIRS.Common
+@using EIRS.BOL
+
+@{
+    ViewBag.Title = "Operation Manager - Review Late Charge";
+    //Sum of Assessment Items + Sum of Adjustment
+    //lstAssessmentItems.Sum(o=>o.)
+    IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = (IList<usp_GetAssessment_AssessmentRuleList_Result>)ViewBag.MAPAssessmentRules;
+    IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = (IList<usp_GetAssessmentRuleItemList_Result>)ViewBag.AssessmentItems;
+    IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = (IList<usp_GetAssessmentRuleBasedSettlement_Result>)ViewBag.AssessmentRuleSettlement;
+    IList<usp_GetSettlementList_Result> lstSettlement = (IList<usp_GetSettlementList_Result>)ViewBag.SettlementList;
+    IList<usp_GetAssessmentAdjustmentList_Result> lstAssessmentAdjustment = (IList<usp_GetAssessmentAdjustmentList_Result>)ViewBag.AdjustmentList;
+    IList<usp_GetAssessmentLateChargeList_Result> lstAssessmentLateCharge = (IList<usp_GetAssessmentLateChargeList_Result>)ViewBag.LateChargeList;
+}
+
+<input type="hidden" id="hdnAssessmentID" value="@Model.AssessmentID" />
+<input type="hidden" id="totalPen" value="@lstAssessmentLateCharge.Sum(t => t.Penalty)" />
+<input type="hidden" id="totalInt" value="@lstAssessmentLateCharge.Sum(t => t.Interest)" />
+<input type="hidden" id="totalTot" value="@lstAssessmentLateCharge.Sum(t => t.TotalAmount)" />
+<input type="hidden" id="hdnAssessmentAmount" value="@Model.AssessmentAmount" />
+<input type="hidden" id="hdnSettlementAmount" value="@Model.SettlementAmount" />
+<div class="title">
+    <h1>
+        Operation Manager - Revise Late Charge
+    </h1>
+    <hr>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="portlet light" style="min-height: 270px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    Record Details
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table border-top-0">
+                    <tbody>
+                        <tr>
+                            <td>Template Type</td>
+                            <td>Assessment</td>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>@CommUtil.GetFormatedDate(Model.AssessmentDate)</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Payer Type</td>
+                            <td>@Model.TaxPayerTypeName</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Payer Name</td>
+                            <td>@Model.TaxPayerName</td>
+                        </tr>
+                        <tr>
+                            <td>Due Date</td>
+                            <td>@CommUtil.GetFormatedDate(Model.SettlementDueDate)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="portlet light" style="min-height: 270px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    Notes
+                </div>
+            </div>
+            <div class="portlet-body link-box">
+                <p>@Html.Raw(Model.AssessmentNotes)</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Reference: @Model.AssessmentRefNo &nbsp; | &nbsp; Status: @Model.SettlementStatusName
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="list-pane" id="dvRequestList">
+            @foreach (var item in lstMAPAssessmentRules)
+            {
+                <div class="list-item clearfix">
+                    <div class="col-sm-12 list-left-col">
+                        <h3>@item.AssessmentRuleName <a data-toggle="modal" data-target="#dvViewAssessmentRuleModal_@item.AARID">[View Items]</a> </h3>
+                        <div class="desc-row">
+
+
+
+                            <!--Amount Charged: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Sum(t => t.TotalAmount)) <br />-->
+                            @*Amount Charged: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount) <br />*@
+                            <!--Amount Paid: @CommUtil.GetFormatedCurrency(item.SettledAmount) <a data-toggle="modal" data-target="#dvViewPaymentModal_@item.AARID">[View Payments]</a> <br />-->
+                            @*Outstanding: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault()) <br />*@
+                            <!--Outstanding: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Sum(t => t.TotalAmount)) <br />-->
+                            Amount Charged: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Where(t => t.AARID == item.AARID).Sum(t => t.TotalAmount)) <br />
+                            @*Amount Charged: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount) <br />*@
+
+                            Amount Paid: @CommUtil.GetFormatedCurrency(item.SettledAmount) <a data-toggle="modal" data-target="#dvViewPaymentModal_@item.AARID">[View Payments]</a> <br />
+                            @*Outstanding: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault()) <br />*@
+                            Outstanding: @CommUtil.GetFormatedCurrency(lstAssessmentItems.Where(t => t.AARID == item.AARID).Sum(t => t.TotalAmount) - item.SettledAmount.GetValueOrDefault()) <br />
+
+                            Tax Year: @item.TaxYear
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade custom-modal" id="dvViewAssessmentRuleModal_@item.AARID" tabindex="-1" role="dialog" aria-labelledby="dvViewAssessmentRuleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dvViewAssessmentRuleModalLabel">View Items in @item.AssessmentRuleName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped ">
+                                    <thead class="thead-theme">
+                                        <tr>
+                                            <th>Item Ref</th>
+                                            <th>Item Name</th>
+                                            <th>Computation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (lstAssessmentItems.Where(t => t.AARID == item.AARID).Count() > 0)
+                                        {
+                                            foreach (var aitem in lstAssessmentItems.Where(t => t.AARID == item.AARID))
+                                            {
+                                                <tr>
+                                                    <td>@aitem.AssessmentItemReferenceNo</td>
+                                                    <td>@aitem.AssessmentItemName</td>
+                                                    <td>@aitem.ComputationName</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="3">No Item Found</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade custom-modal" id="dvViewPaymentModal_@item.AARID" tabindex="-1" role="dialog" aria-labelledby="dvViewPaymentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dvViewPaymentModalLabel">View Payments for @item.AssessmentRuleName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped ">
+                                    <thead class="thead-theme">
+                                        <tr>
+                                            <th>Payment Ref</th>
+                                            <th>Payment Date</th>
+                                            <th>Amount Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (lstAssessmentRuleSettlement != null && lstAssessmentRuleSettlement.Where(t => t.AARID == item.AARID).Count() > 0)
+                                        {
+                                            foreach (var aitem in lstAssessmentRuleSettlement.Where(t => t.AARID == item.AARID))
+                                            {
+                                                <tr>
+                                                    <td>@aitem.SettlementRefNo</td>
+                                                    <td>@CommUtil.GetFormatedDate(aitem.SettlementDate)</td>
+                                                    <td>@CommUtil.GetFormatedCurrency(aitem.SettlementAmount)</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="3">No Payment Found</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Assessment Amount
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount)
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Adjustments <a data-toggle="modal" data-target="#dvViewAdjustmentModal">[View Adjustment]</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(lstAssessmentAdjustment.Sum(t => t.Amount))
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Late Charges <a data-toggle="modal" data-target="#dvViewLateChargeModal">[View Late Charges]</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(lstAssessmentLateCharge.Sum(t => t.TotalAmount))
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Total Amount
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount + lstAssessmentAdjustment.Sum(t => t.Amount) + lstAssessmentLateCharge.Sum(t => t.TotalAmount))
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Total Paid <a data-toggle="modal" data-target="#dvViewSettlementModal">[View Payments]</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.SettlementAmount)
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Outstanding
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount + lstAssessmentAdjustment.Sum(t => t.Amount) - Model.SettlementAmount.GetValueOrDefault())
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row font-red font-17">
+                <div class="col-sm-6">
+                    Amount to Pay
+                </div>
+                <div class="col-sm-6 text-right" id="dvAmountToPay">
+                    @*@CommUtil.GetFormatedCurrency((lstAssessmentItems.Sum(t => t.TaxAmount) + lstAssessmentAdjustment.Sum(t => t.Amount)) - Model.SettlementAmount.GetValueOrDefault())*@
+                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount + lstAssessmentAdjustment.Sum(t => t.Amount) - Model.SettlementAmount.GetValueOrDefault())
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add Adjustment Late charge
+        </div>
+    </div>
+    <div class="portlet-body">
+            <input type="hidden" id="hdnItemAmountCharged" value="0" />
+            <input type="hidden" id="hdnItemAmountPaid" value="0" />
+
+            <div class="row" id="dvItemDetails">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label bold">Amount Charged: </label>
+                        <p class="form-control-static" id="spnAmountCharged">  </p>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label bold">Amount Paid: </label>
+                        <p class="form-control-static" id="spnAmountPaid"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label required-star">Assessment Item</label>
+                        @Html.DropDownList("cboAssessmentItem", (SelectList)ViewBag.AssessmentItemList, "Select Assessment Item", htmlAttributes: new { @tabindex = "1", @class = "form-control bs-select", @id = "cboAssessmentItem" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              
+
+            </div>
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <button class="btn-theme btn" tabindex="5" id="btnSaveAdjustmentIII">Next</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="modal fade custom-modal" id="dvViewSettlementModal" tabindex="-1" role="dialog" aria-labelledby="dvViewSettlementModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewSettlementModalLabel">View Payments for @Model.AssessmentRefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Payment Ref</th>
+                            <th>Payment Date</th>
+                            <th>Amount Paid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstSettlement != null && lstSettlement.Count() > 0)
+                        {
+                            foreach (var sitem in lstSettlement)
+                            {
+                                <tr>
+                                    <td>@sitem.SettlementRefNo</td>
+                                    <td>@CommUtil.GetFormatedDate(sitem.SettlementDate)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(sitem.SettlementAmount)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" align="center">No Payment Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade custom-modal" id="dvViewAdjustmentModal" tabindex="-1" role="dialog" aria-labelledby="dvViewAdjustmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewAdjustmentModalLabel">View Adjustment for @Model.AssessmentRefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Line</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstAssessmentAdjustment != null && lstAssessmentAdjustment.Count() > 0)
+                        {
+                            foreach (var adj in lstAssessmentAdjustment)
+                            {
+                                <tr>
+                                    <td>@CommUtil.GetFormatedDate(adj.AdjustmentDate)</td>
+                                    <td>@adj.AdjustmentTypeName</td>
+                                    <td>@adj.AdjustmentLine</td>
+                                    <td>@CommUtil.GetFormatedCurrency(adj.Amount)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" align="center">No Adjustment Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade custom-modal" id="dvViewLateChargeModal" tabindex="-1" role="dialog" aria-labelledby="dvViewLateChargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewLateChargeModalLabel">View LateCharge for @Model.AssessmentRefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Date</th>
+                            <th>Penalty</th>
+                            <th>Interest</th>
+                            <th>Total Charges</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstAssessmentLateCharge != null && lstAssessmentLateCharge.Count() > 0)
+                        {
+                            foreach (var lc in lstAssessmentLateCharge)
+                            {
+                                <tr>
+                                    <td>@CommUtil.GetFormatedDate(lc.ChargeDate)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(lc.Penalty)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(lc.Interest)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(lc.TotalAmount)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" align="center">No Late Charge Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dvPoAModal" tabindex="-1" role="dialog" aria-labelledby="dvPoAModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dvPoAModal">PoA Details</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmPoA" class="horizontal-form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Transaction Ref No</label>
+                                @Html.TextBox("txtTransactionRefNo", "", new { @class = "form-control", @placeholder = "Enter Transaction Ref No", @id = "txtTransactionRefNo" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Revenue Stream</label>
+                                @Html.DropDownList("cboRevenueStream", (SelectList)ViewBag.RevenueStreamList, "Select Revenue Stream", new { @class = "form-control bs-select", @id = "cboRevenueStream" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Revenue Sub Stream</label>
+                                @Html.DropDownList("cboRevenueSubStream", Enumerable.Empty<SelectListItem>(), "Select Revenue Sub Stream", new { @class = "form-control bs-select", @id = "cboRevenueSubStream" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Agency</label>
+                                @Html.DropDownList("cboAgency", (SelectList)ViewBag.AgencyList, "Select Agency", new { @class = "form-control bs-select", @id = "cboAgency" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">PoA Amount</label>
+                                @Html.TextBox("txtAmount", "", new { @class = "form-control", @placeholder = "Enter Amount", @id = "txtAmount" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label required-star">Payment Method</label>
+                                @Html.DropDownList("cboPaymentMethod", (SelectList)ViewBag.SettlementMethodList, "Select Payment Method", new { @class = "form-control bs-select", @id = "cboPaymentMethod" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Notes</label>
+                                @Html.TextArea("txtNotes", "", new { @class = "form-control", @placeholder = "Enter Notes", @id = "txtNotes" })
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-theme" id="btnSaveAdjustmentWithPoA">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer {
+    <script>
+        $("#btnSaveAdjustmentIII").click(function (e) {
+            e.preventDefault();
+            var detII = parseFloat(document.getElementById("cboAssessmentItem").value) || 0;
+            debugger;
+            if (detII != 0) {
+
+                jsfn_PostNext();
+            }
+            else {
+
+                alert('Adjustment Item is Not Selected');
+            }
+        });
+        function jsfn_PostNext() {
+            debugger;
+            var vData = {
+                AAIID: $("#cboAssessmentItem").val()
+            };
+            jsfn_ShowLoading();
+
+            var url = '/Adjustment/AssessmentLateChargeNext?AAIID=' + vData.AAIID;
+            window.location.href = url;
+           ///* jsfn_ajaxPost('/Adjustment/AssessmentLateChargeNext');*/
+           // jsfn_ajaxPost('/Adjustment/AssessmentLateChargeNext', vData);
+
+
+            jsfn_HideLoading();
+        }
+
+        function jsfn_PostNextResponse(data) {
+            if (data.success) {
+                location.reload(true);
+            }
+            else {
+                jsfn_ShowAlert(data.Message, 'danger', true);
+            }
+        }
+    </script>
+    <script type="text/javascript" src="~/Scripts/jsAssessmentAdjustment.js"></script>
+}

@@ -22,24 +22,12 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using static EIRS.Web.Controllers.Filters;
-using RestSharp;
-using IronPdf;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using System.Windows.Controls;
-using static EIRS.Web.Controllers.ProcessTCCRequestController;
 using EIRS.Web.Utility;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
-using PagedList;
-using DocumentFormat.OpenXml.Bibliography;
 using Title = EIRS.BOL.Title;
-using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using iTextSharp.text.pdf;
-using System.Data.Entity.Migrations;
-using DocumentFormat.OpenXml;
-using Microsoft.Office.Interop.Excel;
 using Vereyon.Web;
+using System.Linq.Dynamic;
+using DocumentFormat.OpenXml.Bibliography;
+using Google.Protobuf.WellKnownTypes;
 
 namespace EIRS.Web.Controllers
 {
@@ -129,8 +117,10 @@ namespace EIRS.Web.Controllers
             {
                 BLTCC mObjBLTCC = new BLTCC();
 
+                var userDet = _db.Individuals.FirstOrDefault(o => o.IndividualID == pObjRequestModel.TaxPayerID);
                 TCC_Request mObjRequest = new TCC_Request()
                 {
+                    TaxOfficeId = userDet != null ? userDet.TaxOfficeID : 0,
                     RequestDate = CommUtil.GetCurrentDateTime(),
                     TaxPayerID = pObjRequestModel.TaxPayerID,
                     TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
@@ -138,6 +128,7 @@ namespace EIRS.Web.Controllers
                     StatusID = (int)TCCRequestStatus.In_Progess,
                     CreatedBy = SessionManager.UserID,
                     CreatedDate = CommUtil.GetCurrentDateTime(),
+                    IsDownloaded = false,
                 };
 
                 FuncResponse<TCC_Request> mObjICFuncResponse = mObjBLTCC.BL_GetIncompleteRequest(mObjRequest);
@@ -157,6 +148,7 @@ namespace EIRS.Web.Controllers
                         };
 
                         new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
+
 
                         return RedirectToAction("List", "ProcessTCCRequest");
                     }
@@ -254,70 +246,6 @@ namespace EIRS.Web.Controllers
                 return RedirectToAction("List", "ProcessTCCRequest");
             }
         }
-        //[HttpGet]
-        //public ActionResult Details(long? reqid, string name)
-        //{
-        //    if (reqid.GetValueOrDefault() > 0)
-        //    {
-        //        BLTCC mObjBLTCCC = new BLTCC();
-
-        //        usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
-
-        //        if (mObjRequestData != null)
-        //        {
-        //            //Get Stage List
-        //            IList<usp_GetAdminRequestStageList_Result> lstRequestStage = mObjBLTCCC.BL_GetAdminRequestStageList(mObjRequestData.TCCRequestID);
-        //            foreach (var ret in lstRequestStage)
-        //            {
-        //                if (ret.StageID > 5)
-        //                    ret.ShowButton = false;
-        //                if (mObjRequestData.SEDE_OrderID == 10003)
-        //                {
-        //                    if (ret.StageID > 5)
-        //                    {
-        //                        ret.StatusName = "Completed";
-        //                    }
-        //                }
-        //                else if (mObjRequestData.SEDE_OrderID == 10000)
-        //                {
-        //                    if (ret.StageID == 5)
-        //                    {
-        //                        ret.StatusName = "Completed";
-        //                    }
-        //                }
-        //                else if (mObjRequestData.SEDE_OrderID == 10001)
-        //                {
-        //                    if (ret.StageID < 7)
-        //                    {
-        //                        ret.StatusName = "Completed";
-        //                    }
-        //                }
-        //                else if (mObjRequestData.SEDE_OrderID == 10002)
-        //                {
-        //                    if (ret.StageID <= 12)
-        //                    {
-        //                        ret.StatusName = "Completed";
-        //                    }
-        //                }
-        //            }
-        //            ViewBag.RequestStageList = lstRequestStage;
-
-        //            IList<usp_GetRequestNotesList_Result> lstNotes = mObjBLTCCC.BL_GetRequestNotesList(new MAP_TCCRequest_Notes() { RequestID = mObjRequestData.TCCRequestID });
-        //            ViewBag.RequestNotesList = lstNotes;
-
-
-        //            return View(mObjRequestData);
-        //        }
-        //        else
-        //        {
-        //            return RedirectToAction("List", "ProcessTCCRequest");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("List", "ProcessTCCRequest");
-        //    }
-        //}
 
         private void UI_FillDropDown(ValidateTaxPayerInformationViewModel pObjIndividualViewModel = null)
         {
@@ -516,6 +444,8 @@ namespace EIRS.Web.Controllers
                         };
 
                         mObjBLTCCC.BL_UpdateRequestStage(mObjRequestStage);
+                        string msg = $"Your TCC application with request reference number {mObjRequestData.RequestRefNo} has been received and under process, click on http://eras.eirs.vip/Default/VerifyTccRequestStatus to verify your status ";
+                        bool blnSMSSent = UtilityController.SendSMS(mObjIndividual.MobileNumber1, msg);
 
                         return RedirectToAction("Details", "ProcessTCCRequest", new { reqid = pobjValidateTaxPayerInformationModel.RequestID });
 
@@ -819,6 +749,21 @@ namespace EIRS.Web.Controllers
                             });
                     }
                     var finalnewpai = newpai.OrderBy(x => x.AssessmentYear).ToList();
+                    finalnewpai = finalnewpai.Select(entry =>
+                    {
+                        if ((int)entry.RowID != 0)
+                        {
+                            entry.RowID = 0;
+                        }
+                        return entry;
+                    }).ToList();
+                    for (int i = 0; i < finalnewpai.Count; i++)
+                    {
+                        var e = finalnewpai[i];
+                        e.RowID = i + 1;
+                    }
+
+
                     ViewBag.PAYEIncomeStreamList = finalnewpai;
                     SessionManager.LstPayeApiResponse = finalnewpai;
                     //check for Eras record first if doesnt exist in the table then go to the api
@@ -827,7 +772,7 @@ namespace EIRS.Web.Controllers
                         IList<usp_GetRequestIncomeStreamList_Result> lstRequestIncomeStream = mObjBLTCC.BL_GetIncomeStreamList(mObjRequestData.TCCRequestID);
                         if (lstRequestIncomeStream.Count > 0)
                         {
-                            foreach (var item in lstRequestIncomeStream)
+                            foreach (usp_GetRequestIncomeStreamList_Result item in lstRequestIncomeStream)
                             {
                                 mObjRequestIncomeStream = new Request_IncomeStream()
                                 {
@@ -1029,55 +974,131 @@ namespace EIRS.Web.Controllers
                                 ERASAssessed = rec.ERASAssessed.Value,
                                 ERASTaxPaid = rec.ERASTaxPaid.Value,
                                 Tax_receipt = rec.Tax_receipt,
-                                intTrack = EnumList.Track.INSERT
+                                intTrack = EnumList.Track.INSERT,
+                                RevenueType = rec.ReveuneType
                             };
                             lstTCCDetail.Add(mObjRequest1TCCDetail);
                         }
                     }
                     else
                     {
+
+                        var tccDetailEras2 = lstIncomeStream.Where(o => o.TaxYear == (currentYear - 2)).FirstOrDefault();
+
+                        var tccDetailEra3 = lstIncomeStream.Where(o => o.TaxYear == (currentYear - 3)).FirstOrDefault();
+
+                        decimal chargeableIncome = Convert.ToDecimal(tccDetailPaye.ChargeableIncome);
+                        decimal totalIncomeEarned = Convert.ToDecimal(tccDetailEras.TotalIncomeEarned);
+                        decimal chargeableIncome2 = Convert.ToDecimal(tccDetailPay2e.ChargeableIncome);
+                        decimal totalIncomeEarned2 = Convert.ToDecimal(tccDetailEras2.TotalIncomeEarned);
+                        decimal chargeableIncome3 = Convert.ToDecimal(tccDetailPay3e.ChargeableIncome);
+                        decimal totalIncomeEarned3 = Convert.ToDecimal(tccDetailEra3.TotalIncomeEarned);
+
+                        // Calculate the sum
+                        decimal totalIncome = chargeableIncome + totalIncomeEarned;
+                        decimal totalIncome2 = chargeableIncome2 + totalIncomeEarned2;
+                        decimal totalIncome3 = chargeableIncome3 + totalIncomeEarned3;
+
+                        // Determine the revenue type based on the values of chargeableIncome and totalIncomeEarned
+                        string revenueType = string.Empty;
+
+                        if (chargeableIncome == 0 && totalIncomeEarned == 0)
+                        {
+                            revenueType = "";
+                        }
+                        else if (chargeableIncome != 0 && totalIncomeEarned != 0)
+                        {
+                            revenueType = "DA and PAYE";
+                        }
+                        else if (chargeableIncome == 0)
+                        {
+                            revenueType = "DA";
+                        }
+                        else if (totalIncomeEarned == 0)
+                        {
+                            revenueType = "PAYE";
+                        }
+
+
                         mObjRequest1TCCDetail = new Request_TCCDetail()
                         {
                             RowID = 1,
                             TBKID = 1,
                             TaxYear = (currentYear - 1),
-                            AssessableIncome = Convert.ToDecimal(tccDetailPaye.ChargeableIncome) + Convert.ToDecimal(tccDetailEras.TotalIncomeEarned),
+                            //income amount from paye + TotalIncomeEarned
+                            AssessableIncome = totalIncome,
                             TCCTaxPaid = Convert.ToDecimal(tccDetailPaye.AnnualTax),
                             ERASAssessed = Convert.ToDecimal(tccDetailPaye.AnnualTax),
                             ERASTaxPaid = Convert.ToDecimal(tccDetailPaye.AnnualTaxII),
                             Tax_receipt = tckRef1,
+                            RevenueType = revenueType,
                             intTrack = EnumList.Track.INSERT
                         };
                         lstTCCDetail.Add(mObjRequest1TCCDetail);
+                        revenueType = string.Empty;
 
-                        var tccDetailEras2 = lstIncomeStream.Where(o => o.TaxYear == (currentYear - 2)).FirstOrDefault();
+                        if (chargeableIncome2 == 0 && totalIncomeEarned2 == 0)
+                        {
+                            revenueType = "";
+                        }
+                        else if (chargeableIncome2 != 0 && totalIncomeEarned2 != 0)
+                        {
+                            revenueType = "DA and PAYE";
+                        }
+                        else if (chargeableIncome2 == 0)
+                        {
+                            revenueType = "DA";
+                        }
+                        else if (totalIncomeEarned2 == 0)
+                        {
+                            revenueType = "PAYE";
+                        }
+
                         var newlstTaxPayerPayment2 = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 2)).ToList();
                         mObjRequest2TCCDetail = new Request_TCCDetail()
                         {
                             RowID = 2,
                             TBKID = 2,
                             TaxYear = (currentYear - 2),
-                            AssessableIncome = Convert.ToDecimal(tccDetailPay2e.ChargeableIncome) + Convert.ToDecimal(tccDetailEras2.TotalIncomeEarned),
+                            AssessableIncome = totalIncome2,
                             TCCTaxPaid = Convert.ToDecimal(tccDetailPay2e.AnnualGross),
                             ERASAssessed = Convert.ToDecimal(tccDetailPay2e.AnnualTax),
                             ERASTaxPaid = Convert.ToDecimal(tccDetailPay2e.AnnualTaxII),
                             Tax_receipt = tckRef2,
+                            RevenueType = revenueType,
                             intTrack = EnumList.Track.INSERT
                         };
                         lstTCCDetail.Add(mObjRequest2TCCDetail);
+                        revenueType = string.Empty;
 
-                        var tccDetailEra3 = lstIncomeStream.Where(o => o.TaxYear == (currentYear - 3)).FirstOrDefault();
+                        if (chargeableIncome3 == 0 && totalIncomeEarned3 == 0)
+                        {
+                            revenueType = "";
+                        }
+                        else if (chargeableIncome3 != 0 && totalIncomeEarned3 != 0)
+                        {
+                            revenueType = "DA and PAYE";
+                        }
+                        else if (chargeableIncome3 == 0)
+                        {
+                            revenueType = "DA";
+                        }
+                        else if (totalIncomeEarned3 == 0)
+                        {
+                            revenueType = "PAYE";
+                        }
                         var newlstTaxPayerPayment3 = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 3)).ToList();
                         mObjRequest3TCCDetail = new Request_TCCDetail()
                         {
                             RowID = 3,
                             TBKID = 3,
                             TaxYear = (currentYear - 3),
-                            AssessableIncome = Convert.ToDecimal(tccDetailPay3e.ChargeableIncome) + Convert.ToDecimal(tccDetailEra3.TotalIncomeEarned),
+                            AssessableIncome = totalIncome3,
                             TCCTaxPaid = Convert.ToDecimal(tccDetailPay3e.AnnualGross),
                             ERASAssessed = Convert.ToDecimal(tccDetailPay3e.AnnualTax),
                             ERASTaxPaid = Convert.ToDecimal(tccDetailPay3e.AnnualTaxII),
                             Tax_receipt = tckRef3,
+                            RevenueType = revenueType,
                             intTrack = EnumList.Track.INSERT
                         };
                         lstTCCDetail.Add(mObjRequest3TCCDetail);
@@ -1156,6 +1177,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken()]
         public ActionResult ValidateTaxPayerIncome(ValidateTaxPayerIncomeViewModel pobjValidateTaxPayerIncomeModel)
@@ -1190,37 +1212,6 @@ namespace EIRS.Web.Controllers
             IList<usp_GetTaxPayerLiabilityForTCC_Result> lstTaxPayerLiability = mObjBLTCC.BL_GetTaxPayerLiabilityForTCC(mObjRequestData.IndividualID, (int)EnumList.TaxPayerType.Individual, mObjRequestData.TaxYear.GetValueOrDefault());
             IList<GetEmployerLiability_Result> lstEmployerLiability = mObjBLTCC.BL_GetEmployerLiability(mObjRequestData.IndividualID);
 
-            if (pobjValidateTaxPayerIncomeModel.SourceOfIncome == "---Select One----")
-            {
-                FlashMessage.Danger("Select New Source Of Income");
-                IList<DropDownListResult> lstAssetType = new BLAssetType().BL_GetAssetTypeDropDownList(pObjAssetType);
-                ViewBag.AssetTypeList = new SelectList(lstAssetType, "id", "text", 0);
-                ViewBag.ProfileInformation = lstProfileInformation;
-                ViewBag.AssessmentRuleInformation = lstAssessmentRuleInformation;
-                ViewBag.TaxPayerBill = lstTaxPayerBill;
-                ViewBag.TaxPayerLiability = lstTaxPayerLiability;
-
-                UI_FillTaxYearDropDown(mObjRequestData.TaxYear.GetValueOrDefault());
-                ViewBag.TaxBusiness = new SelectList(lstTaxPayerAsset.Where(o => o.AssetTypeID == 3 && (o.TaxPayerRoleID == 4 || o.TaxPayerRoleID == 5 || o.TaxPayerRoleID == 37 || o.TaxPayerRoleID == 39)).Select(t => new { id = t.AssetID, text = t.AssetName }).Distinct(), "id", "text");
-                ViewBag.TaxPayerRoleList = new SelectList(lstTaxPayerAsset.Select(t => new { id = t.TaxPayerRoleID, text = t.TaxPayerRoleName }).Distinct(), "id", "text");
-                UI_FillNatureOfBusinessDropDown();
-                ViewBag.RequestData = mObjRequestData;
-                ViewBag.IncomeStreamList = SessionManager.LstIncomeStream.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                ViewBag.TCCDetailList = SessionManager.LstTCCDetail.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                ViewBag.RequestData = mObjRequestData;
-                ViewBag.NewAssetList = newlstTaxPayerAsset;
-                ViewBag.ProfileInformation = lstProfileInformation;
-                ViewBag.AssessmentRuleInformation = lstAssessmentRuleInformation;
-                ViewBag.TaxPayerBill = lstTaxPayerBill;
-                ViewBag.TaxPayerPayment = lstTaxPayerPayment;
-                ViewBag.TaxPayerLiability = lstTaxPayerLiability;
-                UI_FillTaxYearDropDown(mObjRequestData.TaxYear.GetValueOrDefault());
-                ViewBag.TaxPayerRoleList = new SelectList(newlstTaxPayerAsset.Select(t => new { id = t.TaxPayerRoleID, text = t.TaxPayerRoleName }).Distinct(), "id", "text");
-
-                return View(pobjValidateTaxPayerIncomeModel);
-            }
-
-
             if (!ModelState.IsValid)
             {
                 ViewBag.RequestData = mObjRequestData;
@@ -1228,7 +1219,38 @@ namespace EIRS.Web.Controllers
             }
             else
             {
+                if (strAction != "Save")
+                {
+                    if (pobjValidateTaxPayerIncomeModel.SourceOfIncome == "---Select One----")
+                    {
+                        FlashMessage.Danger("Select New Source Of Income");
+                        IList<DropDownListResult> lstAssetType = new BLAssetType().BL_GetAssetTypeDropDownList(pObjAssetType);
+                        ViewBag.AssetTypeList = new SelectList(lstAssetType, "id", "text", 0);
+                        ViewBag.ProfileInformation = lstProfileInformation;
+                        ViewBag.AssessmentRuleInformation = lstAssessmentRuleInformation;
+                        ViewBag.TaxPayerBill = lstTaxPayerBill;
+                        ViewBag.TaxPayerLiability = lstTaxPayerLiability;
 
+                        UI_FillTaxYearDropDown(mObjRequestData.TaxYear.GetValueOrDefault());
+                        ViewBag.TaxBusiness = new SelectList(lstTaxPayerAsset.Where(o => o.AssetTypeID == 3 && (o.TaxPayerRoleID == 4 || o.TaxPayerRoleID == 5 || o.TaxPayerRoleID == 37 || o.TaxPayerRoleID == 39)).Select(t => new { id = t.AssetID, text = t.AssetName }).Distinct(), "id", "text");
+                        ViewBag.TaxPayerRoleList = new SelectList(lstTaxPayerAsset.Select(t => new { id = t.TaxPayerRoleID, text = t.TaxPayerRoleName }).Distinct(), "id", "text");
+                        UI_FillNatureOfBusinessDropDown();
+                        ViewBag.RequestData = mObjRequestData;
+                        ViewBag.IncomeStreamList = SessionManager.LstIncomeStream.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                        ViewBag.TCCDetailList = SessionManager.LstTCCDetail.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                        ViewBag.RequestData = mObjRequestData;
+                        ViewBag.NewAssetList = newlstTaxPayerAsset;
+                        ViewBag.ProfileInformation = lstProfileInformation;
+                        ViewBag.AssessmentRuleInformation = lstAssessmentRuleInformation;
+                        ViewBag.TaxPayerBill = lstTaxPayerBill;
+                        ViewBag.TaxPayerPayment = lstTaxPayerPayment;
+                        ViewBag.TaxPayerLiability = lstTaxPayerLiability;
+                        UI_FillTaxYearDropDown(mObjRequestData.TaxYear.GetValueOrDefault());
+                        ViewBag.TaxPayerRoleList = new SelectList(newlstTaxPayerAsset.Select(t => new { id = t.TaxPayerRoleID, text = t.TaxPayerRoleName }).Distinct(), "id", "text");
+
+                        return View(pobjValidateTaxPayerIncomeModel);
+                    }
+                }
                 using (TransactionScope mObjTransactionScope = new TransactionScope())
                 {
                     try
@@ -1236,9 +1258,9 @@ namespace EIRS.Web.Controllers
                         FuncResponse mObjFuncResponse;
                         foreach (var item in lstPayeDetail)
                         {
-                            var removeFormal = _db.PayeTccHolders.FirstOrDefault(o => o.AssessmentYear == item.AssessmentYear && o.IndividualRIN == item.EmployeeRin);
+                            var removeFormal = _db.PayeTccHolders.Where(o => o.AssessmentYear == item.AssessmentYear && o.IndividualRIN == mObjRequestData.IndividualRIN).ToList();
                             if (removeFormal != null)
-                                _db.PayeTccHolders.Remove(removeFormal);
+                                _db.PayeTccHolders.RemoveRange(removeFormal);
                             _db.PayeTccHolders.Add(new PayeTccHolder
                             {
                                 AnnualGross = item.AnnualGross,
@@ -1257,8 +1279,14 @@ namespace EIRS.Web.Controllers
                                 ReceiptDetail = item.ReceiptDetail
                             });
                         }
-                        List<BalanceHolder> lstb =new List<BalanceHolder>();
-                        IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
+                        List<BalanceHolder> lstb = new List<BalanceHolder>();
+                        //  IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
+
+                        var bnLst = new List<BusinessName>();
+
+                        var bnLstII = _db.BusinessNames.Where(o => o.TccRequestId == pobjValidateTaxPayerIncomeModel.RequestID);
+                        if (bnLstII != null)
+                            _db.BusinessNames.RemoveRange(bnLstII);
                         MAP_TCCRequest_IncomeStream mObjIncomeStream;
                         foreach (var item in lstErasDetail)
                         {
@@ -1274,9 +1302,9 @@ namespace EIRS.Web.Controllers
                                 TotalIncomeEarned = item.TotalIncomeEarned,
                                 LGA = item.LGAName
                             });
-
-                            BusinessNameHolder bn = new BusinessNameHolder();
-                            bn.BusinessName = item.BusinessName;
+                            BusinessName bn = new BusinessName();
+                            bn.BusinessName1 = item.BusinessName;
+                            bn.TccRequestId = pobjValidateTaxPayerIncomeModel.RequestID;
                             bnLst.Add(bn);
                             if (item.intTrack == EnumList.Track.INSERT)
                             {
@@ -1343,13 +1371,12 @@ namespace EIRS.Web.Controllers
                             NewTCCDetailsHold removeFormal = _db.NewTCCDetailsHolds.FirstOrDefault(o => o.TaxYear == item.TaxYear && o.IndividualRIN == mObjRequestData.IndividualRIN);
                             if (removeFormal != null)
                                 _db.NewTCCDetailsHolds.Remove(removeFormal);
-                            NewTCCDetailsHold neth = new NewTCCDetailsHold();
+                            //  NewTCCDetailsHold neth = new NewTCCDetailsHold();
                             string refDate = "";
                             var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == item.TaxYear).ToList();
                             if (newlstTaxPayerPayment.Count > 0)
-                            {
                                 refDate = newlstTaxPayerPayment.OrderByDescending(o => o.PaymentID).FirstOrDefault().PaymentDate.Value.ToString("dd-MMMM-yyyy") ?? "";
-                            }
+
                             var allToBeDeleted = _db.TccRefHolders.Where(o => o.TaxYear == item.TaxYear && o.ReqId == pobjValidateTaxPayerIncomeModel.RequestID.ToString()).ToList();
                             _db.TccRefHolders.RemoveRange(allToBeDeleted);
                             //_db.TccRefHolders.Add(new TccRefHolder { ReciptRef = item.Tax_receipt, TaxYear = item.TaxYear, ReqId = pobjValidateTaxPayerIncomeModel.RequestID.ToString() });
@@ -1373,6 +1400,7 @@ namespace EIRS.Web.Controllers
                                 _db.NewTCCDetailsHolds.Add(new NewTCCDetailsHold
                                 {
                                     RowID = item.RowID,
+                                    TCCRequestID = mObjRequestData.TCCRequestID,
                                     TaxYear = item.TaxYear,
                                     TBKID = item.TBKID,
                                     AssessableIncome = item.AssessableIncome,
@@ -1380,6 +1408,7 @@ namespace EIRS.Web.Controllers
                                     ERASAssessed = item.ERASAssessed,
                                     ERASTaxPaid = item.ERASTaxPaid,
                                     Tax_receipt = item.Tax_receipt,
+                                    ReveuneType = item.RevenueType,
                                     IndividualRIN = mObjRequestData.IndividualRIN
                                 });
 
@@ -1444,36 +1473,38 @@ namespace EIRS.Web.Controllers
                             }
                             lstb.Add(b);
                         }
-                        if (lstb.Any(o => o.Balance > 0))
+                        if (strAction != "Save")
                         {
-                            FlashMessage.Danger("Balance Should Not Be Greater Than 0");
-                            IList<DropDownListResult> lstAssetType = new BLAssetType().BL_GetAssetTypeDropDownList(pObjAssetType);
-                            ViewBag.AssetTypeList = new SelectList(lstAssetType, "id", "text", 0);
-                            ViewBag.ProfileInformation = lstProfileInformation;
-                            ViewBag.AssessmentRuleInformation = lstAssessmentRuleInformation;
-                            ViewBag.TaxPayerBill = lstTaxPayerBill;
-                            ViewBag.TaxPayerLiability = lstTaxPayerLiability;
+                            if (lstb.Any(o => o.Balance > 0))
+                            {
+                                FlashMessage.Danger("Balance Should Not Be Greater Than 0");
+                                IList<DropDownListResult> lstAssetType = new BLAssetType().BL_GetAssetTypeDropDownList(pObjAssetType);
+                                ViewBag.AssetTypeList = new SelectList(lstAssetType, "id", "text", 0);
+                                ViewBag.ProfileInformation = lstProfileInformation;
+                                ViewBag.AssessmentRuleInformation = lstAssessmentRuleInformation;
+                                ViewBag.TaxPayerBill = lstTaxPayerBill;
+                                ViewBag.TaxPayerLiability = lstTaxPayerLiability;
 
-                            UI_FillTaxYearDropDown(mObjRequestData.TaxYear.GetValueOrDefault());
-                            ViewBag.TaxBusiness = new SelectList(lstTaxPayerAsset.Where(o => o.AssetTypeID == 3 && (o.TaxPayerRoleID == 4 || o.TaxPayerRoleID == 5 || o.TaxPayerRoleID == 37 || o.TaxPayerRoleID == 39)).Select(t => new { id = t.AssetID, text = t.AssetName }).Distinct(), "id", "text");
-                            ViewBag.TaxPayerRoleList = new SelectList(lstTaxPayerAsset.Select(t => new { id = t.TaxPayerRoleID, text = t.TaxPayerRoleName }).Distinct(), "id", "text");
-                            UI_FillNatureOfBusinessDropDown();
-                            ViewBag.RequestData = mObjRequestData;
-                            ViewBag.IncomeStreamList = SessionManager.LstIncomeStream.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                            ViewBag.TCCDetailList = SessionManager.LstTCCDetail.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                            ViewBag.RequestData = mObjRequestData;
-                            ViewBag.NewAssetList = newlstTaxPayerAsset;
-                            ViewBag.ProfileInformation = lstProfileInformation;
-                            ViewBag.AssessmentRuleInformation = lstAssessmentRuleInformation;
-                            ViewBag.TaxPayerBill = lstTaxPayerBill;
-                            ViewBag.TaxPayerPayment = lstTaxPayerPayment;
-                            ViewBag.TaxPayerLiability = lstTaxPayerLiability;
-                            UI_FillTaxYearDropDown(mObjRequestData.TaxYear.GetValueOrDefault());
-                            ViewBag.TaxPayerRoleList = new SelectList(newlstTaxPayerAsset.Select(t => new { id = t.TaxPayerRoleID, text = t.TaxPayerRoleName }).Distinct(), "id", "text");
+                                UI_FillTaxYearDropDown(mObjRequestData.TaxYear.GetValueOrDefault());
+                                ViewBag.TaxBusiness = new SelectList(lstTaxPayerAsset.Where(o => o.AssetTypeID == 3 && (o.TaxPayerRoleID == 4 || o.TaxPayerRoleID == 5 || o.TaxPayerRoleID == 37 || o.TaxPayerRoleID == 39)).Select(t => new { id = t.AssetID, text = t.AssetName }).Distinct(), "id", "text");
+                                ViewBag.TaxPayerRoleList = new SelectList(lstTaxPayerAsset.Select(t => new { id = t.TaxPayerRoleID, text = t.TaxPayerRoleName }).Distinct(), "id", "text");
+                                UI_FillNatureOfBusinessDropDown();
+                                ViewBag.RequestData = mObjRequestData;
+                                ViewBag.IncomeStreamList = SessionManager.LstIncomeStream.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                                ViewBag.TCCDetailList = SessionManager.LstTCCDetail.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                                ViewBag.RequestData = mObjRequestData;
+                                ViewBag.NewAssetList = newlstTaxPayerAsset;
+                                ViewBag.ProfileInformation = lstProfileInformation;
+                                ViewBag.AssessmentRuleInformation = lstAssessmentRuleInformation;
+                                ViewBag.TaxPayerBill = lstTaxPayerBill;
+                                ViewBag.TaxPayerPayment = lstTaxPayerPayment;
+                                ViewBag.TaxPayerLiability = lstTaxPayerLiability;
+                                UI_FillTaxYearDropDown(mObjRequestData.TaxYear.GetValueOrDefault());
+                                ViewBag.TaxPayerRoleList = new SelectList(newlstTaxPayerAsset.Select(t => new { id = t.TaxPayerRoleID, text = t.TaxPayerRoleName }).Distinct(), "id", "text");
 
-                            return View(pobjValidateTaxPayerIncomeModel);
+                                return View(pobjValidateTaxPayerIncomeModel);
+                            }
                         }
-
                         SessionManager.LstTCCDetail = lstTCCDetail;
 
                         //Update Certificate
@@ -1513,51 +1544,78 @@ namespace EIRS.Web.Controllers
 
                         if (mObjFuncResponse.Success)
                         {
-                            //  if (strAction == "Submit")
-                            //{
-                            MAP_TCCRequest_Stages mObjRequestStage1 = new MAP_TCCRequest_Stages()
-                            {
-                                ApprovalDate = CommUtil.GetCurrentDateTime(),
-                                StageID = (int)NewTCCRequestStage.Validate_Tax_Payer_Income,
-                                StatusID = (int)TCCRequestStatus.Validated_Income,
-                                RequestID = mObjValidateIncome.RequestID
-                            };
 
-                            mObjBLTCC.BL_UpdateRequestStage(mObjRequestStage1);
-                            MAP_TCCRequest_Stages mObjRequestStage = new MAP_TCCRequest_Stages()
-                            {
-                                ApprovalDate = CommUtil.GetCurrentDateTime(),
-                                StageID = (int)NewTCCRequestStage.Prepare_TCC_Draft,
-                                StatusID = (int)TCCRequestStatus.Prepared_TCC_Draft,
-                                RequestID = mObjValidateIncome.RequestID
-                            };
+                            var used = lstTCCDetail.Where(o => o.RevenueType != null).ToList();
+                            var fused = used.Where(o => o.RevenueType.ToLower() == "paye").ToList();
+                            int appId = 0;
+                            if (used.Count() > fused.Count())
+                                appId = 1;
+                            else
+                                appId = 2;
+                            mObjFuncResponse = mObjBLTCC.BL_UpdateRequestStatus(appId, pobjValidateTaxPayerIncomeModel.RequestID);
 
-                            mObjBLTCC.BL_UpdateRequestStage(mObjRequestStage);
-
-                            int year = DateTime.Now.Year;
-                            DateTime lastDay = new DateTime(year, 12, 31);
-                            MAP_TCCRequest_Generate mObjGenerate = new MAP_TCCRequest_Generate()
+                            if (strAction != "Save")
                             {
-                                RGID = 0,
-                                RequestID = pobjValidateTaxPayerIncomeModel.RequestID,
-                                Notes = pobjValidateTaxPayerIncomeModel.Notes,
-                                PDFTemplateID = GlobalDefaultValues.TCC_PDFTemplateID,
-                                IsExpirable = true,
-                                ExpiryDate = lastDay,
-                                Reason = "",
-                                Location = "",
-                                StageID = (int)NewTCCRequestStage.Generate_eTCC,
-                                ApprovalDate = CommUtil.GetCurrentDateTime(),
-                                IsAction = false,
-                                CreatedBy = SessionManager.UserID,
-                                CreatedDate = CommUtil.GetCurrentDateTime()
-                            };
 
-                            //mObjFuncResponse = mObjBLTCC.BL_InsertUpdateTCCRequestGenerate(mObjGenerate);
-                            FuncResponse<MAP_TCCRequest_Generate> mNewObjFuncResponse = mObjBLTCC.BL_InsertUpdateTCCRequestGenerate(mObjGenerate);
-                            if (pobjValidateTaxPayerIncomeModel.needBusinessName == true)
-                            {
-                                SessionManager.businessNameHolderList = bnLst;
+                                MAP_TCCRequest_Stages mObjRequestStage1 = new MAP_TCCRequest_Stages()
+                                {
+                                    ApprovalDate = CommUtil.GetCurrentDateTime(),
+                                    StageID = (int)NewTCCRequestStage.Validate_Tax_Payer_Income,
+                                    StatusID = (int)TCCRequestStatus.Validated_Income,
+                                    RequestID = mObjValidateIncome.RequestID
+                                };
+
+                                mObjBLTCC.BL_UpdateRequestStage(mObjRequestStage1);
+                                MAP_TCCRequest_Stages mObjRequestStage = new MAP_TCCRequest_Stages()
+                                {
+                                    ApprovalDate = CommUtil.GetCurrentDateTime(),
+                                    StageID = (int)NewTCCRequestStage.Prepare_TCC_Draft,
+                                    StatusID = (int)TCCRequestStatus.Prepared_TCC_Draft,
+                                    RequestID = mObjValidateIncome.RequestID
+                                };
+
+                                mObjBLTCC.BL_UpdateRequestStage(mObjRequestStage);
+
+                                int year = DateTime.Now.Year;
+                                DateTime lastDay = new DateTime(year, 12, 31);
+                                MAP_TCCRequest_Generate mObjGenerate = new MAP_TCCRequest_Generate()
+                                {
+                                    RGID = 0,
+                                    RequestID = pobjValidateTaxPayerIncomeModel.RequestID,
+                                    Notes = pobjValidateTaxPayerIncomeModel.Notes,
+                                    PDFTemplateID = GlobalDefaultValues.TCC_PDFTemplateID,
+                                    IsExpirable = true,
+                                    ExpiryDate = lastDay,
+                                    Reason = "",
+                                    Location = "",
+                                    StageID = (int)NewTCCRequestStage.Generate_eTCC,
+                                    ApprovalDate = CommUtil.GetCurrentDateTime(),
+                                    IsAction = false,
+                                    CreatedBy = SessionManager.UserID,
+                                    CreatedDate = CommUtil.GetCurrentDateTime()
+                                };
+
+                                //mObjFuncResponse = mObjBLTCC.BL_InsertUpdateTCCRequestGenerate(mObjGenerate);
+                                FuncResponse<MAP_TCCRequest_Generate> mNewObjFuncResponse = mObjBLTCC.BL_InsertUpdateTCCRequestGenerate(mObjGenerate);
+                                if (pobjValidateTaxPayerIncomeModel.needBusinessName == true)
+                                {
+                                    bnLst.RemoveAll(item => item.BusinessName1 == null);
+
+                                    if (bnLst.Any())
+                                    {
+                                        List<BusinessName> nameLst = new List<BusinessName>();
+
+                                        foreach (var b in bnLst)
+                                        {
+                                            BusinessName name = new BusinessName();
+                                            name.BusinessName1 = b.BusinessName1;
+                                            name.TccRequestId = pobjValidateTaxPayerIncomeModel.RequestID;
+                                            nameLst.Add(name);
+                                        }
+                                        _db.BusinessNames.AddRange(nameLst);
+                                        //SessionManager.businessNameHolderList = bnLst;
+                                    }
+                                }
                             }
                             SessionManager.LstTicketRef = ticketRefs;
                             _db.SaveChanges();
@@ -1963,26 +2021,31 @@ namespace EIRS.Web.Controllers
                 var last2year1 = new usp_GetTCCDetail_Result();
                 var last3year1 = new usp_GetTCCDetail_Result();
                 var txxx = new TaxClearanceCertificate();
+
+                var bnLst = new List<BusinessName>();
                 using (var ddd = new EIRSEntities())
                 {
+                    bnLst = ddd.BusinessNames.Where(o => o.TccRequestId == reqid).ToList();
                     txxx = ddd.TaxClearanceCertificates.FirstOrDefault(o => o.SerialNumber == reqid.ToString());
                 }
                 string busiName = "";
 
-                IList<BusinessNameHolder> bnLst = SessionManager.businessNameHolderList ?? new List<BusinessNameHolder>();
-
-                var distinctStrings = bnLst.GroupBy(v => v.BusinessName).ToList();
-                if (distinctStrings.Count > 1)
+                if (bnLst.Any())
                 {
-                    foreach (var item in distinctStrings)
+                    var distinctStrings = bnLst.GroupBy(v => v.BusinessName1).ToList();
+                    if (distinctStrings.Count > 1)
                     {
-                        busiName += $"{item.Key},";
+                        foreach (var item in distinctStrings)
+                        {
+                            busiName += $"{item.Key},";
+                        }
+                        busiName = busiName.Remove(busiName.Length - 1);
+                        busiName = busiName.TrimStart(',');
                     }
-                    busiName = busiName.Remove(busiName.Length - 1);
-                }
-                else
-                {
-                    busiName = distinctStrings.FirstOrDefault().Key;
+                    else
+                    {
+                        busiName = distinctStrings.FirstOrDefault().Key;
+                    }
                 }
                 BLTCC mObjBLTCC = new BLTCC();
                 var ret = mObjBLTCC.BL_GetTCCRequestGenerateDetails((long)reqid);
@@ -2056,42 +2119,42 @@ namespace EIRS.Web.Controllers
                     TicketRef streciptand = new TicketRef();
                     TicketRef ndreciptand = new TicketRef();
                     TicketRef rdreciptand = new TicketRef();
-                    if (trf.Count > 0)
-                    {
-                        streciptand = trf.Where(o => o.TaxYear == mObjRequestData.TaxYear.ToString()).FirstOrDefault();
-                        if (streciptand != null)
-                            if ((streciptand.TickRefNo != null) && (streciptand.PaymentDate != null))
-                                streciptanddate = $"{streciptand.TickRefNo} || {streciptand.PaymentDate}";
-                            else
-                                streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
-                        else
-                            streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
-                        ndreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 1).ToString()).FirstOrDefault();
-                        if (ndreciptand != null)
-                            if ((ndreciptand.TickRefNo != null) && (ndreciptand.PaymentDate != null))
-                                ndreciptanddate = $"{ndreciptand.TickRefNo} || {ndreciptand.PaymentDate}";
-                            else
-                                ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
-                        else
-                            ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
-                        rdreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 2).ToString()).FirstOrDefault();
-                        if (rdreciptand != null)
-                            if ((rdreciptand.TickRefNo != null) && (rdreciptand.PaymentDate != null))
-                                rdreciptanddate = $"{rdreciptand.TickRefNo} || {rdreciptand.PaymentDate}";
-                            else
-                                rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
-                        else
-                            rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
-                    }
-                    else
-                    {
-                        var allRef = _db.TccRefHolders.OrderByDescending(o => o.ReqId == reqid.ToString()).ToList();
+                    //if (trf.Count > 0)
+                    //{
+                    //    streciptand = trf.Where(o => o.TaxYear == mObjRequestData.TaxYear.ToString()).FirstOrDefault();
+                    //    if (streciptand != null)
+                    //        if ((streciptand.TickRefNo != null) && (streciptand.PaymentDate != null))
+                    //            streciptanddate = $"{streciptand.TickRefNo} || {streciptand.PaymentDate}";
+                    //        else
+                    //            streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
+                    //    else
+                    //        streciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).Tax_receipt;
+                    //    ndreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 1).ToString()).FirstOrDefault();
+                    //    if (ndreciptand != null)
+                    //        if ((ndreciptand.TickRefNo != null) && (ndreciptand.PaymentDate != null))
+                    //            ndreciptanddate = $"{ndreciptand.TickRefNo} || {ndreciptand.PaymentDate}";
+                    //        else
+                    //            ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
+                    //    else
+                    //        ndreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).Tax_receipt;
+                    //    rdreciptand = trf.Where(o => o.TaxYear == (mObjRequestData.TaxYear - 2).ToString()).FirstOrDefault();
+                    //    if (rdreciptand != null)
+                    //        if ((rdreciptand.TickRefNo != null) && (rdreciptand.PaymentDate != null))
+                    //            rdreciptanddate = $"{rdreciptand.TickRefNo} || {rdreciptand.PaymentDate}";
+                    //        else
+                    //            rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
+                    //    else
+                    //        rdreciptanddate = tccDetails.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).Tax_receipt;
+                    //}
+                    //else
+                    //{
+                    var allRef = _db.TccRefHolders.Where(o => o.ReqId == reqid.ToString()).ToList();
 
-                        // var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 1)).ToList();
-                        streciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
-                        ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
-                        rdreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).ReciptRef : "";
-                    }
+                    // var newlstTaxPayerPayment = lstTaxPayerPayment.Where(o => o.AssessmentYear == (currentYear - 1)).ToList();
+                    streciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear).ReciptRef : "";
+                    ndreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 1).ReciptRef : "";
+                    rdreciptanddate = allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2) != null ? allRef.FirstOrDefault(o => o.TaxYear == mObjRequestData.TaxYear - 2).ReciptRef : "";
+                    //}
                     string money1 = "", money2 = "", money3 = "";
                     string money1a = "", money2a = "", money3a = "";
                     string money1b = "", money2b = "", money3b = "", senty = "";
@@ -2196,19 +2259,19 @@ namespace EIRS.Web.Controllers
                             HttpResponseMessage response = await client.PostAsync(url, content);
 
                             // Check if the request was successful
-                            if (response.IsSuccessStatusCode)
-                            {
-                                // Read and display the response content
-                                var result = await response.Content.ReadAsStringAsync();
-                                if (Convert.ToBoolean(result) == false)
-                                {
-                                    return RedirectToAction("List", "ProcessTCCRequest");
-                                }
-                            }
-                            else
-                            {
-                                return RedirectToAction("List", "ProcessTCCRequest");
-                            }
+                            //if (response.IsSuccessStatusCode)
+                            //{
+                            //    // Read and display the response content
+                            //    var result = await response.Content.ReadAsStringAsync();
+                            //    if (Convert.ToBoolean(result) == false)
+                            //    {
+                            //        return RedirectToAction("List", "ProcessTCCRequest");
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    return RedirectToAction("List", "ProcessTCCRequest");
+                            //}
                         }
                         catch (Exception ex)
                         {
@@ -2242,11 +2305,12 @@ namespace EIRS.Web.Controllers
                         ValidatedPath = "ETCC/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
                         GeneratePathForPrint = "ETCC/Print/" + mObjRequestData.IndividualID + "/Temp/Html/" + mObjRequestData.IndividualID + "_template.html",
                         GeneratedPath = "ETCC/" + mObjRequestData.IndividualID + "/" + mStrGeneratedFileName,
-                        ModifiedDate = CommUtil.GetCurrentDateTime()
+                        ModifiedDate = CommUtil.GetCurrentDateTime(),
+                        RequestDate = CommUtil.GetCurrentDateTime()
                     };
                     mObjBLTCC.BL_UpdateRequestStatus(mObjUpdateStatus);
-                    Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
-                    string file = Convert.ToBase64String(bytesArray);
+                    //Byte[] bytesArray = System.IO.File.ReadAllBytes(mStrGeneratedDocumentPath);
+                    //string file = Convert.ToBase64String(bytesArray);
                     ValidateTcc tcc = new ValidateTcc()
                     {
                         DateCreated = DateTime.Now,
@@ -2256,9 +2320,10 @@ namespace EIRS.Web.Controllers
                         TaxpayerTIN = tin,
                         TCCCertificateNumber = certificateNumber,
                         DateofTCCissued = DateTime.Now,
-                        TCCpdf = file,
+                        TCCpdf = "file",
                         TccRequestId = mObjRequestData.TCCRequestID
                     };
+
                     using (_db = new EIRSEntities())
                     {
                         _db.ValidateTccs.Add(tcc);
@@ -2776,28 +2841,7 @@ namespace EIRS.Web.Controllers
                 return Content("Document Not Found");
             }
         }
-        //[HttpGet]
-        //public FileResult Print(long? reqid)
-        //{
-        //    if (reqid.GetValueOrDefault() > 0)
-        //    {
-        //        BLTCC mObjBLTCC = new BLTCC();
-        //        usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
-        //        if (mObjRequestData != null)
-        //        {
-        //            var db = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == mObjRequestData.TCCRequestID);
-        //            var fname = GlobalDefaultValues.DocumentLocation + db.GeneratePathForPrint.Trim();
-        //            byte[] FileBytes = System.IO.File.ReadAllBytes(fname);
 
-        //            return File(FileBytes, "application/pdf");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return File("", "NoDocumentFOund");
-        //    }
-        //    return File("", "NoDocumentFOund");
-        //}
         [HttpGet]
         public ActionResult Print(long? reqid)
         {
@@ -2813,66 +2857,6 @@ namespace EIRS.Web.Controllers
             }
             return null;
         }
-        //[HttpGet]
-        //public ActionResult Print(long? reqid)
-        //{
-        //    if (reqid.GetValueOrDefault() > 0)
-        //    {
-        //        string html = "";
-        //        BLTCC mObjBLTCC = new BLTCC();
-        //        usp_GetTCCRequestDetails_Result mObjRequestData = mObjBLTCC.BL_GetRequestDetails(reqid.GetValueOrDefault());
-        //        string htlPath = GlobalDefaultValues.DocumentLocation + mObjRequestData.TCCRequestID + "/Print/printedCopy";
-        //        string ptd = Path.Combine(htlPath + "template.pdf");
-
-        //        if (mObjRequestData != null)
-        //        {
-
-        //            var db = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == mObjRequestData.TCCRequestID);
-        //            if (string.IsNullOrEmpty(db.GeneratePathForPrint))
-        //            {
-        //                string removedLogo = "#imNavED";
-        //                var pathPdf = GlobalDefaultValues.DocumentLocation + mObjRequestData.GeneratedPath;
-        //                IronPdf.PdfDocument pdfIII = IronPdf.PdfDocument.FromFile(pathPdf);
-        //                // Convert PDF to HTML string
-        //                html = pdfIII.ToHtmlString();
-        //                html = html.Replace(removedLogo, "");
-        //                db.GeneratePathForPrint = html;
-        //                _db.SaveChanges();
-        //            }
-        //            else
-        //            {
-        //                html = db.GeneratePathForPrint;
-        //            }
-
-        //            SelectPdf.HtmlToPdf pdf = new SelectPdf.HtmlToPdf();
-        //            SelectPdf.PdfDocument doc = pdf.ConvertHtmlString(html);
-
-        //            if (!Directory.Exists(htlPath))
-        //            {
-        //                Directory.CreateDirectory(htlPath);
-        //            }
-        //            var bytes = doc.Save();
-
-        //            System.IO.File.WriteAllBytes(ptd, bytes);
-
-        //            Spire.Pdf.PdfDocument docDoc = new Spire.Pdf.PdfDocument();
-        //            //Load a PDF file
-        //            docDoc.LoadFromFile(ptd);
-        //            //Print with default printer 
-        //            docDoc.Print();
-        //            return RedirectToAction("TccDownload", "OperationManager"); /*File(GlobalDefaultValues.DocumentLocation + mObjRequestData.GeneratedPath, "application/force-download", mObjRequestData.RequestRefNo.Trim() + ".pdf");*/
-        //        }
-        //        else
-        //        {
-        //            return Content("Document Not Found");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return Content("Document Not Found");
-        //    }
-        //}
-
         [HttpPost]
         public JsonResult DeleteIncomeStream(int RowID)
         {
@@ -2881,26 +2865,45 @@ namespace EIRS.Web.Controllers
             if (RowID > 0)
             {
                 IList<Request_IncomeStream> lstIncomeStream = SessionManager.LstIncomeStream ?? new List<Request_IncomeStream>();
+                IList<PayeApiResponse> lstPayeApiResponse = SessionManager.LstPayeApiResponse ?? new List<PayeApiResponse>();
 
                 Request_IncomeStream mObjIncomeStreamModel = lstIncomeStream.Where(t => t.RowID == RowID).FirstOrDefault();
 
                 if (mObjIncomeStreamModel != null)
                 {
-                    mObjIncomeStreamModel.intTrack = EnumList.Track.DELETE;
+                    mObjIncomeStreamModel.TotalIncomeEarned = 0;
+                    mObjIncomeStreamModel.BusinessID = 0;
+                    mObjIncomeStreamModel.BusinessName = "";
+                    mObjIncomeStreamModel.LGAName = "";
+                    mObjIncomeStreamModel.LGAID = 0;
+                    mObjIncomeStreamModel.TaxPayerRoleID = 0;
+                    mObjIncomeStreamModel.TaxPayerRoleName = "";
+                    mObjIncomeStreamModel.intTrack = EnumList.Track.UPDATE;
                 }
 
                 //Update TCC
                 IList<Request_TCCDetail> lstTCCDetails = SessionManager.LstTCCDetail ?? new List<Request_TCCDetail>();
                 //Search if Row for Tax Year Exists
                 Request_TCCDetail mObjTCCDetail;
-
+                var pp = lstPayeApiResponse.FirstOrDefault(o => o.AssessmentYear == mObjIncomeStreamModel.TaxYear.ToString());
                 mObjTCCDetail = lstTCCDetails.Where(t => t.TaxYear == mObjIncomeStreamModel.TaxYear).FirstOrDefault();
-
+                lstTCCDetails.Remove(mObjTCCDetail);
                 if (mObjTCCDetail != null)
                 {
-                    mObjTCCDetail.AssessableIncome = lstIncomeStream.Where(t => t.TaxYear == mObjIncomeStreamModel.TaxYear && t.intTrack != EnumList.Track.DELETE).Sum(t => t.TotalIncomeEarned);
+                    mObjTCCDetail.TaxYear = mObjIncomeStreamModel.TaxYear;
+                    mObjTCCDetail.TCCTaxPaid = Convert.ToDecimal(pp.AnnualTaxII);
+                    mObjTCCDetail.ERASTaxPaid = Convert.ToDecimal(pp.AnnualTaxII);
+                    mObjTCCDetail.ERASAssessed = Convert.ToDecimal(pp.AnnualTax);
+                    mObjTCCDetail.Tax_receipt = "";
+                    mObjTCCDetail.AssessableIncome = Convert.ToDecimal(pp.ChargeableIncome);
+
+                    if (mObjTCCDetail.AssessableIncome > 0)
+                        mObjTCCDetail.RevenueType = "PAYE";
+                    else
+                        mObjTCCDetail.RevenueType = "";
                     mObjTCCDetail.intTrack = lstIncomeStream.Where(t => t.TaxYear == mObjIncomeStreamModel.TaxYear && t.intTrack != EnumList.Track.DELETE).Any() ? EnumList.Track.UPDATE : EnumList.Track.DELETE;
                 }
+                lstTCCDetails.Add(mObjTCCDetail);
 
                 dcResponse["success"] = true;
                 dcResponse["Message"] = "Income Stream Deleted Successfully";
@@ -3047,18 +3050,16 @@ namespace EIRS.Web.Controllers
 
                 lstIncomeStream.Add(mObjIncomeStream);
             }
-
-            //mObjIncomeStream = lstIncomeStream.Where(t => t.TaxYear == pObjIncomeStreamModel.TaxYear).FirstOrDefault();
-            //if (mObjIncomeStream != null)
-            //{
-            //    pObjIncomeStreamModel.RowID = mObjIncomeStream.RowID;
-            //}
             usp_GetTaxPayerLiabilityByTaxYear_Result mObjLiabilityData = new BLReport().BL_GetTaxPayerLiabilityByTaxYear(pObjIncomeStreamModel.TaxPayerTypeID, pObjIncomeStreamModel.TaxPayerID, mIntOldTaxYear);
 
             //Update or Add TCC Details
             IList<Request_TCCDetail> lstTCCDetails = SessionManager.LstTCCDetail ?? new List<Request_TCCDetail>();
             IList<usp_GetTaxPayerLiabilityForTCC_Result> lstTCCDetailsliability = SessionManager.lstLaibility ?? new List<usp_GetTaxPayerLiabilityForTCC_Result>();
             IList<usp_GetTCCDetail_Result> lstTCCDetailsNew = SessionManager.LstTCCDetailNew ?? new List<usp_GetTCCDetail_Result>();
+
+            // BLTCC mObjBLTCC = new BLTCC();
+            // IList<usp_GetTCCDetail_Result> lstTCCDetailsNew = mObjBLTCC.BL_GetTCCDetail(mObjBusinessData.IndividualID, (int)EnumList.TaxPayerType.Individual, mIntOldTaxYear);
+
             //Search if Row for Tax Year Exists
             Request_TCCDetail mObjOldTCCDetail, mObjTCCDetail;
             IList<usp_GetTaxPayerPaymentForTCCNEW_Result> lstTaxPayerPayment = SessionManager.LstTCCTaxPayerPayment ?? new List<usp_GetTaxPayerPaymentForTCCNEW_Result>();
@@ -3091,13 +3092,13 @@ namespace EIRS.Web.Controllers
                         ERASAssessed = newmObjOldTCCDetail == null ? 0 : newmObjOldTCCDetail.ERASAssessed.GetValueOrDefault(),
                         ERASTaxPaid = newmObjOldTCCDetail == null ? 0 : newmObjOldTCCDetail.ERASTaxPaid.GetValueOrDefault(),
                         Tax_receipt = tickRefNo,
+                        RevenueType = formalTccRecord.TotalIncomeEarned != 0 ? "DA" : "",
                         intTrack = EnumList.Track.INSERT,
                     };
                     lstTCCDetails.Add(mObjOldTCCDetail);
                 }
                 else
                 {
-
                     mObjOldTCCDetail = new Request_TCCDetail()
                     {
                         RowID = lstTCCDetails.Count + 1,
@@ -3108,6 +3109,7 @@ namespace EIRS.Web.Controllers
                         ERASAssessed = newmObjOldTCCDetail == null ? 0 : newmObjOldTCCDetail.ERASAssessed.GetValueOrDefault(),
                         ERASTaxPaid = newmObjOldTCCDetail == null ? 0 : newmObjOldTCCDetail.ERASTaxPaid.GetValueOrDefault(),
                         Tax_receipt = tickRefNo,
+                        RevenueType = formalTccRecord.TotalIncomeEarned != 0 ? "DA" : "",
                         intTrack = EnumList.Track.INSERT,
                     };
                     lstTCCDetails.Add(mObjOldTCCDetail);
@@ -3134,12 +3136,32 @@ namespace EIRS.Web.Controllers
                         liaby = liab.AssessmentAmount.Value;
                         liabz = liab.PaymentAmount.Value;
                     }
+                    string revenueType = "";
+                    decimal totalIncomeEarned3 = pObjIncomeStreamModel.TotalIncomeEarned;
+                    decimal chargeableIncome3 = Convert.ToDecimal(newPayeRec.ChargeableIncome);
+                    if (chargeableIncome3 == 0 && totalIncomeEarned3 == 0)
+                    {
+                        revenueType = "";
+                    }
+                    else if (chargeableIncome3 != 0 && totalIncomeEarned3 != 0)
+                    {
+                        revenueType = "DA and PAYE";
+                    }
+                    else if (chargeableIncome3 == 0)
+                    {
+                        revenueType = "DA";
+                    }
+                    else if (totalIncomeEarned3 == 0)
+                    {
+                        revenueType = "PAYE";
+                    }
                     x = ((pObjIncomeStreamModel.TotalIncomeEarned) + (Convert.ToDecimal(newPayeRec.ChargeableIncome)));
                     y = (liaby + (Convert.ToDecimal(newPayeRec.AnnualTax)));
                     z = (liabz + (Convert.ToDecimal(newPayeRec.AnnualTaxII)));
                     mObjTCCDetail.AssessableIncome = x;
                     mObjTCCDetail.ERASAssessed = y;
                     mObjTCCDetail.ERASTaxPaid = z;
+                    mObjTCCDetail.RevenueType = revenueType;
                     mObjTCCDetail.Tax_receipt = refref;
                     lstTCCDetails.Add(mObjTCCDetail);
                 }
@@ -3223,10 +3245,24 @@ namespace EIRS.Web.Controllers
                     refref = paye.ReceiptDetail;
                     //else
                     //    refref = mObjTCCDetail.Tax_receipt;
+
+                    string revenueType = "";
+                    // decimal totalIncomeEarned3 = pObjIncomeStreamModel.TotalIncomeEarned;
+                    decimal chargeableIncome3 = mObjTCCDetail.AssessableIncome - Convert.ToDecimal(formalAssessedIncome);
+
+                    if (chargeableIncome3 == 0)
+                    {
+                        revenueType = "PAYE";
+                    }
+                    else
+                    {
+                        revenueType = "DA and PAYE";
+                    }
                     mObjTCCDetail.AssessableIncome = (mObjTCCDetail.AssessableIncome - Convert.ToDecimal(formalAssessedIncome)) + pObjIncomeStreamModel.TotalIncomeEarned;
                     mObjTCCDetail.ERASAssessed = (mObjTCCDetail.ERASAssessed - Convert.ToDecimal(fomalTax)) + pObjIncomeStreamModel.payeAssessedIncome;
                     mObjTCCDetail.ERASTaxPaid = (mObjTCCDetail.ERASTaxPaid - Convert.ToDecimal(fomalTax)) + pObjIncomeStreamModel.payeTaxPaid;
                     mObjTCCDetail.Tax_receipt = refref;
+                    mObjTCCDetail.RevenueType = revenueType;
                 }
 
 
@@ -3243,7 +3279,75 @@ namespace EIRS.Web.Controllers
 
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult DeletePayeIncomeStream(int RowID)
+        {
+            IDictionary<string, object> dcResponse = new Dictionary<string, object>();
 
+            if (!ModelState.IsValid)
+            {
+                dcResponse["success"] = false;
+                dcResponse["Message"] = "All Fields are required";
+            }
+            else
+            {
+                int mIntOldTaxYear = 0;
+                double fomalTax = 0, formalAssessedIncome = 0;
+                IList<Request_IncomeStream> lstIncomeStream = SessionManager.LstIncomeStream ?? new List<Request_IncomeStream>();
+                IList<PayeApiResponse> lstPayeApiResponse = SessionManager.LstPayeApiResponse ?? new List<PayeApiResponse>();
+                Request_IncomeStream mObjIncomeStream;
+                PayeApiResponse paye = new PayeApiResponse();
+                paye = lstPayeApiResponse.Where(t => t.RowID == RowID).FirstOrDefault();
+                if (paye == null)
+                {
+                    dcResponse["success"] = false;
+                    dcResponse["Message"] = "Row Not Found";
+                }
+
+
+                IList<Request_TCCDetail> lstTCCDetails = SessionManager.LstTCCDetail ?? new List<Request_TCCDetail>();
+                //Search if Row for Tax Year Exists
+                Request_TCCDetail mObjOldTCCDetail, mObjTCCDetail;
+
+                mObjTCCDetail = lstTCCDetails.FirstOrDefault(t => t.TaxYear == Convert.ToInt32(paye.AssessmentYear));
+
+                if (mObjTCCDetail != null)
+                {
+                    mObjTCCDetail.AssessableIncome = (mObjTCCDetail.AssessableIncome - Convert.ToDecimal(paye.ChargeableIncome));
+                    mObjTCCDetail.ERASAssessed = (mObjTCCDetail.ERASAssessed - Convert.ToDecimal(paye.AnnualTax));
+                    mObjTCCDetail.ERASTaxPaid = (mObjTCCDetail.ERASTaxPaid - Convert.ToDecimal(paye.AnnualTaxII));
+                    mObjTCCDetail.Tax_receipt = "";
+                    if (mObjTCCDetail.AssessableIncome > 0)
+                        mObjTCCDetail.RevenueType = "DA";
+                    else
+                        mObjTCCDetail.RevenueType = "";
+                }
+
+                lstPayeApiResponse.Remove(paye);
+                paye.intTrack = EnumList.Track.UPDATE;
+                mIntOldTaxYear = Convert.ToInt32(paye.AssessmentYear);
+                paye.ChargeableIncome = Convert.ToDouble(0);
+                paye.AnnualTaxII = Convert.ToDouble(0);
+                paye.AnnualTax = Convert.ToDouble(0);
+                paye.ReceiptRef = string.Empty;
+                paye.ReceiptDate = string.Empty;
+                paye.EmployerName = string.Empty;
+                paye.ReceiptDetail = string.Empty;
+                lstPayeApiResponse.Add(paye);
+
+                dcResponse["success"] = true;
+                dcResponse["Message"] = "Paye Income Stream Deleted Successfully";
+
+                dcResponse["PayeIncomeStreamData"] = CommUtil.RenderPartialToString("_BindPayeIncomeStreamTable", lstPayeApiResponse.Where(t => t.intTrack != EnumList.Track.DELETE).OrderBy(x => x.AssessmentYear).ToList(), this.ControllerContext);
+
+                SessionManager.LstPayeApiResponse = lstPayeApiResponse.OrderBy(o => o.AssessmentYear).ToList();
+
+                dcResponse["TCCDetailData"] = CommUtil.RenderPartialToString("_BindTCCDetailTable", lstTCCDetails.Where(t => t.intTrack != EnumList.Track.DELETE).ToList(), this.ControllerContext);
+                SessionManager.LstTCCDetail = lstTCCDetails;
+            }
+
+            return Json(dcResponse, JsonRequestBehavior.AllowGet);
+        }
         public IDictionary<decimal, decimal> getTaxPaidAssessed(int year, int individualid, byte TaxPayerTypeID)
         {
             var respValue = new Dictionary<decimal, decimal>();
@@ -3597,6 +3701,7 @@ namespace EIRS.Web.Controllers
 
         public JsonResult Revoke(MAP_TCCRequest_Revoke pObjRevoke)
         {
+            string gp = "", gpd = "";
             IDictionary<string, object> dcResponse = new Dictionary<string, object>();
 
             BLTCC mObjBLTCCC = new BLTCC();
@@ -3607,12 +3712,32 @@ namespace EIRS.Web.Controllers
             {
                 using (_db = new EIRSEntities())
                 {
+                    var tccPath = _db.TCC_Request.FirstOrDefault(o => o.TCCRequestID == pObjRevoke.RequestID);
+                    gp = tccPath.GeneratedPath;
+
+                    gpd = tccPath.GeneratePathForPrint;
+                    tccPath.ApproverTypeId = "0";
+                    if (System.IO.File.Exists(gp))
+                    {
+                        System.IO.File.Delete(gp);
+                    }
+                    if (System.IO.File.Exists(gpd))
+                    {
+                        System.IO.File.Delete(gpd);
+                    }
+                    var refHolderToDelete = _db.TccRefHolders.Where(o => o.ReqId == pObjRevoke.RequestID.ToString()).ToList();
+                    var recToDelete = _db.NewTCCDetailsHolds.Where(o => o.TCCRequestID == pObjRevoke.RequestID).ToList();
                     var detailsToRemove = _db.ValidateTccs.FirstOrDefault(o => o.TccRequestId == pObjRevoke.RequestID);
                     if (detailsToRemove != null)
                     {
                         var deleteFromValidateTccTable = _db.ValidateTccs.Remove(detailsToRemove);
-                        _db.SaveChanges();
                     }
+                    if (recToDelete.Any())
+                        _db.NewTCCDetailsHolds.RemoveRange(recToDelete);
+                    if (refHolderToDelete.Any())
+                        _ = _db.TccRefHolders.RemoveRange(refHolderToDelete);
+                    _db.SaveChanges();
+
                 }
                 pObjRevoke.CreatedDate = CommUtil.GetCurrentDateTime();
                 pObjRevoke.CreatedBy = SessionManager.UserID;
@@ -3647,13 +3772,47 @@ namespace EIRS.Web.Controllers
                     var result = response.Content.ReadAsStringAsync();
                     string res = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     respObj = JsonConvert.DeserializeObject<PayeApiFullResponse>(res);
+                    int currentYear = DateTime.Now.Year;
                     if (respObj.Result.Count() > 0)
                     {
-                        for (int i = 1; i < respObj.Result.Count(); i++)
+                        var lastYr = respObj.Result.Where(o => o.AssessmentYear == (currentYear - 1).ToString()).ToList();
+                        var last2Yr = respObj.Result.Where(o => o.AssessmentYear == (currentYear - 2).ToString()).ToList();
+                        var last3Yr = respObj.Result.Where(o => o.AssessmentYear == (currentYear - 3).ToString()).ToList();
+
+                        if (lastYr.Count > 0)
                         {
-                            var item = respObj.Result[i];
-                            item.RowID = i;
-                            item.AnnualTaxII = item.AnnualTax;
+                            var item = new PayeApiResponse();
+                            item.RowID = 1;
+                            item.EmployerName = lastYr.FirstOrDefault().EmployerName;
+                            item.AnnualTaxII = lastYr.Sum(o => o.AnnualTax);
+                            item.ChargeableIncome = lastYr.Sum(o => o.AnnualGross);
+                            item.AnnualTax = lastYr.Sum(o => o.AnnualTax);
+                            //anual gros ==> income amount
+                            //anual tax ==> assed amount
+                            //anual tax ==> tax paid
+                            item.AssessmentYear = lastYr.FirstOrDefault().AssessmentYear;
+                            respObjList.Add(item);
+                        }
+                        if (last2Yr.Count > 0)
+                        {
+                            var item = new PayeApiResponse();
+                            item.RowID = 2;
+                            item.EmployerName = last2Yr.FirstOrDefault().EmployerName;
+                            item.ChargeableIncome = last2Yr.Sum(o => o.AnnualGross);
+                            item.AnnualTax = last2Yr.Sum(o => o.AnnualTax);
+                            item.AssessmentYear = last2Yr.FirstOrDefault().AssessmentYear;
+                            item.AnnualTaxII = last2Yr.Sum(o => o.AnnualTax);
+                            respObjList.Add(item);
+                        }
+                        if (last3Yr.Count > 0)
+                        {
+                            var item = new PayeApiResponse();
+                            item.RowID = 3;
+                            item.EmployerName = last3Yr.FirstOrDefault().EmployerName;
+                            item.AnnualTax = last3Yr.Sum(o => o.AnnualTax);
+                            item.ChargeableIncome = last3Yr.Sum(o => o.AnnualGross);
+                            item.AssessmentYear = last3Yr.FirstOrDefault().AssessmentYear;
+                            item.AnnualTaxII = last3Yr.Sum(o => o.AnnualTax);
                             respObjList.Add(item);
                         }
                     }

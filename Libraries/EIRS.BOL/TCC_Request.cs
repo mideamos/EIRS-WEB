@@ -51,6 +51,9 @@ namespace EIRS.BOL
         public Nullable<int> ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string GeneratePathForPrint { get; set; }
+        public Nullable<bool> IsDownloaded { get; set; }
+        public Nullable<int> TaxOfficeId { get; set; }
+        public string ApproverTypeId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MAP_TCCRequest_Generate> MAP_TCCRequest_Generate { get; set; }
@@ -72,5 +75,9 @@ namespace EIRS.BOL
         public virtual ICollection<MAP_TCCRequest_ValidateTaxPayerInformation> MAP_TCCRequest_ValidateTaxPayerInformation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MAP_TCCRequest_Revoke> MAP_TCCRequest_Revoke { get; set; }
+        public virtual TCC_Request TCC_Request1 { get; set; }
+        public virtual TCC_Request TCC_Request2 { get; set; }
+        public virtual TCC_Request TCC_Request11 { get; set; }
+        public virtual TCC_Request TCC_Request3 { get; set; }
     }
 }

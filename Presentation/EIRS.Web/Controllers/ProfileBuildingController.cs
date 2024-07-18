@@ -27,7 +27,7 @@ namespace EIRS.Web.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         public JsonResult LoadData()
         {
@@ -73,14 +73,14 @@ namespace EIRS.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpGet]
         public ActionResult ListWithExport()
         {
             return View();
         }
 
-        
+
         [HttpPost]
         public JsonResult LoadExportData()
         {
@@ -126,7 +126,7 @@ namespace EIRS.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpGet]
         public ActionResult ExportData()
         {
@@ -154,14 +154,14 @@ namespace EIRS.Web.Controllers
             return ExportToExcel(lstBuildingData, this.RouteData, strColumns, "Building");
         }
 
-        
+
         public ActionResult Search()
         {
             return View();
         }
 
         [HttpPost]
-        
+
         public ActionResult Search(FormCollection pObjCollection)
         {
             string mStrBuildingName = pObjCollection.Get("txtBuildingName");
@@ -206,7 +206,7 @@ namespace EIRS.Web.Controllers
             ViewBag.BuildingUnitList = SessionManager.LstBuildingUnit;
         }
 
-        
+
         public ActionResult Add()
         {
             SessionManager.LstBuildingUnit = new List<Building_BuildingUnit>();
@@ -215,7 +215,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult Add(BuildingViewModel pObjBuildingModel)
         {
@@ -343,7 +343,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult Edit(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -398,7 +398,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost()]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult Edit(BuildingViewModel pObjBuildingModel)
         {
@@ -463,7 +463,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult Details(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -527,7 +527,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult SearchIndividual(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -580,7 +580,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult SearchIndividual(FormCollection pObjCollection)
         {
             string mStrName = pObjCollection.Get("txtName");
@@ -599,7 +599,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindIndividualTable_SingleSelect", lstIndividual.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchCorporate(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -652,7 +652,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult SearchCorporate(FormCollection pObjCollection)
         {
             string mStrCompanyName = pObjCollection.Get("txtCompanyName");
@@ -671,7 +671,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindCompanyTable_SingleSelect", lstCompany.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchGovernment(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -724,7 +724,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult SearchGovernment(FormCollection pObjCollection)
         {
             string mStrGovernmentName = pObjCollection.Get("txtGovernmentName");
@@ -743,7 +743,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindGovernmentTable_SingleSelect", lstGovernment.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchSpecial(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -796,7 +796,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         public ActionResult SearchSpecial(FormCollection pObjCollection)
         {
             string mStrSpecialName = pObjCollection.Get("txtSpecialName");
@@ -842,7 +842,7 @@ namespace EIRS.Web.Controllers
 
         }
 
-        
+
         public ActionResult AddIndividual(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -883,7 +883,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddIndividual(TPIndividualViewModel pObjIndividualModel)
         {
@@ -1062,7 +1062,7 @@ namespace EIRS.Web.Controllers
             ViewBag.BuildingUnitList = new SelectList(lstBuildingUnitNumberList, "BuildingUnitID", "UnitNumber");
         }
 
-        
+
         public ActionResult AddCorporate(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1103,7 +1103,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddCorporate(TPCompanyViewModel pObjCompanyModel)
         {
@@ -1275,7 +1275,7 @@ namespace EIRS.Web.Controllers
             ViewBag.BuildingUnitList = new SelectList(lstBuildingUnitNumberList, "BuildingUnitID", "UnitNumber");
         }
 
-        
+
         public ActionResult AddGovernment(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1316,7 +1316,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddGovernment(TPGovernmentViewModel pObjGovernmentModel)
         {
@@ -1485,7 +1485,7 @@ namespace EIRS.Web.Controllers
             ViewBag.BuildingUnitList = new SelectList(lstBuildingUnitNumberList, "BuildingUnitID", "UnitNumber");
         }
 
-        
+
         public ActionResult AddSpecial(int? id, string name)
         {
             if (id.GetValueOrDefault() > 0)
@@ -1526,7 +1526,7 @@ namespace EIRS.Web.Controllers
         }
 
         [HttpPost]
-        
+
         [ValidateAntiForgeryToken()]
         public ActionResult AddSpecial(TPSpecialViewModel pObjSpecialModel)
         {

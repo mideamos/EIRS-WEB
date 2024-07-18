@@ -189,8 +189,8 @@ namespace EIRS.Web.Controllers
                         UserTypeID = mObjUserData.UserTypeID.GetValueOrDefault(),
                         ContactNumber = mObjUserData.ContactNumber,
                         Email = mObjUserData.EmailAddress,
-                        Password =EncryptDecrypt.Decrypt(mObjUserData.Password),
-                        ConfirmPassword =EncryptDecrypt.Decrypt(mObjUserData.Password),
+                        Password = EncryptDecrypt.Decrypt(mObjUserData.Password),
+                        ConfirmPassword = EncryptDecrypt.Decrypt(mObjUserData.Password),
                         Active = mObjUserData.Active.GetValueOrDefault(),
                         IsTOManager = mObjUserData.IsTOManager.GetValueOrDefault(),
                         IsDirector = mObjUserData.IsDirector.GetValueOrDefault(),
@@ -469,7 +469,7 @@ namespace EIRS.Web.Controllers
                     {
                         MAP_User_Screen mObjUserScreen = new MAP_User_Screen()
                         {
-                            
+
                             UserID = pObjScreenModel.UserID,
                             ScreenID = TrynParse.parseInt(vScreenID),
                             Active = true,
@@ -482,7 +482,7 @@ namespace EIRS.Web.Controllers
                 }
 
                 FlashMessage.Info("Screen added Successfully");
-                return RedirectToAction("ScreenList", "User", new { id = pObjScreenModel.UserID});
+                return RedirectToAction("ScreenList", "User", new { id = pObjScreenModel.UserID });
             }
         }
 

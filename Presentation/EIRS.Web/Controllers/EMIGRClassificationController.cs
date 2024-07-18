@@ -958,12 +958,12 @@ namespace EIRS.Web.Controllers
 
         public JsonResult GetEntryDetails(int dsid, long entryid)
         {
-            if(dsid == 1)
+            if (dsid == 1)
             {
                 EM_PD_Main_Authorized mObjDetails = new BLEMDataImport().BL_GetPDMainAuthorizedDetails(entryid);
                 return Json(mObjDetails, JsonRequestBehavior.AllowGet);
             }
-            else if(dsid == 2)
+            else if (dsid == 2)
             {
                 EM_PD_Main_Pending mObjDetails = new BLEMDataImport().BL_GetPDMainPendingDetails(entryid);
                 return Json(mObjDetails, JsonRequestBehavior.AllowGet);

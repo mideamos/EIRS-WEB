@@ -345,6 +345,8 @@ namespace EIRS.Web.Controllers
                     SizeID = pObjBusinessModel.SizeID,
                     ContactName = pObjBusinessModel.ContactName,
                     BusinessAddress = pObjBusinessModel.BusinessAddress,
+                    ZoneId = pObjBusinessModel.ZoneId,
+                    TaxOfficeID = pObjBusinessModel.TaxOfficeId,
                     BusinessNumber = pObjBusinessModel.BusinessNumber,
                     Active = true,
                     ModifiedBy = SessionManager.UserID,

@@ -106,7 +106,7 @@ namespace EIRS.Web.Controllers
             }
             sbSMSContent.Append(", kindly pay "); sbSMSContent.Append(pObjEmailDetails.BillAmount);
             sbSMSContent.Append(" at any of the IGR collecting banks or visit https://tyson.eirs.gov.ng/webpay/");
-           // sbSMSContent.Append(" at any of the IGR collecting banks or visit https://tyson.eirs.gov.ng/webpay/?billRef=");
+            // sbSMSContent.Append(" at any of the IGR collecting banks or visit https://tyson.eirs.gov.ng/webpay/?billRef=");
             sbSMSContent.Append(pObjEmailDetails.BillRefNo);
             sbSMSContent.Append(" to make payment online.");
 
@@ -213,6 +213,9 @@ namespace EIRS.Web.Controllers
         }
         public static bool SendSMS(string pStrToNumber, string pStrBody)
         {
+            try
+            {
+
             var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://app.multitexter.com/v2/app/sms");
             httpWebRequest.ContentType = "application/json"; httpWebRequest.Method = "POST";
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
@@ -236,6 +239,12 @@ namespace EIRS.Web.Controllers
             }
 
             return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
         }
         // GET: Utility
 

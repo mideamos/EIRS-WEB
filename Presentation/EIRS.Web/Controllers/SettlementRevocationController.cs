@@ -214,7 +214,7 @@ namespace EIRS.Web.Controllers
 
                             if (Amountholder == kkk)
                                 mObjAssessment.SettlementStatusID = (int)EnumList.SettlementStatus.Settled;
-                         
+
                             else if (kkk == 0)
                                 mObjAssessment.SettlementStatusID = (int)EnumList.SettlementStatus.Assessed;
                             else if (Amountholder > kkk)
@@ -358,13 +358,13 @@ namespace EIRS.Web.Controllers
 
                                 using (_db = new EIRSEntities())
                                 {
-                                    var ret = _db.MAP_ServiceBill_MDAServiceItem.FirstOrDefault(o=>o.SBSIID == mObjSBMSI.SBSIID);
+                                    var ret = _db.MAP_ServiceBill_MDAServiceItem.FirstOrDefault(o => o.SBSIID == mObjSBMSI.SBSIID);
                                     mObjSBMSI.ServiceAmount = ret.ServiceAmount;
-                                    mObjSBMSI.ServiceBaseAmount = ret.ServiceBaseAmount; 
-                                    
+                                    mObjSBMSI.ServiceBaseAmount = ret.ServiceBaseAmount;
+
                                     mssiAmount = _db.MAP_Settlement_SettlementItem.Where(o => o.SBSIID == mObjSBMSI.SBSIID).Sum(o => o.SettlementAmount);
                                 }
-                                
+
 
                                 if (mssiAmount == 0)
                                 {
@@ -391,7 +391,7 @@ namespace EIRS.Web.Controllers
                             {
                                 ServiceBillID = pObjSettlementRevocation.ServiceBillID,
                                 SettlementDate = CommUtil.GetCurrentDateTime(),
-                               // SettlementStatusID = (int)EnumList.SettlementStatus.Partial,
+                                // SettlementStatusID = (int)EnumList.SettlementStatus.Partial,
                                 ModifiedDate = CommUtil.GetCurrentDateTime(),
                                 ModifiedBy = SessionManager.UserID
                             };

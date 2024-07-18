@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = "Individual Tax Payer - View Bill";
 
+    List<MapAssessmentDisapprove_> ddd = (List<MapAssessmentDisapprove_>)ViewBag.disaap;
     IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = (IList<usp_GetAssessment_AssessmentRuleList_Result>)ViewBag.MAPAssessmentRules;
     IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = (IList<usp_GetAssessmentRuleItemList_Result>)ViewBag.AssessmentItems;
     IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = (IList<usp_GetAssessmentRuleBasedSettlement_Result>)ViewBag.AssessmentRuleSettlement;
@@ -303,6 +304,46 @@
                         </a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-sm-12">
+        <div class="portlet light" style="min-height: 270px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    Disapproval Notes
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPendingListII">
+                    <thead class="red-th">
+                        <tr>
+                            <th>DateCreated</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ddd.Count > 0)
+                        {
+                            foreach (var vProfile in ddd)
+                            {
+                                <tr>
+                                    <td>@vProfile.DateCreated.Value.ToString("dd-MMMM-yyyy")</td>
+                                    <td>@vProfile.Notes</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">No Item Found Yet As This Assessment As Never Been Disapproved.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+               
             </div>
         </div>
     </div>

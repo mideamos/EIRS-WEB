@@ -49,6 +49,15 @@
           <Property Name="ASLID" Type="int" Nullable="false" />
           <Property Name="ASLName" Type="varchar" MaxLength="500" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EIRS.dbo.ApproverType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ApproverType">
+          <Key>
+            <PropertyRef Name="ApproverTypeId" />
+          </Key>
+          <Property Name="ApproverTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApproverTypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -392,6 +401,14 @@
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="BusinessNames">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TccRequestId" Type="bigint" />
+          <Property Name="BusinessName" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Certificate_Types">
           <Key>
@@ -2066,7 +2083,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="TotalIncomeEarned" Type="decimal" Precision="18" Scale="2" />
           <Property Name="AssessmentYear" Type="int" />
           <Property Name="Role" Type="varchar" MaxLength="50" />
-          <Property Name="BusinessName" Type="varchar" MaxLength="50" />
+          <Property Name="BusinessName" Type="varchar" MaxLength="200" />
           <Property Name="LGA" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="NewTCCDetailsHold">
@@ -2081,8 +2098,10 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="TCCTaxPaid" Type="decimal" Precision="18" Scale="2" />
           <Property Name="ERASTaxPaid" Type="decimal" Precision="18" Scale="2" />
           <Property Name="ERASAssessed" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TCCRequestID" Type="bigint" />
           <Property Name="Tax_receipt" Type="nvarchar" MaxLength="100" />
           <Property Name="IndividualRIN" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReveuneType" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Notification_Method">
           <Key>
@@ -2680,6 +2699,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="PAYE_ApproverID" Type="int" />
         </EntityType>
         <EntityType Name="TaxClearanceCertificate">
           <Key>
@@ -2751,7 +2771,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Key>
             <PropertyRef Name="TCCRequestID" />
           </Key>
-          <Property Name="TCCRequestID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TCCRequestID" Type="bigint" Nullable="false" />
           <Property Name="RequestRefNo" Type="varchar" MaxLength="500" />
           <Property Name="RequestDate" Type="datetime" />
           <Property Name="ServiceBillID" Type="bigint" />
@@ -2773,6 +2793,9 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="GeneratePathForPrint" Type="varchar(max)" />
+          <Property Name="IsDownloaded" Type="bit" />
+          <Property Name="TaxOfficeId" Type="int" />
+          <Property Name="ApproverTypeId" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="TCCDetails">
           <Key>
@@ -2894,7 +2917,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TaxpayerRIN" Type="nvarchar" MaxLength="50" />
-          <Property Name="TaxpayerTIN" Type="nchar" MaxLength="10" />
+          <Property Name="TaxpayerTIN" Type="varchar" MaxLength="50" />
           <Property Name="TCCCertificateNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="DateofTCCissued" Type="datetime" />
           <Property Name="TCCpdf" Type="varchar(max)" />
@@ -5687,6 +5710,18 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TCC_Request_TCC_Request">
+          <End Role="TCC_Request" Type="Self.TCC_Request" Multiplicity="1" />
+          <End Role="TCC_Request1" Type="Self.TCC_Request" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TCC_Request">
+              <PropertyRef Name="TCCRequestID" />
+            </Principal>
+            <Dependent Role="TCC_Request1">
+              <PropertyRef Name="TCCRequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Town_LGA">
           <End Role="LGA" Type="Self.LGA" Multiplicity="0..1" />
           <End Role="Town" Type="Self.Town" Multiplicity="*" />
@@ -7324,6 +7359,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="RevenueStreamID" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="TaxOfficeID" Type="int" Mode="In" />
         </Function>
         <Function Name="usp_RPT_ReviewStatusSummary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaxOfficeID" Type="int" Mode="In" />
@@ -8187,6 +8223,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="Business_Structure" EntityType="Self.Business_Structure" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Business_SubSector" EntityType="Self.Business_SubSector" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Business_Types" EntityType="Self.Business_Types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BusinessNames" EntityType="Self.BusinessNames" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Certificate_Types" EntityType="Self.Certificate_Types" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Certificates" EntityType="Self.Certificates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
@@ -8367,6 +8404,12 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="Ward" EntityType="Self.Ward" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Zone" EntityType="Self.Zone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZoneLGA" EntityType="Self.ZoneLGA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApproverType" EntityType="Self.ApproverType" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ApproverType].[ApproverTypeId] AS [ApproverTypeId], 
+    [ApproverType].[ApproverTypeName] AS [ApproverTypeName]
+    FROM [dbo].[ApproverType] AS [ApproverType]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="DA_And_PAYE_TCC_Details" EntityType="Self.DA_And_PAYE_TCC_Details" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [DA_And_PAYE_TCC_Details].[TccRequestId] AS [TccRequestId], 
@@ -9429,6 +9472,10 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <AssociationSet Name="FK_TaxPayer_Roles_TaxPayer_Types" Association="Self.FK_TaxPayer_Roles_TaxPayer_Types">
             <End Role="TaxPayer_Types" EntitySet="TaxPayer_Types" />
             <End Role="TaxPayer_Roles" EntitySet="TaxPayer_Roles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TCC_Request_TCC_Request" Association="Self.FK_TCC_Request_TCC_Request">
+            <End Role="TCC_Request" EntitySet="TCC_Request" />
+            <End Role="TCC_Request1" EntitySet="TCC_Request" />
           </AssociationSet>
           <AssociationSet Name="FK_Town_LGA" Association="Self.FK_Town_LGA">
             <End Role="LGA" EntitySet="LGA" />
@@ -11878,6 +11925,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
             <Parameter Name="RevenueStreamID" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="TaxOfficeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="usp_RPT_TaxOfficeByRevenueStreamTarget" ReturnType="Collection(EIRSModel.usp_RPT_TaxOfficeByRevenueStreamTarget_Result)">
             <Parameter Name="TaxOfficeID" Mode="In" Type="Int32" />
@@ -12903,6 +12951,16 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="MapAssessmentDisapprove_" EntityType="EIRSModel.MapAssessmentDisapprove_" />
           <EntitySet Name="DA_And_PAYE_TCC_Details" EntityType="EIRSModel.DA_And_PAYE_TCC_Details" />
           <EntitySet Name="NewTCCDetailsHolds" EntityType="EIRSModel.NewTCCDetailsHold" />
+          <EntitySet Name="BusinessNames" EntityType="EIRSModel.BusinessName" />
+          <AssociationSet Name="FK_TCC_Request_Approvaltype" Association="EIRSModel.FK_TCC_Request_Approvaltype">
+            <End Role="TCC_Request" EntitySet="TCC_Request" />
+            <End Role="TCC_Request1" EntitySet="TCC_Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TCC_Request_TCC_Request" Association="EIRSModel.FK_TCC_Request_TCC_Request">
+            <End Role="TCC_Request" EntitySet="TCC_Request" />
+            <End Role="TCC_Request1" EntitySet="TCC_Request" />
+          </AssociationSet>
+          <EntitySet Name="ApproverTypes" EntityType="EIRSModel.ApproverType" />
           <!--<EntitySet Name="TestingNEWTAB" EntityType="EIRSModel.TestingNEWTAB" />
           <EntitySet Name="vw_ServiceBillNew" EntityType="EIRSModel.vw_ServiceBillNew" />-->
           </EntityContainer>
@@ -20795,6 +20853,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="ZoneId" Type="Int32" />
           <Property Name="OfficeManagerID" Type="Int32" />
           <Property Name="IncomeDirector" Type="Int32" />
+          <Property Name="PAYE_ApproverID" Type="Int32" />
         </EntityType>
         <Association Name="FK_Tax_Offices_Address_Types">
           <End Type="EIRSModel.Address_Types" Role="Address_Types" Multiplicity="0..1" />
@@ -21456,6 +21515,13 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <NavigationProperty Name="MAP_TCCRequest_ValidateTaxPayerInformation" Relationship="EIRSModel.FK_MAP_TCCRequest_ValidateTaxPayerInformation_TCC_Request" FromRole="TCC_Request" ToRole="MAP_TCCRequest_ValidateTaxPayerInformation" />
           <NavigationProperty Name="MAP_TCCRequest_Revoke" Relationship="EIRSModel.FK_MAP_TCCRequest_Revoke_TCC_Request" FromRole="TCC_Request" ToRole="MAP_TCCRequest_Revoke" />
           <Property Name="GeneratePathForPrint" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDownloaded" Type="Boolean" />
+          <Property Name="TaxOfficeId" Type="Int32" />
+          <NavigationProperty Name="TCC_Request1" Relationship="EIRSModel.FK_TCC_Request_Approvaltype" FromRole="TCC_Request" ToRole="TCC_Request1" />
+          <NavigationProperty Name="TCC_Request2" Relationship="EIRSModel.FK_TCC_Request_Approvaltype" FromRole="TCC_Request1" ToRole="TCC_Request" />
+          <NavigationProperty Name="TCC_Request11" Relationship="EIRSModel.FK_TCC_Request_TCC_Request" FromRole="TCC_Request" ToRole="TCC_Request1" />
+          <NavigationProperty Name="TCC_Request3" Relationship="EIRSModel.FK_TCC_Request_TCC_Request" FromRole="TCC_Request1" ToRole="TCC_Request" />
+          <Property Name="ApproverTypeId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_MAP_TCCRequest_Generate_TCC_Request">
           <End Type="EIRSModel.TCC_Request" Role="TCC_Request" Multiplicity="0..1" />
@@ -23802,7 +23868,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="TotalIncomeEarned" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AssessmentYear" Type="Int32" />
           <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BusinessName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="LGA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TccRefHolder">
@@ -23933,7 +23999,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TaxpayerRIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TaxpayerTIN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="TaxpayerTIN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="TCCCertificateNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateofTCCissued" Type="DateTime" Precision="3" />
           <Property Name="TCCpdf" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -24000,6 +24066,47 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="ERASAssessed" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Tax_receipt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IndividualRIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TCCRequestID" Type="Int64" />
+          <Property Name="ReveuneType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BusinessName">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TccRequestId" Type="Int64" />
+          <Property Name="BusinessName1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_TCC_Request_Approvaltype">
+          <End Type="EIRSModel.TCC_Request" Role="TCC_Request" Multiplicity="1" />
+          <End Type="EIRSModel.TCC_Request" Role="TCC_Request1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TCC_Request">
+              <PropertyRef Name="TCCRequestID" />
+            </Principal>
+            <Dependent Role="TCC_Request1">
+              <PropertyRef Name="TCCRequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TCC_Request_TCC_Request">
+          <End Type="EIRSModel.TCC_Request" Role="TCC_Request" Multiplicity="1" />
+          <End Type="EIRSModel.TCC_Request" Role="TCC_Request1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TCC_Request">
+              <PropertyRef Name="TCCRequestID" />
+            </Principal>
+            <Dependent Role="TCC_Request1">
+              <PropertyRef Name="TCCRequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ApproverType">
+          <Key>
+            <PropertyRef Name="ApproverTypeId" />
+          </Key>
+          <Property Name="ApproverTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApproverTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
        
         </Schema>
@@ -30699,6 +30806,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySetMapping Name="Tax_Offices">
             <EntityTypeMapping TypeName="EIRSModel.Tax_Offices">
               <MappingFragment StoreEntitySet="Tax_Offices">
+                <ScalarProperty Name="PAYE_ApproverID" ColumnName="PAYE_ApproverID" />
                 <ScalarProperty Name="IncomeDirector" ColumnName="IncomeDirector" />
                 <ScalarProperty Name="OfficeManagerID" ColumnName="OfficeManagerID" />
                 <ScalarProperty Name="ZoneId" ColumnName="ZoneId" />
@@ -31193,6 +31301,9 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySetMapping Name="TCC_Request">
             <EntityTypeMapping TypeName="EIRSModel.TCC_Request">
               <MappingFragment StoreEntitySet="TCC_Request">
+                <ScalarProperty Name="ApproverTypeId" ColumnName="ApproverTypeId" />
+                <ScalarProperty Name="TaxOfficeId" ColumnName="TaxOfficeId" />
+                <ScalarProperty Name="IsDownloaded" ColumnName="IsDownloaded" />
                 <ScalarProperty Name="GeneratePathForPrint" ColumnName="GeneratePathForPrint" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
@@ -33616,6 +33727,8 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySetMapping Name="NewTCCDetailsHolds">
             <EntityTypeMapping TypeName="EIRSModel.NewTCCDetailsHold">
               <MappingFragment StoreEntitySet="NewTCCDetailsHold">
+                <ScalarProperty Name="ReveuneType" ColumnName="ReveuneType" />
+                <ScalarProperty Name="TCCRequestID" ColumnName="TCCRequestID" />
                 <ScalarProperty Name="IndividualRIN" ColumnName="IndividualRIN" />
                 <ScalarProperty Name="Tax_receipt" ColumnName="Tax_receipt" />
                 <ScalarProperty Name="ERASAssessed" ColumnName="ERASAssessed" />
@@ -33626,6 +33739,23 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
                 <ScalarProperty Name="TBKID" ColumnName="TBKID" />
                 <ScalarProperty Name="RowID" ColumnName="RowID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusinessNames">
+            <EntityTypeMapping TypeName="EIRSModel.BusinessName">
+              <MappingFragment StoreEntitySet="BusinessNames">
+                <ScalarProperty Name="BusinessName1" ColumnName="BusinessName" />
+                <ScalarProperty Name="TccRequestId" ColumnName="TccRequestId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApproverTypes">
+            <EntityTypeMapping TypeName="EIRSModel.ApproverType">
+              <MappingFragment StoreEntitySet="ApproverType">
+                <ScalarProperty Name="ApproverTypeName" ColumnName="ApproverTypeName" />
+                <ScalarProperty Name="ApproverTypeId" ColumnName="ApproverTypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

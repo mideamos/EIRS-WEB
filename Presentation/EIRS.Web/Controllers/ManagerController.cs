@@ -17,21 +17,21 @@ namespace EIRS.Web.Controllers
     public class ManagerController : BaseController
     {
         // GET: Manager
-        
+
         public ActionResult TaxOfficerList()
         {
             IList<usp_GetUserList_Result> lstTaxOfficer = new BLUser().BL_GetUserList(new MST_Users() { intStatus = 1, TOManagerID = SessionManager.UserID });
             return View(lstTaxOfficer);
         }
 
-        
+
         public ActionResult TaxPayerList(int? tofid)
         {
             ViewBag.TaxOfficerID = tofid;
             return View();
         }
 
-       
+
         public JsonResult TaxPayerLoadData(int TaxOfficerID)
         {
             //Get parameters
@@ -80,7 +80,7 @@ namespace EIRS.Web.Controllers
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data, AssessmentTotal = dcAssessmentTotal, PaymentTotal = dcPaymentTotal, OutstandingTotal = dcOutstandingTotal }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult TaxPayerReview(int? tpid, int? tptid)
         {
             if (tpid.GetValueOrDefault() > 0 && tptid.GetValueOrDefault() > 0)
@@ -197,14 +197,14 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult ReviewStatusSummary()
         {
             UI_FillReviewStatus();
             return View();
         }
 
-        
+
         public JsonResult ReviewStatusSummaryLoadData(int ReviewStatusID)
         {
             //Get parameters
@@ -246,14 +246,14 @@ namespace EIRS.Web.Controllers
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult ReviewStatusTaxPayer(int rsid)
         {
             ViewBag.ReviewStatusID = rsid;
             return View();
         }
 
-        
+
         public JsonResult ReviewStatusTaxPayerLoadData(int ReviewStatusID)
         {
             //Get parameters
@@ -297,14 +297,14 @@ namespace EIRS.Web.Controllers
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult TaxOfficerMonthlyPayment()
         {
             UI_FillYearDropDown();
             return View();
         }
 
-        
+
         public JsonResult TaxOfficerMonthlyPaymentLoadData(int Year)
         {
             //Get parameters

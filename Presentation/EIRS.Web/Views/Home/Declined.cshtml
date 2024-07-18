@@ -1,10 +1,9 @@
 ﻿@using EIRS.Web.GISModels
 @{
     ViewBag.Title = "Declined";
-    IList<ApprovalFlow> lstProfileInformation = (IList<ApprovalFlow>)ViewBag.ProfileInformation;
+    IList<usp_GetAssessmentForPendingOrDeclined_Result> lstProfileInformation = (IList<usp_GetAssessmentForPendingOrDeclined_Result>)ViewBag.ProfileInformation;
 
 }
-
 
 <div class="portlet light">
     <div class="portlet-title">
@@ -16,20 +15,23 @@
                 <tr>
                     <th>RIN</th>
                     <th>Taxpayer Name</th>
-                    <th>Assessment Id</th>
                     <th>Amount</th>
+                    <th>TaxOfficerName</th>
+                    <th>TaxOfficeName</th>
                     <th>Status</th>
                     <th class="action-th all">Action</th>
                 </tr>
             </thead>
             <tbody>
+
                 @foreach (var vProfile in lstProfileInformation)
                 {
                     <tr>
-                        <td>@vProfile.Rin</td>
+                        <td>@vProfile.TaxPayerRIN</td>
                         <td>@vProfile.TaxPayerName</td>
-                        <td>@vProfile.AssessmentId</td>
-                        <td>@vProfile.Amount</td>
+                        <td>@CommUtil.GetFormatedCurrency(vProfile.Amount)</td>
+                        <td>@vProfile.TaxOfficerName</td>
+                        <td>@vProfile.TaxOfficeName</td>
                         <td>@vProfile.Status</td>
                         <td>
                             <div class="btn-group">
@@ -38,7 +40,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="@Url.Action("BillDetailFromDecline", "CaptureIndividual", new {id=vProfile.Id, billid = vProfile.AssessmentId, billrefno = vProfile.AssessmentRefNo })">
+                                        <a href="@Url.Action("BillDetailFromDecline", "CaptureIndividual", new {id=vProfile.ID, billid = vProfile.AssessmentID, billrefno = vProfile.AssessmentRefNo })">
                                             View Bill
                                         </a>
                                     </li>

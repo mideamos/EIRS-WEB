@@ -99,7 +99,7 @@ $(document).ready(function () {
     $("#btnSavedSignature").click(function () {
         $(".signer-element").removeClass("selected-element");
         var vSignaturePath = $("#hdnSavedSignaturePath").val();
-
+        console.log(vSignaturePath);
         if (vSignaturePath === '') {
             jsfn_ShowAlert('Saved Signature not available for this user', 'danger');
         }
@@ -352,7 +352,7 @@ function appendFixedSignature(imgData) {
         SignSourceID: $("#hdnSignType").val(),
         reqid: $("#hdnRequestID").val()
     }
-
+    console.log(vData);
     jsfn_ShowLoading();
     jsfn_ajaxPost('/Staff/GenerateTCC', vData, jsfnFixedTCCSignResponse);
 
@@ -381,6 +381,8 @@ function appendFixedSignature(imgData) {
 }
 
 function jsfnFixedTCCSignResponse(data) {
+
+
     jsfn_HideLoading();
     if (data.success) {
         jsfn_ShowAlert(data.Message, 'success');

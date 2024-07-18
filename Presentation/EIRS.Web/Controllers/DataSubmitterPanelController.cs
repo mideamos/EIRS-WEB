@@ -13,7 +13,7 @@ using EIRS.Web.Utility;
 
 namespace EIRS.Web.Controllers
 {
-    
+
     public class DataSubmitterPanelController : Controller
     {
         private void UI_FillDropDown()

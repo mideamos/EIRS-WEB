@@ -1,4 +1,5 @@
-﻿
+
+
 using ClosedXML.Excel;
 using EFCore.BulkExtensions;
 using EIRS.BLL;
@@ -25,14 +26,18 @@ using System.Linq.Dynamic;
 using System.Net;
 using System.Reflection;
 using System.Transactions;
+using System.Configuration;
+using Microsoft.Data.SqlClient;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Twilio.TwiML.Voice;
 using Vereyon.Web;
 using static EIRS.Web.Controllers.Filters;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace EIRS.Web.Controllers
 {
@@ -58,8 +63,6 @@ namespace EIRS.Web.Controllers
             return View();
         }
 
-        //
-        // 
         [HttpGet]
         public ActionResult LateChargeList()
         {
@@ -94,9 +97,48 @@ namespace EIRS.Web.Controllers
             string url = getUrl();
             bool itCan = new UtilityController().CheckAccess(url);
             if (!itCan) { return RedirectToAction("AccessDenied", "Utility"); }
-            var res = _db.usp_GetTccDownloadByYear().ToList();
+            var res = getSPList();
             return View(res);
         }
+
+        [NonAction]
+        private List<usp_GetTccDownloadByYearResult> getSPList()
+        {
+            long curentyear = DateTime.Now.Year - 1;
+            var rawQuery = $"SELECT notf.TCCRequestID ,(nm.FirstName +' '+ nm.LastName) as Fullname ,nm.IndividualRIN ,notf.RequestRefNo,notf.Isdownloaded,  CASE WHEN ISNULL(notf.IsDownloaded, 0) = 0 THEN 'Awaiting Download'       ELSE 'Downloaded'   END as DownloadStatus,notf.RequestDate FROM TCC_Request  notf Left JOIN Individual  nm ON notf.TaxPayerID  = nm.IndividualID WHERE notf.TaxYear  = {curentyear} and notf.StatusID = 14";
+            // List to hold the results
+            List<usp_GetTccDownloadByYearResult> results = new List<usp_GetTccDownloadByYearResult>();
+
+            string con = ConfigurationManager.ConnectionStrings["DbEntities"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(con))
+            {
+                using (SqlCommand command = new SqlCommand(rawQuery, connection))
+                {
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(new usp_GetTccDownloadByYearResult
+                            {
+                                FullName = reader["Fullname"] != DBNull.Value ? reader["Fullname"].ToString() : "",
+                                IndividualRIn = reader["IndividualRIN"] != DBNull.Value ? reader["IndividualRIN"].ToString() : "",
+                                TccRefNo = reader["RequestRefNo"] != DBNull.Value ? reader["RequestRefNo"].ToString() : "",
+                                RequestDate = reader["RequestDate"] != DBNull.Value ? Convert.ToDateTime(reader["RequestDate"]) : DateTime.Now,
+                                TccId = reader["TCCRequestID"] != DBNull.Value ? Convert.ToInt64(reader["TCCRequestID"]) : 0,
+                                IsDownloaded = reader["IsDownloaded"] != DBNull.Value ? Convert.ToBoolean(reader["IsDownloaded"]) : false,
+                                DownloadStatus = reader["DownloadStatus"] != DBNull.Value ? reader["DownloadStatus"].ToString() : ""
+                            });
+
+                        }
+                    }
+                }
+            }
+
+            return results;
+        }
+
         [HttpGet]
         public ActionResult Download(long? reqid)
         {
@@ -106,6 +148,9 @@ namespace EIRS.Web.Controllers
 
                 if (mObjRequestData != null)
                 {
+                    mObjRequestData.IsDownloaded = true;
+                    _db.SaveChanges();
+
                     return File(GlobalDefaultValues.DocumentLocation + mObjRequestData.SignedVisiblePath, "application/force-download", mObjRequestData.RequestRefNo.Trim() + ".pdf");
                 }
                 else
@@ -260,34 +305,6 @@ namespace EIRS.Web.Controllers
 
                     lstAvr.Add(avr);
 
-
-                    //Ass = (from a in _db.Assessments
-                    //       join m in _db.MAP_Assessment_AssessmentRule
-                    //       on a.AssessmentID equals m.AssessmentID
-                    //       join t in _db.MAP_Assessment_AssessmentItem
-                    //       on m.AARID equals t.AARID
-                    //       join i in _db.Individuals
-                    //       on a.TaxPayerID equals i.IndividualID
-                    //       where t.AAIID == r.AAIID 
-                    //       select new LateChargeResponse
-                    //       {
-
-                    //           TotalAmount = r.TotalAmount.Value,
-                    //           AssessmentRefNo = a.AssessmentRefNo,
-                    //           TaxPayerId = a.TaxPayerID.ToString(),
-                    //           TaxPayerName = i.FirstName + " " + i.LastName,
-                    //           TaxPayerRIN = i.IndividualRIN
-                    //       }).FirstOrDefault();
-                    //if (!lstlateChargeResponses.Any(o => o.AssessmentRefNo == Ass.AssessmentRefNo) && Ass.AssessmentItemID != 2569))
-                    //{
-                    //    Ass.AAIID = r.AAIID.Value;
-                    //    Ass.PendingAmount = avr.PendingAmount.Value;
-                    //    Ass.SettlementAmount = r.SettlementAmount.Value;
-                    //    Ass.LateChargeAmount = avr.LC_Interest.Value + avr.LC_Penatly.Value;
-                    //    Ass.LC_Penatly = avr.LC_Penatly.Value;
-                    //    Ass.LC_Interest = avr.LC_Interest.Value;
-                    //    lstlateChargeResponses.Add(Ass);
-                    //}
                     Ass = (from a in _db.Assessments
                            join m in _db.MAP_Assessment_AssessmentRule
                            on a.AssessmentID equals m.AssessmentID
@@ -630,7 +647,7 @@ namespace EIRS.Web.Controllers
 
         public JsonResult PoATransferValidate(string pid, int? pIntTaxPayerTypeID, int? pIntTaxPayerID)
         {
-            decimal? reciedAmount = 0; decimal? sentAmount = 0; decimal? newbalance = 0; 
+            decimal? reciedAmount = 0; decimal? sentAmount = 0; decimal? newbalance = 0;
             string noUser = "";
             List<MAP_PaymentAccount_Operation> lstret = new List<MAP_PaymentAccount_Operation>();
             MAP_PaymentAccount_Operation ret = new MAP_PaymentAccount_Operation();
@@ -2322,8 +2339,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "RevenueStreamName", "Amount", "TransactionCount" };
             string[] strTotalColumns = new string[] { "Amount", "TransactionCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstPaymentByRevenueStreamData, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstPaymentByRevenueStreamData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -2396,8 +2414,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerRIN", "TaxPayerName", "PaymentDate", "PaymentRef", "PaymentMethodName", "Amount" };
             string[] strTotalColumns = new string[] { "Amount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -2487,8 +2507,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "RevenueStreamName", "Amount", "TransactionCount" };
             string[] strTotalColumns = new string[] { "Amount", "TransactionCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstBillByRevenueStream, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstBillByRevenueStream, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -2563,8 +2585,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerRIN", "TaxPayerName", "BillDate", "BillRef", "BillStatusName", "Amount" };
             string[] strTotalColumns = new string[] { "Amount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstBillByRevenueStreamData, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstBillByRevenueStreamData, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
         #endregion
@@ -2649,8 +2672,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "RevenueStreamName", "Amount", "TransactionCount" };
             string[] strTotalColumns = new string[] { "Amount", "TransactionCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstBillAgingByRevenueStream, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstBillAgingByRevenueStream, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -2719,8 +2743,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerName", "TaxPayerTIN", "BillRef", "BillDate", "Amount", "BillStatusName", "ContactNumber", "ContactAddress" };
             string[] strTotalColumns = new string[] { "Amount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -2787,7 +2812,9 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_GetPOATaxPayerWithoutAsset_Result> lstPOATaxPayerWithoutAsset = new BLOperationManager().BL_GetPOATaxPayerWithoutAsset(TaxYear, FromDate, ToDate, TaxPayerTypeID, TaxOfficeID);
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerRIN", "TaxPayerName", "TaxPayerMobileNumber", "TaxPayerAddress" };
-            return ExportToExcel(lstPOATaxPayerWithoutAsset, this.RouteData, strColumns, false);
+            string method = MethodBase.GetCurrentMethod().Name;
+
+            return ExportToExcel(lstPOATaxPayerWithoutAsset, this.RouteData, strColumns, false,null,method);
         }
 
         [HttpGet]
@@ -2881,9 +2908,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxOfficeName", "Amount", "TransactionCount" };
             string[] strTotalColumns = new string[] { "Amount", "TransactionCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstPaymentByTaxOfficeData, this.RouteData, strColumns, true, strTotalColumns);
-
+            byte[] ObjExcelData = CommUtil.ToExcel(lstPaymentByTaxOfficeData, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
 
@@ -2955,8 +2983,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerRIN", "TaxPayerName", "PaymentDate", "PaymentRef", "PaymentMethodName", "Amount" };
             string[] strTotalColumns = new string[] { "Amount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -3047,9 +3076,10 @@ namespace EIRS.Web.Controllers
             IList<usp_GetBillByTaxOffice_Result> lstBillByTaxOffice = new BLOperationManager().BL_GetBillByTaxOffice(TaxYear, FromDate, ToDate, BillTypeID, BillStatusID);
 
             string[] strColumns = new string[] { "TaxOfficeName", "Amount", "TransactionCount" };
-            string[] strTotalColumns = new string[] { "Amount", "TransactionCount" };
+            string[] strTotalColumns = new string[] { "Amount", "TransactionCount" }; string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstBillByTaxOffice, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstBillByTaxOffice, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -3123,9 +3153,10 @@ namespace EIRS.Web.Controllers
             IList<usp_GetBillByTaxOfficeDetail_Result> lstBillByTaxOfficeData = new BLOperationManager().BL_GetBillByTaxOfficeDetails(TaxYear, FromDate, ToDate, BillTypeID, BillStatusID, TaxOfficeID);
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerRIN", "TaxPayerName", "BillDate", "BillRef", "BillStatusName", "Amount" };
-            string[] strTotalColumns = new string[] { "Amount" };
+            string[] strTotalColumns = new string[] { "Amount" }; string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstBillByTaxOfficeData, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstBillByTaxOfficeData, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
         #endregion
@@ -3210,8 +3241,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxOfficeName", "Amount", "TransactionCount" };
             string[] strTotalColumns = new string[] { "Amount", "TransactionCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstBillAgingByTaxOffice, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstBillAgingByTaxOffice, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -3280,8 +3313,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerName", "TaxPayerTIN", "BillRef", "BillDate", "Amount", "BillStatusName", "ContactNumber", "ContactAddress" };
             string[] strTotalColumns = new string[] { "Amount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -3360,8 +3394,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxOfficeName", "TaxPayerCount", "AssetCount", "BillAmount", "SettlementAmount", "PoAAmount" };
             string[] strTotalColumns = new string[] { "TaxPayerCount", "AssetCount", "BillAmount", "SettlementAmount", "PoAAmount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstRevenueStreamAssessmentsbyTaxOffice, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstRevenueStreamAssessmentsbyTaxOffice, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
 
@@ -3428,7 +3463,9 @@ namespace EIRS.Web.Controllers
             IList<usp_GetRevenueStreamBillDetailByTaxOffice_Result> lstRevenueStreamBillDetailByTaxOfficeData = new BLOperationManager().BL_GetRevenueStreamBillDetailByTaxOffice(TaxYear, FromDate, ToDate, RevenueStreamID, TaxOfficeID);
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerName", "TaxPayerRINNumber", "ContactAddress", "AssetTypeName", "AssetName", "AssetRIN", "AssessmentYear", "BillAmount", "SettlementAmount", "OutstandingAmount" };
-            return ExportToExcel(lstRevenueStreamBillDetailByTaxOfficeData, this.RouteData, strColumns);
+            string method = MethodBase.GetCurrentMethod().Name;
+
+            return ExportToExcel(lstRevenueStreamBillDetailByTaxOfficeData, this.RouteData, strColumns,method);
 
         }
 
@@ -3505,8 +3542,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxOfficeName", "EmployerCount", "EmployeeCount", "BusinessCount", "BillAmount", "SettlementAmount", "PoAAmount" };
             string[] strTotalColumns = new string[] { "EmployerCount", "EmployeeCount", "BusinessCount", "BillAmount", "SettlementAmount", "PoAAmount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstPayeRevenueStreamAssessmentsbyTaxOffice, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstPayeRevenueStreamAssessmentsbyTaxOffice, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
 
@@ -3588,7 +3626,9 @@ namespace EIRS.Web.Controllers
             IList<usp_GetPAYERevenueStreamBillDetailByTaxOffice_Result> lstPayeRevenueStreamBillDetailByTaxOffice = new BLOperationManager().BL_GetPayeRevenueStreamBillDetailbyTaxOffice(TaxYear, FromDate, ToDate, TaxOfficeID);
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerName", "TaxPayerRINNumber", "TaxPayerTIN", "AssetTypeName", "AssetName", "AssetRIN", "AssessmentYear", "BillAmount", "SettlementAmount", "OutstandingAmount" };
-            return ExportToExcel(lstPayeRevenueStreamBillDetailByTaxOffice, this.RouteData, strColumns);
+            string method = MethodBase.GetCurrentMethod().Name;
+
+            return ExportToExcel(lstPayeRevenueStreamBillDetailByTaxOffice, this.RouteData, strColumns,method);
         }
 
         #endregion
@@ -3686,7 +3726,9 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_RPT_TaxPayerLiabilityStatus_Bills_Result> lstTaxPayerLiabilityStatusAssessmentData = new BLOperationManager().BL_GetTaxPayerLiabilityStatusDetails(TaxPayerID, TaxPayerTypeID, TaxYear, FromDate, ToDate);
             string[] strColumns = new string[] { "TaxPayerName", "BillRefNo", "BillDate", "BillAmount", "SettlementStatusName" };
-            return ExportToExcel(lstTaxPayerLiabilityStatusAssessmentData, this.RouteData, strColumns);
+            string method = MethodBase.GetCurrentMethod().Name;
+
+            return ExportToExcel(lstTaxPayerLiabilityStatusAssessmentData, this.RouteData, strColumns,method);
         }
 
 
@@ -3754,7 +3796,9 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_RPT_TaxPayerLiabilityStatus_Payment_Result> lstTaxPayerLiabilityStatusPaymentData = new BLOperationManager().BL_GetTaxPayerLiabilityStatusPaymentDetails(TaxPayerID, TaxPayerTypeID, TaxYear, FromDate, ToDate);
             string[] strColumns = new string[] { "TaxPayerName", "PaymentRefNo", "PaymentDate", "Amount" };
-            return ExportToExcel(lstTaxPayerLiabilityStatusPaymentData, this.RouteData, strColumns);
+            string method = MethodBase.GetCurrentMethod().Name;
+
+            return ExportToExcel(lstTaxPayerLiabilityStatusPaymentData, this.RouteData, strColumns,method);
         }
 
 
@@ -3822,8 +3866,10 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_RPT_GetUnallocatedTaxPayerList_Result> lstTaxPayer = new BLOperationManager().BL_GetUnAllocatedTaxPayerList(TaxOfficeID, TaxPayerTypeID);
             string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerName", "TotalAssessmentAmount", "TotalPaymentAmount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstTaxPayer, this.RouteData, strColumns);
+
+            return ExportToExcel(lstTaxPayer, this.RouteData, strColumns,method);
 
         }
 
@@ -3988,8 +4034,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxOfficeName", "TaxPayerCount" };
             string[] strTotalColumns = new string[] { "TaxPayerCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstTaxPayerStatusManager, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstTaxPayerStatusManager, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
 
@@ -4067,8 +4114,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerRIN", "TaxPayerName", "TaxOfficerName", "ReviewStatusName", "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" };
             string[] strTotalColumns = new string[] { "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstTaxPayer, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstTaxPayer, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
 
@@ -4259,8 +4307,8 @@ namespace EIRS.Web.Controllers
             IList<usp_RPT_TaxOfficerStatus_Result> lstTaxPayer = new BLOperationManager().BL_GetTaxOfficerStatus(TaxOfficeID, TaxPayerTypeID, ReviewStatusID, TaxOfficerID);
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerName", "TaxPayerRIN", "ReviewStatusName", "TaxOfficerName", "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" };
             string[] strTotalColumns = new string[] { "TotalAssessmentAmount", "TotalPaymentAmount", "OutstandingAmount" };
-
-            return ExportToExcel(lstTaxPayer, this.RouteData, strColumns, true, strTotalColumns);
+            string method = MethodBase.GetCurrentMethod().Name;
+            return ExportToExcel(lstTaxPayer, this.RouteData, strColumns, true, strTotalColumns, method);
         }
 
         #endregion
@@ -4349,11 +4397,25 @@ namespace EIRS.Web.Controllers
             UI_FillRevenueStreamDropDown();
             UI_FillYearDropDown();
             UI_FillMonthDropDown();
+            UI_FillTaxOfficeDropDown();
+            return View();
+        }
+        public ActionResult NewTaxOfficeTarget()
+        {
+            UI_FillYearDropDown();
+            UI_FillMonthDropDown();
+            UI_FillTaxOfficeDropDown();
+            return View();
+        }
+        public ActionResult NewTaxOfficeTargetByMonth()
+        {
+            UI_FillYearDropDown();
+            UI_FillTaxOfficeDropDown();
             return View();
         }
 
 
-        public JsonResult RevenueStreamByTaxOfficeTargetLoadData(int RevenueStreamID, int Year, int Month)
+        public JsonResult RevenueStreamByTaxOfficeTargetLoadData(int? RevenueStreamID, int? Year, int? Month, int? taxofficeId)
         {
             //Get parameters
 
@@ -4370,15 +4432,18 @@ namespace EIRS.Web.Controllers
             int IntTotalRecords = 0;
 
 
-            IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month);
+            var lstSummary = _appDbContext.usp_RPT_RevenueStreamForAllPurpose(RevenueStreamID.GetValueOrDefault(), Year.GetValueOrDefault(), Month.GetValueOrDefault(), taxofficeId.GetValueOrDefault()).ToList();
+            // IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month, taxofficeId);
             //Filtering/Searching data 
+
             if (!string.IsNullOrEmpty(vFilter))
             {
                 lstSummary = lstSummary.Where(t =>
-                t.TargetAmount != null && t.TargetAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
-                t.AssessedAmount != null && t.AssessedAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
-                t.RevenueAmount != null && t.RevenueAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
-                t.TaxOfficeName != null && t.TaxOfficeName.ToLower().Trim().Contains(vFilter.ToLower().Trim())).ToList();
+                      (t.TargetAmount != null && t.TargetAmount.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.AssessedAmount != null && t.AssessedAmount.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.RevenueAmount != null && t.RevenueAmount.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.TaxOfficeName != null && t.TaxOfficeName.ToLower().Trim().Contains(vFilter.ToLower().Trim()))
+                  ).ToList();
             }
 
 
@@ -4392,6 +4457,55 @@ namespace EIRS.Web.Controllers
             var data = lstSummary.Skip(IntSkip).Take(IntPageSize).ToList();
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult RevenueStreamByTaxOfficeTargetII()
+        {
+            UI_FillRevenueStreamDropDown();
+            UI_FillYearDropDown();
+            UI_FillMonthDropDown();
+            return View();
+        }
+
+
+        //public JsonResult RevenueStreamByTaxOfficeTargetLoadDataII(int RevenueStreamID, int Year, int Month)
+        //{
+        //    //Get parameters
+
+        //    // get Start (paging start index) and length (page size for paging)
+        //    var vDraw = Request.Form.GetValues("draw").FirstOrDefault();
+        //    var vStart = Request.Form.GetValues("start").FirstOrDefault();
+        //    var vLength = Request.Form.GetValues("length").FirstOrDefault();
+        //    //Get Sort columns value
+        //    var vSortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
+        //    var vSortColumnDir = Request.Form.GetValues("order[0][dir]")[0];
+        //    var vFilter = Request.Form.GetValues("search[value]")[0];
+        //    int IntPageSize = vLength != null ? Convert.ToInt32(vLength) : 0;
+        //    int IntSkip = vStart != null ? Convert.ToInt32(vStart) : 0;
+        //    int IntTotalRecords = 0;
+
+
+        //    IList<usp_RPT_RevenueStreamByTaxOfficeTarget_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficeTarget(RevenueStreamID, Year, Month);
+        //    //Filtering/Searching data 
+        //    if (!string.IsNullOrEmpty(vFilter))
+        //    {
+        //        lstSummary = lstSummary.Where(t =>
+        //        t.TargetAmount != null && t.TargetAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
+        //        t.AssessedAmount != null && t.AssessedAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
+        //        t.RevenueAmount != null && t.RevenueAmount.Value.ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
+        //        t.TaxOfficeName != null && t.TaxOfficeName.ToLower().Trim().Contains(vFilter.ToLower().Trim())).ToList();
+        //    }
+
+
+        //    //Purpose Sorting Data 
+        //    if (!string.IsNullOrEmpty(vSortColumn) && !string.IsNullOrEmpty(vSortColumnDir))
+        //    {
+        //        lstSummary = lstSummary.OrderBy(vSortColumn + " " + vSortColumnDir).ToList();
+        //    }
+
+        //    IntTotalRecords = lstSummary.Count();
+        //    var data = lstSummary.Skip(IntSkip).Take(IntPageSize).ToList();
+        //    return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
+        //}
 
         #endregion
 
@@ -4458,18 +4572,10 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_RPT_GetRevenueStreamByPaymentChannel_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByPaymentChannel(SettlementMethodID, Year, FromDate, ToDate);
 
-            string[] strColumns = new string[] { "RevenueStreamName", "PoAAmount", "SettlementAmount", "TotalAmount" };
-            string[] strTotalColumns = new string[] { "PoAAmount", "SettlementAmount", "TotalAmount" };
-            var vMemberInfoData = typeof(usp_RPT_GetRevenueStreamByPaymentChannel_Result)
-                    .GetProperties()
-                    .Where(pi => strColumns.Contains(pi.Name))
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
+            string method = MethodBase.GetCurrentMethod().Name;
 
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstSummary, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RevenueStreamByPaymentChannel_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
-
+            byte[] ObjExcelData = CommUtil.ToExcel(lstSummary, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         public ActionResult RevenueStreamByPaymentChannelDetail(int smthId, int tyear, int rstrmID, DateTime? fdate, DateTime? tdate)
@@ -4528,17 +4634,10 @@ namespace EIRS.Web.Controllers
 
             IList<usp_RPT_GetPaymentDetail_Result> lstPaymentDetails = new BLOperationManager().BL_GetPaymentChannelDetail(SettlementMethodID, RevenueStreamID, TaxYear, Fromdate, Todate);
 
-            string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerTIN", "TaxPayerName", "TaxPayerTypeName", "TaxOfficeName", "RevenueStreamName", "PaymentChannelName", "PaymentDate", "Amount" };
-            string[] strTotalColumns = new string[] { "Amount" };
-            var vMemberInfoData = typeof(usp_RPT_GetPaymentDetail_Result)
-                    .GetProperties()
-                    .Where(pi => strColumns.Contains(pi.Name))
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
+            string method = MethodBase.GetCurrentMethod().Name;
 
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstPaymentDetails, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RevenueStreamByPaymentChannel_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstPaymentDetails, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         #endregion
@@ -4697,10 +4796,10 @@ namespace EIRS.Web.Controllers
                     .Where(pi => strColumns.Contains(pi.Name))
                     .Select(pi => (MemberInfo)pi)
                     .ToArray();
+            string method = MethodBase.GetCurrentMethod().Name;
 
-
-            byte[] ObjExcelData = CommUtil.ToExcel(lstPaymentDetails, "RevenueStreamByPaymentChannel_");
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RevenueStreamByPaymentChannel_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstPaymentDetails, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         #endregion
@@ -4844,18 +4943,11 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_RPT_GetRevenueStreamByTaxOfficerTargetDetail_Result> lstSummary = new BLOperationManager().BL_GetRevenueStreamByTaxOfficerTargetDetail(TaxOfficerID, RevenueStreamID, Year, Month);
 
-            string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerTypeName", "TaxPayerName", "TIN", "ContactNumber", "ContactAddress", "AssessedAmount", "RevenueAmount" };
-            string[] strTotalColumns = new string[] { "AssessedAmount", "RevenueAmount" };
-            var vMemberInfoData = typeof(usp_RPT_GetRevenueStreamByTaxOfficerTargetDetail_Result)
-                    .GetProperties()
-                    .Where(pi => strColumns.Contains(pi.Name))
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
 
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstSummary, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RevenueStreamByTaxOfficerTargetDetail_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
-
+            byte[] ObjExcelData = CommUtil.ToExcel(lstSummary, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         #endregion
@@ -4944,8 +5036,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "BusinessCategoryName", "BusinessSectorName", "BillAmount", "SettlementAmount", "PoAAmount", "OutstandingAmount" };
             string[] strTotalColumns = new string[] { "BillAmount", "SettlementAmount", "PoAAmount", "OutstandingAmount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstSummary, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstSummary, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -5010,7 +5103,9 @@ namespace EIRS.Web.Controllers
             string[] strColumns = new string[] { "TaxPayerTypeName","TaxPayerRIN","TaxPayerName","TaxPayerTIN","ContactNumber","ContactAddress",
                                                  "BillAmount","SettlementAmount","PoAAmount","OutstandingAmount" };
             string[] strTotalColumns = new string[] { "BillAmount", "SettlementAmount", "PoAAmount", "OutstandingAmount" };
-            return ExportToExcel(lstDetails, this.RouteData, strColumns, true, strTotalColumns);
+            string method = MethodBase.GetCurrentMethod().Name;
+
+            return ExportToExcel(lstDetails, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
         #endregion
@@ -5204,8 +5299,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "RevenueStreamName", "Amount", "TransactionCount" };
             string[] strTotalColumns = new string[] { "Amount", "TransactionCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstTreasuryReceiptByRevenueStreamData, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstTreasuryReceiptByRevenueStreamData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -5278,8 +5374,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerRIN", "TaxPayerName", "ReceiptDate", "ReceiptRefNo", "GeneratedBy", "Amount" };
             string[] strTotalColumns = new string[] { "Amount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -5349,8 +5447,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxOfficeName", "Amount", "TransactionCount" };
             string[] strTotalColumns = new string[] { "Amount", "TransactionCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstTreasuryReceiptByTaxOfficeData, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstTreasuryReceiptByTaxOfficeData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -5423,8 +5523,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerTypeName", "TaxPayerRIN", "TaxPayerName", "ReceiptDate", "ReceiptRefNo", "GeneratedBy", "Amount" };
             string[] strTotalColumns = new string[] { "Amount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -5485,8 +5587,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerName", "MobileNumber", "TotalAssessmentAmount", "TotalPaymentAmount", "Balance" };
             string[] strTotalColumns = new string[] { "TotalAssessmentAmount", "TotalPaymentAmount", "Balance" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstEmployerLiability, this.RouteData, strColumns, false);
+            return ExportToExcel(lstEmployerLiability, this.RouteData, strColumns, false,null,method);
         }
 
         public ActionResult EmployerLiabilityDetails(int? id)
@@ -5591,8 +5694,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerName", "MobileNumber", "AssetName", "StaffCount", "BillCount", "BillAmount", "PaymentAmount", "Balance" };
             string[] strTotalColumns = new string[] { "StaffCount", "BillCount", "BillAmount", "PaymentAmount", "Balance" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstEmployerLiability, this.RouteData, strColumns, false);
+            return ExportToExcel(lstEmployerLiability, this.RouteData, strColumns, false,null,method);
         }
 
         public ActionResult EmployerPAYELiabilityDetails(int tpid, int aid)
@@ -5708,8 +5812,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "StartMonthName", "RequestCount" };
             string[] strTotalColumns = new string[] { "RequestCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstTCCSummary, this.RouteData, strColumns, true, strTotalColumns);
+
+            return ExportToExcel(lstTCCSummary, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
         [HttpGet]
@@ -5787,7 +5893,8 @@ namespace EIRS.Web.Controllers
             IList<usp_RPT_MonthlyTCCSummaryDetail_Result> lstTCCSummaryDetail = new BLOperationManager().BL_GetMonthlyTCCSummaryDetail(reportParams);
 
             string[] strColumns = new string[] { "RequestDate", "RequestRefNo", "TaxPayerName", "TaxPayerRIN", "TaxPayerTIN", "MobileNumber", "StatusName" };
-            return ExportToExcel(lstTCCSummaryDetail, this.RouteData, strColumns, false);
+            string method = MethodBase.GetCurrentMethod().Name;
+            return ExportToExcel(lstTCCSummaryDetail, this.RouteData, strColumns, false,null,method);
         }
 
         #endregion
@@ -5859,8 +5966,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "StartMonthName", "RequestCount" };
             string[] strTotalColumns = new string[] { "RequestCount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstTCCRevoke, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstTCCRevoke, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
         [HttpGet]
@@ -5938,7 +6046,9 @@ namespace EIRS.Web.Controllers
             IList<usp_RPT_MonthlyTCCRevokeDetail_Result> lstTCCRevokeDetail = new BLOperationManager().BL_GetMonthlyTCCRevokeDetail(reportParams);
 
             string[] strColumns = new string[] { "RequestDate", "RequestRefNo", "TaxPayerName", "TaxPayerRIN", "TaxPayerTIN", "MobileNumber", "StatusName" };
-            return ExportToExcel(lstTCCRevokeDetail, this.RouteData, strColumns, false);
+
+            string method = MethodBase.GetCurrentMethod().Name;
+            return ExportToExcel(lstTCCRevokeDetail, this.RouteData, strColumns, false,null,method);
         }
 
         #endregion
@@ -6010,8 +6120,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "StartMonthName", "RequestCount", "CommissionAmount" };
             string[] strTotalColumns = new string[] { "RequestCount", "CommissionAmount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstTCCCommission, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstTCCCommission, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
         #endregion
@@ -6089,8 +6200,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "BillRef", "BillDate", "BillAmount", "RevisedDate", "RevisedAmount", "BillStatusName" };
             string[] strTotalColumns = new string[] { "BillAmount", "RevisedAmount" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstReviseBill, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstReviseBill, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
 
@@ -6201,7 +6313,8 @@ namespace EIRS.Web.Controllers
                 IList<usp_RPT_TaxPayerCaptureAnalysis_Result> lstData = new BLOperationManager().BL_TaxPayerCaptureAnalysis(pObjExportProfileModel.FromDate, pObjExportProfileModel.ToDate, pObjExportProfileModel.TaxPayerTypeID, pObjExportProfileModel.TaxOfficeID);
 
                 string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerName", "TaxPayerMobileNumber", "TaxPayerAddress", "TaxOfficeName", "CreatedDate", "CreatedBy" };
-                return ExportToExcel(lstData, this.RouteData, strColumns);
+                string method = MethodBase.GetCurrentMethod().Name;
+                return ExportToExcel(lstData, this.RouteData, strColumns,method);
             }
         }
 
@@ -6267,8 +6380,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "EmployerRIN", "EmployerName", "EmployeeCount", "AmountCollected" };
             string[] strTotalColumns = new string[] { "EmployeeCount", "AmountCollected" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
         [HttpGet]
@@ -6337,8 +6451,9 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "EmployeeRIN", "EmployeeName", "AmountContributed" };
             string[] strTotalColumns = new string[] { "AmountContributed" };
+            string method = MethodBase.GetCurrentMethod().Name;
 
-            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns);
+            return ExportToExcel(lstData, this.RouteData, strColumns, true, strTotalColumns,method);
 
         }
 
@@ -7101,6 +7216,216 @@ namespace EIRS.Web.Controllers
                 }
             }
         }
+        public ActionResult TCCReports(int taxYear, int status, int txoffId)
+        {
+            var fullUrl = Request.Url.ToString();
+            UI_FillYearDropDown();
+            UI_FillTCCStatusDropDown();
+
+            var finalRes = new List<TaxReportReturn>();
+            var rec = SessionManager.LstTaxReportModel ?? new List<TaxReportModel>();
+            if (rec.Count() <= 1)
+            {
+                rec = GetReport();
+            }
+            if (taxYear == 0 && status == 0 && txoffId != 0)
+            {
+                string body = SessionManager.detHolder.ToString();
+                if (!String.IsNullOrEmpty(body))
+                {
+                    var ye = body.Split('@');
+                    var cc = ye[0].Replace('"', ' ');
+                    var dd = ye[1].Replace('"', ' ');
+                    int yr = cc == "" ? 0 : Convert.ToInt32(cc);
+                    int st = dd == "" ? 0 : Convert.ToInt32(dd);
+                    if (yr != 0)
+                    {
+                        rec = rec.Where(o => o.TaxOfficeId == txoffId && o.TaxYear == yr).ToList();
+                    }
+                    else
+                    {
+                        rec = rec.Where(o => o.TaxOfficeId == txoffId).ToList();
+                    }
+
+                    switch (st)
+                    {
+                        case 1:
+                            rec = rec.Where(o => o.StatusId != 14).ToList();
+                            break;
+                        case 2:
+                            rec = rec.Where(o => o.IsDownload == true).ToList();
+                            break;
+                        case 3:
+
+                            rec = rec.Where(o => o.StatusId == 14).ToList();
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    rec = rec.Where(o => o.TaxOfficeId == txoffId).ToList();
+                }
+                ViewBag.Taxxx = rec;
+                ViewBag.Det = 2;
+            }
+            else
+            {
+                if (taxYear == 0)
+                {
+                    if (status != 0)
+                    {
+                        switch (status)
+                        {
+                            case 1:
+                                rec = rec.Where(o => o.StatusId != 14).ToList();
+                                break;
+                            case 2:
+                                rec = rec.Where(o => o.IsDownload == true).ToList();
+                                break;
+                            case 3:
+
+                                rec = rec.Where(o => o.StatusId == 14).ToList();
+                                break;
+
+                            default:
+                                break;
+                        }
+
+                    }
+                    finalRes = rec.GroupBy(o => o.TaxOfficeId)
+                          .Select(g => new TaxReportReturn
+                          {
+                              TaxOfficeId = g.Key,
+                              TaxOffice = g.First().TaxOffice,
+                              TotalRequest = g.Count().ToString()
+                          }).ToList();
+
+                    ViewBag.Det = 1;
+                    SessionManager.detHolder = $"{taxYear}@{status}";
+                }
+                else
+                {
+                    rec = SessionManager.LstTaxReportModel.Where(o => o.TaxYear == taxYear).ToList();
+                    switch (status)
+                    {
+                        case 1:
+                            rec = rec.Where(o => o.StatusId != 14).ToList();
+                            break;
+                        case 2:
+                            rec = rec.Where(o => o.IsDownload == true).ToList();
+                            break;
+                        case 3:
+
+                            rec = rec.Where(o => o.StatusId == 14).ToList();
+                            break;
+
+                        default:
+                            break;
+                    }
+                    finalRes = rec.GroupBy(o => o.TaxOfficeId)
+                     .Select(g => new TaxReportReturn
+                     {
+                         TaxOfficeId = g.Key,
+                         TaxOffice = g.First().TaxOffice,
+                         TotalRequest = g.Count().ToString()
+                     }).ToList();
+
+                    ViewBag.Det = 1;
+
+                    SessionManager.detHolder = $"{taxYear}@{status}";
+                }
+            }
+            return View(finalRes);
+        }
+
+        private List<TaxReportModel> GetReport()
+        {
+            var rec = (from d in _db.TCC_Request
+                       join t in _db.Tax_Offices
+                       on d.TaxOfficeId equals t.TaxOfficeID
+                       join i in _db.Individuals
+                       on d.TaxPayerID equals i.IndividualID
+                       join s in _db.MST_TCCRequestStatus
+                       on d.StatusID equals s.StatusID
+                       select new TaxReportModel
+                       {
+                           TaxOfficeId = d.TaxOfficeId,
+                           TaxOffice = t.TaxOfficeName,
+                           Taxpayername = i.FirstName + " " + i.LastName,
+                           TaxpayerId = d.TaxPayerID,
+                           StatusId = d.StatusID,
+                           IsDownload = d.IsDownloaded,
+                           TaxYear = d.TaxYear,
+                           RequestDate = d.RequestDate,
+                           StatusName = s.StatusName,
+                           RequestRef = d.RequestRefNo
+                       }
+                     ).AsNoTracking().ToList();
+
+
+            SessionManager.LstTaxReportModel = rec;
+            return rec;
+        }
+
+        public ActionResult ManageLateCharge()
+        {
+            //string url = getUrl();
+            //bool itCan = new UtilityController().CheckAccess(url);
+            //if (!itCan) { return RedirectToAction("AccessDenied", "Utility"); }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public ActionResult ManageLateCharge(ReviseBillViewModel pObjReviseBillModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(pObjReviseBillModel);
+            }
+            else
+            {
+                if (pObjReviseBillModel.BillRefNo.StartsWith("AB"))
+                {
+                    BLAssessment mObjBLAssessment = new BLAssessment();
+                    usp_GetAssessmentList_Result mObjAssessmentData = mObjBLAssessment.BL_GetAssessmentDetails(new Assessment() { AssessmentRefNo = pObjReviseBillModel.BillRefNo, IntStatus = 2 });
+
+                    if (mObjAssessmentData != null)
+                    {
+                        return RedirectToAction("AssessmentLateCharge", "Adjustment", new { id = mObjAssessmentData.AssessmentID, name = mObjAssessmentData.AssessmentRefNo.ToSeoUrl() });
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Invalid Bill Ref No";
+                        return View(pObjReviseBillModel);
+                    }
+
+                }
+                else if (pObjReviseBillModel.BillRefNo.StartsWith("SB"))
+                {
+                    BLServiceBill mObjBLServiceBill = new BLServiceBill();
+                    usp_GetServiceBillList_Result mObjServiceBillData = mObjBLServiceBill.BL_GetServiceBillDetails(new ServiceBill() { ServiceBillRefNo = pObjReviseBillModel.BillRefNo, IntStatus = 2 });
+
+                    if (mObjServiceBillData != null)
+                    {
+                        return RedirectToAction("ServiceBill", "Adjustment", new { id = mObjServiceBillData.ServiceBillID, name = mObjServiceBillData.ServiceBillRefNo.ToSeoUrl() });
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Invalid Bill Ref No";
+                        return View(pObjReviseBillModel);
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Invalid Bill Ref No";
+                    return View(pObjReviseBillModel);
+                }
+            }
+        }
 
         //
         public ActionResult IndividualLiabilityStatus()
@@ -7238,14 +7563,10 @@ namespace EIRS.Web.Controllers
                 string strProfileIds = string.Join(",", pObjExportProfileModel.ProfileID);
 
                 IList<usp_GetTaxPayerProfileForExport_Result> lstData = new BLOperationManager().BL_GetTaxPayerProfileForExport(strProfileIds, pObjExportProfileModel.Year);
-                var vMemberInfoData = typeof(usp_GetTaxPayerProfileForExport_Result)
-                   .GetProperties()
-                   .Select(pi => (MemberInfo)pi)
-                   .ToArray();
+                string method = "TaxPayerAssetData_";
 
-
-                byte[] ObjExcelData = CommUtil.ExportToExcel2(lstData, vMemberInfoData, false);
-                return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxPayerAssetData_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+                byte[] ObjExcelData = CommUtil.ToExcel(lstData, $"{method}");
+                return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
             }
         }
@@ -7271,14 +7592,13 @@ namespace EIRS.Web.Controllers
             else
             {
                 IList<usp_GetTaxPayerProfileTypeForExport_Result> lstData = new BLOperationManager().BL_GetTaxPayerProfileTypeForExport(pObjExportProfileModel.ProfileTypeID, pObjExportProfileModel.Year);
-                var vMemberInfoData = typeof(usp_GetTaxPayerProfileTypeForExport_Result)
-                   .GetProperties()
-                   .Select(pi => (MemberInfo)pi)
-                   .ToArray();
 
 
-                byte[] ObjExcelData = CommUtil.ExportToExcel2(lstData, vMemberInfoData, false);
-                return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxPayerAssetData_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+                string method = "TaxPayerAssetData_";
+
+                byte[] ObjExcelData = CommUtil.ToExcel(lstData, $"{method}");
+                return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+
 
             }
         }
@@ -7525,16 +7845,18 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxOfficeName", "IndividualCount", "CorporateCount", "GovernmentCount", "SpecialCount", "TotalCount" };
             string[] strTotalColumns = new string[] { "IndividualCount", "CorporateCount", "GovernmentCount", "SpecialCount", "TotalCount" };
-            var vMemberInfoData = typeof(usp_RPT_GetTaxPayerTypeByTaxOffice_Result)
-                    .GetProperties()
-                    .Where(pi => strColumns.Contains(pi.Name))
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
+            //var vMemberInfoData = typeof(usp_RPT_GetTaxPayerTypeByTaxOffice_Result)
+            //        .GetProperties()
+            //        .Where(pi => strColumns.Contains(pi.Name))
+            //        .Select(pi => (MemberInfo)pi)
+            //        .ToArray();
 
+            string method = "TaxPayerTypeByTaxOffice_";
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstData, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxPayerTypeByTaxOffice_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstData, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
+          
         }
 
         public ActionResult TaxPayerTypeByTaxOfficeDetail(int tofid)
@@ -7593,14 +7915,10 @@ namespace EIRS.Web.Controllers
 
             IList<usp_GetTaxPayerBasedOnTaxOfficeForExport_Result> lstTaxPayerData = new BLOperationManager().BL_GetTaxPayerBasedOnTaxOfficeForExport(TaxOfficeID);
 
-            var vMemberInfoData = typeof(usp_GetTaxPayerBasedOnTaxOfficeForExport_Result)
-                    .GetProperties()
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
+            string method = "TaxPayerTypeByTaxOfficeDetail_";
 
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstTaxPayerData, vMemberInfoData, false);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxPayerTypeByTaxOfficeDetail_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstTaxPayerData, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         public ActionResult AssetTypeByTaxOffice()
@@ -7615,15 +7933,11 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "TaxOfficeName", "BusinessCount", "BuildingCount", "LandCount", "VehicleCount", "TotalCount" };
             string[] strTotalColumns = new string[] { "BusinessCount", "BuildingCount", "LandCount", "VehicleCount", "TotalCount" };
-            var vMemberInfoData = typeof(usp_RPT_GetAssetTypeByTaxOffice_Result)
-                    .GetProperties()
-                    .Where(pi => strColumns.Contains(pi.Name))
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
 
+            string method = "AssetTypeByTaxOffice_";
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstData, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AssetTypeByTaxOffice_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstData, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
 
@@ -7678,14 +7992,10 @@ namespace EIRS.Web.Controllers
 
             IList<usp_GetAssetBasedOnTaxOfficeForExport_Result> lstAssetData = new BLOperationManager().BL_GetAssetBasedOnTaxOfficeForExport(TaxOfficeID);
 
-            var vMemberInfoData = typeof(usp_GetAssetBasedOnTaxOfficeForExport_Result)
-                    .GetProperties()
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
+            string method = "AssetTypeByTaxOfficeDetail_";
 
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstAssetData, vMemberInfoData, false);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AssetTypeByTaxOfficeDetail_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstAssetData, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         public ActionResult PaymentCharges()
@@ -7745,17 +8055,10 @@ namespace EIRS.Web.Controllers
 
             IList<usp_GetPaymentChargeList_Result> lstPaymentCharge = new BLOperationManager().BL_GetPaymentChargeList(0, 0);
 
-            string[] strColumns = new string[] { "TaxPayerRIN", "TaxPayerTypeName", "TaxPayerName", "TaxYear", "BillRefNo", "BillDate", "RevenueStreamName", "Penalty", "Interest", "TotalCharge", "ChargeDate", "BillStatus" };
-            string[] strTotalColumns = new string[] { "Penalty", "Interest", "TotalCharge" };
-            var vMemberInfoData = typeof(usp_GetPaymentChargeList_Result)
-                    .GetProperties()
-                    .Where(pi => strColumns.Contains(pi.Name))
-                    .Select(pi => (MemberInfo)pi)
-                    .ToArray();
+            string method = "PaymentCharges_";
 
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstPaymentCharge, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PaymentCharges_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstPaymentCharge, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
         }
 
         public ActionResult TaxPayerMonthlyPayment()
@@ -7815,17 +8118,10 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_RPT_GetTaxPayerMonthlyPayment_Result> lstSummary = new BLOperationManager().BL_GetTaxPayerMonthlyPayment(TaxPayerTypeID, TaxPayerID, RevenueStreamID, Year);
 
-            string[] strColumns = new string[] { "StartMonthName", "SettlementAmount", "PoAAmount", "TotalAmount" };
-            string[] strTotalColumns = new string[] { "SettlementAmount", "PoAAmount", "TotalAmount" };
-            var vMemberInfoData = typeof(usp_RPT_GetTaxPayerMonthlyPayment_Result)
-                   .GetProperties()
-                   .Where(pi => strColumns.Contains(pi.Name))
-                   .Select(pi => (MemberInfo)pi)
-                   .ToArray();
+            string method = "TaxPayerMonthlyPayment_";
 
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstSummary, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxPayerMonthlyPayment_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstSummary, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
 
@@ -7887,15 +8183,10 @@ namespace EIRS.Web.Controllers
 
             string[] strColumns = new string[] { "PaymentDate", "PaymentTypeName", "PaymentRefNo", "Amount" };
             string[] strTotalColumns = new string[] { "Amount" };
-            var vMemberInfoData = typeof(usp_RPT_GetTaxPayerMonthlyPaymentDetail_Result)
-                   .GetProperties()
-                   .Where(pi => strColumns.Contains(pi.Name))
-                   .Select(pi => (MemberInfo)pi)
-                   .ToArray();
+            string method = "TaxPayerMonthlyPaymentDetail_";
 
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstSummary, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxPayerMonthlyPaymentDetail_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstSummary, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
 
@@ -7950,17 +8241,10 @@ namespace EIRS.Web.Controllers
         {
             IList<usp_RPT_TaxOfficeAssessmentSummary_Result> lstSummary = new BLOperationManager().BL_GetTaxOfficeAssessmentSummary(TaxYear);
 
-            string[] strColumns = new string[] { "TaxOfficeName", "BillAmount", "SettlementAmount", "PoAAmount", "OutstandingAmount" };
-            string[] strTotalColumns = new string[] { "BillAmount", "SettlementAmount", "PoAAmount", "OutstandingAmount" };
-            var vMemberInfoData = typeof(usp_RPT_TaxOfficeAssessmentSummary_Result)
-                   .GetProperties()
-                   .Where(pi => strColumns.Contains(pi.Name))
-                   .Select(pi => (MemberInfo)pi)
-                   .ToArray();
+            string method = "TaxOfficeAssessmentSummary_";
 
-
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstSummary, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficeAssessmentSummary_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstSummary, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
 
         }
 
@@ -8028,12 +8312,12 @@ namespace EIRS.Web.Controllers
                    .Select(pi => (MemberInfo)pi)
                    .ToArray();
 
+            string method = "TaxOfficeAssessmentDetail_";
 
-            byte[] ObjExcelData = CommUtil.ExportToExcel2(lstDetails, vMemberInfoData, true, strTotalColumns);
-            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "TaxOfficeAssessmentDetail_" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+            byte[] ObjExcelData = CommUtil.ToExcel(lstDetails, $"{method}");
+            return File(ObjExcelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{method}" + DateTime.Now.ToString("dd_MM_yy") + ".xlsx");
+
         }
-
-
 
         public ActionResult GenerateTLRPDF(int tpid)
         {
@@ -8105,5 +8389,6 @@ namespace EIRS.Web.Controllers
         {
             return View();
         }
+
     }
 }

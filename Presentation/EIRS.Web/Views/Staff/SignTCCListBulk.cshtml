@@ -1,0 +1,141 @@
+﻿
+@model List<EIRS.Web.Models.NewTccViewModel>
+
+@{
+    ViewBag.Title = "My Operations - Sign eTCC Bulk";
+}
+
+
+<div class="title">
+    <h1>
+        My Operations - Sign eTCC Bulk
+    </h1>
+    <hr>
+</div>
+<form id="requestForm" method="post" action="~/Staff/SignTCCListBulk">
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Sign eTCC Bulk</div>
+            <div class="actions">
+                <button style="background-color: green; color: white; border-radius: 12px; padding: 10px 20px; border: none; display: none;"
+                        type="submit" id="submitButton">
+                    Sign All
+                </button>
+            </div>
+        </div>
+        <div class="portlet-body">
+
+            <div id="divLoader" style="display:none;">
+                <img src="~/Content/Images/microsoft-loading.gif" alt="Loader" />
+                <h2>Please hold, your request is being processed.</h2>
+            </div>
+            <div id="divLoaderPage">
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.Message
+                    </div>
+                }
+                <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblNewRequest">
+                    <thead class="red-th">
+                        <tr>
+                            <th>SN</th>
+                            <th>Request Ref</th>
+                            <th>Tax Payer Name</th>
+                            <th class="none">Mobile Number</th>
+                            <th>Request Date</th>
+                            <th>Tax Year</th>
+                            <th class="none">Bill Status</th>
+                            <th class="action-th all">
+                                Check All
+                                <input type="checkbox" id="checkAll" />
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.TaxPayerID</td>
+                                <td>@item.RequestRefNo</td>
+                                <td>@item.TaxFName  @item.TaxLName</td>
+                                <td>@item.MobileNumber</td>
+                                <td>@CommUtil.GetFormatedFullDate(item.RequestDate)</td>
+                                <td>@item.TaxYear</td>
+                                <td>@item.BillStatus</td>
+                                <td>
+                                    <input type="checkbox" class="rowCheckbox" value="@item.TCCRequestID" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </div>
+</form>
+@section Footer {
+
+    <script>
+        $(document).ready(function () {
+            function updateSubmitButtonVisibility() {
+                if ($('.rowCheckbox:checked').length > 0) {
+                    $('#submitButton').show();
+                } else {
+                    $('#submitButton').hide();
+                }
+            }
+            var vColumnsList = [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }];
+            jsfn_ConvertToDatableWithCustomSort($('#tblNewRequest'), vColumnsList, 'No Tcc Record Found', 0);
+
+            $('#checkAll').click(function () {
+                $('.rowCheckbox').prop('checked', this.checked);
+                updateSubmitButtonVisibility();
+            });
+
+            $('.rowCheckbox').click(function () {
+                if (!this.checked) {
+                    $('#checkAll').prop('checked', false);
+                } else {
+                    if ($('.rowCheckbox:checked').length === $('.rowCheckbox').length) {
+                        $('#checkAll').prop('checked', true);
+                    }
+                }
+                updateSubmitButtonVisibility();
+            });
+
+            $('#requestForm').submit(function (event) {
+                debugger;
+                var selectedIds = [];
+                $('.rowCheckbox:checked').each(function () {
+                    selectedIds.push($(this).val());
+                });
+
+                // If no checkboxes are selected, prevent form submission
+                if (selectedIds.length === 0) {
+                    alert('Please select at least one item.');
+                    event.preventDefault();
+                    return;
+                }
+
+                // Append the selected IDs to the form as hidden inputs
+                for (var i = 0; i < selectedIds.length; i++) {
+                    $(this).append('<input type="hidden" name="selectedIds[]" value="' + selectedIds[i] + '" />');
+                }
+
+
+                $("#divLoaderPage").hide();
+                $("#divLoader").show();
+            });
+
+            // Initial check to see if any checkboxes are checked and update submit button visibility
+            updateSubmitButtonVisibility();
+        });
+    </script>
+}
+
+

@@ -174,7 +174,7 @@ namespace EIRS.Web.Controllers
                 }
             }
         }
-        
+
         public ActionResult Details()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -239,7 +239,7 @@ namespace EIRS.Web.Controllers
                 return RedirectToAction("Dashboard", "CaptureGovernment");
             }
         }
-        
+
         public ActionResult SearchBuilding()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -302,7 +302,7 @@ namespace EIRS.Web.Controllers
             IList<usp_GetBuildingList_Result> lstBuilding = new BLBuilding().BL_GetBuildingList(mObjBuilding);
             return PartialView("_BindBuildingTable_SingleSelect", lstBuilding.Take(5).ToList());
         }
-        
+
         public ActionResult SearchBusiness()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -365,7 +365,7 @@ namespace EIRS.Web.Controllers
             IList<usp_GetBusinessListNewTy_Result> lstBusiness = new BLBusiness().BL_GetBusinessList(mObjBusiness);
             return PartialView("_BindBusinessTable_SingleSelect", lstBusiness.Take(5).ToList());
         }
-        
+
         public ActionResult SearchLand()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -428,7 +428,7 @@ namespace EIRS.Web.Controllers
             IList<usp_GetLandList_Result> lstLand = new BLLand().BL_GetLandList(mObjLand);
             return PartialView("_BindLandTable_SingleSelect", lstLand.Take(5).ToList());
         }
-        
+
         public ActionResult SearchVehicle()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -510,7 +510,7 @@ namespace EIRS.Web.Controllers
             UI_FillBusinessOperationDropDown(new Business_Operation() { intStatus = 1, IncludeBusinessOperationIds = pObjBusinessViewModel.BusinessOperationID.ToString(), BusinessTypeID = pObjBusinessViewModel.BusinessTypeID });
             UI_FillSizeDropDown(new Size() { intStatus = 1, IncludeSizeIds = pObjBusinessViewModel.SizeID.ToString() });
         }
-        
+
         public ActionResult AddBusiness()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -676,7 +676,7 @@ namespace EIRS.Web.Controllers
                 }
             }
         }
-        
+
         public void UI_FillLandDropDown(TPLandViewModel pObjLandViewModel = null)
         {
             if (pObjLandViewModel != null)
@@ -2250,7 +2250,7 @@ namespace EIRS.Web.Controllers
                             if (System.IO.File.Exists(strExportFilePath))
                                 System.IO.File.Delete(strExportFilePath);
 
-                          //  //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
+                            //  //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
 
                             //Send email to assessment@eras.eirs.gov.ng
                             string strSubject = $"Service Bill Generated : {mObjServiceBillData.ServiceBillRefNo}";

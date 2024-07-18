@@ -48,6 +48,7 @@ namespace EIRS.Repository
         FuncResponse REP_RemoveIncomeStream(MAP_TCCRequest_IncomeStream pObjIncomeStream);
         IDictionary<string, object> REP_SearchTCCDetail(TCCDetail pObjTCCDetails);
         FuncResponse REP_UpdateRequestStatus(TCC_Request pObjRequest);
+        FuncResponse REP_UpdateRequestStatus(int appId, long tccId);
         FuncResponse REP_UpdateServiceBillInRequest(TCC_Request pObjRequest);
         TCC_Request REP_GetRequestBasedOnServiceBill(long pIntServiceBillID);
 

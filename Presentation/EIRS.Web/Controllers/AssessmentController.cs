@@ -9,7 +9,6 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using static EIRS.Web.Controllers.Filters;
-
 namespace EIRS.Web.Controllers
 {
     [SessionTimeout]
@@ -32,7 +31,7 @@ namespace EIRS.Web.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         public JsonResult LoadData()
         {
@@ -79,14 +78,14 @@ namespace EIRS.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpGet]
         public ActionResult ListWithExport()
         {
             return View();
         }
 
-        
+
         [HttpPost]
         public JsonResult LoadExportData()
         {
@@ -133,7 +132,7 @@ namespace EIRS.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [HttpGet]
         public ActionResult ExportData()
         {

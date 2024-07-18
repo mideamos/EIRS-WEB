@@ -319,7 +319,7 @@ namespace EIRS.Web.Controllers
                 usp_GetGovernmentList_Result mObjGovernmentData = new BLGovernment().BL_GetGovernmentDetails(new Government() { intStatus = 1, GovernmentID = mIntTaxPayerID });
 
                 if (mObjGovernmentData != null)
-                     {
+                {
                     return View(mObjGovernmentData);
                 }
                 else

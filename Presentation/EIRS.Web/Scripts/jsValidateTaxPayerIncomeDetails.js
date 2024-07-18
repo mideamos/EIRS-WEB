@@ -6,7 +6,7 @@
     jsfn_ConvertToDatableWithCustomSort($('#tblAssessmentRules'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Assoicated Rules Found');
     jsfn_ConvertToDatableWithCustomSort($('#tblBillList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Assoicated Bill Found');
     jsfn_ConvertToDatableWithCustomSort($('#tblPaymentList'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Assoicated Payment Found');
-    jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No TCC Detail Found');
+    jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No TCC Detail Found');
     jsfn_ConvertToDatableWithCustomSort($('#tblLiabilitySummary'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Records Found');
 
     $('#cboBusinessID').on("change", jsfn_onTaxPayerRoleChange);
@@ -163,7 +163,7 @@ function jsfn_onAddUpdatePayeIncomeStreamResponse(data) {
         jsfn_ConvertToDatableWithCustomSort($('#tblPayeIncomeStream'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Income Streams Found');
 
         $("#dvTCCDetailData").html(data.TCCDetailData);
-        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }], 'No TCC Detail Found');
+        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true },{ "orderable": true }], 'No TCC Detail Found');
 
         $("#hdnISRowID").val('0')
         $("#cboPayeTaxYear").val('').selectpicker('refresh');
@@ -188,7 +188,7 @@ function jsfn_onAddUpdateIncomeStreamResponse(data) {
         jsfn_ConvertToDatableWithCustomSort($('#tblIncomeStream'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Income Streams Found');
 
         $("#dvTCCDetailData").html(data.TCCDetailData);
-        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }], 'No TCC Detail Found');
+        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true },{ "orderable": true }], 'No TCC Detail Found');
 
         $("#hdnISRowID").val('0')
         $("#cboTaxYear").val('').selectpicker('refresh');
@@ -210,7 +210,7 @@ function jsfn_onUpdateTCCDetailResponse(data) {
     jsfn_HideLoading();
     if (data.success) {
         $("#dvTCCDetailData").html(data.TCCDetailData);
-        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },  { "orderable": true }], 'No TCC Detail Found');
+        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },  { "orderable": true },  { "orderable": true }], 'No TCC Detail Found');
 
         $("#hdnTCDRowID").val('0')
         $("#txtTaxYear").val('');
@@ -239,7 +239,28 @@ function jsfn_DeleteIncomeStreamResponse(data) {
         jsfn_ConvertToDatableWithCustomSort($('#tblIncomeStream'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Income Streams Found');
 
         $("#dvTCCDetailData").html(data.TCCDetailData);
-        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": true }], 'No TCC Detail Found');
+        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": true }], 'No TCC Detail Found');
+    }
+    else {
+        jsfn_ShowAlert(data.Message, 'danger');
+    }
+}
+function jsfn_DeletePayeIncomeStream(RowID) {
+    var vData = {
+        RowID: RowID === '' ? 0 : RowID
+    };
+
+    jsfn_ajaxPost('/ProcessTCCRequest/DeletePayeIncomeStream', vData, jsfn_DeletePayeIncomeStreamResponse);
+}
+
+function jsfn_DeletePayeIncomeStreamResponse(data) {
+    if (data.success === true) {
+        $("#dvPayeIncomeStreamData").html(data.PayeIncomeStreamData);
+        jsfn_ConvertToDatableWithCustomSort($('#tblPayeIncomeStream'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Income Streams Found');
+
+       
+        $("#dvTCCDetailData").html(data.TCCDetailData);
+        jsfn_ConvertToDatableWithCustomSort($('#tblTCCDetail'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": true },{ "orderable": true }, { "orderable": true }, { "orderable": true }], 'No TCC Detail Found');
     }
     else {
         jsfn_ShowAlert(data.Message, 'danger');

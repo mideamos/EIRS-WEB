@@ -26,7 +26,7 @@ using SelectPdf;
 using EIRS.Web.Utility;
 using static EIRS.Common.EnumList;
 using Twilio.TwiML.Voice;
-using Aspose.Pdf.Operators;
+using System.Web.Script.Serialization;
 
 namespace EIRS.Web.Controllers
 {
@@ -355,105 +355,105 @@ namespace EIRS.Web.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult AddWithoutNumber(IndividualViewModel pObjIndividualModel)
         {
-            if (!ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            //    UI_FillDropDown(pObjIndividualModel);
+            //    return View(pObjIndividualModel);
+            //}
+            //else
+            //{
+            Individual mObjIndividual = new Individual()
             {
-                UI_FillDropDown(pObjIndividualModel);
-                return View(pObjIndividualModel);
-            }
-            else
+                IndividualID = 0,
+                GenderID = pObjIndividualModel.GenderID,
+                TitleID = pObjIndividualModel.TitleID,
+                FirstName = pObjIndividualModel.FirstName,
+                LastName = pObjIndividualModel.LastName,
+                MiddleName = pObjIndividualModel.MiddleName,
+                DOB = TrynParse.parseNullableDate(pObjIndividualModel.DOB),
+                TIN = pObjIndividualModel.TIN,
+                MobileNumber1 = pObjIndividualModel.MobileNumber1,
+                MobileNumber2 = pObjIndividualModel.MobileNumber2,
+                EmailAddress1 = pObjIndividualModel.EmailAddress1,
+                EmailAddress2 = pObjIndividualModel.EmailAddress2,
+                BiometricDetails = pObjIndividualModel.BiometricDetails,
+                TaxOfficeID = pObjIndividualModel.TaxOfficeID,
+                MaritalStatusID = pObjIndividualModel.MaritalStatusID,
+                NationalityID = pObjIndividualModel.NationalityID,
+                TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
+                EconomicActivitiesID = pObjIndividualModel.EconomicActivitiesID,
+                NotificationMethodID = pObjIndividualModel.NotificationMethodID,
+                ContactAddress = pObjIndividualModel.ContactAddress,
+                Active = true,
+                CreatedBy = SessionManager.UserID,
+                CreatedDate = CommUtil.GetCurrentDateTime()
+            };
+
+            try
             {
-                Individual mObjIndividual = new Individual()
+
+                FuncResponse<Individual> mObjResponse = new BLIndividual().BL_InsertUpdateIndividual(mObjIndividual, true, true);
+
+                if (mObjResponse.Success)
                 {
-                    IndividualID = 0,
-                    GenderID = pObjIndividualModel.GenderID,
-                    TitleID = pObjIndividualModel.TitleID,
-                    FirstName = pObjIndividualModel.FirstName,
-                    LastName = pObjIndividualModel.LastName,
-                    MiddleName = pObjIndividualModel.MiddleName,
-                    DOB = TrynParse.parseNullableDate(pObjIndividualModel.DOB),
-                    TIN = pObjIndividualModel.TIN,
-                    MobileNumber1 = pObjIndividualModel.MobileNumber1,
-                    MobileNumber2 = pObjIndividualModel.MobileNumber2,
-                    EmailAddress1 = pObjIndividualModel.EmailAddress1,
-                    EmailAddress2 = pObjIndividualModel.EmailAddress2,
-                    BiometricDetails = pObjIndividualModel.BiometricDetails,
-                    TaxOfficeID = pObjIndividualModel.TaxOfficeID,
-                    MaritalStatusID = pObjIndividualModel.MaritalStatusID,
-                    NationalityID = pObjIndividualModel.NationalityID,
-                    TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
-                    EconomicActivitiesID = pObjIndividualModel.EconomicActivitiesID,
-                    NotificationMethodID = pObjIndividualModel.NotificationMethodID,
-                    ContactAddress = pObjIndividualModel.ContactAddress,
-                    Active = true,
-                    CreatedBy = SessionManager.UserID,
-                    CreatedDate = CommUtil.GetCurrentDateTime()
-                };
-
-                try
-                {
-
-                    FuncResponse<Individual> mObjResponse = new BLIndividual().BL_InsertUpdateIndividual(mObjIndividual, true, true);
-
-                    if (mObjResponse.Success)
+                    if (GlobalDefaultValues.SendNotification)
                     {
-                        if (GlobalDefaultValues.SendNotification)
+                        //Send Notification
+                        EmailDetails mObjEmailDetails = new EmailDetails()
                         {
-                            //Send Notification
-                            EmailDetails mObjEmailDetails = new EmailDetails()
-                            {
-                                TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
-                                TaxPayerTypeName = "Individual",
-                                TaxPayerID = mObjIndividual.IndividualID,
-                                TaxPayerName = mObjIndividual.FirstName + " " + mObjIndividual.LastName,
-                                TaxPayerRIN = mObjIndividual.IndividualRIN,
-                                TaxPayerMobileNumber = mObjIndividual.MobileNumber1,
-                                TaxPayerEmail = mObjIndividual.EmailAddress1,
-                                ContactAddress = mObjIndividual.ContactAddress,
-                                TaxPayerTIN = mObjIndividual.TIN,
-                                LoggedInUserID = SessionManager.UserID,
-                            };
-
-                            if (!string.IsNullOrWhiteSpace(mObjIndividual.EmailAddress1))
-                            {
-                                BLEmailHandler.BL_TaxPayerCreated(mObjEmailDetails);
-                            }
-
-                            if (!string.IsNullOrWhiteSpace(mObjIndividual.MobileNumber1))
-                            {
-                                UtilityController.BL_TaxPayerCreated(mObjEmailDetails);
-                            }
-                        }
-
-                        Audit_Log mObjAuditLog = new Audit_Log()
-                        {
-                            LogDate = CommUtil.GetCurrentDateTime(),
-                            ASLID = (int)EnumList.ALScreen.Capture_Individual_Add,
-                            Comment = $"New Individual Added Without Number - {mObjResponse.AdditionalData.IndividualRIN}",
-                            IPAddress = CommUtil.GetIPAddress(),
-                            StaffID = SessionManager.UserID,
+                            TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
+                            TaxPayerTypeName = "Individual",
+                            TaxPayerID = mObjIndividual.IndividualID,
+                            TaxPayerName = mObjIndividual.FirstName + " " + mObjIndividual.LastName,
+                            TaxPayerRIN = mObjIndividual.IndividualRIN,
+                            TaxPayerMobileNumber = mObjIndividual.MobileNumber1,
+                            TaxPayerEmail = mObjIndividual.EmailAddress1,
+                            ContactAddress = mObjIndividual.ContactAddress,
+                            TaxPayerTIN = mObjIndividual.TIN,
+                            LoggedInUserID = SessionManager.UserID,
                         };
 
-                        new BLAuditLog().BL_InsertAuditLog(mObjAuditLog);
+                        if (!string.IsNullOrWhiteSpace(mObjIndividual.EmailAddress1))
+                        {
+                            BLEmailHandler.BL_TaxPayerCreated(mObjEmailDetails);
+                        }
 
-                        FlashMessage.Info(mObjResponse.Message);
-                        return RedirectToAction("Details", "CaptureIndividual", new { id = mObjResponse.AdditionalData.IndividualID, name = (mObjResponse.AdditionalData.FirstName + " " + mObjResponse.AdditionalData.LastName).ToSeoUrl() });
+                        if (!string.IsNullOrWhiteSpace(mObjIndividual.MobileNumber1))
+                        {
+                            UtilityController.BL_TaxPayerCreated(mObjEmailDetails);
+                        }
                     }
-                    else
+
+                    Audit_Log mObjAuditLog = new Audit_Log()
                     {
-                        UI_FillDropDown(pObjIndividualModel);
-                        ViewBag.Message = mObjResponse.Message;
-                        return View(pObjIndividualModel);
-                    }
+                        LogDate = CommUtil.GetCurrentDateTime(),
+                        ASLID = (int)EnumList.ALScreen.Capture_Individual_Add,
+                        Comment = $"New Individual Added Without Number - {mObjResponse.AdditionalData.IndividualRIN}",
+                        IPAddress = CommUtil.GetIPAddress(),
+                        StaffID = SessionManager.UserID,
+                    };
+
+                    new BLAuditLog().BL_InsertAuditLog(mObjAuditLog);
+
+                    FlashMessage.Info(mObjResponse.Message);
+                    return RedirectToAction("Details", "CaptureIndividual", new { id = mObjResponse.AdditionalData.IndividualID, name = (mObjResponse.AdditionalData.FirstName + " " + mObjResponse.AdditionalData.LastName).ToSeoUrl() });
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.SendErrorToText(ex);
-                    ErrorSignal.FromCurrentContext().Raise(ex);
                     UI_FillDropDown(pObjIndividualModel);
-                    ViewBag.Message = "Error occurred while saving Individual";
+                    ViewBag.Message = mObjResponse.Message;
                     return View(pObjIndividualModel);
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.SendErrorToText(ex);
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                UI_FillDropDown(pObjIndividualModel);
+                ViewBag.Message = "Error occurred while saving Individual";
+                return View(pObjIndividualModel);
+            }
+            //}
         }
         public ActionResult Edit(int? id, string name)
         {
@@ -517,13 +517,6 @@ namespace EIRS.Web.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult Edit(IndividualViewModel pObjIndividualModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    UI_FillDropDown(pObjIndividualModel);
-            //    return View(pObjIndividualModel);
-            //}
-            //else
-            //{
             Individual mObjIndividual = new Individual()
             {
                 IndividualID = pObjIndividualModel.IndividualID,
@@ -605,7 +598,6 @@ namespace EIRS.Web.Controllers
                 ViewBag.Message = "Error occurred while saving Individual";
                 return View(pObjIndividualModel);
             }
-            //}
         }
         public ActionResult EditTaxOffice(int? id, string name)
         {
@@ -2344,8 +2336,9 @@ namespace EIRS.Web.Controllers
                     //string[] strArrAssessmentRuleIds = strAssessmentRuleIds.Split(',');
                     if (aruleIds.Contains("{"))
                     {
-                        var assBillIds = JsonConvert.DeserializeObject<List<newServiceBillIdsRequest>>(aruleIds);
-
+                        JavaScriptSerializer js = new JavaScriptSerializer();
+                        var assBillIds = js.Deserialize<List<newServiceBillIdsRequest>>(aruleIds);
+                        //  var assBillIds = (List<newServiceBillIdsRequest>)js.DeserializeObject(aruleIds);
                         foreach (var item in assBillIds)
                         {
                             strArrAssessmentRuleIds.Add(item.ServiceId);
@@ -3059,8 +3052,9 @@ namespace EIRS.Web.Controllers
 
                     if (mdsIds.Contains("{"))
                     {
-                        var serviceBillIds = JsonConvert.DeserializeObject<List<ServiceBillIdsRequest>>(mdsIds);
-
+                        JavaScriptSerializer js = new JavaScriptSerializer();
+                        var serviceBillIds = js.Deserialize<List<newServiceBillIdsRequest>>(mdsIds);
+                        // var serviceBillIds = (List<newServiceBillIdsRequest>)js.DeserializeObject(mdsIds);
                         foreach (var item in serviceBillIds)
                         {
                             strArrMDAServiceIds.Add(item.ServiceId);
@@ -3746,6 +3740,8 @@ namespace EIRS.Web.Controllers
 
                         if (mObjAssessmentData != null && mObjAssessmentData.TaxPayerID == mObjIndividualData.IndividualID && mObjAssessmentData.TaxPayerTypeID == (int)EnumList.TaxPayerType.Individual)
                         {
+                            var disaap = _db.MapAssessmentDisapprove_.Where(o => o.AssessmentID == mObjAssessmentData.AssessmentID).ToList();
+
                             IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = mObjBLAssessment.BL_GetAssessmentRules(mObjAssessmentData.AssessmentID.GetValueOrDefault());
                             IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = mObjBLAssessment.BL_GetAssessmentRuleItem(mObjAssessmentData.AssessmentID.GetValueOrDefault());
                             IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = mObjBLAssessment.BL_GetAssessmentRuleBasedSettlement(mObjAssessmentData.AssessmentID.GetValueOrDefault());
@@ -3763,7 +3759,7 @@ namespace EIRS.Web.Controllers
                             ViewBag.SettlementList = lstSettlement;
                             ViewBag.AdjustmentList = lstAssessmentAdjustment;
                             ViewBag.LateChargeList = lstAssessmentLateCharge;
-
+                            ViewBag.disaap = disaap;
                             return View("AssessmentBillDetailFromPending", mObjAssessmentData);
                         }
                         else
@@ -3885,9 +3881,6 @@ namespace EIRS.Web.Controllers
                             ass.SettlementStatusID = 4;
 
                     }
-
-                    _db.SaveChanges();
-                    return RedirectToAction("Details", "CaptureIndividual", new { id = ass.TaxPayerID, name = ass.TaxPayerRIN });
                     break;
                 case 2:
                     ass.SettlementStatusID = 7;
@@ -3898,13 +3891,13 @@ namespace EIRS.Web.Controllers
                     map.TaxOfficerDesignation = SessionManager.UserID.ToString();
                     map.TaxOfficerId = allTax.FirstOrDefault().TaxOfficeID;
                     _db.MapAssessmentDisapprove_.Add(map);
-                    _db.SaveChanges();
-                    return RedirectToAction("Declined", "Home", new { id = ass.TaxPayerID, name = ass.TaxPayerRIN });
                     break;
                 default:
                     break;
             }
-            return View("AssessmentBillDetailFromPending", ass);
+            _db.SaveChanges();
+            return RedirectToAction("Pending", "Home", new { id = ass.TaxPayerID, name = ass.TaxPayerRIN });
+
         }
         public ActionResult GenerateBill(int? id, string name, int? billid, string billrefno)
         {
@@ -4192,15 +4185,13 @@ namespace EIRS.Web.Controllers
         }
         public JsonResult AddTCCRequest(int TaxYear, int TaxPayerID)
         {
-            //string url = getUrl();
-            //bool itCan = new UtilityController().CheckAccess(url);
-            //if (!itCan) { return RedirectToAction("AccessDenied", "Utility"); }
             IDictionary<string, object> dcResponse = new Dictionary<string, object>();
-
             BLTCC mObjBLTCC = new BLTCC();
+            var userDet = _db.Individuals.FirstOrDefault(o => o.IndividualID == TaxPayerID);
 
             TCC_Request mObjRequest = new TCC_Request()
             {
+                TaxOfficeId = userDet != null ? userDet.TaxOfficeID : 0,
                 RequestDate = CommUtil.GetCurrentDateTime(),
                 TaxPayerID = TaxPayerID,
                 TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
@@ -4227,6 +4218,9 @@ namespace EIRS.Web.Controllers
                     };
 
                     new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
+
+                    //string msg = $"Your TCC Application with request Reference number {mObjReqResponse.AdditionalData.RequestRefNo} has been received and under process";
+                    //  bool blnSMSSent = UtilityController.SendSMS(userDet.MobileNumber1, msg);
 
                     //Get List
                     dcResponse["success"] = true;

@@ -23,15 +23,17 @@ $(document).ready(function () {
             { "data": "MobileNumber", "orderable": true, "name": "MobileNumber" },
             {
                 "data": "RequestDate", "orderable": true, "name": "RequestDate", "render": function (data, type, req) {
-                    var vRequestDate = new Date(parseInt(req["RequestDate"].substr(6)));
-                    return vRequestDate.format("dd-mmm-yyyy");
+                    if (req["RequestDate"] != null) {
+                        var vRequestDate = new Date(parseInt(req["RequestDate"].substr(6)));
+                        return vRequestDate.format("dd-mmm-yyyy");
+                    } return null;
                 }
             },
             { "data": "StatusName", "orderable": true, "name": "StatusName" },
             {
                 "data": "", "orderable": false, "name": "Action",
                 "render": function (data, type, req) {
-                    return '<div class="btn-group"><button '+(req.StatusID === 15 ? "disabled" : "")+' type = "button" class= "btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>'
+                    return '<div class="btn-group"><button ' + (req.StatusID === 15 ? "disabled" : "") + ' type = "button" class= "btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>'
                         + '<ul class="dropdown-menu">'
                         + '<li><a href="/ProcessTCCRequest/Details?reqid=' + req.TCCRequestID + '">Process Request</a></li>'
                         //+ (req.StatusID < 9 ? '<li><a href="/ProcessTCCRequest/Edit?reqid=' + req.TCCRequestID + '">Edit Request</a></li>' : '')

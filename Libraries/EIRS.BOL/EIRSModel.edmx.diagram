@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="16af8c9999464a8b95765d9f16c708e8" Name="Diagram1" ZoomLevel="55">
+      <Diagram DiagramId="16af8c9999464a8b95765d9f16c708e8" Name="Diagram1" ZoomLevel="72">
         <EntityTypeShape EntityType="EIRSModel.Address_Types" Width="1.5" PointX="15" PointY="69.875" />
         <EntityTypeShape EntityType="EIRSModel.Agency" Width="1.5" PointX="5.25" PointY="91.125" />
         <EntityTypeShape EntityType="EIRSModel.Agency_Types" Width="1.5" PointX="3" PointY="91.5" />
@@ -453,6 +453,10 @@
         <EntityTypeShape EntityType="EIRSModel.MapAssessmentDisapprove_" Width="1.5" PointX="11.375" PointY="38.75" />
         <EntityTypeShape EntityType="EIRSModel.DA_And_PAYE_TCC_Details" Width="1.5" PointX="38.375" PointY="35.75" />
         <EntityTypeShape EntityType="EIRSModel.NewTCCDetailsHold" Width="1.5" PointX="0.75" PointY="39.75" />
+        <EntityTypeShape EntityType="EIRSModel.BusinessName" Width="1.5" PointX="39.375" PointY="0.75" />
+        <AssociationConnector Association="EIRSModel.FK_TCC_Request_Approvaltype" />
+        <AssociationConnector Association="EIRSModel.FK_TCC_Request_TCC_Request" />
+        <EntityTypeShape EntityType="EIRSModel.ApproverType" Width="1.5" PointX="39.375" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -230,7 +230,7 @@ namespace EIRS.Web.Controllers
                 if (strAction == "Submit")
                 {
                     //Validation
-                    if (!lstCertificateItem.Where(t=>t.BilledAmount.GetValueOrDefault() > 0).Any())
+                    if (!lstCertificateItem.Where(t => t.BilledAmount.GetValueOrDefault() > 0).Any())
                     {
                         ViewBag.Message = "No Bill Found for Tax Payer";
                         ViewBag.CertificateDetails = mObjCertificateDetails;
@@ -379,7 +379,7 @@ namespace EIRS.Web.Controllers
 
                         var vTaxPayerRole = lstTaxPayerAsset.FirstOrDefault().TaxPayerRoleName;
 
-                       
+
                         mObjCertificate = new Certificate()
                         {
                             CertificateID = pObjCertificateModel.CertificateID,

@@ -119,7 +119,7 @@ namespace EIRS.Web.Controllers
             }
             else
             {
-                if(pObjTaxPayerModel.TaxPayerID > 0)
+                if (pObjTaxPayerModel.TaxPayerID > 0)
                 {
                     Individual mObjIndividual = new Individual()
                     {
@@ -129,7 +129,7 @@ namespace EIRS.Web.Controllers
 
                     FuncResponse mObjFuncResponse = new BLIndividual().REP_CheckOTPCode(mObjIndividual);
 
-                    if(mObjFuncResponse.Success)
+                    if (mObjFuncResponse.Success)
                     {
                         Session["TaxPayerID"] = pObjTaxPayerModel.TaxPayerID;
                         Session["TaxPayerMobileNumber"] = pObjTaxPayerModel.MobileNumber;
@@ -145,7 +145,7 @@ namespace EIRS.Web.Controllers
                 {
                     int mIntOTP = TrynParse.parseInt(Session["VerificationOTP"]);
 
-                    if(mIntOTP == pObjTaxPayerModel.OTP)
+                    if (mIntOTP == pObjTaxPayerModel.OTP)
                     {
                         Session["TaxPayerID"] = pObjTaxPayerModel.TaxPayerID;
                         Session["TaxPayerMobileNumber"] = pObjTaxPayerModel.MobileNumber;

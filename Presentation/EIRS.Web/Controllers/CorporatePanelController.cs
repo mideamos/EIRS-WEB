@@ -18,7 +18,7 @@ using System.Net.Mail;
 
 namespace EIRS.Web.Controllers
 {
-    
+
     public class CorporatePanelController : BaseController
     {
         EIRSEntities _db;
@@ -178,7 +178,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult Details()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -437,7 +437,7 @@ namespace EIRS.Web.Controllers
             return PartialView("_BindLandTable_SingleSelect", lstLand.Take(5).ToList());
         }
 
-        
+
         public ActionResult SearchVehicle()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -521,7 +521,7 @@ namespace EIRS.Web.Controllers
             UI_FillSizeDropDown(new Size() { intStatus = 1, IncludeSizeIds = pObjBusinessViewModel.SizeID.ToString() });
         }
 
-        
+
         public ActionResult AddBusiness()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -706,7 +706,7 @@ namespace EIRS.Web.Controllers
             UI_FillLandStreetConditionDropDown(new Land_StreetCondition() { intStatus = 1, IncludeLandStreetConditionIds = pObjLandViewModel.LandStreetConditionID.ToString() });
         }
 
-        
+
         public ActionResult AddLand()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -895,7 +895,7 @@ namespace EIRS.Web.Controllers
             UI_FillVehicleOwnershipDropDown(new Vehicle_Ownership() { intStatus = 1, IncludeVehicleOwnershipIds = pObjVehicleViewModel.VehicleOwnershipID.ToString() });
         }
 
-        
+
         public ActionResult AddVehicle()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -1083,7 +1083,7 @@ namespace EIRS.Web.Controllers
             ViewBag.BuildingUnitList = SessionManager.LstBuildingUnit;
         }
 
-        
+
         public ActionResult AddBuilding()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -1315,7 +1315,7 @@ namespace EIRS.Web.Controllers
                 }
             }
         }
-        
+
         public ActionResult GenerateServiceBill()
         {
             if (SessionManager.TaxPayerID > 0)
@@ -1375,7 +1375,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult AddServiceBill()
         {
             string mdsIds = string.Empty;
@@ -1648,7 +1648,7 @@ namespace EIRS.Web.Controllers
             }
         }
 
-        
+
         public ActionResult EditServiceBill(int? sbid)
         {
             if (SessionManager.TaxPayerID > 0 && sbid.GetValueOrDefault() > 0)
@@ -2160,7 +2160,7 @@ namespace EIRS.Web.Controllers
                             if (System.IO.File.Exists(strExportFilePath))
                                 System.IO.File.Delete(strExportFilePath);
 
-                           // //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
+                            // //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
 
                             //Send email to assessment@eras.eirs.gov.ng
                             string strSubject = $"Assessment Bill Generated : {mObjAssessmentData.AssessmentRefNo}";
@@ -2259,7 +2259,7 @@ namespace EIRS.Web.Controllers
                             if (System.IO.File.Exists(strExportFilePath))
                                 System.IO.File.Delete(strExportFilePath);
 
-                        //    //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
+                            //    //CommUtil.RenderReportNStoreInFile(strExportFilePath, localReport, "PDF");
 
                             //Send email to assessment@eras.eirs.gov.ng
                             string strSubject = $"Service Bill Generated : {mObjServiceBillData.ServiceBillRefNo}";

@@ -350,8 +350,7 @@ namespace EIRS.Repository
         public IList<usp_GetAssessmentList_Result> REP_GetAssessmentList(Assessment pObjAssessment)
         {
             using (_db = new EIRSEntities())
-            {
-                return _db.usp_GetAssessmentList(pObjAssessment.TaxPayerTypeID, pObjAssessment.TaxPayerID, pObjAssessment.AssessmentID, pObjAssessment.AssessmentRefNo, pObjAssessment.IntStatus).ToList();
+            {return _db.usp_GetAssessmentList(pObjAssessment.TaxPayerTypeID, pObjAssessment.TaxPayerID, pObjAssessment.AssessmentID, pObjAssessment.AssessmentRefNo, pObjAssessment.IntStatus).ToList();
             }
         }
 

@@ -25,6 +25,9 @@ using LicenseContext = OfficeOpenXml.LicenseContext;
 
 namespace EIRS.Common
 {
+    /// <summary>
+    /// /just to push again to amos
+    /// </summary>
     public class CommUtil
     {
         public static readonly char[] Alphabets = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };

@@ -20,9 +20,9 @@ namespace EIRS.Repository
             {
                 Assessment mObjInsertUpdateAssessment; //Assessment Insert Object
                 FuncResponse<Assessment> mObjFuncResponse = new FuncResponse<Assessment>(); //Return Object
-                decimal? amount=0;
+                decimal? amount = 0;
                 var arule = _db.Assessment_Rules.FirstOrDefault(x => x.AssessmentRuleID == ruleId);
-                if(arule!= null)
+                if (arule != null)
                     amount = arule.AssessmentAmount.GetValueOrDefault();
                 //Check if Duplicate 
                 var vDuplicateCheck = (from assmnt in _db.MAP_Assessment_AssessmentRule
@@ -350,7 +350,8 @@ namespace EIRS.Repository
         public IList<usp_GetAssessmentList_Result> REP_GetAssessmentList(Assessment pObjAssessment)
         {
             using (_db = new EIRSEntities())
-            {return _db.usp_GetAssessmentList(pObjAssessment.TaxPayerTypeID, pObjAssessment.TaxPayerID, pObjAssessment.AssessmentID, pObjAssessment.AssessmentRefNo, pObjAssessment.IntStatus).ToList();
+            {
+                return _db.usp_GetAssessmentList(pObjAssessment.TaxPayerTypeID, pObjAssessment.TaxPayerID, pObjAssessment.AssessmentID, pObjAssessment.AssessmentRefNo, pObjAssessment.IntStatus).ToList();
             }
         }
 
@@ -730,7 +731,7 @@ namespace EIRS.Repository
                 FuncResponse mObjResponse = new FuncResponse();
                 decimal? checker = 0;
                 MAP_Assessment_AssessmentItem mObjUpdateAssessmentItem = _db.MAP_Assessment_AssessmentItem.Find(pObjAssessmentItem.AAIID);
-                
+
                 if (mObjUpdateAssessmentItem != null)
                 {
                     List<MAP_Assessment_AssessmentItem> zeroValue = _db.MAP_Assessment_AssessmentItem.Where(k => k.AARID == mObjUpdateAssessmentItem.AARID && k.TaxAmount == checker).ToList();
@@ -941,6 +942,6 @@ namespace EIRS.Repository
             }
         }
 
-        
+
     }
 }

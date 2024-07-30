@@ -532,106 +532,180 @@ namespace EIRS.Web.Controllers
             }
             return View(listTccVm);
         }
+        //public ActionResult SignTCCListBulk()
+        //{
+        //    string approvalType = "";
+        //    long holder;
+        //    int userId = SessionManager.UserID;
+        //    List<NewTccViewModel> listTccVm = new List<NewTccViewModel>();
+
+        //    var checkAppLevel = _db.Tax_Offices.Where(x =>
+        //        x.Approver1 == userId ||
+        //        x.Approver2 == userId ||
+        //        x.Approver3 == userId ||
+        //        x.PAYE_ApproverID == userId)
+        //        .ToList();
+
+        //    if (checkAppLevel.Count == 0)
+        //    {
+        //        ViewBag.Message = "You Are Not An Approving Officer";
+        //        return View(listTccVm);
+        //    }
+        //    else
+        //    {
+        //        if (checkAppLevel.Any(o => o.Approver1 == userId && o.PAYE_ApproverID != userId))
+        //        {
+        //            holder = (long)TCCSigningStage.AwaitingFirstSigner;
+        //            approvalType = "1";
+        //        }
+        //        else if (checkAppLevel.Any(o => o.Approver1 != userId && o.PAYE_ApproverID == userId))
+        //        {
+        //            holder = (long)TCCSigningStage.AwaitingFirstSigner;
+        //            approvalType = "2";
+        //        }
+        //        else if (checkAppLevel.Any(o => o.Approver2 == userId))
+        //        {
+        //            holder = (long)TCCSigningStage.AwaitingSecondSigner;
+        //        }
+        //        else if (checkAppLevel.Any(o => o.Approver3 == userId))
+        //        {
+        //            holder = (long)TCCSigningStage.AwaitingThirdSigner;
+        //        }
+        //        else
+        //        {
+        //            ViewBag.Message = "You Are Not An Approving Officer As You Are Not PAYE APPROVAL";
+        //            return View(listTccVm);
+        //        }
+
+        //        var query = _db.TCC_Request.AsQueryable();
+
+        //        if (approvalType == "1" || approvalType == "2")
+        //        {
+        //            query = query.Where(o => o.ApproverTypeId == approvalType);
+        //        }
+
+        //        query = query.Where(o => o.SEDE_OrderID == holder || o.SEDE_DocumentID == userId || o.ServiceBillID == userId || o.VisibleSignStatusID == userId);
+
+        //        var ee = (from ex in query
+        //                  join ue in _db.Individuals on ex.TaxPayerID equals ue.IndividualID
+        //                  select new
+        //                  {
+        //                      TCCRequestID = ex.TCCRequestID,
+        //                      GeneratedPath = ex.GeneratedPath,
+        //                      RequestRefNo = ex.RequestRefNo,
+        //                      MobileNumber = ue.MobileNumber1,
+        //                      RequestDate = ex.RequestDate,
+        //                      TaxFName = ue.FirstName,
+        //                      TaxYear = ex.TaxYear,
+        //                      TaxLName = ue.LastName,
+        //                      modifiedDate = ex.ModifiedDate,
+        //                      modifiedBy = ex.ModifiedBy,
+        //                      sedeDoc = ex.SEDE_DocumentID,
+        //                      serviceBillid = ex.ServiceBillID,
+        //                      VisibleSignStatusID = ex.VisibleSignStatusID,
+        //                      sedeId = ex.SEDE_OrderID
+        //                  }).OrderByDescending(o => o.modifiedDate).ToList();
+
+        //        for (int i = 0; i < ee.Count; i++)
+        //        {
+        //            NewTccViewModel tccVm = new NewTccViewModel();
+        //            if (ee[i].sedeId == 10000)
+        //                tccVm.BillStatus = "Awaiting First Signer";
+        //            else if (ee[i].sedeId == 10001)
+        //                tccVm.BillStatus = "Awaiting Second Signer";
+        //            else if (ee[i].sedeId == 10002)
+        //                tccVm.BillStatus = "Awaiting Third Signer";
+        //            else
+        //                tccVm.BillStatus = "TCC Signed Successfully";
+        //            if (ee[i].sedeDoc == userId || ee[i].serviceBillid == userId || ee[i].VisibleSignStatusID == userId)
+        //                tccVm.IsSigned = true;
+        //            tccVm.TCCRequestID = ee[i].TCCRequestID;
+        //            tccVm.GeneratedPath = ee[i].GeneratedPath;
+        //            tccVm.RequestRefNo = ee[i].RequestRefNo;
+        //            tccVm.MobileNumber = ee[i].MobileNumber;
+        //            tccVm.RequestDate = ee[i].modifiedDate;
+        //            tccVm.TaxFName = ee[i].TaxFName;
+        //            tccVm.TaxLName = ee[i].TaxLName;
+        //            tccVm.TaxYear = ee[i].TaxYear;
+        //            tccVm.TaxPayerID = i + 1;
+        //            tccVm.ModifiedBy = ee[i].modifiedBy;
+        //            listTccVm.Add(tccVm);
+        //        }
+        //    }
+        //    return View(listTccVm);
+        //}
+
         public ActionResult SignTCCListBulk()
         {
-            string approvalType = "";
             long holder;
             int userId = SessionManager.UserID;
             List<NewTccViewModel> listTccVm = new List<NewTccViewModel>();
-
-            var checkAppLevel = _db.Tax_Offices.Where(x =>
-                x.Approver1 == userId ||
-                x.Approver2 == userId ||
-                x.Approver3 == userId ||
-                x.PAYE_ApproverID == userId)
-                .ToList();
-
+            var checkAppLevel = _db.Tax_Offices.Where(x => x.Approver1 == userId || x.Approver2 == userId || x.Approver3 == userId).ToList();
             if (checkAppLevel.Count == 0)
             {
                 ViewBag.Message = "You Are Not An Approving Officer";
                 return View(listTccVm);
             }
+
+            var retHolder = checkAppLevel.FirstOrDefault();
+            if (checkAppLevel.Any(o => o.PAYE_ApproverID == userId))
+                holder = (long)TCCSigningStage.AwaitingFirstSigner;
+            else if (retHolder.Approver1 == userId)
+                holder = (long)TCCSigningStage.AwaitingFirstSigner;
+            else if (retHolder.Approver2 == userId)
+                holder = (long)TCCSigningStage.AwaitingSecondSigner;
             else
+                holder = (long)TCCSigningStage.AwaitingThirdSigner;
+            var ee =
+                (from ex in _db.TCC_Request.Where(o => o.SEDE_OrderID == holder)
+                 join ue in _db.Individuals on
+                 ex.TaxPayerID equals ue.IndividualID
+                 select new
+                 {
+                     TCCRequestID = ex.TCCRequestID,
+                     GeneratedPath = ex.GeneratedPath,
+                     RequestRefNo = ex.RequestRefNo,
+                     MobileNumber = ue.MobileNumber1,
+                     RequestDate = ex.RequestDate,
+                     TaxFName = ue.FirstName,
+                     TaxYear = ex.TaxYear,
+                     TaxLName = ue.LastName,
+                     modifiedDate = ex.ModifiedDate,
+                     modifiedBy = ex.ModifiedBy,
+                     sedeDoc = ex.SEDE_DocumentID,
+                     serviceBillid = ex.ServiceBillID,
+                     VisibleSignStatusID = ex.VisibleSignStatusID,
+                     sedeId = ex.SEDE_OrderID
+                 }).OrderByDescending(o => o.modifiedDate).ToList();
+
+            //ee = ee.Where(o => o.sedeId == holder).ToList();
+
+            for (int i = 0; i < ee.Count; i++)
             {
-                if (checkAppLevel.Any(o => o.Approver1 == userId && o.PAYE_ApproverID != userId))
-                {
-                    holder = (long)TCCSigningStage.AwaitingFirstSigner;
-                    approvalType = "1";
-                }
-                else if (checkAppLevel.Any(o => o.Approver1 != userId && o.PAYE_ApproverID == userId))
-                {
-                    holder = (long)TCCSigningStage.AwaitingFirstSigner;
-                    approvalType = "2";
-                }
-                else if (checkAppLevel.Any(o => o.Approver2 == userId))
-                {
-                    holder = (long)TCCSigningStage.AwaitingSecondSigner;
-                }
-                else if (checkAppLevel.Any(o => o.Approver3 == userId))
-                {
-                    holder = (long)TCCSigningStage.AwaitingThirdSigner;
-                }
+                NewTccViewModel tccVm = new NewTccViewModel();
+                if (ee[i].sedeId == 10000)
+                    tccVm.BillStatus = "Awaiting First Signer";
+                else if (ee[i].sedeId == 10001)
+                    tccVm.BillStatus = "Awaiting Second Signer";
+                else if (ee[i].sedeId == 10002)
+                    tccVm.BillStatus = "Awaiting Third Signer";
                 else
-                {
-                    ViewBag.Message = "You Are Not An Approving Officer As You Are Not PAYE APPROVAL";
-                    return View(listTccVm);
-                }
-
-                var query = _db.TCC_Request.AsQueryable();
-
-                if (approvalType == "1" || approvalType == "2")
-                {
-                    query = query.Where(o => o.ApproverTypeId == approvalType);
-                }
-
-                query = query.Where(o => o.SEDE_OrderID == holder || o.SEDE_DocumentID == userId || o.ServiceBillID == userId || o.VisibleSignStatusID == userId);
-
-                var ee = (from ex in query
-                          join ue in _db.Individuals on ex.TaxPayerID equals ue.IndividualID
-                          select new
-                          {
-                              TCCRequestID = ex.TCCRequestID,
-                              GeneratedPath = ex.GeneratedPath,
-                              RequestRefNo = ex.RequestRefNo,
-                              MobileNumber = ue.MobileNumber1,
-                              RequestDate = ex.RequestDate,
-                              TaxFName = ue.FirstName,
-                              TaxYear = ex.TaxYear,
-                              TaxLName = ue.LastName,
-                              modifiedDate = ex.ModifiedDate,
-                              modifiedBy = ex.ModifiedBy,
-                              sedeDoc = ex.SEDE_DocumentID,
-                              serviceBillid = ex.ServiceBillID,
-                              VisibleSignStatusID = ex.VisibleSignStatusID,
-                              sedeId = ex.SEDE_OrderID
-                          }).OrderByDescending(o => o.modifiedDate).ToList();
-
-                for (int i = 0; i < ee.Count; i++)
-                {
-                    NewTccViewModel tccVm = new NewTccViewModel();
-                    if (ee[i].sedeId == 10000)
-                        tccVm.BillStatus = "Awaiting First Signer";
-                    else if (ee[i].sedeId == 10001)
-                        tccVm.BillStatus = "Awaiting Second Signer";
-                    else if (ee[i].sedeId == 10002)
-                        tccVm.BillStatus = "Awaiting Third Signer";
-                    else
-                        tccVm.BillStatus = "TCC Signed Successfully";
-                    if (ee[i].sedeDoc == userId || ee[i].serviceBillid == userId || ee[i].VisibleSignStatusID == userId)
-                        tccVm.IsSigned = true;
-                    tccVm.TCCRequestID = ee[i].TCCRequestID;
-                    tccVm.GeneratedPath = ee[i].GeneratedPath;
-                    tccVm.RequestRefNo = ee[i].RequestRefNo;
-                    tccVm.MobileNumber = ee[i].MobileNumber;
-                    tccVm.RequestDate = ee[i].modifiedDate;
-                    tccVm.TaxFName = ee[i].TaxFName;
-                    tccVm.TaxLName = ee[i].TaxLName;
-                    tccVm.TaxYear = ee[i].TaxYear;
-                    tccVm.TaxPayerID = i + 1;
-                    tccVm.ModifiedBy = ee[i].modifiedBy;
-                    listTccVm.Add(tccVm);
-                }
+                    tccVm.BillStatus = "TCC Signed Successfully";
+                if (ee[i].sedeDoc == userId || ee[i].serviceBillid == userId || ee[i].VisibleSignStatusID == userId)
+                    tccVm.IsSigned = true;
+                tccVm.TCCRequestID = ee[i].TCCRequestID;
+                tccVm.GeneratedPath = ee[i].GeneratedPath;
+                tccVm.RequestRefNo = ee[i].RequestRefNo;
+                tccVm.MobileNumber = ee[i].MobileNumber;
+                tccVm.RequestDate = ee[i].modifiedDate;
+                tccVm.TaxFName = ee[i].TaxFName;
+                tccVm.TaxLName = ee[i].TaxLName;
+                tccVm.TaxYear = ee[i].TaxYear;
+                tccVm.TaxPayerID = i + 1;
+                tccVm.ModifiedBy = ee[i].modifiedBy;
+                listTccVm.Add(tccVm);
             }
+
             return View(listTccVm);
         }
 

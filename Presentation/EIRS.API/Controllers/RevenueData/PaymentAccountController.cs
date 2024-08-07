@@ -18,7 +18,7 @@ namespace EIRS.API.Controllers
 {
 
     [RoutePrefix("RevenueData/POA")]
-
+    
     public class PaymentAccountController : BaseController
     {
         [HttpPost]
@@ -95,6 +95,9 @@ namespace EIRS.API.Controllers
             {
                 mObjAPIResponse.Success = false;
                 mObjAPIResponse.Result = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
+                //mObjAPIResponse.Success = false;
+                //mObjAPIResponse.Message = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             }
             else
             {

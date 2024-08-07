@@ -745,7 +745,6 @@ namespace EIRS.Repository
                 using (_db = new ERASEntities())
                 {
 
-                   // var all = _db.MST_Users.ToList();
                     var vFind = (from usr in _db.MST_Users
                                  where (usr.UserName.Equals(pObjUser.UserName) || usr.EmailAddress.Equals(pObjUser.UserName)) && usr.Password.Equals(pObjUser.Password) && usr.UserTypeID == pObjUser.UserTypeID
                                  select usr);
@@ -1040,7 +1039,7 @@ namespace EIRS.Repository
                                        id = usrs.UserID,
                                        text = usrs.ContactName
                                    }).ToList();
-                        break;
+                        break;   
                     case "2":
                         vResult = (from usrs in _db.MST_Users
                                    where usrs.Active == true && usrs.UserTypeID == pObjUser.UserTypeID && usrs.IsDirector == true
@@ -1053,7 +1052,7 @@ namespace EIRS.Repository
                     default:
                         break;
                 }
-
+                
 
                 return vResult;
             }

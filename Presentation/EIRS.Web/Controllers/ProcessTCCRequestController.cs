@@ -1008,7 +1008,7 @@ namespace EIRS.Web.Controllers
                         }
                         else if (chargeableIncome != 0 && totalIncomeEarned != 0)
                         {
-                            revenueType = "DA & PAYE";
+                            revenueType = "DA and PAYE";
                         }
                         else if (chargeableIncome == 0)
                         {
@@ -1043,7 +1043,7 @@ namespace EIRS.Web.Controllers
                         }
                         else if (chargeableIncome2 != 0 && totalIncomeEarned2 != 0)
                         {
-                            revenueType = "DA & PAYE";
+                            revenueType = "DA and PAYE";
                         }
                         else if (chargeableIncome2 == 0)
                         {
@@ -1077,7 +1077,7 @@ namespace EIRS.Web.Controllers
                         }
                         else if (chargeableIncome3 != 0 && totalIncomeEarned3 != 0)
                         {
-                            revenueType = "DA & PAYE";
+                            revenueType = "DA and PAYE";
                         }
                         else if (chargeableIncome3 == 0)
                         {
@@ -3145,7 +3145,7 @@ namespace EIRS.Web.Controllers
                     }
                     else if (chargeableIncome3 != 0 && totalIncomeEarned3 != 0)
                     {
-                        revenueType = "DA & PAYE";
+                        revenueType = "DA and PAYE";
                     }
                     else if (chargeableIncome3 == 0)
                     {
@@ -3256,7 +3256,7 @@ namespace EIRS.Web.Controllers
                     }
                     else
                     {
-                        revenueType = "DA & PAYE";
+                        revenueType = "DA and PAYE";
                     }
                     mObjTCCDetail.AssessableIncome = (mObjTCCDetail.AssessableIncome - Convert.ToDecimal(formalAssessedIncome)) + pObjIncomeStreamModel.TotalIncomeEarned;
                     mObjTCCDetail.ERASAssessed = (mObjTCCDetail.ERASAssessed - Convert.ToDecimal(fomalTax)) + pObjIncomeStreamModel.payeAssessedIncome;

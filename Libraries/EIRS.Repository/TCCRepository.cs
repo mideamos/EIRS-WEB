@@ -2192,7 +2192,7 @@ namespace EIRS.Repository
 
         /******************* Revoke TCC **************************/
         public FuncResponse REP_RevokeTCC(MAP_TCCRequest_Revoke pObjRevoke)
-         {
+        {
             using (_db = new EIRSEntities())
             {
                 FuncResponse mObjFuncResponse = new FuncResponse();

@@ -7,3 +7,560 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+
+public partial class MAP_API_Users_Rights
+{
+    public long UAID { get; set; }
+    public Nullable<int> APIID { get; set; }
+    public Nullable<int> UserID { get; set; }
+    public Nullable<bool> APIAccess { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    public virtual MST_API MST_API { get; set; }
+    public virtual MST_Users MST_Users { get; set; }
+}
+
+public partial class MAP_CentralMenu_Screen
+{
+    public long CMSID { get; set; }
+    public Nullable<int> CentralMenuID { get; set; }
+    public Nullable<int> ScreenID { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<bool> isMainScreen { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    public virtual MST_CentralMenu MST_CentralMenu { get; set; }
+    public virtual MST_Screen MST_Screen { get; set; }
+}
+
+public partial class MAP_User_Screen
+{
+    public long USID { get; set; }
+    public Nullable<int> UserID { get; set; }
+    public Nullable<int> ScreenID { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    public virtual MST_Screen MST_Screen { get; set; }
+    public virtual MST_Users MST_Users { get; set; }
+}
+
+public partial class MST_API
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public MST_API()
+    {
+        this.MAP_API_Users_Rights = new HashSet<MAP_API_Users_Rights>();
+    }
+
+    public int APIID { get; set; }
+    public string APIName { get; set; }
+    public string ControllerName { get; set; }
+    public string ActionName { get; set; }
+    public string APIDescription { get; set; }
+    public string DocumentPath { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MAP_API_Users_Rights> MAP_API_Users_Rights { get; set; }
+}
+
+public partial class MST_AwarenessCategory
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public MST_AwarenessCategory()
+    {
+        this.MST_FAQ = new HashSet<MST_FAQ>();
+    }
+
+    public int AwarenessCategoryID { get; set; }
+    public string AwarenessCategoryName { get; set; }
+    public string SectionDescription { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MST_FAQ> MST_FAQ { get; set; }
+}
+
+public partial class MST_Business
+{
+    public long BusinessID { get; set; }
+    public string BusinessName { get; set; }
+    public string BusinessAddress { get; set; }
+    public string BusinessSector { get; set; }
+    public string BusinessSubSector { get; set; }
+    public string BusinessType { get; set; }
+    public string BusinessCategory { get; set; }
+    public string AssetType { get; set; }
+    public string BusinessStructure { get; set; }
+    public string BusinessOperation { get; set; }
+    public string Size { get; set; }
+    public string LGA { get; set; }
+    public string TIN { get; set; }
+    public string TaxOffice { get; set; }
+    public string ContactName { get; set; }
+    public string Phone { get; set; }
+    public string EmailAddress { get; set; }
+    public Nullable<bool> PAYE { get; set; }
+    public Nullable<bool> DirectAssessment { get; set; }
+    public Nullable<bool> PresumptiveTax { get; set; }
+    public Nullable<bool> BusinessPremises { get; set; }
+    public Nullable<bool> ConsumtpionTaxes { get; set; }
+    public Nullable<bool> MDAServices { get; set; }
+    public string Source { get; set; }
+    public string BuildingTag { get; set; }
+    public string Latitude { get; set; }
+    public string Longitude { get; set; }
+    public Nullable<bool> PhoneVerified { get; set; }
+    public Nullable<bool> Claimed { get; set; }
+    public Nullable<bool> Active { get; set; }
+}
+
+public partial class MST_CentralMenu
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public MST_CentralMenu()
+    {
+        this.MAP_CentralMenu_Screen = new HashSet<MAP_CentralMenu_Screen>();
+        this.MST_CentralMenu1 = new HashSet<MST_CentralMenu>();
+    }
+
+    public int CentralMenuID { get; set; }
+    public string CentralMenuName { get; set; }
+    public Nullable<int> ParentCentralMenuID { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<decimal> SortOrder { get; set; }
+    public Nullable<int> MenuType { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MAP_CentralMenu_Screen> MAP_CentralMenu_Screen { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MST_CentralMenu> MST_CentralMenu1 { get; set; }
+    public virtual MST_CentralMenu MST_CentralMenu2 { get; set; }
+}
+
+public partial class MST_FAQ
+{
+    public int FAQID { get; set; }
+    public Nullable<int> AwarenessCategoryID { get; set; }
+    public string FAQTitle { get; set; }
+    public string FAQText { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    public virtual MST_AwarenessCategory MST_AwarenessCategory { get; set; }
+}
+
+public partial class MST_Menu
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public MST_Menu()
+    {
+        this.MST_Menu1 = new HashSet<MST_Menu>();
+    }
+
+    public int MenuID { get; set; }
+    public string MenuName { get; set; }
+    public Nullable<int> ParentMenuID { get; set; }
+    public string MenuURL { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<int> SortOrder { get; set; }
+    public string PageHeader { get; set; }
+    public string ShortDesc { get; set; }
+    public string PageContent { get; set; }
+    public string PageTitle { get; set; }
+    public string MetaTitle { get; set; }
+    public string MetaKeywords { get; set; }
+    public string MetaDescription { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MST_Menu> MST_Menu1 { get; set; }
+    public virtual MST_Menu MST_Menu2 { get; set; }
+}
+
+public partial class MST_Pages
+{
+    public int PageID { get; set; }
+    public string PageName { get; set; }
+    public string PageHeader { get; set; }
+    public string ShortDesc { get; set; }
+    public string PageContent { get; set; }
+    public string PageTitle { get; set; }
+    public string MetaTitle { get; set; }
+    public string MetaKeywords { get; set; }
+    public string MetaDescription { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+}
+
+public partial class MST_Screen
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public MST_Screen()
+    {
+        this.MAP_CentralMenu_Screen = new HashSet<MAP_CentralMenu_Screen>();
+        this.MAP_User_Screen = new HashSet<MAP_User_Screen>();
+    }
+
+    public int ScreenID { get; set; }
+    public string ScreenName { get; set; }
+    public string ControllerName { get; set; }
+    public string ActionName { get; set; }
+    public string ViewName { get; set; }
+    public string ScreenUrl { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MAP_CentralMenu_Screen> MAP_CentralMenu_Screen { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MAP_User_Screen> MAP_User_Screen { get; set; }
+}
+
+public partial class MST_Users
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public MST_Users()
+    {
+        this.MAP_API_Users_Rights = new HashSet<MAP_API_Users_Rights>();
+        this.MAP_User_Screen = new HashSet<MAP_User_Screen>();
+        this.MST_UserToken = new HashSet<MST_UserToken>();
+    }
+
+    public int UserID { get; set; }
+    public Nullable<int> UserTypeID { get; set; }
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string ContactName { get; set; }
+    public string EmailAddress { get; set; }
+    public string ContactNumber { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<System.DateTime> LastLogin { get; set; }
+    public Nullable<int> FailedLoginCount { get; set; }
+    public Nullable<bool> IsTOManager { get; set; }
+    public Nullable<int> TaxOfficeID { get; set; }
+    public Nullable<int> TOManagerID { get; set; }
+    public string SignaturePath { get; set; }
+    public Nullable<bool> IsDirector { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+    public Nullable<int> AgencyID { get; set; }
+    public string Title { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MAP_API_Users_Rights> MAP_API_Users_Rights { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MAP_User_Screen> MAP_User_Screen { get; set; }
+    public virtual MST_UserType MST_UserType { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MST_UserToken> MST_UserToken { get; set; }
+}
+
+public partial class MST_UserToken
+{
+    public int TokenID { get; set; }
+    public Nullable<int> UserID { get; set; }
+    public string Token { get; set; }
+    public Nullable<System.DateTime> TokenIssuedDate { get; set; }
+    public Nullable<System.DateTime> TokenExpiresDate { get; set; }
+    public string IPAddresss { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+
+    public virtual MST_Users MST_Users { get; set; }
+}
+
+public partial class MST_UserType
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public MST_UserType()
+    {
+        this.MST_Users = new HashSet<MST_Users>();
+    }
+
+    public int UserTypeID { get; set; }
+    public string UserTypeName { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<MST_Users> MST_Users { get; set; }
+}
+
+public partial class SystemRole
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public SystemRole()
+    {
+        this.SystemUsers = new HashSet<SystemUser>();
+    }
+
+    public int SystemRoleID { get; set; }
+    public string SystemRoleName { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<SystemUser> SystemUsers { get; set; }
+}
+
+public partial class SystemUser
+{
+    public int SystemUserID { get; set; }
+    public string SystemUserName { get; set; }
+    public string UserLogin { get; set; }
+    public string UserPassword { get; set; }
+    public Nullable<int> SystemRoleID { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public Nullable<System.DateTime> LastLogin { get; set; }
+    public Nullable<int> FailedLoginCount { get; set; }
+    public Nullable<int> CreatedBy { get; set; }
+    public Nullable<System.DateTime> CreatedDate { get; set; }
+    public Nullable<int> ModifiedBy { get; set; }
+    public Nullable<System.DateTime> ModifiedDate { get; set; }
+
+    public virtual SystemRole SystemRole { get; set; }
+}
+
+public partial class usp_GetAPIList_Result
+{
+    public Nullable<int> APIID { get; set; }
+    public string APIName { get; set; }
+    public string APIDescription { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+    public string DocumentPath { get; set; }
+}
+
+public partial class usp_GetAPIUserRightList_Result
+{
+    public Nullable<long> UAID { get; set; }
+    public Nullable<int> UserID { get; set; }
+    public string UserName { get; set; }
+    public Nullable<int> APIID { get; set; }
+    public string APIName { get; set; }
+    public Nullable<bool> APIAccess { get; set; }
+    public string APIAccessText { get; set; }
+}
+
+public partial class usp_GetAwarenessCategoryList_Result
+{
+    public Nullable<int> AwarenessCategoryID { get; set; }
+    public string AwarenessCategoryName { get; set; }
+    public string SectionDescription { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+}
+
+public partial class usp_GetCentralMenuList_Result
+{
+    public Nullable<int> CentralMenuID { get; set; }
+    public string CentralMenuName { get; set; }
+    public Nullable<int> ParentCentralMenuID { get; set; }
+    public string ParentCentralMenuName { get; set; }
+    public Nullable<int> MenuType { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+    public Nullable<decimal> SortOrder { get; set; }
+}
+
+public partial class usp_GetCentralMenuUserBased_Result
+{
+    public Nullable<int> CentralMenuID { get; set; }
+    public string CentralMenuName { get; set; }
+    public string ControllerName { get; set; }
+    public string ActionName { get; set; }
+    public Nullable<decimal> SortOrder { get; set; }
+    public string ParentMenuName { get; set; }
+}
+
+public partial class usp_GetClaimBusinessList_Result
+{
+    public Nullable<long> BusinessID { get; set; }
+    public string BusinessName { get; set; }
+    public string BusinessAddress { get; set; }
+    public string BusinessSector { get; set; }
+    public string BusinessSubSector { get; set; }
+    public string BusinessType { get; set; }
+    public string BusinessCategory { get; set; }
+    public string AssetType { get; set; }
+    public string BusinessStructure { get; set; }
+    public string BusinessOperation { get; set; }
+    public string Size { get; set; }
+    public string LGA { get; set; }
+    public string TIN { get; set; }
+    public string TaxOffice { get; set; }
+    public string ContactName { get; set; }
+    public string Phone { get; set; }
+    public string EmailAddress { get; set; }
+    public Nullable<bool> PAYE { get; set; }
+    public Nullable<bool> DirectAssessment { get; set; }
+    public Nullable<bool> PresumptiveTax { get; set; }
+    public Nullable<bool> BusinessPremises { get; set; }
+    public Nullable<bool> ConsumtpionTaxes { get; set; }
+    public Nullable<bool> MDAServices { get; set; }
+    public string Source { get; set; }
+    public string BuildingTag { get; set; }
+    public string Latitude { get; set; }
+    public string Longitude { get; set; }
+    public Nullable<bool> PhoneVerified { get; set; }
+    public Nullable<bool> Claimed { get; set; }
+    public string ClaimedText { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+}
+
+public partial class usp_GetFAQList_Result
+{
+    public Nullable<int> AwarenessCategoryID { get; set; }
+    public string AwarenessCategoryName { get; set; }
+    public Nullable<int> FAQID { get; set; }
+    public string FAQTitle { get; set; }
+    public string FAQText { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+}
+
+public partial class usp_GetMenuList_Result
+{
+    public Nullable<int> MenuID { get; set; }
+    public Nullable<int> ParentMenuID { get; set; }
+    public string ParentMenuName { get; set; }
+    public string ParentMenuUrl { get; set; }
+    public string MenuURL { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+    public Nullable<int> SortOrder { get; set; }
+    public string MenuTreeName { get; set; }
+    public string MenuName { get; set; }
+    public string GeneratedMenu { get; set; }
+    public string PageHeader { get; set; }
+    public string ShortDesc { get; set; }
+    public string PageContent { get; set; }
+    public string PageTitle { get; set; }
+    public string MetaTitle { get; set; }
+    public string MetaKeywords { get; set; }
+    public string MetaDescription { get; set; }
+    public Nullable<int> HLevel { get; set; }
+}
+
+public partial class usp_GetPageList_Result
+{
+    public Nullable<int> PageID { get; set; }
+    public string PageName { get; set; }
+    public string PageHeader { get; set; }
+    public string ShortDesc { get; set; }
+    public string PageContent { get; set; }
+    public string PageTitle { get; set; }
+    public string MetaTitle { get; set; }
+    public string MetaKeywords { get; set; }
+    public string MetaDescription { get; set; }
+}
+
+public partial class usp_GetScreenList_Result
+{
+    public Nullable<int> ScreenID { get; set; }
+    public string ScreenName { get; set; }
+    public string ScreenUrl { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+}
+
+public partial class usp_GetScreenMenuList_Result
+{
+    public long CMSID { get; set; }
+    public int CentralMenuID { get; set; }
+    public string CentralMenuName { get; set; }
+    public string ParentCentralMenuName { get; set; }
+    public string ScreenName { get; set; }
+    public string ScreenUrl { get; set; }
+    public Nullable<bool> isMainScreen { get; set; }
+    public string MainScreenText { get; set; }
+}
+
+public partial class usp_GetScreenUserList_Result
+{
+    public long USID { get; set; }
+    public Nullable<int> UserID { get; set; }
+    public string UserName { get; set; }
+    public string ContactName { get; set; }
+    public string EmailAddress { get; set; }
+    public string ScreenName { get; set; }
+    public string ScreenUrl { get; set; }
+}
+
+public partial class usp_GetSystemUserList_Result
+{
+    public Nullable<int> SystemUserID { get; set; }
+    public string SystemUserName { get; set; }
+    public string UserPassword { get; set; }
+    public string UserLogin { get; set; }
+    public Nullable<int> SystemRoleID { get; set; }
+    public string SystemRoleName { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+}
+
+public partial class usp_GetUserList_Result
+{
+    public Nullable<int> UserID { get; set; }
+    public Nullable<int> UserTypeID { get; set; }
+    public string UserTypeName { get; set; }
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string ContactName { get; set; }
+    public string EmailAddress { get; set; }
+    public string ContactNumber { get; set; }
+    public Nullable<bool> Active { get; set; }
+    public string ActiveText { get; set; }
+    public Nullable<bool> IsTOManager { get; set; }
+    public string IsTOManagerText { get; set; }
+    public Nullable<int> TaxOfficeID { get; set; }
+    public string TaxOfficeName { get; set; }
+    public Nullable<int> TOManagerID { get; set; }
+    public string TOManagerName { get; set; }
+    public string SignaturePath { get; set; }
+    public Nullable<bool> IsDirector { get; set; }
+    public string IsDirectorText { get; set; }
+}

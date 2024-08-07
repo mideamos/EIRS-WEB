@@ -1647,7 +1647,6 @@
     <Content Include="Scripts\jsJTBNonIndividualList.js" />
     <Content Include="Scripts\jsJTBPullData.js" />
     <Content Include="Scripts\jsLandListWithExport.js" />
-    <Content Include="Scripts\JsLateCharge.js" />
     <Content Include="Scripts\jsManagerReviewStatusSummary.js" />
     <Content Include="Scripts\jsManagerReviewStatusSummaryTaxPayer.js" />
     <Content Include="Scripts\jsManagerTaxOfficerMonthlyPayment.js" />
@@ -1787,6 +1786,7 @@
     <Content Include="Scripts\jsRevenueStreamByPaymentChannel.js" />
     <Content Include="Scripts\jsRevenueStreamByPaymentChannelDetail.js" />
     <Content Include="Scripts\jsRevenueStreamByTaxOfficerTarget.js" />
+    <Content Include="Scripts\jsRevenueStreamView.js" />
     <Content Include="Scripts\jsRevenueStreamByTaxOfficeTarget.js" />
     <Content Include="Scripts\jsReviewStatusSummary.js" />
     <Content Include="Scripts\jsReviewStatusSummaryTaxPayer.js" />
@@ -2020,6 +2020,7 @@
     <Content Include="Views\Default\VerifyTccRequestStatusRes.cshtml" />
     <Content Include="Views\OperationManager\NewTaxOfficeTarget.cshtml" />
     <Content Include="Views\OperationManager\NewTaxOfficeTargetByMonth.cshtml" />
+    <Content Include="Views\OperationManager\RevenueDetails.cshtml" />
     <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
     <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
     <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />

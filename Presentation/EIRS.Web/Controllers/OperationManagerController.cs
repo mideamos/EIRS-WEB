@@ -3399,6 +3399,125 @@ namespace EIRS.Web.Controllers
             return ExportToExcel(lstRevenueStreamAssessmentsbyTaxOffice, this.RouteData, strColumns, true, strTotalColumns,method);
         }
 
+        [HttpGet]
+        public ActionResult viewRevenue(int TaxYear, DateTime? FromDate, DateTime? ToDate, int? RevenueStreamID, int? TaxOfficeID)
+        {
+            var target = 1000; 
+            var totalCollection = 800; 
+            var differential = totalCollection - target;
+            var performance = target > 0 ? (totalCollection / (float)target) * 100 : 0;
+
+            ViewBag.RevenueStream = RevenueStreamID;
+            ViewBag.AmountAssessed = target;
+            ViewBag.TotalCollection = totalCollection;
+            ViewBag.Differential = differential;
+            ViewBag.Performance = performance;
+
+            return View();
+        }
+
+        [HttpPost]
+        //public JsonResult RevenueStreamViewLoadData( int RevenueStreamID, int AmountAssessed, int TotalCollection, int Differential, int Performance)
+        //{
+        //    // Get paging parameters
+        //    var vDraw = Request.Form.GetValues("draw").FirstOrDefault();
+        //    var vStart = Request.Form.GetValues("start").FirstOrDefault();
+        //    var vLength = Request.Form.GetValues("length").FirstOrDefault();
+        //    // Get sort columns values
+        //    var vSortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
+        //    var vSortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+        //    var vFilter = Request.Form.GetValues("search[value]").FirstOrDefault();
+        //    int IntPageSize = !string.IsNullOrEmpty(vLength) ? int.Parse(vLength) : 0;
+        //    int IntSkip = !string.IsNullOrEmpty(vStart) ? int.Parse(vStart) : 0;
+        //    int IntTotalRecords = 0;
+
+        //    IList<usp_GetRevenueStreamBillByTaxOffice_Result> lstRevenueStreamAssessmentsbyTaxOffice = new BLOperationManager().BL_GetRevenueStreamAssessmentsbyTaxOffice(TaxYear, FromDate, ToDate, RevenueStreamID);
+
+        //    // Filtering/Search
+        //    if (!string.IsNullOrEmpty(vFilter))
+        //    {
+        //        lstRevenueStreamAssessmentsbyTaxOffice = lstRevenueStreamAssessmentsbyTaxOffice.Where(t =>
+        //            t.BillAmount != null && t.BillAmount.GetValueOrDefault().ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
+        //            t.SettlementAmount != null && t.SettlementAmount.GetValueOrDefault().ToString().Trim().Contains(vFilter.ToLower().Trim()) ||
+        //            t.PoAAmount != null && t.PoAAmount.GetValueOrDefault().ToString().Trim().Contains(vFilter.ToLower().Trim())).ToList();
+        //    }
+
+        //    // Calculate footer totals
+        //    IDictionary<string, object> dcFooterTotal = new Dictionary<string, object>
+        //    {
+        //        ["BillAmount"] = lstRevenueStreamAssessmentsbyTaxOffice.Sum(t => t.BillAmount),
+        //        ["SettlementAmount"] = lstRevenueStreamAssessmentsbyTaxOffice.Sum(t => t.SettlementAmount),
+        //        ["PoAAmount"] = lstRevenueStreamAssessmentsbyTaxOffice.Sum(t => t.PoAAmount)
+        //    };
+
+        //    // Sorting
+        //    if (!string.IsNullOrEmpty(vSortColumn) && !string.IsNullOrEmpty(vSortColumnDir))
+        //    {
+        //        lstRevenueStreamAssessmentsbyTaxOffice = lstRevenueStreamAssessmentsbyTaxOffice.OrderBy(vSortColumn + " " + vSortColumnDir).ToList();
+        //    }
+
+        //    IntTotalRecords = lstRevenueStreamAssessmentsbyTaxOffice.Count;
+        //    var data = lstRevenueStreamAssessmentsbyTaxOffice.Skip(IntSkip).Take(IntPageSize).ToList();
+
+        //    return Json(new
+        //    {
+        //        draw = vDraw,
+        //        recordsFiltered = IntTotalRecords,
+        //        recordsTotal = IntTotalRecords,
+        //        data = data,
+        //        FooterTotal = dcFooterTotal
+        //    }, JsonRequestBehavior.AllowGet);
+        //}
+
+        //public JsonResult RevenueStreamViewLoadData(RevenueValues revenueValues, int RevenueStreamID, int AmountAssessed, int TotalCollection, int Differential, int Performance)
+        //{
+        //    IList<DropDownListResult> lstRevenueStream = new BLRevenueStream().BL_GetRevenueStreamDropDownList(new Revenue_Stream() { intStatus = 1 });
+        //    lstRevenueStream = lstRevenueStream.Where(t => t.id != 8).ToList();
+        //    ViewBag.RevenueStreamList = new SelectList(lstRevenueStream, "id", "text");
+
+        //    // Fetch data based on parameters
+        //    var query = from item in _db.Revenue_Stream
+        //                where (RevenueStreamID == 0 || item.RevenueStreamID == RevenueStreamID) &&
+        //                      (AmountAssessed == 0 || item.AmountAssessed == AmountAssessed) &&
+        //                      (TotalCollection == 0 || item.TotalCollection == TotalCollection) &&
+        //                      (Differential == 0 || item.Differential == Differential) &&
+        //                      (Performance == 0 || item.Performance == Performance)
+        //                select new
+        //                {
+        //                    item.RevenueStreamID,
+        //                    item.AmountAssessed,
+        //                    TargetAmount = item.TargetAmount,
+        //                    RevenueAmount = item.RevenueAmount,
+        //                    Differential = item.RevenueAmount - item.TargetAmount,
+        //                    Performance = item.TargetAmount > 0 ? (item.RevenueAmount / (float)item.TargetAmount) * 100 : 0
+        //                };
+
+        //    // Apply sorting
+        //    if (revenueValues.Order.Count > 0)
+        //    {
+        //        var sortColumn = revenueValues.Columns[revenueValues.Order[0].Column].Data;
+        //        var sortDirection = revenueValues.Order[0].Dir;
+        //        query = sortDirection == "asc" ? query.OrderBy(sortColumn) : query.OrderByDescending(sortColumn);
+        //    }
+
+        //    var totalRecords = query.Count();
+        //    var data = query
+        //        .Skip(revenueValues.Start)
+        //        .Take(revenueValues.Length)
+        //        .ToList();
+
+        //    var result = new
+        //    {
+        //        draw = revenueValues.Draw,
+        //        recordsTotal = totalRecords,
+        //        recordsFiltered = totalRecords,
+        //        data = data
+        //    };
+
+        //    return Json(result, JsonRequestBehavior.AllowGet);
+        //}
+
+
 
         [HttpGet]
         public ActionResult RevenueStreamBillDetailByTaxOffice(int TaxYear, DateTime? FromDate, DateTime? ToDate, int? RevenueStreamID, int? TaxOfficeID)

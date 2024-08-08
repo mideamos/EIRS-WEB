@@ -177,15 +177,32 @@ namespace EIRS.Web.Controllers
             string mStrCompanyName = pObjCollection.Get("txtCompanyName");
             string mStrMobileNumber = pObjCollection.Get("txtMobileNumber");
             string mStrRIN = pObjCollection.Get("txtRIN");
-            Company mObjCompany = new Company()
+
+            var mObjCompany = new Company();
+            mObjCompany.CompanyName = mStrCompanyName;
+            mObjCompany.MobileNumber1 = mStrMobileNumber;
+            if (mStrRIN.Contains("CMP"))
             {
-                CompanyName = mStrCompanyName,
-                MobileNumber1 = mStrMobileNumber,
-                TIN = mStrRIN,
-                CompanyRIN = mStrRIN,
-                CACRegistrationNumber = mStrRIN,
-                intStatus = 1
-            };
+                mObjCompany.CompanyRIN = mStrRIN;
+            }
+            else if (mStrRIN.All(char.IsDigit) && mStrRIN.Length == 10)
+            {
+                mObjCompany.TIN = mStrRIN;
+            }
+            else if (mStrRIN.Contains("CAC") && mStrRIN.All(char.IsDigit))
+            {
+                mObjCompany.CACRegistrationNumber = mStrRIN;
+            }
+            mObjCompany.intStatus = 1;
+            //Company mObjCompany = new Company()
+            //{
+            //    CompanyName = mStrCompanyName,
+            //    MobileNumber1 = mStrMobileNumber,
+            //    TIN = mStrRIN,
+            //    CompanyRIN = mStrRIN,
+            //    CACRegistrationNumber = mStrRIN,
+            //    intStatus = 1
+            //};
 
             IList<usp_GetCompanyList_Result> lstCompany = new BLCompany().BL_GetCompanyList(mObjCompany);
             return PartialView("_BindTable", lstCompany.Take(5).ToList());

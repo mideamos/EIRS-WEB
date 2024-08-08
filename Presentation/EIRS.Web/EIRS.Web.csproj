@@ -81,8 +81,11 @@
     <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    <Reference Include="DocumentFormat.OpenXml, Version=3.0.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DocumentFormat.OpenXml.3.0.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DocumentFormat.OpenXml.Framework.3.1.0\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
     </Reference>
     <Reference Include="EFCore.BulkExtensions, Version=3.6.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EFCore.BulkExtensions.3.6.6\lib\netstandard2.0\EFCore.BulkExtensions.dll</HintPath>
@@ -401,8 +404,8 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    <Reference Include="System.IO.Packaging, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Packaging.8.0.0\lib\net462\System.IO.Packaging.dll</HintPath>
     </Reference>
     <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
@@ -1647,7 +1650,6 @@
     <Content Include="Scripts\jsJTBNonIndividualList.js" />
     <Content Include="Scripts\jsJTBPullData.js" />
     <Content Include="Scripts\jsLandListWithExport.js" />
-    <Content Include="Scripts\JsLateCharge.js" />
     <Content Include="Scripts\jsManagerReviewStatusSummary.js" />
     <Content Include="Scripts\jsManagerReviewStatusSummaryTaxPayer.js" />
     <Content Include="Scripts\jsManagerTaxOfficerMonthlyPayment.js" />
@@ -2230,20 +2232,6 @@
     <Content Include="Content\Plugins\jquery-slimscroll\slimScroll.jquery.json" />
     <Content Include="Content\Plugins\plupload\js\Moxie.xap" />
     <Content Include="Content\Scripts\jquery.min.map" />
-    <Content Include="Document\Bills\310520180511.pdf" />
-    <Content Include="Document\Bills\310520181321.pdf" />
-    <Content Include="Document\Bills\310520181432.pdf" />
-    <Content Include="Document\Bills\310520181557_SB00001.pdf" />
-    <Content Include="Document\Bills\310520182752_AB00003.pdf" />
-    <Content Include="Document\Bills\310520182924.pdf" />
-    <Content Include="Document\Bills\310520183735.pdf" />
-    <Content Include="Document\Bills\310520184722_AB00001.pdf" />
-    <Content Include="Document\Bills\310520184800_AB00001.pdf" />
-    <Content Include="Document\Bills\310520184833_AB00001.pdf" />
-    <Content Include="Document\Bills\310520184851_AB00001.pdf" />
-    <Content Include="Document\Bills\310520185014_AB00001.pdf" />
-    <Content Include="Document\Bills\310520185026_AB00001.pdf" />
-    <Content Include="Document\Bills\310520185809.pdf" />
     <None Include="bundleconfig.json" />
     <Content Include="Dataset\dsRDLCTable.xsc">
       <DependentUpon>dsRDLCTable.xsd</DependentUpon>
@@ -3194,10 +3182,10 @@
     <Content Include="Views\OperationManager\LateChargeDetailStep4.cshtml" />
     <Content Include="Views\OperationManager\InserttoMapassessmentLateCharge.cshtml" />
     <Content Include="Views\Shared\_BindPayeIncomeStreamTable.cshtml" />
-    <Content Include="Views\Home\OtiLo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Document\Bills\" />
     <Folder Include="Document\DailySummaryReport\" />
     <Folder Include="Document\MonthlySummaryReport\" />
     <Folder Include="Views\Default1\" />

@@ -198,7 +198,8 @@ namespace EIRS.Web.Controllers
                 totalnewAmount = 0;
                 totalnewAmountLateCharge = 0;
             }
-            retList = retList.Where(o => o.UserID == SessionManager.UserID).ToList();
+            //retList = retList.Where(o => o.UserID == SessionManager.UserID).ToList();
+            retList = retList.Where(o => o.TaxOffManagerID == SessionManager.UserID).ToList();
 
             ViewBag.ProfileInformation = retList;
             return View(retList);
@@ -375,6 +376,7 @@ namespace EIRS.Web.Controllers
                                 SettlementStatusID = Convert.ToInt32(reader["SettlementStatusID"]),
                                 ID = Convert.ToInt32(reader["ID"]),
                                 UserID = Convert.ToInt32(reader["UserID"]),
+                                TaxOffManagerID = Convert.ToInt32(reader["OfficeManagerID"]),
                                 Amount = Convert.ToDecimal(reader["Amount"]),
                                 AssessmentRefNo = reader["AssessmentRefNo"].ToString(),
                                 Status = reader["Status"].ToString(),

@@ -32,6 +32,7 @@ namespace EIRS.Web.GISModels
         public long AssessmentID { get; set; }
         public int ID { get; set; }
         public int UserID { get; set; }
+        public int TaxOffManagerID  { get; set; }
         public decimal Amount { get; set; }
         public int SettlementStatusID { get; set; }
         public string Status { get; set; }

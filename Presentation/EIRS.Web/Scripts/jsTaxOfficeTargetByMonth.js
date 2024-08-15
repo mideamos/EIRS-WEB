@@ -1,14 +1,12 @@
-﻿function viewDetails(revenueStreamId, year, month, taxofficeId) {
-    if (!revenueStreamId || !year || !month || !taxofficeId) {
-        console.error("Invalid parameters passed to viewDetails:", revenueStreamId, year, month, taxofficeId);
+﻿function viewDetails(year, month) {
+    if (!year || !month ) {
+        console.error("Invalid parameters passed to viewDetails:",  year, month);
         return;
     }
-    console.log("viewDetails called with:", revenueStreamId, year, month, taxofficeId);
-    var url = '/OperationManager/RevenueStreamByTaxOfficeTargetDetails/' +
-        revenueStreamId + '/' +
+    console.log("viewDetails called with:",  year, month);
+    var url = '/OperationManager/TaxOfficeTargetByMonthDetails/' +
         year + '/' +
-        month + '/' +
-        taxofficeId;
+        month;
     window.location.href = url;
 }
 
@@ -30,7 +28,7 @@ function viewDetailss(revenueStreamId, year, month, taxofficeId) {
 $(document).ready(function () {
     $('#dvSearchData').hide();
 
-    var vfrmRevenueStreamByTaxOfficeTarget = $("#frmRevenueStreamByTaxOfficeTarget");
+    var vfrmRevenueStreamByTaxOfficeTarget = $("#frmTaxOfficeTargetByMonth");
     vfrmRevenueStreamByTaxOfficeTarget.validate({
         errorElement: 'span', //default input error message container
         errorClass: 'help-inline', // default input error message class
@@ -91,74 +89,13 @@ $(document).ready(function () {
     });
 });
 
-var vRevenueStreamByTaxOfficeTarget;
+var vTaxOfficeTargetByMonth;
 
 function jsfn_bindTable() {
-    if (vRevenueStreamByTaxOfficeTarget !== undefined) {
-        vRevenueStreamByTaxOfficeTarget.draw();
+    if (vTaxOfficeTargetByMonth !== undefined) {
+        vTaxOfficeTargetByMonth.draw();
     } else {
-        vRevenueStreamByTaxOfficeTarget = $("#tblRevenueStreamByTaxOfficeTarget").DataTable({
-            "processing": true, // show progress bar
-            "serverSide": true, // process server side
-            "filter": true,
-            "orderMulti": false, // disable multiple column ordering
-            "ajax": {
-                "url": "/OperationManager/RevenueStreamByTaxOfficeTargetLoadData",
-                "type": "POST",
-                "datatype": "json",
-                "data": function (data) {
-                    data.RevenueStreamID = $("#cboRevenueStream").val() !== '' ? $("#cboRevenueStream").val() : '0';
-                    data.Year = $("#cboYear").val() !== '' ? $("#cboYear").val() : '0';
-                    data.Month = $("#cboMonth").val() !== '' ? $("#cboMonth").val() : '0';
-                    data.taxofficeId = $("#cboTaxOfficeList").val() !== '' ? $("#cboTaxOfficeList").val() : '0';
-                },
-                "error": function (jqXHR, exception) {
-                    console.log(jqXHR.responseText);
-                    if (jqXHR.status === 401) {
-                        window.location.href = '/Login/Individual';
-                    }
-                }
-            },
-            "columns": [
-                { "data": "TaxOfficeName", "orderable": true, "name": "TaxOfficeName", "width": "20%" },
-                {
-                    "data": "TargetAmount", "orderable": true, "name": "TargetAmount", "width": "20%", "render": function (data, type, st) {
-                        return st.TargetAmount.formatMoney();
-                    }
-                },
-                {
-                    "data": "RevenueAmount", "orderable": true, "name": "RevenueAmount", "width": "20%", "render": function (data, type, st) {
-                        return st.RevenueAmount.formatMoney();
-                    }
-                },
-                {
-                    "data": "Differential", "orderable": true, "name": "Differential", "width": "20%", "render": function (data, type, st) {
-                        return st.Differential.formatMoney();
-                    }
-                },
-                {
-                    "data": "Performance", "orderable": true, "name": "Performance", "width": "20%", "render": function (data, type, st) {
-                        // Assuming Performance is a percentage or similar calculation, format as needed
-                        return st.Performance.toString();
-                    }
-                },
-                {
-                    "data": null, "orderable": false, "width": "20%", "render": function (data, type, st) {
-                        console.log(data, st);
-                        return '<button class="btn btn-primary" onclick="viewDetails(' + st.revenueStreamId + ', ' + st.year + ', \'' + st.month + '\', ' + st.taxofficeId + ')">View Details</button>';
-                    }
-                }
-            ],
-            "order": [[1, "asc"]]
-        });
-    }
-}
-
-function jsfn_bindTableII() {
-    if (vRevenueStreamByTaxOfficeTarget !== undefined) {
-        vRevenueStreamByTaxOfficeTarget.draw();
-    } else {
-        vRevenueStreamByTaxOfficeTarget = $("#tblRevenueStreamByTaxOfficeTarget").DataTable({
+        vTaxOfficeTargetByMonth = $("#tblTaxOfficeTargetByMonth").DataTable({
             "processing": true, // show progress bar
             "serverSide": true, // process server side
             "filter": true,
@@ -181,22 +118,81 @@ function jsfn_bindTableII() {
             "columns": [
                 { "data": "monthString", "orderable": true, "name": "monthString", "width": "20%" },
                 {
-                    "data": "Targetamount", "orderable": true, "name": "Targetamount", "width": "20%", "render": function (data, type, st) {
+                    "data": "totalTargetamount", "orderable": true, "name": "Targetamount", "width": "20%", "render": function (data, type, st) {
                         return (data || 0).formatMoney();
                     }
                 },
                 {
-                    "data": "Settlementamount", "orderable": true, "name": "Settlementamount", "width": "20%", "render": function (data, type, st) {
+                    "data": "totalSettlementAmount", "orderable": true, "name": "Settlementamount", "width": "20%", "render": function (data, type, st) {
                         return (data || 0).formatMoney();
                     }
                 },
                 {
-                    "data": "differenitial", "orderable": true, "name": "differenitial", "width": "20%", "render": function (data, type, st) {
+                    "data": "totaldifferenitial", "orderable": true, "name": "differenitial", "width": "20%", "render": function (data, type, st) {
                         return (data || 0).formatMoney();
                     }
                 },
                 {
-                    "data": "Perc", "orderable": true, "name": "Perc", "width": "20%", "render": function (data, type, st) {
+                    "data": "totalPercentage", "orderable": true, "name": "Perc", "width": "20%", "render": function (data, type, st) {
+                        return (data || 0).formatMoney();
+                    }
+                },
+                {
+                    "data": null, "orderable": false, "width": "20%", "render": function (data, type, st) {
+                        console.log(data, st);
+                        return '<button class="btn btn-primary" onclick="viewDetails(' + st.year + ', \'' + st.month + '\')">View Details</button>';
+                    }
+                }
+            ]
+,
+            "order": [[1, "asc"]]
+        });
+    }
+}
+
+function jsfn_bindTableII() {
+    if (vTaxOfficeTargetByMonth !== undefined) {
+        vTaxOfficeTargetByMonth.draw();
+    } else {
+        vTaxOfficeTargetByMonth = $("#tblRevenueStreamByTaxOfficeTarget").DataTable({
+            "processing": true, // show progress bar
+            "serverSide": true, // process server side
+            "filter": true,
+            "orderMulti": false, // disable multiple column ordering
+            "ajax": {
+                "url": "/OperationManager/uspRPTAllTaxOfficesPerformanceByMonthLoadDataDetails",
+                "type": "POST",
+                "datatype": "json",
+                "data": function (data) {
+                    data.Year = $("#cboYear").val() !== '' ? $("#cboYear").val() : '0';
+                    data.Month = $("#cboMonth").val() !== '' ? $("#cboMonth").val() : '0';
+                },
+                "error": function (jqXHR, exception) {
+                    console.log(jqXHR.responseText);
+                    if (jqXHR.status === 401) {
+                        window.location.href = '/Login/Individual';
+                    }
+                }
+            },
+            "columns": [
+                { "data": "monthString", "orderable": true, "name": "monthString", "width": "20%" },
+                {
+                    "data": "totalTargetamount", "orderable": true, "name": "totalTargetamount", "width": "20%", "render": function (data, type, st) {
+                        return (data || 0).formatMoney();
+                    }
+                },
+                {
+                    "data": "totalSettlementAmount", "orderable": true, "name": "totalSettlementAmount", "width": "20%", "render": function (data, type, st) {
+                        return (data || 0).formatMoney();
+                    }
+                },
+                {
+                    "data": "totaldifferenitial", "orderable": true, "name": "totaldifferenitial", "width": "20%", "render": function (data, type, st) {
+                        return (data || 0).formatMoney();
+                    }
+                },
+                {
+                    "data": "totalPercentage", "orderable": true, "name": "totalPercentage", "width": "20%", "render": function (data, type, st) {
                         // Assuming Performance is a percentage or similar calculation, format as needed
                         return (data || 0).formatMoney();
                     }

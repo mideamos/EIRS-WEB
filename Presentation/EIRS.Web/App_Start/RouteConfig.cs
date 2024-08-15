@@ -39,17 +39,31 @@ namespace EIRS.Web
                defaults: new { id = UrlParameter.Optional, name = UrlParameter.Optional }
            );
 
-           // routes.MapRoute(
-           //    name: "TEST1",
-           //    url: "{controller}/{action}/{id}/{name}&aid={aid}",
-           //    defaults: new { id = UrlParameter.Optional, name = UrlParameter.Optional, aid = UrlParameter.Optional }
-           //);
+            // routes.MapRoute(
+            //    name: "TEST1",
+            //    url: "{controller}/{action}/{id}/{name}&aid={aid}",
+            //    defaults: new { id = UrlParameter.Optional, name = UrlParameter.Optional, aid = UrlParameter.Optional }
+            //);
 
-           // routes.MapRoute(
-           //    name: "TEST2",
-           //    url: "{controller}/{action}/{id}/{name}&billid={billid}&billrefno={billrefno}",
-           //    defaults: new { id = UrlParameter.Optional, name = UrlParameter.Optional, billid = UrlParameter.Optional, billrefno = UrlParameter.Optional }
-           //);
+            // routes.MapRoute(
+            //    name: "TEST2",
+            //    url: "{controller}/{action}/{id}/{name}&billid={billid}&billrefno={billrefno}",
+            //    defaults: new { id = UrlParameter.Optional, name = UrlParameter.Optional, billid = UrlParameter.Optional, billrefno = UrlParameter.Optional }
+            //);
+
+            // New route for RevenueStreamByTaxOfficeTargetDetails
+            routes.MapRoute(
+                name: "RevenueStreamDetails",
+                url: "OperationManager/RevenueStreamByTaxOfficeTargetDetails/{RevenueStreamID}/{Year}/{Month}/{taxofficeId}",
+                defaults: new { controller = "OperationManager", action = "RevenueStreamByTaxOfficeTargetDetails", RevenueStreamID = UrlParameter.Optional, Year = UrlParameter.Optional, Month = UrlParameter.Optional, taxofficeId = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "taxOfficeTargetByMonthDetails",
+                url: "OperationManager/TaxOfficeTargetByMonthDetails/{Year}/{Month}",
+                defaults: new { controller = "OperationManager", action = "TaxOfficeTargetByMonthDetails", Year = UrlParameter.Optional, Month = UrlParameter.Optional }
+            );
+
 
             //routes.MapRoute(
             //    name: "LA1",

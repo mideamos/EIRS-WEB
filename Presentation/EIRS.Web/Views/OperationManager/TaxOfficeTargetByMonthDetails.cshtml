@@ -1,0 +1,61 @@
+﻿@model List<EIRS.Web.GISModels.usp_RPT_All_TaxOffices_Performance_ByMonth_Result>
+
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - Revenue Stream By Tax Office Target";
+}
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">TaxOffice Target By Month Details</div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxOfficeTargetMonthDetails">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Office Name</th>
+                    <th>Target</th>
+                    <th>Collection</th>
+                    <th>Differential</th>
+                    <th>Performance</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var ret in Model)
+                    {
+                        <tr>
+                            <td>@(string.IsNullOrEmpty(ret.TaxOfficeName) ? "N/A" : ret.TaxOfficeName)</td>
+                            <td>@(ret.Targetamount.HasValue ? ret.Targetamount.Value.ToString("C") : "N/A")</td>
+                            <td>@(ret.Settlementamount.HasValue ? ret.Settlementamount.Value.ToString("C") : "N/A")</td>
+                            <td>@(ret.differenitial.HasValue ? ret.differenitial.Value.ToString("C") : "N/A")</td>
+                            <td>@(ret.Perc.HasValue ? ret.Perc.Value.ToString("C") : "N/A")</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="@Url.Action("TaxOfficeTargetByMonthDetailsDrill", "OperationManger",new {reqid= ret.TaxOfficeID})">ViewDetails</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jsfn_ConvertToDatableWithCustomSort($('#tblTaxOfficeTargetMonthDetails'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Record Found');
+        });
+    </script>
+}

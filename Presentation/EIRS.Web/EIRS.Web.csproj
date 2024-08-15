@@ -1658,6 +1658,7 @@
     <Content Include="Scripts\jsManualPoA.js" />
     <Content Include="Scripts\jsMDAServiceListWithExport.js" />
     <Content Include="Scripts\jsMonthlyTaxOfficeTarget.js" />
+    <Content Include="Scripts\jsNewTaxOfficeTarget.js" />
     <Content Include="Scripts\jsPAYEOutputAggregationDetails.js" />
     <Content Include="Scripts\jsPAYEOutputAggregationSummary.js" />
     <Content Include="Scripts\jsPayeRevenueStreamAssessmentsbyTaxOfficeList.js" />
@@ -2026,6 +2027,7 @@
     <Content Include="Views\OperationManager\NewTaxOfficeTargetByMonth.cshtml" />
     <Content Include="Views\OperationManager\RevenueStreamByTaxOfficeTargetDetails.cshtml" />
     <Content Include="Views\OperationManager\TaxOfficeTargetByMonthDetails.cshtml" />
+    <Content Include="Views\OperationManager\TaxOfficeTargetByMonthDetailsDrill.cshtml" />
     <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
     <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
     <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />

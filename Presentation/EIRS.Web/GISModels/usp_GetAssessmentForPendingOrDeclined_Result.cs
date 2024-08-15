@@ -26,6 +26,17 @@ namespace EIRS.Web.GISModels
         public decimal? differenitial { get; set; }
         public decimal? Perc { get; set; }
     }
+    public class usp_RPT_TaxOffice_Performance_ByAllRevenueStreamResult
+    {
+        public int TaxOfficeID { get; set; }
+        public string TaxOfficeName { get; set; }
+        public int RevenueStreamID { get; set; }
+        public string RevenueStreamName { get; set; }
+        public decimal? Targetamount { get; set; }
+        public decimal? Settlementamount { get; set; }
+        public decimal? differenitial { get; set; }
+        public decimal? Perc { get; set; }
+    }
 
     public class RevenueStreamResultDrillDown
     {
@@ -65,14 +76,13 @@ namespace EIRS.Web.GISModels
     }
     public class usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown
     {
-        [Key]
         public int TaxOfficeID { get; set; }
         public string TaxOfficeName { get; set; }
         public int RevenueStreamID { get; set; }
         public string RevenueStreamName { get; set; }
-        public int TaxpayerID { get; set; }
-        public int TaxpayerTypeID { get; set; }
-        public long Assessmentid { get; set; }
+        public int? TaxpayerID { get; set; }
+        public int? TaxpayerTypeID { get; set; }
+        public long? Assessmentid { get; set; }
         public long AAIID { get; set; }
         public long servicebillid { get; set; }
         public long SBSIID { get; set; }

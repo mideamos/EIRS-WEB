@@ -38,6 +38,7 @@ using Twilio.TwiML.Voice;
 using Vereyon.Web;
 using static EIRS.Web.Controllers.Filters;
 using DocumentFormat.OpenXml.Bibliography;
+using System.Security.Policy;
 
 namespace EIRS.Web.Controllers
 {
@@ -4406,13 +4407,94 @@ namespace EIRS.Web.Controllers
             UI_FillTaxOfficeDropDown();
             return View();
         }
+        //usp_RPT_TaxOffice_Performance_ByAllRevenueStreamResult
+
         public ActionResult NewTaxOfficeTargetByMonth()
         {
             UI_FillYearDropDown();
             UI_FillMonthDropDown();
             return View();
         }
+        public ActionResult NewTaxOfficeTargetDrillDrown(int? Year, int? Month, int? taxofficeId)
+        {
+            string yearr = "0";
+            string monthh = "0";
+            string taxoffId = "0";
 
+            var url = Request.Url.AbsoluteUri.ToLower();
+
+            Uri uri = new Uri(url);
+            string[] segments = uri.AbsolutePath.Split('/');
+            if (segments.Length > 4)
+            {
+                yearr = segments[3];
+                monthh = segments[4];
+                taxoffId = segments[5];
+            }
+
+            int nwYear = Convert.ToInt32(yearr);
+            int nwMonth = Convert.ToInt32(monthh);
+            int nwtaxoffId = Convert.ToInt32(taxoffId);
+
+            ViewBag.Year = nwYear;
+            ViewBag.Month = nwMonth;
+            ViewBag.Month = nwtaxoffId;
+
+            //var res = TaxOfficeTargetByMonthDetailsCall(nwYear, nwMonth);
+            return View();
+        }
+        public JsonResult NewTaxOfficeTargetLoadData(int? Year, int? Month, int? taxofficeId)
+        {
+            //Get parameters
+
+            // get Start (paging start index) and length (page size for paging)
+            var vDraw = Request.Form.GetValues("draw").FirstOrDefault();
+            var vStart = Request.Form.GetValues("start").FirstOrDefault();
+            var vLength = Request.Form.GetValues("length").FirstOrDefault();
+            //Get Sort columns value
+            var vSortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
+            var vSortColumnDir = Request.Form.GetValues("order[0][dir]")[0];
+            var vFilter = Request.Form.GetValues("search[value]")[0];
+            int IntPageSize = vLength != null ? Convert.ToInt32(vLength) : 0;
+            int IntSkip = vStart != null ? Convert.ToInt32(vStart) : 0;
+            int IntTotalRecords = 0;
+
+            var lstSummary = _appDbContext.usp_RPT_TaxOffice_Performance_ByAllRevenueStream(Year.GetValueOrDefault(), Month.GetValueOrDefault(), taxofficeId.GetValueOrDefault()).ToList();
+
+            if (!string.IsNullOrEmpty(vFilter))
+            {
+                lstSummary = lstSummary.Where(t =>
+                      (t.RevenueStreamName != null && t.RevenueStreamName.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.Targetamount != null && t.Targetamount.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.Settlementamount != null && t.Settlementamount.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.differenitial != null && t.differenitial.ToString().Trim().Contains(vFilter.ToLower().Trim())) ||
+                      (t.Perc != null && t.Perc.ToString().ToLower().Trim().Contains(vFilter.ToLower().Trim()))
+                  ).ToList();
+            }
+
+
+            //Purpose Sorting Data 
+            if (!string.IsNullOrEmpty(vSortColumn) && !string.IsNullOrEmpty(vSortColumnDir))
+            {
+                lstSummary = lstSummary.OrderBy(vSortColumn + " " + vSortColumnDir).ToList();
+            }
+
+            IntTotalRecords = lstSummary.Count();
+            //var data = lstSummary.Skip(IntSkip).Take(IntPageSize).ToList();
+            var data = lstSummary.Skip(IntSkip).Take(IntPageSize)
+             .Select(s => new
+             {
+                 s.RevenueStreamName,
+                 s.Targetamount,
+                 s.Settlementamount,
+                 s.differenitial,
+                 s.Perc,
+                 year = Year,
+                 month = Month,
+                 taxofficeId = taxofficeId
+             }).ToList();
+            return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult RevenueStreamByTaxOfficeTargetLoadData(int? RevenueStreamID, int? Year, int? Month, int? taxofficeId)
         {
             //Get parameters
@@ -4524,7 +4606,7 @@ namespace EIRS.Web.Controllers
                      totalPercentage,
                      year = Year,
                      month = Month,
-                 }).ToList();
+                 }).Distinct().ToList();
 
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
         }
@@ -4630,10 +4712,26 @@ namespace EIRS.Web.Controllers
 
         public ActionResult TaxOfficeTargetByMonthDetails(int? Year, int? Month)
         {
-            ViewBag.Year = Year.GetValueOrDefault();
-            ViewBag.Month = Month;
+            string yearr = "0"; 
+            string monthh = "0";
 
-            var res = TaxOfficeTargetByMonthDetailsCall(Year, Month);
+            var url = Request.Url.AbsoluteUri.ToLower();
+            //var routeData = Request.RequestContext.RouteData.Values;
+            Uri uri = new Uri(url);
+            string[] segments = uri.AbsolutePath.Split('/');
+            if (segments.Length > 4)
+            {
+                yearr = segments[3];
+                monthh = segments[4];
+            }
+
+            int nwYear = Convert.ToInt32(yearr);
+            int nwMonth = Convert.ToInt32(monthh);
+
+            ViewBag.Year = nwYear;
+            ViewBag.Month = nwMonth;
+
+            var res = TaxOfficeTargetByMonthDetailsCall(nwYear, nwMonth);
             return View(res);
         }
         [NonAction]
@@ -4657,13 +4755,39 @@ namespace EIRS.Web.Controllers
 
             return lstRet;
         }
-        public ActionResult TaxOfficeTargetByMonthDetailsDrill(int? TaxOfficeID)
+        public ActionResult TaxOfficeTargetByMonthDetailsDrill(int Year, int Month, int? TaxOfficeID)
         {
-            ViewBag.Month = TaxOfficeID;
+            ViewBag.TaxOfficeID = TaxOfficeID;
+            ViewBag.Year = Year;
+            ViewBag.Month = Month;
 
-            //var res = TaxOfficeTargetByMonthDetailsCall(Year, Month);
-            return View(/*res*/);
+            //var res = TaxOfficeTargetByMonthDetailsCallDrillDown(Year, Month, TaxOfficeID);
+            return View();
         }
+
+        [NonAction]
+        //private List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> TaxOfficeTargetByMonthDetailsCallDrillDown(int Year, int Month, int? TaxOfficeID)
+        //{
+
+        //    var lstSummary = _appDbContext.usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown(Year, Month, TaxOfficeID.GetValueOrDefault()).ToList();
+        //    List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> lstRet = new List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown>();
+        //    foreach (var item in lstSummary)
+        //    {
+        //        usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown ret = new usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown
+        //        {
+        //            RevenueStreamName = item.TaxOfficeName ?? "N/A",
+        //            Targetamount = item.Targetamount ?? 0m,
+        //            Settlementamount = item.Settlementamount ?? 0m,
+        //            differenitial = item.differenitial ?? 0m,
+        //            Perc = item.Perc ?? 0m
+        //        };
+
+        //        lstRet.Add(ret);
+        //    }
+
+        //    return lstRet;
+        //}
+
         //public JsonResult RevenueStreamByTaxOfficeTargetLoadDataII(int RevenueStreamID, int Year, int Month)
         //{
         //    //Get parameters

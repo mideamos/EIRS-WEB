@@ -83,13 +83,13 @@ namespace EIRS.Web.GISModels
         public int? TaxpayerID { get; set; }
         public int? TaxpayerTypeID { get; set; }
         public long? Assessmentid { get; set; }
-        public long AAIID { get; set; }
-        public long servicebillid { get; set; }
-        public long SBSIID { get; set; }
-        public decimal settlementamount { get; set; }
-        public string AssessmentRefNo { get; set; }
-        public string TaxpayerName { get; set; }
-        public string TaxpayerRIN { get; set; }
+        public long AAIID { get; set; } 
+        public long? servicebillid { get; set; } 
+        public long? SBSIID { get; set; }
+        public decimal? settlementamount { get; set; }
+        public string AssessmentRefNo { get; set; } = null;
+        public string TaxpayerName { get; set; } = null;
+        public string TaxpayerRIN { get; set; } = null;
 
     }
     public class usp_GetTccDownloadByYearResult

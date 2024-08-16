@@ -4440,8 +4440,8 @@ namespace EIRS.Web.Controllers
             ViewBag.Month = nwMonth;
             ViewBag.Month = nwtaxoffId;
 
-            //var res = TaxOfficeTargetByMonthDetailsCall(nwYear, nwMonth);
-            return View();
+            var res = NewTaxOfficeTargetDrillDrownCall(nwYear, nwMonth, nwtaxoffId);
+            return View(res);
         }
         public JsonResult NewTaxOfficeTargetLoadData(int? Year, int? Month, int? taxofficeId)
         {
@@ -4748,6 +4748,25 @@ namespace EIRS.Web.Controllers
                     Settlementamount = item.Settlementamount ?? 0m,
                     differenitial = item.differenitial ?? 0m,
                     Perc = item.Perc ?? 0m
+                };
+
+                lstRet.Add(ret);
+            }
+
+            return lstRet;
+        }
+        private List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> NewTaxOfficeTargetDrillDrownCall(int? Year, int? Month, int? TaxOfficeId)
+        {
+            var lstSummary = _appDbContext.usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown(Year.GetValueOrDefault(), Month.GetValueOrDefault(), TaxOfficeId.GetValueOrDefault()).ToList();
+            List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> lstRet = new List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown>();
+            foreach (var item in lstSummary)
+            {
+                usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown ret = new usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown
+                {
+                    TaxpayerRIN = item.TaxpayerRIN ?? "N/A",
+                    TaxpayerTypeID = item.TaxpayerTypeID ?? 0,
+                    TaxpayerName = item.TaxpayerName ?? "N/A",
+                    settlementamount = item.settlementamount ?? 0m,
                 };
 
                 lstRet.Add(ret);

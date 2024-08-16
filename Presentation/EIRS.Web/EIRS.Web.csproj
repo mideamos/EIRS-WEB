@@ -2028,6 +2028,7 @@
     <Content Include="Views\OperationManager\RevenueStreamByTaxOfficeTargetDetails.cshtml" />
     <Content Include="Views\OperationManager\TaxOfficeTargetByMonthDetails.cshtml" />
     <Content Include="Views\OperationManager\TaxOfficeTargetByMonthDetailsDrill.cshtml" />
+    <Content Include="Views\OperationManager\NewTaxOfficeTargetDrillDrown.cshtml" />
     <None Include="Views\Shared\_BindIndividualFormForTaxOffice.cshtml" />
     <None Include="Views\CaptureGovernment\EditTaxOffice.cshtml" />
     <None Include="Views\Shared\_BindGovernmentFormForTaxOffice.cshtml" />

@@ -4581,10 +4581,11 @@ namespace EIRS.Web.Controllers
                   ).ToList();
             }
 
-            var totalTargetamount = lstSummary.Sum(t => t.Targetamount); // Ensure 'Targetamount' exists
-            var totalSettlementAmount = lstSummary.Sum(t => t.Settlementamount); // Ensure 'Settlementamount' exists
-            var totaldifferenitial = lstSummary.Sum(t => t.differenitial); // Ensure 'differenitial' exists
-            var totalPercentage = lstSummary.Sum(t => t.Perc); // Ensure 'Perc' exists
+            var totalTargetamount = lstSummary.Sum(t => t.Targetamount); 
+            var totalSettlementAmount = lstSummary.Sum(t => t.Settlementamount); 
+            var totaldifferenitial = lstSummary.Sum(t => t.differenitial); 
+            var totalPercentage = totalTargetamount != 0 ? (totalSettlementAmount / totalTargetamount) * 100 : 0m;
+
 
 
 
@@ -4741,13 +4742,15 @@ namespace EIRS.Web.Controllers
             List<usp_RPT_All_TaxOffices_Performance_ByMonth_Result> lstRet = new List<usp_RPT_All_TaxOffices_Performance_ByMonth_Result>();
             foreach (var item in lstSummary)
             {
+                var targetAmount = item.Targetamount ?? 0m;
+                var settlementAmount = item.Settlementamount ?? 0m;
                 usp_RPT_All_TaxOffices_Performance_ByMonth_Result ret = new usp_RPT_All_TaxOffices_Performance_ByMonth_Result
                 {
                     TaxOfficeName = item.TaxOfficeName ?? "N/A",
                     Targetamount = item.Targetamount ?? 0m,
                     Settlementamount = item.Settlementamount ?? 0m,
                     differenitial = item.differenitial ?? 0m,
-                    Perc = item.Perc ?? 0m
+                    Perc = (settlementAmount / targetAmount) * 100
                 };
 
                 lstRet.Add(ret);

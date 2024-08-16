@@ -134,7 +134,9 @@ function jsfn_bindTable() {
                 },
                 {
                     "data": "totalPercentage", "orderable": true, "name": "Perc", "width": "20%", "render": function (data, type, st) {
-                        return (data || 0).formatMoney();
+                        if (data === null || data === undefined) {
+                            return '0%';
+                        } return data.toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 });
                     }
                 },
                 {
@@ -208,4 +210,5 @@ function jsfn_bindTableII() {
         });
     }
 }
+
 

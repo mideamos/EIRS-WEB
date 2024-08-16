@@ -139,7 +139,7 @@ function jsfn_bindTable() {
                 {
                     "data": "Performance", "orderable": true, "name": "Performance", "width": "20%", "render": function (data, type, st) {
                         // Assuming Performance is a percentage or similar calculation, format as needed
-                        return st.Performance.toString();
+                        return (data || 0) + '%';
                     }
                 },
                 {
@@ -198,7 +198,7 @@ function jsfn_bindTableII() {
                 {
                     "data": "Perc", "orderable": true, "name": "Perc", "width": "20%", "render": function (data, type, st) {
                         // Assuming Performance is a percentage or similar calculation, format as needed
-                        return (data || 0).formatMoney();
+                        return (data || 0) + '%';
                     }
                 },
                 {

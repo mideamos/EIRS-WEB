@@ -138,7 +138,6 @@ function jsfn_bindTable() {
                 },
                 {
                     "data": "Performance", "orderable": true, "name": "Performance", "width": "20%", "render": function (data, type, st) {
-                        // Assuming Performance is a percentage or similar calculation, format as needed
                         return (data || 0) + '%';
                     }
                 },

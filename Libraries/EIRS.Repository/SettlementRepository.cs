@@ -380,7 +380,7 @@ namespace EIRS.Repository
 
                 var result = _db.Database.SqlQuery<TaxpayerPayment>(sqlQuery).ToList();
 
-                var convertedResult = result.Select(tp => new TaxpayerPayment
+                var convertedResult = result.Select(tp => new usp_GetTaxPayerPayment_Result
                 {
                     PaymentID = tp.PaymentID,
                     PaymentDate = tp.PaymentDate,
@@ -391,7 +391,7 @@ namespace EIRS.Repository
                     TransactionRefNo = tp.TransactionRefNo
                 }).ToList();
 
-                return (IList<usp_GetTaxPayerPayment_Result>)convertedResult;
+                return convertedResult;
             }
         }
         internal partial class TaxpayerPayment

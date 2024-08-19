@@ -113,9 +113,11 @@ function jsfn_bindTable() {
                     }
                 },
                 {
-                    "data": "Perc", "orderable": true, "name": "Perc", "width": "20%", "render": function (data, type, st) {
-                        // Assuming Performance is a percentage or similar calculation, format as needed
-                        return (data || 0).formatMoney();
+
+                    "data": "Percentage", "orderable": true, "name": "Perc", "width": "20%", "render": function (data, type, st) {
+                        if (data === null || data === undefined) {
+                            return '0%';
+                        } return data.toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 });
                     }
                 },
                 {

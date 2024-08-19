@@ -19,5 +19,6 @@ namespace EIRS.BOL
         public string PaymentTypeName { get; set; }
         public string PaymentRefNo { get; set; }
         public Nullable<decimal> Amount { get; set; }
+        public string TransactionRefNo { get; set; }
     }
 }

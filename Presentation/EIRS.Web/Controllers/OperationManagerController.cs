@@ -4479,6 +4479,8 @@ namespace EIRS.Web.Controllers
                 lstSummary = lstSummary.OrderBy(vSortColumn + " " + vSortColumnDir).ToList();
             }
 
+            double Percentage = (double)lstSummary.First().Perc;
+
             IntTotalRecords = lstSummary.Count();
             //var data = lstSummary.Skip(IntSkip).Take(IntPageSize).ToList();
             var data = lstSummary.Skip(IntSkip).Take(IntPageSize)
@@ -4488,7 +4490,7 @@ namespace EIRS.Web.Controllers
                  s.Targetamount,
                  s.Settlementamount,
                  s.differenitial,
-                 s.Perc,
+                 Percentage,
                  year = Year,
                  month = Month,
                  taxofficeId = taxofficeId
@@ -4584,9 +4586,7 @@ namespace EIRS.Web.Controllers
             var totalTargetamount = lstSummary.Sum(t => t.Targetamount); 
             var totalSettlementAmount = lstSummary.Sum(t => t.Settlementamount); 
             var totaldifferenitial = lstSummary.Sum(t => t.differenitial); 
-            var totalPercentage = totalTargetamount != 0 ? (totalSettlementAmount / totalTargetamount) * 100 : 0m;
-
-
+            double totalPercentage = (double)(totalTargetamount != 0 ? (totalSettlementAmount / totalTargetamount) * 100 : 0m);
 
 
             //Purpose Sorting Data 

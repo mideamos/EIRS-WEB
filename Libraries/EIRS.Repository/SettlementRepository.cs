@@ -382,7 +382,7 @@ namespace EIRS.Repository
 
                 var convertedResult = result.Select(tp => new usp_GetTaxPayerPayment_Result
                 {
-                    PaymentID = (int?)tp.PaymentID,
+                    PaymentID = tp.PaymentID,
                     PaymentDate = tp.PaymentDate,
                     PaymentTypeID = tp.PaymentTypeID,
                     PaymentTypeName = tp.PaymentTypeName,

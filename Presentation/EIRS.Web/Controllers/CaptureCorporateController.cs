@@ -185,16 +185,15 @@ namespace EIRS.Web.Controllers
             {
                 mObjCompany.CompanyRIN = mStrRIN;
             }
-            else if (mStrRIN.All(char.IsDigit) && mStrRIN.Length == 10) 
+            else if (mStrRIN.All(char.IsDigit) && mStrRIN.Length == 10)
             {
                 mObjCompany.TIN = mStrRIN;
             }
-            else if (mStrRIN.Contains("CAC") && mStrRIN.All(char.IsDigit)) 
+            else if (mStrRIN.Contains("CAC") && mStrRIN.All(char.IsDigit))
             {
                 mObjCompany.CACRegistrationNumber = mStrRIN;
             }
             mObjCompany.intStatus = 1;
-
             //Company mObjCompany = new Company()
             //{
             //    CompanyName = mStrCompanyName,

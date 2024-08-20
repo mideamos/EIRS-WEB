@@ -22,5 +22,6 @@ namespace EIRS.BOL
         public Nullable<int> TaxOfficeID { get; set; }
         public string TaxOfficeName { get; set; }
         public string TaxPayerTypeName { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

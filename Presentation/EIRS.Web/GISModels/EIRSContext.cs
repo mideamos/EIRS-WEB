@@ -34,6 +34,11 @@ namespace EIRS.Web.GISModels
         public virtual DbSet<GISFileParty> GISFileParty { get; set; }
         public virtual DbSet<GISFileHolder> GISFileHolder { get; set; }
         public virtual DbSet<RevenueStreamResult> RevenueStreamResults { get; set; }
+        public virtual DbSet<usp_RPT_All_TaxOffices_Performance_ByMonth_Result> uspRPTAllTaxOfficesPerformanceByMonths { get; set; }
+        public virtual DbSet<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamResult> uspRPTTaxOfficePerformanceByAllRevenueStreams { get; set; }
+        public virtual DbSet<RevenueStreamResultDrillDown> RevenueStreamResultDrillDowns { get; set; }
+        public virtual DbSet<usp_RPT_All_TaxOffices_Performance_byRevenueStreamdrilldown> AllTaxOfficesPerformancebyRevenueStreamdrilldowns { get; set; }
+        public virtual DbSet<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> TaxOfficesPerformancebyAllRevenueStreamdrilldowns { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -96,9 +101,69 @@ namespace EIRS.Web.GISModels
             var r = RevenueStreamResults.FromSqlRaw("usp_RPT_RevenueStreamForAllPurpose @RevenueStreamID, @Year, @Month, @TaxOfficeID", parameters: parameters.ToArray());
             return r;
         }
+        
+        public virtual IQueryable<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamResult> usp_RPT_TaxOffice_Performance_ByAllRevenueStream(int year, int month, int taxOfficeID)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@Year", year));
+            parameters.Add(new SqlParameter("@Month", month));
+            parameters.Add(new SqlParameter("@TaxOfficeID", taxOfficeID));
+
+            var r = uspRPTTaxOfficePerformanceByAllRevenueStreams.FromSqlRaw("usp_RPT_TaxOffice_Performance_ByAllRevenueStream @Year, @Month, @TaxOfficeID", parameters: parameters.ToArray());
+            return r;
+        }
+        
+        public virtual IQueryable<usp_RPT_All_TaxOffices_Performance_ByMonth_Result> usp_RPT_All_TaxOffices_Performance_ByMonth(int year, int month)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@Year", year));
+            parameters.Add(new SqlParameter("@Month", month));
+
+            var r = uspRPTAllTaxOfficesPerformanceByMonths.FromSqlRaw("usp_RPT_All_TaxOffices_Performance_ByMonth @Year, @Month ", parameters: parameters.ToArray());
+            return r;
+        }
+
+        public virtual IQueryable<RevenueStreamResultDrillDown> usp_RPT_TaxOffice_Performance_byRevenueStreamdrilldown(int? revenueStreamID, int? year, int? month, int? taxOfficeID)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@RevenueStreamID", revenueStreamID));
+            parameters.Add(new SqlParameter("@Year", year));
+            parameters.Add(new SqlParameter("@Month", month));
+            parameters.Add(new SqlParameter("@TaxOfficeID", taxOfficeID));
+
+            var r = RevenueStreamResultDrillDowns.FromSqlRaw("usp_RPT_TaxOffice_Performance_byRevenueStreamdrilldown @RevenueStreamID, @Year, @Month, @TaxOfficeID", parameters: parameters.ToArray());
+            return r;
+        }
+
+        public virtual IQueryable<usp_RPT_All_TaxOffices_Performance_byRevenueStreamdrilldown> usp_RPT_All_TaxOffices_Performance_byRevenueStreamdrilldown(int revenueStreamID, int year, int month)
+        {
+            return AllTaxOfficesPerformancebyRevenueStreamdrilldowns.FromSqlRaw(
+                "EXEC usp_RPT_All_TaxOffices_Performance_byRevenueStreamdrilldown @RevenueStreamID, @Year, @Month",
+                new SqlParameter("@RevenueStreamID", revenueStreamID),
+                new SqlParameter("@Year", year),
+                new SqlParameter("@Month", month)
+            );
+        }
+
+        public virtual IQueryable<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown(int year, int month, int taxOfficeID)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@Year", year));
+            parameters.Add(new SqlParameter("@Month", month));
+            parameters.Add(new SqlParameter("@TaxOfficeID", taxOfficeID));
+
+            var r = TaxOfficesPerformancebyAllRevenueStreamdrilldowns.FromSqlRaw("usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown @Year, @Month, @TaxOfficeID", parameters: parameters.ToArray());
+            return r;
+        }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RevenueStreamResult>().HasNoKey();
+            modelBuilder.Entity<RevenueStreamResultDrillDown>().HasNoKey();
+            modelBuilder.Entity<usp_RPT_All_TaxOffices_Performance_ByMonth_Result>().HasNoKey();
+            modelBuilder.Entity<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown>().HasNoKey();
+            modelBuilder.Entity<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamResult>().HasNoKey();
 
             modelBuilder.Entity<Gistesting>(entity =>
             {

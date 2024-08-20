@@ -138,6 +138,7 @@
     <Compile Include="RevenueStreamViewModel.cs" />
     <Compile Include="EMRevenueHeadViewModel.cs" />
     <Compile Include="RevenueSubStreamViewModel.cs" />
+    <Compile Include="RevenueValues.cs" />
     <Compile Include="ScratchCardDealerViewModel.cs" />
     <Compile Include="ScratchCardPrinterViewModel.cs" />
     <Compile Include="ScreenViewModel.cs" />

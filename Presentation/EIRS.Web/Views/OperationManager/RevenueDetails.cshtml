@@ -1,0 +1,77 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manger - List of Revenue Stream By Tax Office";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - List of Revenue Stream By Tax Office 
+    </h1>
+
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Revenue Stream Details</div>
+        <div class="form-actions text-right">
+
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblRevenueStreamDeatails">
+            <thead class="red-th">
+                <tr>
+                    <th>Revenue Stream</th>
+                    <th>Amount Assessed</th>
+                    <th>Total Collection</th>
+                    <th>Differential</th>
+                    <th>Performance (%)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@ViewBag.RevenueStream</td>
+                    <td>@ViewBag.AmountAssessed</td>
+                    <td>@ViewBag.TotalCollection</td>
+                    <td>@ViewBag.Differential</td>
+                    <td>@ViewBag.Performance</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("ViewDetails", "OperationManager", new { RevenueStreamID = ViewBag.RevenueStream })" class="btn btn-primary">View Details</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+@section Footer {
+   
+    
+    <script type="text/javascript" src="~/Scripts/jsRevenueStreamByTaxOfficeTarget.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

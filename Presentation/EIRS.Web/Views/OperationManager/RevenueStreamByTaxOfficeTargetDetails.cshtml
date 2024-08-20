@@ -24,7 +24,8 @@
                     foreach (var ret in Model)
                     {
                         <tr>
-                            <td>@(string.IsNullOrEmpty(ret.TaxOfficeName) ? "N/A" : ret.TaxOfficeName)</td>
+                            @*<td>@(string.IsNullOrEmpty(ret.TaxOfficeName) ? "N/A" : ret.TaxOfficeName)</td>*@
+                            <td>@(string.IsNullOrEmpty(ret.TaxpayerName) ? "N/A" : ret.TaxpayerName)</td>
                             <td>@(string.IsNullOrEmpty(ret.AssessmentRefNo) ? "N/A" : ret.AssessmentRefNo)</td>
                             <td>@(ret.settlementamount.HasValue ? ret.settlementamount.Value.ToString("C") : "N/A")</td>
                         </tr>

@@ -10,6 +10,7 @@ namespace EIRS.Web.GISModels
     {
         public int TaxOfficeID { get; set; }
         public string TaxOfficeName { get; set; }
+        //public string RevenueStreamName { get; set; }//TODO: Enable when stored procedure has been updated
         public string TaxMonth { get; set; }
         public decimal TargetAmount { get; set; }
         public decimal AssessedAmount { get; set; }

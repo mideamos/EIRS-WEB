@@ -4660,6 +4660,7 @@ namespace EIRS.Web.Controllers
              .Select(s => new
              {
                  s.TaxOfficeName,
+                 //s.RevenueStreamName,
                  s.TargetAmount,
                  s.RevenueAmount,
                  s.Differential,
@@ -4810,7 +4811,8 @@ namespace EIRS.Web.Controllers
             {
                 RevenueStreamResultDrillDown ret = new RevenueStreamResultDrillDown
                 {
-                    TaxOfficeName = item.TaxOfficeName ?? "N/A",
+                    //TaxOfficeName = item.TaxOfficeName ?? "N/A",
+                    TaxpayerName = item.TaxpayerName ?? "N/A",//TaxpayerName
                     AssessmentRefNo = item.AssessmentRefNo ?? "N/A",
                     settlementamount = item.settlementamount ?? 0m // or a default value
                 };

@@ -4660,7 +4660,7 @@ namespace EIRS.Web.Controllers
              .Select(s => new
              {
                  s.TaxOfficeName,
-                 //s.RevenueStreamName,
+                 s.RevenueStreamName,
                  s.TargetAmount,
                  s.RevenueAmount,
                  s.Differential,

@@ -4534,32 +4534,38 @@ namespace EIRS.Web.Controllers
             UI_FillMonthDropDown();
             return View();
         }
-        public ActionResult NewTaxOfficeTargetDrillDrown(int? Year, int? Month, int? taxofficeId)
+        public ActionResult NewTaxOfficeTargetDrillDrown(int? Year, int? Month, int? taxofficeId, int? revenueStreamID)
         {
             string yearr = "0";
             string monthh = "0";
             string taxoffId = "0";
+            string revenueStreamId = "0";
 
             var url = Request.Url.AbsoluteUri.ToLower();
 
             Uri uri = new Uri(url);
             string[] segments = uri.AbsolutePath.Split('/');
-            if (segments.Length > 4)
+            if (segments.Length > 5)
+            // if (segments.Length > 4)
+            // if (segments.Length > 6)
             {
                 yearr = segments[3];
                 monthh = segments[4];
                 taxoffId = segments[5];
+                revenueStreamId = segments[6];
             }
 
             int nwYear = Convert.ToInt32(yearr);
             int nwMonth = Convert.ToInt32(monthh);
             int nwtaxoffId = Convert.ToInt32(taxoffId);
+            int nwRevenueStreamId = Convert.ToInt32(revenueStreamId);
 
             ViewBag.Year = nwYear;
             ViewBag.Month = nwMonth;
             ViewBag.Month = nwtaxoffId;
+            ViewBag.RevenueStreamID = nwRevenueStreamId;
 
-            var res = NewTaxOfficeTargetDrillDrownCall(nwYear, nwMonth, nwtaxoffId);
+            var res = NewTaxOfficeTargetDrillDrownCall(nwYear, nwMonth, nwtaxoffId, nwRevenueStreamId);
             return View(res);
         }
         public JsonResult NewTaxOfficeTargetLoadData(int? Year, int? Month, int? taxofficeId)
@@ -4609,6 +4615,7 @@ namespace EIRS.Web.Controllers
                  s.Targetamount,
                  s.Settlementamount,
                  s.differenitial,
+                 s.RevenueStreamID,
                  Percentage,
                  year = Year,
                  month = Month,
@@ -4660,6 +4667,7 @@ namespace EIRS.Web.Controllers
              .Select(s => new
              {
                  s.TaxOfficeName,
+                 s.RevenueStreamName,
                  s.TargetAmount,
                  s.RevenueAmount,
                  s.Differential,
@@ -4810,7 +4818,8 @@ namespace EIRS.Web.Controllers
             {
                 RevenueStreamResultDrillDown ret = new RevenueStreamResultDrillDown
                 {
-                    TaxOfficeName = item.TaxOfficeName ?? "N/A",
+                    //TaxOfficeName = item.TaxOfficeName ?? "N/A",
+                    TaxpayerName = item.TaxpayerName ?? "N/A",//TaxpayerName
                     AssessmentRefNo = item.AssessmentRefNo ?? "N/A",
                     settlementamount = item.settlementamount ?? 0m // or a default value
                 };
@@ -4877,9 +4886,9 @@ namespace EIRS.Web.Controllers
 
             return lstRet;
         }
-        private List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> NewTaxOfficeTargetDrillDrownCall(int? Year, int? Month, int? TaxOfficeId)
+        private List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> NewTaxOfficeTargetDrillDrownCall(int? Year, int? Month, int? TaxOfficeId, int? RevenueStreamID)
         {
-            var lstSummary = _appDbContext.usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown(Year.GetValueOrDefault(), Month.GetValueOrDefault(), TaxOfficeId.GetValueOrDefault()).ToList();
+            var lstSummary = _appDbContext.usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown(Year.GetValueOrDefault(), Month.GetValueOrDefault(), TaxOfficeId.GetValueOrDefault(), RevenueStreamID.GetValueOrDefault()).ToList();
             List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> lstRet = new List<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown>();
             foreach (var item in lstSummary)
             {

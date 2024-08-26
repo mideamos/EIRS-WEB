@@ -1,13 +1,15 @@
-﻿function viewDetails(year, month, taxofficeId) {
-    if ( !year || !month || !taxofficeId) {
-        console.error("Invalid parameters passed to viewDetails:", year, month, taxofficeId);
+﻿function viewDetails(year, month, taxofficeId, revenueStreamID) {
+  
+    if (!year || !month || !taxofficeId || !revenueStreamID) {
+        console.error("Invalid parameters passed to viewDetails:", year, month, taxofficeId, revenueStreamID);
         return;
     }
-    console.log("viewDetails called with:", year, month, taxofficeId);
+    console.log("viewDetails called with:", year, month, taxofficeId, revenueStreamID);
     var url = '/OperationManager/NewTaxOfficeTargetDrillDrown/' +
         year + '/' +
         month + '/' +
-        taxofficeId;
+        taxofficeId + '/' +
+        revenueStreamID;
     window.location.href = url;
 }
 
@@ -123,7 +125,7 @@ function jsfn_bindTable() {
                 {
                     "data": null, "orderable": false, "width": "20%", "render": function (data, type, st) {
                         console.log(data, st);
-                        return '<button class="btn btn-primary" onclick="viewDetails(' + st.year + ', \'' + st.month + '\', ' + st.taxofficeId + ')">View Details</button>';
+                        return '<button class="btn btn-primary" onclick="viewDetails(' + st.year + ', \'' + st.month + '\', ' + st.taxofficeId + ', ' + st.RevenueStreamID + ')">View Details</button>';
                     }
                 }
             ],

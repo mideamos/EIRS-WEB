@@ -66,8 +66,8 @@ namespace EIRS.Web
             
             routes.MapRoute(
                 name: "NewTaxOfficeTargetDrillDrown",
-                url: "OperationManager/NewTaxOfficeTargetDrillDrown/{Year}/{Month}/{taxofficeId}",
-                defaults: new { controller = "OperationManager", action = "NewTaxOfficeTargetDrillDrown", Year = UrlParameter.Optional, Month = UrlParameter.Optional, taxofficeId = UrlParameter.Optional }
+                url: "OperationManager/NewTaxOfficeTargetDrillDrown/{Year}/{Month}/{taxofficeId}/{revenueStreamID}",
+                defaults: new { controller = "OperationManager", action = "NewTaxOfficeTargetDrillDrown", Year = UrlParameter.Optional, Month = UrlParameter.Optional, taxofficeId = UrlParameter.Optional, revenueStreamID = UrlParameter.Optional }
             );
 
 

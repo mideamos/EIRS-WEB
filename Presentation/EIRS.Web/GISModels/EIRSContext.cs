@@ -145,14 +145,15 @@ namespace EIRS.Web.GISModels
             );
         }
 
-        public virtual IQueryable<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown(int year, int month, int taxOfficeID)
+        public virtual IQueryable<usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown> usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown(int year, int month, int taxOfficeID, int revenueStreamID)
         {
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@Year", year));
             parameters.Add(new SqlParameter("@Month", month));
             parameters.Add(new SqlParameter("@TaxOfficeID", taxOfficeID));
+            parameters.Add(new SqlParameter("@RevenueStreamID", revenueStreamID));
 
-            var r = TaxOfficesPerformancebyAllRevenueStreamdrilldowns.FromSqlRaw("usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown @Year, @Month, @TaxOfficeID", parameters: parameters.ToArray());
+            var r = TaxOfficesPerformancebyAllRevenueStreamdrilldowns.FromSqlRaw("usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown @Year, @Month, @TaxOfficeID, @RevenueStreamID", parameters: parameters.ToArray());
             return r;
         }
 

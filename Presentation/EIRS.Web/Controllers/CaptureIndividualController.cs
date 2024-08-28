@@ -2520,6 +2520,7 @@ namespace EIRS.Web.Controllers
 
                                     if (mObjARResponse.Success)
                                     {
+                                        
                                         IList<MAP_Assessment_AssessmentItem> lstInsertAssessmentDetail = new List<MAP_Assessment_AssessmentItem>();
                                         if (lstAssessmentRules.Count > 1)
                                         {

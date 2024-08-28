@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="portlet-body">
-        <form id="frmRevenueStreamByTaxOfficeTarget" class="form-horizontal">
+        <form id="frmTaxOfficeTargetByMonth" class="form-horizontal">
             <div class="row">
                 <div class="col-sm-7">
 
@@ -30,28 +30,34 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">TaxOffice:</label>
+                        <label class="col-md-4 control-label">Month:</label>
                         <div class="col-md-8">
-                            @Html.DropDownList("TaxOfficeList", (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", new { @class = "form-control bs-select", @id = "cboTaxOfficeList" })
+                            @Html.DropDownList("Month", (SelectList)ViewBag.MonthList, "Select Month", new { @class = "form-control bs-select", @id = "cboMonth" })
                         </div>
                     </div>
                 </div>
-                <div class="form-group text-right row">
-                    <div class="col-sm-6"></div>
+                @* <div class="form-group text-right row">
+                     <div class="col-sm-3"></div>
                     <div class="col-sm-6">
-                        <button class="btn btn-theme btn-block" id="btnSearchII" type="button" tabindex="4"> Search </button>
+                        <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
                     </div>
-                </div>
-
+                </div> *@
+@* 
                 <div class="col-sm-5">
 
-                </div>
+                </div> *@
             </div>
+            <div class="form-group text-right row">
+                     <div class="col-sm-3"></div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                    </div>
+                </div>
 
         </form>
     </div>
 </div>
-</div>
+
 
 <div class="portlet light" id="dvSearchData">
     <div class="portlet-title">
@@ -61,7 +67,7 @@
         </div>
     </div>
     <div class="portlet-body" id="dvData">
-        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblRevenueStreamByTaxOfficeTarget">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxOfficeTargetByMonth">
             <thead class="red-th">
                 <tr>
                     <th>Months</th>
@@ -81,7 +87,7 @@
 @section Footer {
 
 
-    <script type="text/javascript" src="~/Scripts/jsRevenueStreamByTaxOfficeTarget.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript" src="~/Scripts/jsTaxOfficeTargetByMonth.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
 }
 
 

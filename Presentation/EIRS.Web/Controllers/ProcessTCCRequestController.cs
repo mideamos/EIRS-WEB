@@ -2001,6 +2001,7 @@ namespace EIRS.Web.Controllers
         [HttpGet]
         public FileResult GetTCC()
         {
+
             string name = SessionManager.Path;
             string ReportURL = name;
             byte[] FileBytes = System.IO.File.ReadAllBytes(ReportURL);
@@ -2115,6 +2116,22 @@ namespace EIRS.Web.Controllers
                     {
                         Directory.CreateDirectory(mStrDirectoryForPrint + "/Temp/Html");
                     }
+                    //void CreateDirectoryIfNotExists(string directoryPath)
+                    //{
+                    //    if (!Directory.Exists(directoryPath))
+                    //    {
+                    //        Directory.CreateDirectory(directoryPath);
+                    //    }
+                    //}
+
+                    //// Create directories
+                    //CreateDirectoryIfNotExists(mStrDirectory);
+                    //CreateDirectoryIfNotExists(Path.Combine(mStrDirectory, "Temp", "Html"));
+                    //CreateDirectoryIfNotExists(mStrGeneratedBarCodePath);
+                    //CreateDirectoryIfNotExists(Path.Combine(mStrDirectoryForPrint, "Temp", "Html"));
+                    //CreateDirectoryIfNotExists(mStrGeneratedBarCodePathForPrint);
+
+
                     string tin = "", firstName = "", lastName = "", streciptanddate = "", ndreciptanddate = "", rdreciptanddate = "", rin = "", station = "", title = "", address = "", certificateNumber = "", serialNumber = "", incomeSource = "";
                     TicketRef streciptand = new TicketRef();
                     TicketRef ndreciptand = new TicketRef();

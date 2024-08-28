@@ -1,0 +1,71 @@
+﻿
+@model List<EIRS.Web.GISModels.usp_RPT_TaxOffice_Performance_ByAllRevenueStreamdrilldown>
+
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - Revenue Stream By Tax Office Target";
+}
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Tax Offices Target and Performance by Tax Office Details</div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblNewTaxOfficeTargetDetails">
+            <thead class="red-th">
+                <tr>
+                    <th>Taxpayer RIN</th>
+                    <th>Taxpayer Type</th>
+                    <th>Taxpayer Name</th>
+                    <th>Amount Paid</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var ret in Model)
+                    {
+                        <tr>
+                            <td>@(string.IsNullOrEmpty(ret.TaxpayerRIN) ? "N/A" : ret.TaxpayerRIN)</td>
+                            @* <td>@(ret.TaxpayerTypeID.HasValue ? ret.TaxpayerTypeID.Value.ToString() : "N/A")</td> *@
+                            <td>
+                                @if (ret.TaxpayerTypeID.HasValue)
+                                {
+                                    switch (ret.TaxpayerTypeID.Value)
+                                    {
+                                        case 1: @:Individual
+                                            break;
+                                        case 2: @:Company
+                                            break;
+                                        case 3: @:Government
+                                            break;
+                                        case 4: @:Special
+                                            break;
+                                        default: @:N/A
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
+                            </td>
+                            <td>@(string.IsNullOrEmpty(ret.TaxpayerName) ? "N/A" : ret.TaxpayerName)</td>
+                            <td>@(ret.settlementamount.HasValue ? ret.settlementamount.Value.ToString("C") : "N/A")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jsfn_ConvertToDatableWithCustomSort($('#tblNewTaxOfficeTargetDetails'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Record Found');
+        });
+    </script>
+}
+
+

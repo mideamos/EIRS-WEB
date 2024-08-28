@@ -692,7 +692,17 @@ namespace EIRS.Web.Controllers
 
                 using (_db = new EIRSEntities())
                 {
-                    var retVal = _db.ServiceBills.FirstOrDefault(o => o.ServiceBillID == ServiceBillID);
+                    //var retVal = _db.ServiceBills.FirstOrDefault(o => o.ServiceBillID == ServiceBillID);
+
+                    var retVal = _db.MAP_ServiceBill_MDAService
+                        .Where(s => s.ServiceBillID == ServiceBillID)
+                        .GroupBy(s => s.ServiceBillID)
+                        .Select(g => new
+                        {
+                            ServiceBillAmount = g.Sum(s => s.ServiceAmount)
+                        })
+                        .FirstOrDefault();
+
                     Amountholder = retVal.ServiceBillAmount;
                     AmountAssItemholder = _db.MAP_ServiceBill_MDAServiceItem.FirstOrDefault(o => o.SBSIID == pObjAdjustment.SBSIID).ServiceAmount;
                 }
@@ -881,7 +891,7 @@ namespace EIRS.Web.Controllers
                 mObjServiceBill.SettlementStatusID = statId;
                 mObjServiceBill.ModifiedDate = CommUtil.GetCurrentDateTime();
                 mObjServiceBill.ModifiedBy = SessionManager.UserID;
-                mObjServiceBill.ServiceBillAmount = newAmount;
+                mObjServiceBill.ServiceBillAmount = Amountholder;
 
                 mObjBLServiceBill.BL_UpdateServiceBillSettlementStatus(mObjServiceBill);
 

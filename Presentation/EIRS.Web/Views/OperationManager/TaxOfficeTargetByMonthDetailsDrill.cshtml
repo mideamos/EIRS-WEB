@@ -26,10 +26,10 @@
                     {
                         <tr>
                             <td>@(string.IsNullOrEmpty(ret.TaxOfficeName) ? "N/A" : ret.TaxOfficeName)</td>
-                            <td>@(ret.Targetamount.HasValue ? ret.Targetamount.Value.ToString("C") : "N/A")</td>
-                            <td>@(ret.Settlementamount.HasValue ? ret.Settlementamount.Value.ToString("C") : "N/A")</td>
-                            <td>@(ret.differenitial.HasValue ? ret.differenitial.Value.ToString("C") : "N/A")</td>
-                            <td>@(ret.Perc.HasValue ? ret.Perc.Value.ToString("C") : "N/A")</td>
+                            <td>@(ret.Targetamount.HasValue ? ret.Targetamount.Value.ToString("C", new System.Globalization.CultureInfo("en-NG")) : "N/A")</td>
+                            <td>@(ret.Settlementamount.HasValue ? ret.Settlementamount.Value.ToString("C", new System.Globalization.CultureInfo("en-NG")) : "N/A")</td>
+                            <td>@(ret.differenitial.HasValue ? ret.differenitial.Value.ToString("C", new System.Globalization.CultureInfo("en-NG")) : "N/A")</td>
+                            <td>@(ret.Perc.HasValue ? ret.Perc.Value.ToString("C", new System.Globalization.CultureInfo("en-NG")) : "N/A")</td>
                         </tr>
                     }
                 }

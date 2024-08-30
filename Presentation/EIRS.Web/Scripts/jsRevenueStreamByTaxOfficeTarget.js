@@ -120,30 +120,30 @@ function jsfn_bindTable() {
                 }
             },
             "columns": [
-                { "data": "TaxOfficeName", "orderable": true, "name": "TaxOfficeName", "width": "20%" },
-                { "data": "RevenueStreamName", "orderable": true, "name": "RevenueStreamName", "width": "20%" },
+                { "data": "TaxOfficeName", "orderable": true, "name": "TaxOfficeName", "width": "15%" },
+                { "data": "RevenueStreamName", "orderable": true, "name": "RevenueStreamName", "width": "15%" },
                 {
-                    "data": "TargetAmount", "orderable": true, "name": "TargetAmount", "width": "20%", "render": function (data, type, st) {
+                    "data": "TargetAmount", "orderable": true, "name": "TargetAmount", "width": "15%", "render": function (data, type, st) {
                         return st.TargetAmount.formatMoney();
                     }
                 },
                 {
-                    "data": "RevenueAmount", "orderable": true, "name": "RevenueAmount", "width": "20%", "render": function (data, type, st) {
+                    "data": "RevenueAmount", "orderable": true, "name": "RevenueAmount", "width": "15%", "render": function (data, type, st) {
                         return st.RevenueAmount.formatMoney();
                     }
                 },
                 {
-                    "data": "Differential", "orderable": true, "name": "Differential", "width": "20%", "render": function (data, type, st) {
+                    "data": "Differential", "orderable": true, "name": "Differential", "width": "15%", "render": function (data, type, st) {
                         return st.Differential.formatMoney();
                     }
                 },
                 {
-                    "data": "Performance", "orderable": true, "name": "Performance", "width": "20%", "render": function (data, type, st) {
+                    "data": "Performance", "orderable": true, "name": "Performance", "width": "15%", "render": function (data, type, st) {
                         return (data || 0) + '%';
                     }
                 },
                 {
-                    "data": null, "orderable": false, "width": "20%", "render": function (data, type, st) {
+                    "data": null, "orderable": false, "width": "15%", "render": function (data, type, st) {
                         console.log(data, st);
                         return '<button class="btn btn-primary" onclick="viewDetails(' + st.revenueStreamId + ', ' + st.year + ', \'' + st.month + '\', ' + st.taxofficeId + ')">View Details</button>';
                     }
@@ -202,7 +202,7 @@ function jsfn_bindTableII() {
                     }
                 },
                 {
-                    "data": null, "orderable": false, "width": "20%", "render": function (data, type, st) {
+                    "data": null, "orderable": false, "width": "150px", "render": function (data, type, st) {
                         console.log(data, st);
                         return '<button class="btn btn-primary" onclick="viewDetailss(' + st.revenueStreamId + ', ' + st.year + ', \'' + st.month + '\', ' + st.taxofficeId + ')">View Details</button>';
                     }

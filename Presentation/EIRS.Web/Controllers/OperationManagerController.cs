@@ -106,7 +106,30 @@ namespace EIRS.Web.Controllers
         private List<usp_GetTccDownloadByYearResult> getSPList()
         {
             long curentyear = DateTime.Now.Year - 1;
-            var rawQuery = $"SELECT notf.TCCRequestID ,(nm.FirstName +' '+ nm.LastName) as Fullname ,nm.IndividualRIN ,notf.RequestRefNo,notf.Isdownloaded,  CASE WHEN ISNULL(notf.IsDownloaded, 0) = 0 THEN 'Awaiting Download'       ELSE 'Downloaded'   END as DownloadStatus,notf.RequestDate FROM TCC_Request  notf Left JOIN Individual  nm ON notf.TaxPayerID  = nm.IndividualID WHERE notf.TaxYear  = {curentyear} and notf.StatusID = 14 order by RequestDate desc ";
+            // var rawQuery = $"SELECT notf.TCCRequestID ,(nm.FirstName +' '+ nm.LastName) as Fullname ,nm.IndividualRIN ,notf.RequestRefNo,notf.Isdownloaded,  CASE WHEN ISNULL(notf.IsDownloaded, 0) = 0 THEN 'Awaiting Download'       ELSE 'Downloaded'   END as DownloadStatus,notf.RequestDate FROM TCC_Request  notf Left JOIN Individual  nm ON notf.TaxPayerID  = nm.IndividualID WHERE notf.TaxYear  = {curentyear} and notf.StatusID = 14 order by RequestDate desc ";
+        var rawQuery = $@"
+            SELECT 
+                notf.TCCRequestID,
+                (nm.FirstName + ' ' + nm.LastName) AS Fullname,
+                nm.IndividualRIN,
+                notf.RequestRefNo,
+                notf.Isdownloaded,
+                CASE 
+                    WHEN ISNULL(notf.IsDownloaded, 0) = 0 THEN 'Awaiting Download'
+                    ELSE 'Downloaded' 
+                END AS DownloadStatus,
+                notf.RequestDate,
+                notf.ModifiedDate
+            FROM TCC_Request notf
+            LEFT JOIN Individual nm ON notf.TaxPayerID = nm.IndividualID
+            WHERE notf.TaxYear = {curentyear} 
+            AND notf.StatusID = 14
+            ORDER BY 
+                CASE 
+                    WHEN ISNULL(notf.IsDownloaded, 0) = 0 THEN 0 
+                    ELSE 1 
+                END ASC, 
+                notf.ModifiedDate DESC"; 
             // List to hold the results
             List<usp_GetTccDownloadByYearResult> results = new List<usp_GetTccDownloadByYearResult>();
 

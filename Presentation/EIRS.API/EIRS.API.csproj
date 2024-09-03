@@ -312,6 +312,7 @@
     <Compile Include="Controllers\TaxPayer\IndividualController.cs" />
     <Compile Include="Controllers\TaxPayer\SpecialController.cs" />
     <Compile Include="Controllers\TaxPayer\TaxPayerController.cs" />
+    <Compile Include="Controllers\User\UserController.cs" />
     <Compile Include="Models\ApiRequest.cs" />
     <Compile Include="Models\ApiResponse.cs" />
     <Compile Include="Models\AssessmentModel.cs" />

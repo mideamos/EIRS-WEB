@@ -211,8 +211,38 @@ namespace EIRS.BOL
             var taxOfficeIDParameter = taxOfficeID.HasValue ?
                 new ObjectParameter("TaxOfficeID", taxOfficeID) :
                 new ObjectParameter("TaxOfficeID", typeof(int));
+
+            var emailAddressParameter = new ObjectParameter("EmailAddress", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetUserList_Result>("usp_GetUserList", userIDParameter, userTypeIDParameter, intStatusParameter, managerIDParameter, taxOfficeIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetUserList_Result>("usp_GetUserList", userIDParameter, userTypeIDParameter, intStatusParameter, managerIDParameter, taxOfficeIDParameter, emailAddressParameter);
+        }
+        public virtual ObjectResult<usp_GetUserList_Result> usp_GetUserList(Nullable<int> userID, Nullable<int> userTypeID, Nullable<int> intStatus, Nullable<int> managerID, Nullable<int> taxOfficeID, string emailAddress)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(int));
+    
+            var userTypeIDParameter = userTypeID.HasValue ?
+                new ObjectParameter("UserTypeID", userTypeID) :
+                new ObjectParameter("UserTypeID", typeof(int));
+    
+            var intStatusParameter = intStatus.HasValue ?
+                new ObjectParameter("intStatus", intStatus) :
+                new ObjectParameter("intStatus", typeof(int));
+    
+            var managerIDParameter = managerID.HasValue ?
+                new ObjectParameter("ManagerID", managerID) :
+                new ObjectParameter("ManagerID", typeof(int));
+    
+            var taxOfficeIDParameter = taxOfficeID.HasValue ?
+                new ObjectParameter("TaxOfficeID", taxOfficeID) :
+                new ObjectParameter("TaxOfficeID", typeof(int));
+
+            var emailAddressParameter = emailAddress != null ?
+                new ObjectParameter("EmailAddress", emailAddress) :
+                new ObjectParameter("EmailAddress", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetUserList_Result>("usp_GetUserList", userIDParameter, userTypeIDParameter, intStatusParameter, managerIDParameter, taxOfficeIDParameter, emailAddressParameter);
         }
     
         public virtual ObjectResult<usp_GetCentralMenuList_Result> usp_GetCentralMenuList(Nullable<int> centralMenuID, Nullable<int> parentCentralMenuID, Nullable<int> intStatus, Nullable<int> intMenuType, string centralMenuName)

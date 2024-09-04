@@ -2,13 +2,12 @@
 using EIRS.BOL;
 using EIRS.Common;
 using System;
-using System.Collections.Generic;
 using System.Web.Http;
 
 namespace EIRS.API.Controllers.User
 {
     [RoutePrefix("User")]
-    
+
     public class UserController : BaseController
     {
         [HttpGet]
@@ -20,7 +19,7 @@ namespace EIRS.API.Controllers.User
             try
             {
 
-                // IList<usp_GetUserList_Result> lstTaxOfficer = new BLUser().BL_GetUserList(new MST_Users() { intStatus = 2, UserTypeID = 2, EmailAddress = EmailAddress });
+                // IList<usp_GetUserList_Result> lstTaxOfficer = new BLUser().BL_GetUserList(new MST_Users() { intStatus = 2, UserTypeID = 2 });
                 usp_GetUserList_Result lstTaxOfficer = new BLUser().BL_GetUserDetails(new MST_Users() { intStatus = 2, UserTypeID = 2, EmailAddress = EmailAddress });
 
                 mObjAPIResponse.Success = true;

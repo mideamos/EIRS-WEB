@@ -426,6 +426,7 @@ namespace EIRS.Repository
                 mObjInsertTCC_Requests = new TCC_Request
                 {
                     CreatedBy = pObjRequest.CreatedBy,
+                    CreatedByTypeID = pObjRequest.CreatedByTypeID,
                     CreatedDate = pObjRequest.CreatedDate,
                     RequestDate = pObjRequest.RequestDate,
                     TaxPayerTypeID = pObjRequest.TaxPayerTypeID,

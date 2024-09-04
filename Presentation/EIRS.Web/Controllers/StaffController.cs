@@ -584,7 +584,8 @@ namespace EIRS.Web.Controllers
                     query = query.Where(o => o.ApproverTypeId == approvalType);
                 }
 
-                query = query.Where(o => o.SEDE_OrderID == holder || o.SEDE_DocumentID == userId || o.ServiceBillID == userId || o.VisibleSignStatusID == userId);
+                query = query.Where(o => o.SEDE_OrderID == holder || o.SEDE_DocumentID == userId || o.ServiceBillID == userId || o.VisibleSignStatusID == userId)
+                             .Where(o => o.SEDE_OrderID == 10000 || o.SEDE_OrderID == 10001 || o.SEDE_OrderID == 10002);
 
                 var ee = (from ex in query
                           join ue in _db.Individuals on ex.TaxPayerID equals ue.IndividualID

@@ -444,14 +444,14 @@ namespace EIRS.Repository
                     try
                     {
                         // Enable IDENTITY_INSERT for the table
-                        //_db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request ON");
+                        _db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request ON");
 
                         // Add the new TCC_Request object
                         _db.TCC_Request.Add(mObjInsertTCC_Requests);
                         _db.SaveChanges();
 
                         // Disable IDENTITY_INSERT for the table
-                        //_db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request OFF");
+                        _db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request OFF");
 
                         // Commit the transaction
                         transaction.Commit();

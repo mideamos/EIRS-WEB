@@ -426,7 +426,7 @@ namespace EIRS.Repository
                 mObjInsertTCC_Requests = new TCC_Request
                 {
                     CreatedBy = pObjRequest.CreatedBy,
-                    CreatedByTypeID = pObjRequest.CreatedByTypeID,
+                    // CreatedByTypeID = pObjRequest.CreatedByTypeID,
                     CreatedDate = pObjRequest.CreatedDate,
                     RequestDate = pObjRequest.RequestDate,
                     TaxPayerTypeID = pObjRequest.TaxPayerTypeID,
@@ -444,14 +444,14 @@ namespace EIRS.Repository
                     try
                     {
                         // Enable IDENTITY_INSERT for the table
-                        _db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request ON");
+                        //_db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request ON");
 
                         // Add the new TCC_Request object
                         _db.TCC_Request.Add(mObjInsertTCC_Requests);
                         _db.SaveChanges();
 
                         // Disable IDENTITY_INSERT for the table
-                        _db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request OFF");
+                        //_db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT TCC_Request OFF");
 
                         // Commit the transaction
                         transaction.Commit();
@@ -463,7 +463,8 @@ namespace EIRS.Repository
                     catch (Exception Ex)
                     {
                         // Rollback the transaction if an error occurs
-                        transaction.Rollback();
+                         // transaction.Rollback();
+                        transaction?.Rollback();
 
                         mObjFuncResponse.Success = false;
                         mObjFuncResponse.Exception = Ex;

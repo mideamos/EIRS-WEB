@@ -52,7 +52,7 @@ namespace EIRS.API.Controllers
                         TaxYear = request.TaxYear,
                         StatusID = (int)EnumList.TCCRequestStatus.In_Progess,
                         CreatedBy = 10,//SessionManager.UserID,
-                        CreatedByTypeID = 3,//add column to DB
+                        // CreatedByTypeID = 3,//add column to DB
                         CreatedDate = CommUtil.GetCurrentDateTime(),
                     };
 

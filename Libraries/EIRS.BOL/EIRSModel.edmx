@@ -2101,7 +2101,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="TCCRequestID" Type="bigint" />
           <Property Name="Tax_receipt" Type="nvarchar" MaxLength="100" />
           <Property Name="IndividualRIN" Type="nvarchar" MaxLength="50" />
-          <Property Name="ReveuneType" Type="varchar" MaxLength="10" />
+          <Property Name="ReveuneType" Type="varchar" MaxLength="11" />
         </EntityType>
         <EntityType Name="Notification_Method">
           <Key>
@@ -2789,7 +2789,6 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="SEDE_DocumentID" Type="int" />
           <Property Name="SEDE_OrderID" Type="bigint" />
           <Property Name="CreatedBy" Type="int" />
-          <Property Name="CreatedByTypeID" Type="int" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
@@ -21506,7 +21505,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="SEDE_DocumentID" Type="Int32" />
           <Property Name="SEDE_OrderID" Type="Int64" />
           <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CreatedByTypeID" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
@@ -24073,7 +24071,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="Tax_receipt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IndividualRIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TCCRequestID" Type="Int64" />
-          <Property Name="ReveuneType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ReveuneType" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="BusinessName">
           <Key>
@@ -31316,7 +31314,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedByTypeID" ColumnName="CreatedByTypeID" />
                 <ScalarProperty Name="SEDE_OrderID" ColumnName="SEDE_OrderID" />
                 <ScalarProperty Name="SEDE_DocumentID" ColumnName="SEDE_DocumentID" />
                 <ScalarProperty Name="SealedPath" ColumnName="SealedPath" />

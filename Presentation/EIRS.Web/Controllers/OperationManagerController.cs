@@ -152,7 +152,8 @@ namespace EIRS.Web.Controllers
                                 RequestDate = reader["RequestDate"] != DBNull.Value ? Convert.ToDateTime(reader["RequestDate"]) : DateTime.Now,
                                 TccId = reader["TCCRequestID"] != DBNull.Value ? Convert.ToInt64(reader["TCCRequestID"]) : 0,
                                 IsDownloaded = reader["IsDownloaded"] != DBNull.Value ? Convert.ToBoolean(reader["IsDownloaded"]) : false,
-                                DownloadStatus = reader["DownloadStatus"] != DBNull.Value ? reader["DownloadStatus"].ToString() : ""
+                                DownloadStatus = reader["DownloadStatus"] != DBNull.Value ? reader["DownloadStatus"].ToString() : "",
+                                ModifiedDate = reader["ModifiedDate"] != DBNull.Value ? Convert.ToDateTime(reader["ModifiedDate"]) : DateTime.Now,
                             });
 
                         }

@@ -47,6 +47,7 @@ namespace EIRS.BOL
         public Nullable<int> SEDE_DocumentID { get; set; }
         public Nullable<long> SEDE_OrderID { get; set; }
         public Nullable<int> CreatedBy { get; set; }
+        // public Nullable<int> CreatedByTypeID { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

@@ -426,6 +426,7 @@ namespace EIRS.Repository
                 mObjInsertTCC_Requests = new TCC_Request
                 {
                     CreatedBy = pObjRequest.CreatedBy,
+                    // CreatedByTypeID = pObjRequest.CreatedByTypeID,
                     CreatedDate = pObjRequest.CreatedDate,
                     RequestDate = pObjRequest.RequestDate,
                     TaxPayerTypeID = pObjRequest.TaxPayerTypeID,
@@ -462,7 +463,8 @@ namespace EIRS.Repository
                     catch (Exception Ex)
                     {
                         // Rollback the transaction if an error occurs
-                        transaction.Rollback();
+                         // transaction.Rollback();
+                        transaction?.Rollback();
 
                         mObjFuncResponse.Success = false;
                         mObjFuncResponse.Exception = Ex;

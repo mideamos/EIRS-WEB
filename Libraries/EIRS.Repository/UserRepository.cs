@@ -691,7 +691,7 @@ namespace EIRS.Repository
         {
             using (_db = new ERASEntities())
             {
-                return _db.usp_GetUserList(pObjUser.UserID, pObjUser.UserTypeID, pObjUser.intStatus, pObjUser.TOManagerID, pObjUser.TaxOfficeID).FirstOrDefault();
+                return _db.usp_GetUserList(pObjUser.UserID, pObjUser.UserTypeID, pObjUser.intStatus, pObjUser.TOManagerID, pObjUser.TaxOfficeID, pObjUser.EmailAddress).FirstOrDefault();
             }
         }
 

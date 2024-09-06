@@ -102,6 +102,7 @@ namespace EIRS.Web.GISModels
         public string DownloadStatus { get; set; }
         public Nullable<System.DateTime> RequestDate { get; set; }
         public Nullable<bool> IsDownloaded { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
     }
     public class usp_GetAssessmentForPendingOrDeclined_Result
     {

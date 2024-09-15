@@ -11,12 +11,7 @@
 *.sln.docstates
 
 # Ignore bin, Document, and obj directories in Presentation/EIRS.Web
-Presentation/EIRS.Web/bin/
 Presentation/EIRS.Web/Document/
-Presentation/EIRS.Web/obj/
-
-Presentation/EIRS.API/bin/
-Presentation/EIRS.API/obj/
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)

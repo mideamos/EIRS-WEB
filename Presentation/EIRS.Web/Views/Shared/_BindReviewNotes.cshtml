@@ -1,0 +1,22 @@
+﻿@model IList<EIRS.BOL.usp_GetTaxPayerReviewNotes_Result>
+
+<div class="mt-comments">
+    @foreach (var item in Model)
+    {
+        <div class="mt-comment">
+            <div class="mt-comment-img">
+                <div class="profile-icon">@item.ContactName.Substring(0, 1)</div>
+            </div>
+            <div class="mt-comment-body">
+                <div class="mt-comment-info">
+                    <span class="mt-comment-author">@item.ContactName</span>
+                    <span class="mt-comment-date">@item.ReviewDate.Value.ToString("dd MMM, hh:mm tt")</span>
+                </div>
+                <div class="mt-comment-text"> @item.Notes </div>
+                <div class="mt-comment-details">
+                    <span class="mt-comment-status">@item.ReviewStatusName</span>
+                </div>
+            </div>
+        </div>
+    }
+</div>

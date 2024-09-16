@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Building List";
+}
+
+<div class="title">
+    <h1>Buildings</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Buildings
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("ExportData","ProfileBuilding")" target="_blank" class="btn btn-theme">Export To Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBuilding">
+            <thead class="red-th">
+                <tr>
+                    <th>RIN</th>
+                    <th>Building Name</th>
+                    <th class="desktop">Street Address</th>
+                    <th>Building Purpose</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{Html.RenderPartial("_BuildingDetailPopup"); }
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsBuildingListWithExport.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+

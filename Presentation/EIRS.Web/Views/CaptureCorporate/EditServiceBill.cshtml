@@ -1,0 +1,200 @@
+﻿@model EIRS.Models.ServiceBillViewModel
+@using EIRS.BOL
+@using EIRS.Common
+@{
+    ViewBag.Title = "Corporate Tax Payer - Update Service Bill";
+}
+
+<div class="title">
+    <h1>
+        Corporate Tax Payer: Update Service Bill
+    </h1>
+    <hr>
+</div>
+
+@using (Html.BeginForm("EditServiceBill", "CaptureCorporate", FormMethod.Post, new { @id = "frmAddServiceBill" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.TaxPayerID, htmlAttributes: new { @value = Model.TaxPayerID })
+    @Html.HiddenFor(model => model.TaxPayerTypeID, htmlAttributes: new { @value = Model.TaxPayerTypeID })
+    @Html.HiddenFor(model => model.TaxPayerRIN, htmlAttributes: new { @value = Model.TaxPayerRIN })
+    @Html.HiddenFor(model => model.TaxPayerName, htmlAttributes: new { @value = Model.TaxPayerName })
+    @Html.HiddenFor(model => model.TaxPayerAddress, htmlAttributes: new { @value = Model.TaxPayerAddress })
+    @Html.HiddenFor(model => model.ServiceBillID, htmlAttributes: new { @value = Model.ServiceBillID })
+    @Html.HiddenFor(model => model.ServiceBillDate, htmlAttributes: new { @value = Model.ServiceBillDate })
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Message
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="portlet light" style="min-height: 270px;">
+                <div class="portlet-title">
+                    <div class="caption">
+                        Record Details
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <table class="table border-top-0">
+                        <tbody>
+                            <tr>
+                                <td>Template Type</td>
+                                <td>Service Bill</td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td>@CommUtil.GetFormatedDate(Model.ServiceBillDate)</td>
+                            </tr>
+                            <tr>
+                                <td>Tax Payer Type</td>
+                                <td>Corporate</td>
+                            </tr>
+                            <tr>
+                                <td>Tax Payer Name</td>
+                                <td>@Model.TaxPayerName</td>
+                            </tr>
+                            <tr>
+                                <td>Tax Payer Address</td>
+                                <td>@Model.TaxPayerAddress</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="portlet light" style="min-height: 270px;">
+                <div class="portlet-body link-box">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label required-star" })
+                                @Html.TextAreaFor(model => model.Notes, htmlAttributes: new { @tabindex = "1", @placeholder = "Enter Service Bill Notes", @Rows = "5", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Notes, "", htmlAttributes: new { @class = "help-block" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SettlementDuedate, htmlAttributes: new { @class = "control-label required-star" })
+                                @Html.TextBoxFor(model => model.SettlementDuedate, "{0:dd/MM/yyyy}", htmlAttributes: new { @tabindex = "2", @placeholder = "Enter Settlement Due Date", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.SettlementDuedate, "", htmlAttributes: new { @class = "help-block" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">MDA Services</div>
+            <div class="actions">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-redtheme" id="btnAddMDAService">
+                        Add MDA Service
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="list-pane">
+                <div id="dvMDAService">
+                    @{ Html.RenderPartial("_BindMDAServiceForSerivceBill");}
+                </div>
+                <hr class="margin-top-0">
+                <div class="text-right">
+                    <a href="@Url.Action("Details","CaptureCorporate",new { id  =  Model.TaxPayerID, name = Model.TaxPayerRIN.ToSeoUrl() })" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+                    <a class="btn btn-theme" id="btnFinalSave"> Save </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade custom-modal" id="dvViewMDAServiceItemModal" tabindex="-1" role="dialog" aria-labelledby="dvViewMDAServiceItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewMDAServiceItemModalLabel">View Items in <span id="spViewMDAServiceName"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="dvViewMDAServiceItemModalBody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade custom-modal" id="dvEditMDAServiceItemModal" tabindex="-1" role="dialog" aria-labelledby="dvEditMDAServiceItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvEditMDAServiceItemModalLabel">Edit Items in <span id="spEditMDAServiceName"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="dvEditMDAServiceItemModalBody">
+
+            </div>
+            <div class="modal-footer" id="dvModalFooter">
+                <a class="btn btn-theme" id="btnSaveItems"> Save </a>
+                <a data-dismiss="modal" class="btn btn-redtheme"> Close </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dvMDAServiceModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h5 class="modal-title">Select MDA Service</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hdnMDAServiceIds" />
+                <div id="dvMDAServiceList">
+                    <table class="table table-bordered v-middle" id="tblMDAServices">
+                        <thead class="red-th">
+                            <tr>
+                                <th>Service Year</th>
+                                <th>Service Name</th>
+                                <th>Service Amount</th>
+                                <th class="action-th">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnAddSelectedMDAService" class="btn btn-redtheme">Save</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsAddEditServiceBill.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

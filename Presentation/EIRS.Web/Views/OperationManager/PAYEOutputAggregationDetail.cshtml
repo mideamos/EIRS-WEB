@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Operation Manager - PAYE Output Aggregation";
+}
+
+<input type="hidden" value="@ViewBag.TaxOffice" id="hdnTaxOffice" />
+<input type="hidden" value="@ViewBag.TaxYear" id="hdnTaxYear" />
+<input type="hidden" value="@ViewBag.EmployerRIN" id="hdnEmployerRIN" />
+
+<div class="title">
+    <h1>
+        Operation Manager - PAYE Output Aggregation
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Employee List
+        </div>
+        <div class="form-actions text-right">
+            <a href="@Url.Action("PAYEOutputAggregation","OperationManager")" class="btn btn-redtheme">Cancel</a>
+            <a href="@Url.Action("PAYEOutputAggregationDetailExportToExcel","OperationManager",new { TaxOfficeID=ViewBag.TaxOffice,TaxYear = ViewBag.TaxYear,EmployerRIN = ViewBag.EmployerRIN })" class="btn btn-theme">Export Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPAYEOutputAggregation">
+            <thead class="red-th">
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Employee RIN</th>
+                    <th>Amount Contributed</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsPAYEOutputAggregationDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

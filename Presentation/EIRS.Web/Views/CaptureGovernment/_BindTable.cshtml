@@ -1,0 +1,48 @@
+﻿@model IList<EIRS.BOL.usp_GetGovernmentList_Result>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblGovernment">
+    <thead class="red-th">
+        <tr>
+            <th>RIN</th>
+            <th>Government Name</th>
+            <th>TIN</th>
+            <th class="desktop">Address</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Count > 0)
+    {
+        <tbody>
+            @foreach (var vGovernment in Model)
+            {
+                <tr>
+                    <td>@vGovernment.GovernmentRIN</td>
+                    <td>@vGovernment.GovernmentName</td>
+                    <td>@vGovernment.TIN</td>
+                    <td>@vGovernment.ContactAddress</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a onclick="javascript:jsfn_GovernmentInformation(@vGovernment.GovernmentID)">
+                                        Quick View
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Details", "CaptureGovernment", new { id = vGovernment.GovernmentID, name=vGovernment.GovernmentRIN.ToSeoUrl() })">
+                                        Tax Payer Details
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>
+

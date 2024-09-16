@@ -1,0 +1,207 @@
+﻿@model EIRS.Web.Models.EMPDViewModel
+
+@{
+    ViewBag.Title = "ERAS Manual - Pay Direct  - MVA – Authorized - Add Entry";
+}
+
+<div class="title">
+    <h1>
+        ERAS Manual - Pay Direct  - MVA – Authorized - Add Entry
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add Entry
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("DataSource","ERASManual")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("AddEntry", "EMPDMVAAuthorized", FormMethod.Post, htmlAttributes: new { @id = "frmAddIGRClassification" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxMonth, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.TaxMonth, (SelectList)ViewBag.MonthList, "Select Month", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "1", @placeholder = "Select Month" })
+                        @Html.ValidationMessageFor(model => model.TaxMonth, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxYear, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.TaxYear, (SelectList)ViewBag.YearList, "Select Year", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "2", @placeholder = "Select Year" })
+                        @Html.ValidationMessageFor(model => model.TaxYear, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PaymentRefNumber, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.PaymentRefNumber, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PaymentRefNumber, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PaymentDateTime, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.PaymentDateTime, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PaymentDateTime, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AssessmentReference, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.AssessmentReference, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AssessmentReference, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ReceiptNo, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.ReceiptNo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ReceiptNo, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RIN, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.RIN, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.RIN, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.CustomerName, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CustomerName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RevenueItem, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.RevenueItem, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.RevenueItem, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.Amount, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Amount, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PaymentMethod, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.PaymentMethod, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PaymentMethod, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepositSlip, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.DepositSlip, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DepositSlip, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ChequeValueDate, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.ChequeValueDate, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ChequeValueDate, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Bank, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.Bank, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Bank, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AdditionalInfo, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.AdditionalInfo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AdditionalInfo, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BankBranch, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.BankBranch, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.BankBranch, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxPayerType, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.TaxPayerType, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TaxPayerType, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PaymentCode, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.PaymentCode, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PaymentCode, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RetrievalRefNumber, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.RetrievalRefNumber, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.RetrievalRefNumber, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AuthID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.AuthID, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AuthID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="25" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,101 @@
+﻿@model EIRS.Web.Models.EMDataImportViewModel
+
+@{
+    ViewBag.Title = "ERAS Manual - Pay Direct  - MVA – Authorized - Import Data";
+}
+
+@section Header {
+    <link href="~/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" />
+}
+
+<div class="title">
+    <h1>
+        ERAS Manual - Pay Direct  - MVA – Authorized - Import Data
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Import data</div>
+        <div class="actions">
+            <a href="@Url.Action("DataSource","ERASManual")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("ImportData", "EMPDMVAAuthorized", FormMethod.Post, htmlAttributes: new { @id = "frmImportData", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            if (ViewBag.SMessage != null)
+            {
+                <div class="alert alert-success">
+                    @ViewBag.SMessage <br />
+                    Please Find attached Result : <a href="@ViewBag.ResultFilePath" target="_blank">Result</a>
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxMonth, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.TaxMonth, (SelectList)ViewBag.MonthList, "Select Month", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "1", @placeholder = "Select Month" })
+                        @Html.ValidationMessageFor(model => model.TaxMonth, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxYear, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.TaxYear, (SelectList)ViewBag.YearList, "Select Year", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "2", @placeholder = "Select Year" })
+                        @Html.ValidationMessageFor(model => model.TaxYear, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ExcelFile, new { @class = "control-label required-star" })
+                        <div>
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="input-group input-large">
+                                    <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                        <span class="fileinput-filename"></span>
+                                    </div>
+                                    <span class="input-group-addon btn default btn-file">
+                                        <span class="fileinput-new"> Select file </span>
+                                        <span class="fileinput-exists"> Change </span>
+                                        @Html.TextBoxFor(m => m.ExcelFile, new { type = "file", id = "fuExcelFile", name = "fuExcelFile" })
+                                    </span>
+                                    <a class="input-group-addon btn red fileinput-exists removeFile"> Remove </a>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ExcelFile, "", new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Upload" tabindex="4" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Footer {
+    <script src="~/Content/Plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+}

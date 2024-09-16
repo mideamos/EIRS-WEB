@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Payment transactions List";
+}
+
+<input type="hidden" value="@ViewBag.FromDate" id="hdnFromDate" />
+<input type="hidden" value="@ViewBag.ToDate" id="hdnToDate" />
+<input type="hidden" value="@ViewBag.PaymentType" id="hdnPaymentType" />
+<input type="hidden" value="@ViewBag.TaxOffice" id="hdnTaxOffice" />
+<input type="hidden" value="@ViewBag.TaxYear" id="hdnTaxYear" />
+
+<div class="title">
+    <h1>
+        Operation Manager - Manage Payments by Tax Office
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Payment transactions List
+        </div>
+        <div class="form-actions text-right">
+            <a href="@Url.Action("PaymentByTaxOffice","OperationManager")" class="btn btn-redtheme">Cancel</a>
+            <a href="@Url.Action("PaymentByTaxOfficeDetailExportToExcel","OperationManager",new { TaxOfficeID=ViewBag.TaxOffice,FromDate= ViewBag.FromDate,ToDate=ViewBag.ToDate,PaymentTypeID=ViewBag.PaymentType,TaxYear = ViewBag.TaxYear })" class="btn btn-theme">Export Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPaymentDetailsByTaxOffice">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer</th>
+                    <th>Payment Ref</th>
+                    <th>Payment Date</th>
+                    <th>Amount</th>
+                    <th class="none">Payment Method</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsPaymentByTaxOfficeDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

@@ -1,0 +1,205 @@
+﻿@model EIRS.Web.Models.PrepareTCCDraftViewModel
+@using EIRS.Common
+
+@{
+    ViewBag.Title = "Prepare TCC Draft";
+    usp_GetTCCRequestDetails_Result mObjRequestData = (usp_GetTCCRequestDetails_Result)ViewBag.RequestData;
+    IList<usp_GetTaxClearanceCertificateDetails_Result> lstTCC = (IList<usp_GetTaxClearanceCertificateDetails_Result>)ViewBag.TaxClearanceCertificateList;
+
+    int year = DateTime.Now.Year;
+    string lastDay = new DateTime(year, 12, 31).ToString("D");
+}
+
+<input type="hidden" id="hdnStageID" value="@((int)EnumList.TCCRequestStage.Prepare_TCC_Draft)" />
+
+<div class="title">
+    <h1>
+        TCC Request - Prepare TCC Draft
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Request Information
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Details","ProcessTCCRequest", new { reqId = Model.RequestID })" class="btn btn-theme btn-outline">
+                Cancel
+            </a>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Request Ref No: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.RequestRefNo
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Request Date: </label>
+                <div class="form-control-static">
+                    @CommUtil.GetFormatedDate(mObjRequestData.RequestDate)
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Year: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.TaxYear
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.FirstName @mObjRequestData.LastName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer EIN: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.IndividualRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.MobileNumber1
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Tax Clearance Certificate</div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" id="tblTCC">
+            <thead class="purple-th">
+                <tr>
+                    <th> TCC Number </th>
+                    <th> TCC Date </th>
+                    <th> Tax Year </th>
+                    <th> Tax Payer Name </th>
+                    @*<th class="action-th all">Action</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @if (lstTCC != null && lstTCC.Count() > 0)
+                {
+                    foreach (var item in lstTCC)
+                    {
+                        <tr>
+                            <td>@item.TCCNumber</td>
+                            <td>@CommUtil.GetFormatedDate(item.TCCDate)</td>
+                            <td>@item.TaxYear</td>
+                            <td>@item.TaxPayerName</td>
+                            @*<td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a onclick="jsfn_DeleteIncomeStream(@item.RowID)">Remove</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>*@
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@using (Html.BeginForm("PrepareTCCDraft", "ProcessTCCRequest", FormMethod.Post, htmlAttributes: new { @id = "frmPrepareDraft" }))
+{
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Tax Clearance Certificate Duration</div>
+            <div class="actions">
+
+            </div>
+        </div>
+        <div class="portlet-body">
+
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.PTCCDraftID, htmlAttributes: new { @value = Model.PTCCDraftID })
+            @Html.HiddenFor(model => model.RequestID, htmlAttributes: new { @value = Model.RequestID, @id = "hdnRequestID" })
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label required-star" })
+                                @Html.TextBoxFor(model => model.Reason, htmlAttributes: new { @tabindex = "21", @class = "form-control", @placeholder = "Enter Reason" })
+                                @Html.ValidationMessageFor(m => m.Reason, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ExpiryDate)
+                                @Html.TextBoxFor(model => model.ExpiryDate, htmlAttributes: new { @tabindex = "21", @Value = lastDay, @readonly = "readonly", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ExpiryDate, "", htmlAttributes: new { @class = "help-block" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label required-star" })
+                            @Html.TextBoxFor(model => model.Location, htmlAttributes: new { @tabindex = "21", @class = "form-control", @placeholder = "Enter Location" })
+                            @Html.ValidationMessageFor(m => m.Location, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+                            @Html.TextAreaFor(model => model.Notes, htmlAttributes: new { @class = "form-control", @tabindex = "21", @placeholder = "Enter Notes", @Rows = "3" })
+                            @Html.ValidationMessageFor(model => model.Notes, "", htmlAttributes: new { @class = "help-block" })
+                        </div>
+                    </div>
+                </div>
+            <div class="portlet-footer text-right">
+                @if (lstTCC.Count > 0)
+                {
+                    <button type="submit" class="btn btn-theme"> Save </button>
+                }
+                else
+                {
+                    <a class="btn btn-theme" disabled="disabled">Save</a>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@{ Html.RenderPartial("_BindInternalNotes"); }
+
+@section Footer {
+    <script type="text/javascript" src="/Content/plugins/plupload/js/plupload.full.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jsfn_ConvertToDatableWithCustomSort($("#tblTCC"), [{}, {}, {}, {}], 'No Records Founds');
+        });
+    </script>
+    <script type="text/javascript" src="~/Scripts/jsProcessTCCNotes.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

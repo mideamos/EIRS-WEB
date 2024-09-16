@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Capture Special";
+}
+
+<div class="title">
+    <h1>
+        Search Tax Payer - Special
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Tax Payer - Special
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-7">
+                @using (Ajax.BeginForm("Search", "CaptureSpecial", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Post", OnSuccess = "jsfn_ShowData", OnBegin = "jsfn_ShowLoading", OnComplete = "jsfn_HideLoading" }, new { @class = "form-horizontal", @id="frmSearchSpecial" }))
+                {
+                    <div class="form-group">
+                        <label for="TIN" class="control-label col-sm-3">TIN</label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("txtSpecialName", "", new { @class = "form-control", @placeholder = "Enter Special Name", @tabindex = "1" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="MobileNumber" class="control-label col-sm-3">Mobile</label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("txtMobileNumber", "", new { @class = "form-control", @placeholder = "Enter Mobile Number", @tabindex = "2" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RIN" class="control-label col-sm-3">RIN</label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("txtRIN", "", new { @class = "form-control", @placeholder = "Enter RIN", @tabindex = "3" })
+                        </div>
+                    </div>
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch"> Search </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-sm-5">
+                <p>
+                    Enter name of Special and click on search below. The five most matches results will be returned where available. Select the one that best matches your Special name and click on proceed.
+                </p>
+
+                <p>
+                    You will be able to claim one business at a time and to view details of each Special, click on the view link.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Special List</div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="@Url.Action("Add","CaptureIndividual")">Individuals</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Add","CaptureCorporate")">Corporates</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Add","CaptureGovernment")">Government</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Add","CaptureSpecial")">Special</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+
+    </div>
+</div>
+
+@{Html.RenderPartial("_SpecialDetailPopup"); }
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsSearchSpecial.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

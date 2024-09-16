@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>My Responsive Webpage</title>
+  <!-- Load Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+    box-sizing: border-box;
+    }
+    body {
+  margin: 0;
+  font-family: Open Sans;
+  font-size: 24px;
+  font-weight:400;
+  line-height: 1.5;
+  color: #333;
+  background-color: #ffffff;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+.bg-success {
+  background-color:  #2C8968 !important;
+  color: #ffffff;
+}
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    
+   
+</nav>
+
+  <!-- Content -->
+  <div class="container-fluid">
+    <h1><a class="navbar-brand" href="#">
+      <img width="133" height="39"src="data:image/jpg;base64,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" alt="background image"/>
+    </a>Edo State Internal Revenue Service</h1>
+    <div class="d-flex justify-content-center">
+    <div class="row align-items-center">
+      <div class="col-sm-12 col-md-5 px-5" style="display: flex; flex-direction: column; margin-left: 50px;">
+        <div class="text-right border-bottom">
+            <p>Revenue House, 80 New Lagos Road,</p>
+            <p>Benin City, Edo State</p>
+            <p><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+              </svg></span> 0813 097 0146</p>           
+            <p><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+              </svg></span> info@eirs.gov.ng</p>
+            <p><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe2" viewBox="0 0 16 16">
+                <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855-.143.268-.276.56-.395.872.705.157 1.472.257 2.282.287V1.077zM4.249 3.539c.142-.384.304-.744.481-1.078a6.7 6.7 0 0 1 .597-.933A7.01 7.01 0 0 0 3.051 3.05c.362.184.763.349 1.198.49zM3.509 7.5c.036-1.07.188-2.087.436-3.008a9.124 9.124 0 0 1-1.565-.667A6.964 6.964 0 0 0 1.018 7.5h2.49zm1.4-2.741a12.344 12.344 0 0 0-.4 2.741H7.5V5.091c-.91-.03-1.783-.145-2.591-.332zM8.5 5.09V7.5h2.99a12.342 12.342 0 0 0-.399-2.741c-.808.187-1.681.301-2.591.332zM4.51 8.5c.035.987.176 1.914.399 2.741A13.612 13.612 0 0 1 7.5 10.91V8.5H4.51zm3.99 0v2.409c.91.03 1.783.145 2.591.332.223-.827.364-1.754.4-2.741H8.5zm-3.282 3.696c.12.312.252.604.395.872.552 1.035 1.218 1.65 1.887 1.855V11.91c-.81.03-1.577.13-2.282.287zm.11 2.276a6.696 6.696 0 0 1-.598-.933 8.853 8.853 0 0 1-.481-1.079 8.38 8.38 0 0 0-1.198.49 7.01 7.01 0 0 0 2.276 1.522zm-1.383-2.964A13.36 13.36 0 0 1 3.508 8.5h-2.49a6.963 6.963 0 0 0 1.362 3.675c.47-.258.995-.482 1.565-.667zm6.728 2.964a7.009 7.009 0 0 0 2.275-1.521 8.376 8.376 0 0 0-1.197-.49 8.853 8.853 0 0 1-.481 1.078 6.688 6.688 0 0 1-.597.933zM8.5 11.909v3.014c.67-.204 1.335-.82 1.887-1.855.143-.268.276-.56.395-.872A12.63 12.63 0 0 0 8.5 11.91zm3.555-.401c.57.185 1.095.409 1.565.667A6.963 6.963 0 0 0 14.982 8.5h-2.49a13.36 13.36 0 0 1-.437 3.008zM14.982 7.5a6.963 6.963 0 0 0-1.362-3.675c-.47.258-.995.482-1.565.667.248.92.4 1.938.437 3.008h2.49zM11.27 2.461c.177.334.339.694.482 1.078a8.368 8.368 0 0 0 1.196-.49 7.01 7.01 0 0 0-2.275-1.52c.218.283.418.597.597.932zm-.488 1.343a7.765 7.765 0 0 0-.395-.872C9.835 1.897 9.17 1.282 8.5 1.077V4.09c.81-.03 1.577-.13 2.282-.287z"/>
+              </svg></span> www.eirs.gov.ng</p>
+        </div>
+        <div class="border-bottom">
+            <div class="d-flex justify-content-between"><p class="text-left">RIN:</p><p class="text-center">@@rptTaxPayerRIN@@</p></div>
+            <div class="d-flex justify-content-between"><p class="text-left">Tax Payer Name:</p><p class="text-center">@@rptTaxPayerName@@</p></div>
+            <div class="d-flex justify-content-between"><p class="text-left">Tax Payer Number:</p><p class="text-center">@@rptTaxPayerNumber@@</p></div>
+            <div class="d-flex justify-content-between"><p class="text-left">Contact Address:</p><p class="text-center">@@rptTaxPayerContactAddress@@</p></div>
+        </div>
+        <div class="mt-2 border-bottom">
+            <h2>ERAS Bill Details</h2>
+            <p>This is an official notification of payment demand by
+                the Edo State Internal Revenue Service.</p>
+            <h4>The summary of what is being paid as follows:</h4>
+            <p>@@rptBillSummary@@</p>
+        </div>
+        <div class="mt-2 border-bottom">
+            <h2>Reporting Agency</h2>
+            <p>Edo Internal Revenue Service</p>
+        </div>
+        <div class="mt-2 border-bottom">
+            <h2>ERAS Bill Notes</h2>
+            <p>D2M tax year 2022</p>
+        </div>
+        <div class="mt-2 border-bottom">
+            <h2>ERAS Bill Notes</h2>
+            <p>D2M tax year 2022</p>
+        </div>
+        <div class="mt-2 border-bottom">
+            <h2>S. A. Abu</h2>
+            <p>Secretary to Revenue Service, EIRS</p>
+        </div>
+        <div class="mt-2 border-bottom">
+            <h2>Payment Options:</h2>
+            <ul>
+                <li>
+                    <p>Bank - use of any designated EIRS IGR Banks</p>
+                </li>
+                <li>
+                    <p>Online - eras.eirs.gov.ng/cbs</p>
+                </li>
+                <li>
+                    <p>Internet Banking - Select EIRS from bill Payments</p>
+                </li>
+            </ul>
+        </div>
+      </div>
+
+        <div class="col-sm-12 col-md-6 px-5 ">
+            <div class="bg-success h-25 text-center p-5 justify-content-center align-items-center">
+                <h1>Tax Bill Notice - <script>document.write(new Date().getFullYear())</script></h1>
+                <h3>Assessment Bill</h3>
+                <h3>Bill Ref: @@rptReferenceNumber@@</h3>
+            </div>
+            <div class="bg-light h-25 p-5 justify-content-center align-items-center">
+                <div class="d-flex justify-content-between"><h1 class="text-left">Bill Date </h1><h1 class="text-right">@@rptBillDate@@</h1></div>
+                <div class="d-flex justify-content-between"><h1 class="text-left">Bill Reference </h1><h1 class="text-right">@@rptReferenceNumber@@</h1></div>
+                <div class="d-flex justify-content-between"><h1 class="text-left">Tax Payer RIN </h1><h1 class="text-right">@@rptTaxPayerRIN@@</h1></div>
+            </div>
+            <div class="bg-success p-4 justify-content-center align-items-center">
+                <div class="d-flex justify-content-between"><h1 class="text-left">Bill Status </h1><h1 class="text-right">@@rptBillStatus@@</h1></div>
+            </div>
+            <div class="bg-light h-50 p-5 justify-content-center align-items-center">
+                <div class="d-flex justify-content-between"><h1 class="text-left">Bill Amount <br><small>(for this assessment) </small></h1><h1 class="text-right">@@rptBillAmount@@</h1></div>
+                <div class="d-flex justify-content-between"><h1 class="text-left">Payment Received <br><small>(on this assessment) </small></h1><h1 class="text-right">@@rptBillPaidAmount@@</h1></div>
+                <div class="d-flex justify-content-between"><h1 class="text-left">Amount Due <br><small>(outstanding) </small></h1><h1 class="text-right">@@rptBillAmountDue@@</h1></div>
+
+                <div class="bg-white p-4 justify-content-center align-items-center text-center">
+                    <p>If you pay late, it will cost you
+                        more - pay online now at </p>
+                    <a href="#">eras.eirs.gov.ng</a>
+                    <p class="pt-3">Your taxes pay for roads, hospitals and
+                    other government services right here in
+                    Edo State. Let us make it great.</p>
+                </div>
+            </div>
+        
+      </div>
+    </div>
+    </div>
+   </div>
+
+  <!-- Load Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

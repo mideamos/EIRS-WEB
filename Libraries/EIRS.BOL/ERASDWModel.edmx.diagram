@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9e2cc22d96584619ae5f929d98d8dd57" Name="Diagram1" ZoomLevel="78" >
+        <EntityTypeShape EntityType="ERASDWModel.PAYEInput" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERASDWModel.PAYEOutput" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERASDWModel.vw_PAYEInputList" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERASDWModel.vw_PAYEOutput" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ERASDWModel.vw_DAInputList" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="ERASDWModel.vw_DAOutputList" Width="1.5" PointX="7.375" PointY="5.75" />
+        <EntityTypeShape EntityType="ERASDWModel.DAInput" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ERASDWModel.DAOutput" Width="1.5" PointX="0.75" PointY="6.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,14 @@
+﻿jQuery(document).ready(function () {
+    jsfn_bindTable();
+});
+
+function jsfn_bindTable() {
+    var vColumnList =
+        [
+            { 'orderable': true },
+            { 'orderable': true }
+        ];
+    var vSortOrder = [];
+    jsfn_ConvertToDatableWithCustomSort($('#tblPoolsBetting'), vColumnList, 'No Pools Betting Found', vSortOrder);
+    $('.collapse').click();
+}

@@ -1,0 +1,163 @@
+﻿@model EIRS.Web.Models.SignDigitalViewModel
+@using EIRS.Common
+
+@{
+    ViewBag.Title = "Sign Digital Certificate";
+    usp_GetCertificateDetails_Result mObjCertificateData = (usp_GetCertificateDetails_Result)ViewBag.CertificateData;
+}
+
+<input type="hidden" id="hdnFilePreview" value="/Document/@mObjCertificateData.SignedVisiblePath?v=@GlobalDefaultValues.VersionNumber" />
+
+<div class="title">
+    <h1>
+        Manage Digital Certificate - Sign Digital Certificate
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Certificate Details
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List", "ProcessCertificate")" class="btn btn-theme">Cancel</a>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Certificate Type: </label>
+                <div class="form-control-static">
+                    @mObjCertificateData.CertificateTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Certificate Number : </label>
+                <div class="form-control-static">
+                    @mObjCertificateData.CertificateNumber
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Profile: </label>
+                <div class="form-control-static">
+                    @mObjCertificateData.ProfileDescription
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Status: </label>
+                <div class="form-control-static">
+                    @mObjCertificateData.CertificateStatusName
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Type: </label>
+                <div class="form-control-static">
+                    @mObjCertificateData.TaxPayerTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer: </label>
+                <div class="form-control-static">
+                    @mObjCertificateData.TaxPayerName (@mObjCertificateData.TaxPayerRIN)
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Asset Type: </label>
+                <div class="form-control-static">
+                    @mObjCertificateData.AssetTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Asset: </label>
+                <div class="form-control-static">
+                    @mObjCertificateData.AssetName
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Document Preview
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="light-card document">
+                    <div class="document-pagination">
+                        <div class="pull-left">
+                            <button id="btnPrev" class="btn btn-primary btn-round"><i class="fa fa-angle-left"></i></button>
+                            <button id="btnNext" class="btn btn-primary btn-round"><i class="fa fa-angle-right"></i></button>
+                        </div>
+                        <div class="pull-right">
+                            <span>Page: <span id="spnCurrentPage"></span> / <span id="spnPageCount"></span></span>
+                        </div>
+                    </div>
+                    <div class="document-load">
+                        <i class="ion-loading-c"></i>
+                    </div>
+                    <div class="text-center">
+                        <canvas id="cnvDocument"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("SignDigital", "ProcessCertificate", FormMethod.Post, htmlAttributes: new { @id = "frmSignDigital" }))
+{
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Sign Digital Certificate</div>
+            <div class="actions">
+
+            </div>
+        </div>
+        <div class="portlet-body">
+
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.CSDID, htmlAttributes: new { @value = Model.CSDID })
+            @Html.HiddenFor(model => model.CertificateID, htmlAttributes: new { @value = Model.CertificateID })
+
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SignNotes, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.SignNotes, htmlAttributes: new { @class = "form-control", @tabindex = "21", @placeholder = "Enter Notes", @Rows = "3" })
+                        @Html.ValidationMessageFor(model => model.SignNotes, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="portlet-footer text-right">
+
+            <button type="submit" class="btn btn-theme"> Save </button>
+        </div>
+    </div>
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Content/Plugins/PDFJS/pdf.js"></script>
+    <script src="~/Scripts/jsDocumentPreview.js?v=@GlobalDefaultValues.VersionNumber" type="text/javascript"></script>
+
+}

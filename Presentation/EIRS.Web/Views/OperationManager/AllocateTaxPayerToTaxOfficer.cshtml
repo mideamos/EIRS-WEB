@@ -1,0 +1,66 @@
+﻿@model EIRS.Web.Models.AllocateTaxPayerViewModel
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manger - Allocate Tax Payers to Tax Officer";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Allocate Tax Payers to Tax Officer
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Unallocated Tax Payers</div>
+        <div class="actions">
+            <button id="btnSave" class="btn btn-redtheme">Allocate</button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("AllocateTaxPayerToTaxOfficer", "OperationManager", FormMethod.Post, htmlAttributes: new { @id = "frmAllocateTaxPayer" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(m => m.TaxPayerTypeID, new { @Value = Model.TaxPayerTypeID, @id = "hdnTaxPayerType" })
+            @Html.HiddenFor(m => m.TaxOfficeID, new { @Value = Model.TaxOfficeID, @id = "hdnTaxOffice" })
+            @Html.HiddenFor(m => m.TaxOfficerID, new { @Value = Model.TaxOfficerID })
+            @Html.HiddenFor(m => m.TaxPayerIds, new { @Value = Model.TaxPayerIds, @id = "hdnTaxPayerIds" })
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblUnallocatedTaxPayer">
+                <thead class="red-th">
+                    <tr>
+                        <th>Tax Payer RIN</th>
+                        <th class="none">Tax Payer Name</th>
+                        <th>Tax Payer Type </th>
+                        <th>Assessment</th>
+                        <th>Payment</th>
+                        <th class="action-th all">
+                            @Html.CheckBox("chkSelectAll", new { @class = "icheck", @data_checkbox = "icheckbox_square-green", @id = "chkSelectAll" })
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        }
+
+
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsAddAllocatedTaxPayer.js"></script>
+}
+
+
+
+

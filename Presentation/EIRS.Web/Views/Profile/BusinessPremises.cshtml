@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Business Premises";
+}
+
+<div class="title">
+    <h1>Business Premises</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Business Premises
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblLand">
+            <thead class="red-th">
+                <tr>
+                    <th>Profile Name</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Business Premises</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("BP","Profile")">View Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsLandUseChargesList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

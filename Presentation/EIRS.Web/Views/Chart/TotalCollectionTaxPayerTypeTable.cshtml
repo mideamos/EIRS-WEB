@@ -1,0 +1,100 @@
+﻿@model IList<EIRS.Chart.DTOs.TotalCollectionTaxPayerTypeChartResponse>
+@{
+    var vTaxPayerTypeList = Model.Select(t => new { t.TaxPayerTypeID, t.TaxPayerTypeName }).Distinct();
+    var vSeriesList = Model.Select(t => new { t.SeriesDate }).Distinct().OrderBy(t => t.SeriesDate);
+    int DisplayTypeId = (int)ViewData["DisplayTypeId"];
+    int PeriodId = (int)ViewData["PeriodId"];
+}
+
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTotalCollectionTaxPayerType">
+    <thead class="red-th">
+        <tr>
+            <th>Tax Payer Type</th>
+            @foreach (var item in vSeriesList)
+            {
+                if (PeriodId == 1)
+                {
+                    <th>@item.SeriesDate.Year</th>
+                }
+                else if (PeriodId == 2)
+                {
+                    <th class="none">@item.SeriesDate.ToString("MMM-yyyy")</th>
+                }
+                else
+                {
+                    <th class="none">@item.SeriesDate.ToString("dd-MMM-yyyy")</th>
+                }
+            }
+            <th class="desktop">Total</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Count > 0)
+    {
+<tbody>
+    @foreach (var tptype in vTaxPayerTypeList)
+    {
+        <tr>
+            <td>@tptype.TaxPayerTypeName</td>
+            @foreach (var item in vSeriesList)
+            {
+                if (Model.Where(t => t.TaxPayerTypeID == tptype.TaxPayerTypeID && t.SeriesDate == item.SeriesDate).Any())
+                {
+                    if (DisplayTypeId == 1)
+                    {
+                        <td>@CommUtil.GetFormatedCurrency(Model.Where(t => t.TaxPayerTypeID == tptype.TaxPayerTypeID && t.SeriesDate == item.SeriesDate).FirstOrDefault().TotalAmount)</td>
+                    }
+                    else
+                    {
+                        <td>@Model.Where(t => t.TaxPayerTypeID == tptype.TaxPayerTypeID && t.SeriesDate == item.SeriesDate).FirstOrDefault().TotalCount</td>
+                    }
+                }
+                else
+                {
+                    if (DisplayTypeId == 1)
+                    {
+                        <td>@CommUtil.GetFormatedCurrency(0)</td>
+                    }
+                    else
+                    {
+                        <td>0</td>
+                    }
+                }
+            }
+
+            @if (DisplayTypeId == 1)
+            {
+                <td>@(CommUtil.GetFormatedCurrency(Model.Where(t=>t.TaxPayerTypeID == tptype.TaxPayerTypeID).Sum(t=>t.TotalAmount)))</td>
+            }
+            else
+            {
+                <td>@(Model.Where(t=>t.TaxPayerTypeID == tptype.TaxPayerTypeID).Sum(t=>t.TotalCount))</td>
+            }
+        </tr>
+    }
+<tr class="ctotal">
+                <td>Totals</td>
+                @foreach (var item in vSeriesList)
+                {
+                    if (DisplayTypeId == 1)
+                    {
+                        <td>@(CommUtil.GetFormatedCurrency(Model.Where(t => t.SeriesDate == item.SeriesDate).Sum(t => t.TotalAmount)))</td>
+                    }
+                    else
+                    {
+                        <td>@(Model.Where(t => t.SeriesDate == item.SeriesDate).Sum(t => t.TotalCount))</td>
+                    }
+                }
+
+                @if (DisplayTypeId == 1)
+                {
+                    <td>@(CommUtil.GetFormatedCurrency(Model.Sum(t => t.TotalAmount)))</td>
+                }
+                else
+                {
+                    <td>@(Model.Sum(t => t.TotalCount))</td>
+                }
+            </tr>
+</tbody>
+    }
+</table>

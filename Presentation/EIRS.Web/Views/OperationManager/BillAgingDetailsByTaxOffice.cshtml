@@ -1,0 +1,49 @@
+﻿@model IList<EIRS.BOL.usp_GetBillAgingDetailByTaxOffice_Result>
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Bill Aging By Tax Office List";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Manage Bills Aging by Tax Office
+    </h1>
+    <hr>
+</div>
+
+<input type="hidden" value="@ViewBag.TaxOfficeID" id="hdnTaxOfficeID" />
+<input type="hidden" value="@ViewBag.BillType" id="hdnBillTypeID" />
+<input type="hidden" value="@ViewBag.StageID" id="hdnStageID" />
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Bill List
+        </div>
+        <div class="form-actions text-right">
+            <a href="@Url.Action("BillAgingByTaxOffice","OperationManager")" class="btn btn-redtheme"> Cancel</a>
+            <a href="@Url.Action("BillAgingDetailsByTaxOfficeExportToExcel","OperationManager",new { BillType=ViewBag.BillType,StageID= ViewBag.StageID,TaxOfficeID =ViewBag.TaxOfficeID})" class="btn btn-theme">Export To Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBillDetailsAgingByTaxOffice">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer Name </th>
+                    <th>Bill Ref No</th>
+                    <th>Bill Date</th>
+                    <th>Amount</th>
+                    <th>Bill Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsBillAgingDetailsByTaxOffice.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+

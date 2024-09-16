@@ -1,0 +1,449 @@
+﻿@model usp_GetAssessmentList_Result
+@using EIRS.Common
+@using EIRS.BOL
+
+@{
+    ViewBag.Title = "Corporate Tax Payer - View Bill";
+
+    IList<usp_GetAssessment_AssessmentRuleList_Result> lstMAPAssessmentRules = (IList<usp_GetAssessment_AssessmentRuleList_Result>)ViewBag.MAPAssessmentRules;
+    IList<usp_GetAssessmentRuleItemList_Result> lstAssessmentItems = (IList<usp_GetAssessmentRuleItemList_Result>)ViewBag.AssessmentItems;
+    IList<usp_GetAssessmentRuleBasedSettlement_Result> lstAssessmentRuleSettlement = (IList<usp_GetAssessmentRuleBasedSettlement_Result>)ViewBag.AssessmentRuleSettlement;
+    IList<usp_GetSettlementList_Result> lstSettlement = (IList<usp_GetSettlementList_Result>)ViewBag.SettlementList;
+}
+
+<div class="title">
+    <h1>
+        Corporate Tax Payer: View Bill Details
+    </h1>
+    <hr>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="portlet light" style="min-height: 270px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    Record Details
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table border-top-0">
+                    <tbody>
+                        <tr>
+                            <td>Template Type</td>
+                            <td>Assessment</td>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>@CommUtil.GetFormatedDate(Model.AssessmentDate)</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Payer Type</td>
+                            <td>@Model.TaxPayerTypeName</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Payer Name</td>
+                            <td>@Model.TaxPayerName</td>
+                        </tr>
+                        <tr>
+                            <td>Due Date</td>
+                            <td>@CommUtil.GetFormatedDate(Model.SettlementDueDate)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="portlet light" style="min-height: 270px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    Notes
+                </div>
+            </div>
+            <div class="portlet-body link-box">
+                <p>@Html.Raw(Model.AssessmentNotes)</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Reference: @Model.AssessmentRefNo &nbsp; | &nbsp; Status: @Model.SettlementStatusName
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="list-pane" id="dvRequestList">
+            @foreach (var item in lstMAPAssessmentRules)
+            {
+                <div class="list-item clearfix">
+                    <div class="col-sm-12 list-left-col">
+                        <h3>@item.AssessmentRuleName <a data-toggle="modal" data-target="#dvViewAssessmentRuleModal_@item.AARID">[View Items]</a> </h3>
+                        <div class="desc-row">
+                            Amount Charged: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount) <br />
+                            Amount Paid: @CommUtil.GetFormatedCurrency(item.SettledAmount) <a data-toggle="modal" data-target="#dvViewPaymentModal_@item.AARID">[View Payments]</a> <br />
+                            Outstanding: @CommUtil.GetFormatedCurrency(item.AssessmentRuleAmount.GetValueOrDefault() - item.SettledAmount.GetValueOrDefault()) <br />
+                            Tax Year: @item.TaxYear
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade custom-modal" id="dvViewAssessmentRuleModal_@item.AARID" tabindex="-1" role="dialog" aria-labelledby="dvViewAssessmentRuleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dvViewAssessmentRuleModalLabel">View Items in @item.AssessmentRuleName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped ">
+                                    <thead class="thead-theme">
+                                        <tr>
+                                            <th>Item Ref</th>
+                                            <th>Item Name</th>
+                                            <th>Computation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (lstAssessmentItems.Where(t => t.AARID == item.AARID).Count() > 0)
+                                        {
+                                            foreach (var aitem in lstAssessmentItems.Where(t => t.AARID == item.AARID))
+                                            {
+                                                <tr>
+                                                    <td>@aitem.AssessmentItemReferenceNo</td>
+                                                    <td>@aitem.AssessmentItemName</td>
+                                                    <td>@aitem.ComputationName</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="3">No Item Found</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade custom-modal" id="dvViewPaymentModal_@item.AARID" tabindex="-1" role="dialog" aria-labelledby="dvViewPaymentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dvViewPaymentModalLabel">View Payments for @item.AssessmentRuleName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped ">
+                                    <thead class="thead-theme">
+                                        <tr>
+                                            <th>Payment Ref</th>
+                                            <th>Payment Date</th>
+                                            <th>Amount Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (lstAssessmentRuleSettlement != null && lstAssessmentRuleSettlement.Where(t => t.AARID == item.AARID).Count() > 0)
+                                        {
+                                            foreach (var aitem in lstAssessmentRuleSettlement.Where(t => t.AARID == item.AARID))
+                                            {
+                                                <tr>
+                                                    <td>@aitem.SettlementRefNo</td>
+                                                    <td>@CommUtil.GetFormatedDate(aitem.SettlementDate)</td>
+                                                    <td>@CommUtil.GetFormatedCurrency(aitem.SettlementAmount)</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="3">No Payment Found</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Total Amount
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount)
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Total Paid <a data-toggle="modal" data-target="#dvViewSettlementModal">[View Payments]</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.SettlementAmount)
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row">
+                <div class="col-sm-6">
+                    Outstanding
+                </div>
+                <div class="col-sm-6 text-right">
+                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount.GetValueOrDefault() - Model.SettlementAmount.GetValueOrDefault())
+                </div>
+            </div>
+            <hr class="margin-0">
+            <div class="row info-row font-red font-17">
+                <div class="col-sm-6">
+                    Amount to Pay
+                </div>
+                <div class="col-sm-6 text-right" id="dvAmountToPay">
+                    @CommUtil.GetFormatedCurrency(Model.AssessmentAmount.GetValueOrDefault() - Model.SettlementAmount.GetValueOrDefault())
+                </div>
+            </div>
+
+            @if (Model.SettlementStatusID < (int)EnumList.SettlementStatus.Settled)
+            {
+                <hr class="margin-top-0" />
+
+                using (Html.BeginForm("MakePayment", "CorporatePanel", FormMethod.Post, new { @class = "form-horizontal", @id="frmSettlement" }))
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Settlement Method*</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("cboSettlementMethod", (SelectList)ViewBag.SettlementMethodList, "Select Settlement Method", htmlAttributes: new { @tabindex = "2", @class = "form-control bs-select", @width = "100%" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Add Notes</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4"></label>
+                        <div class="col-sm-2">
+                            <a href="@Url.Action("Details","CorporatePanel",new { id  =  Model.TaxPayerID, name = Model.TaxPayerRIN.ToSeoUrl() })" class="btn btn-redtheme btn-block" id="btnCancel"> Cancel </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-theme btn-block" id="btnMakePayment"> Make Payment</button>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade custom-modal" id="dvViewSettlementModal" tabindex="-1" role="dialog" aria-labelledby="dvViewSettlementModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvViewSettlementModalLabel">View Payments for @Model.AssessmentRefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped ">
+                    <thead class="thead-theme">
+                        <tr>
+                            <th>Payment Ref</th>
+                            <th>Payment Date</th>
+                            <th>Amount Paid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstSettlement != null && lstSettlement.Count() > 0)
+                        {
+                            foreach (var sitem in lstSettlement)
+                            {
+                                <tr>
+                                    <td>@sitem.SettlementRefNo</td>
+                                    <td>@CommUtil.GetFormatedDate(sitem.SettlementDate)</td>
+                                    <td>@CommUtil.GetFormatedCurrency(sitem.SettlementAmount)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" align="center">No Payment Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dvBankDetails" tabindex="-1" role="dialog" aria-labelledby="dvBankDetailLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dvBankDetailLabel">View Collecting Banks</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Note : ALWAYS QUOTE YOUR BILL REFERENCE NUMBER WHEN MAKING PAYMENTS TO ANY OF THE LISTED EDO INTERNAL REVENUE SERVICE IGR BANK ACCOUNTS</h5>
+                <table class="table table-bordered table-striped" id="tblBankPayment">
+                    <tbody>
+                        <tr>
+                            <td>S/N</td>
+                            <td>BANK NAME</td>
+                            <td>ADDRESS</td>
+                            <td>NUBAN</td>
+                            <td>SORT CODE</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Access Bank PLC</td>
+                            <td>145, Sapele Road, Benin City</td>
+                            <td>0006663034</td>
+                            <td>044040906</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Diamond Bank PLC</td>
+                            <td>13, Akpakpava street, Benin City</td>
+                            <td>0025859505</td>
+                            <td>063240360</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Ecobank PLC</td>
+                            <td>New Lagos Road, Benin City</td>
+                            <td>0282019379</td>
+                            <td>050040344</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Enterprise Bank PLC</td>
+                            <td>Sapele Road, Benin City</td>
+                            <td>1400014044</td>
+                            <td>084240792</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Fidelity Bank PLC</td>
+                            <td>56, Mission Road, Benin City</td>
+                            <td>5030017247</td>
+                            <td>070040951</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>FBN PLC</td>
+                            <td>Uselu Branch, B/C</td>
+                            <td>2006459257</td>
+                            <td>011044602</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>FCMB PLC</td>
+                            <td>112, Mission Road, Benin City</td>
+                            <td>0432954019</td>
+                            <td>214040012</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>GT Bank PLC</td>
+                            <td>35B, Sapele Road, Benin City</td>
+                            <td>0031880645</td>
+                            <td>058044128</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Keystone Bank PLC</td>
+                            <td>107, Akpakpava Street, Benin City</td>
+                            <td>1002818635</td>
+                            <td>082240189</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>Mainstreet Bank PLC</td>
+                            <td>Ring Road, Benin City</td>
+                            <td>7000010265</td>
+                            <td>014040111</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>Skyebank PLC</td>
+                            <td>00, Akpakpava Street, Benin City</td>
+                            <td>1790094342</td>
+                            <td>076042403</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>Stanbic IBTC bank PLC</td>
+                            <td>Akpakpava, Benin City</td>
+                            <td>0000567027</td>
+                            <td>221040496</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>Sterling Bank PLC</td>
+                            <td>38, Akpakpava Street, Benin City</td>
+                            <td>0006954243</td>
+                            <td>232040016</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>UBA PLC</td>
+                            <td>4, Akpakpava Street, Benin City</td>
+                            <td>1003730017</td>
+                            <td>033040448</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>Union Bank of Nigeria PLC</td>
+                            <td>Mission Road, Benin City</td>
+                            <td>0015027022</td>
+                            <td>032041197</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>Unity Bank PLC</td>
+                            <td>King&rsquo;s Square, Benin City</td>
+                            <td>0012352221</td>
+                            <td>215043522</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>Zenith Bank PLC</td>
+                            <td>21, Airport Road, Benin City</td>
+                            <td>1130004993</td>
+                            <td>057040042</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>WEMA Bank PLC</td>
+                            <td>12. Akpakpava Road, Benin City</td>
+                            <td>0122146651</td>
+                            <td>035041458</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section footer {
+    <script type="text/javascript" src="~/Scripts/jsBillDetails.js"></script>
+}

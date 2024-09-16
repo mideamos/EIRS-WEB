@@ -1,0 +1,44 @@
+﻿@model List<EIRS.Web.GISModels.RevenueStreamResultDrillDown>
+
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manager - Revenue Stream By Tax Office Target";
+}
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Tax Office Details</div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxOfficeDetails">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer Name</th>
+                    <th>Ass Ref No</th>
+                    <th>Amount Paid</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var ret in Model)
+                    {
+                        <tr>
+                            <td>@(string.IsNullOrEmpty(ret.TaxpayerName) ? "N/A" : ret.TaxpayerName)</td>
+                            <td>@(string.IsNullOrEmpty(ret.AssessmentRefNo) ? "N/A" : ret.AssessmentRefNo)</td>
+                            <td>@(ret.settlementamount.HasValue ? ret.settlementamount.Value.ToString("C", new System.Globalization.CultureInfo("en-NG")) : "N/A")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jsfn_ConvertToDatableWithCustomSort($('#tblTaxOfficeDetails'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }], 'No Record Found');
+        });
+    </script>
+}

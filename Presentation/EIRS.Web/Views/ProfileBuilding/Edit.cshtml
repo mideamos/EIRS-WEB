@@ -1,0 +1,53 @@
+﻿@model EIRS.Models.BuildingViewModel
+
+@{
+    ViewBag.Title = "Edit Building Asset";
+}
+
+<div class="title">
+    <h1>
+        Building Asset
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Update Building
+        </div>
+        <div class="actions">
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Edit", "ProfileBuilding", FormMethod.Post, htmlAttributes: new { @id = "frmAddBuilding" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.BuildingID, htmlAttributes: new { @value = Model.BuildingID })
+            @Html.HiddenFor(model => model.BuildingRIN, htmlAttributes: new { @value = Model.BuildingRIN })
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            Html.RenderPartial("_BindBuildingForm", Model);
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="20" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsAddEditBuilding.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

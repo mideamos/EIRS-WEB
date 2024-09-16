@@ -1,0 +1,282 @@
+﻿@model EIRS.Web.Models.ValidateTaxPayerInformationViewModel
+@using EIRS.Common
+@{
+    ViewBag.Title = "Validate Tax Payer Information";
+    usp_GetTCCRequestDetails_Result mObjRequestData = (usp_GetTCCRequestDetails_Result)ViewBag.RequestData;
+}
+
+<input type="hidden" id="hdnStageID" value="@((int)EnumList.TCCRequestStage.Validate_Tax_Payer_Information)" />
+
+<div class="title">
+    <h1>
+        TCC Request - Validate Tax Payer Information
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Request Information
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Details","ProcessTCCRequest", new { reqId = Model.RequestID })" class="btn btn-theme btn-outline">
+                Cancel
+            </a>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Request Ref No: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.RequestRefNo
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Request Date: </label>
+                <div class="form-control-static">
+                    @CommUtil.GetFormatedDate(mObjRequestData.RequestDate)
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Year: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.TaxYear
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.FirstName @mObjRequestData.LastName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer EIN: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.IndividualRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.MobileNumber1
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("ValidateTaxPayerInformation", "ProcessTCCRequest", FormMethod.Post, htmlAttributes: new { @id = "frmValidateTaxPayerInformation" }))
+{
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Validate Tax Payer Information</div>
+            <div class="actions">
+
+            </div>
+        </div>
+        <div class="portlet-body">
+
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.IndividualID, htmlAttributes: new { @value = Model.IndividualID })
+            @Html.HiddenFor(model => model.VTPInformationID, htmlAttributes: new { @value = Model.VTPInformationID })
+            @Html.HiddenFor(model => model.RequestID, htmlAttributes: new { @value = Model.RequestID, @id = "hdnRequestID" })
+            @Html.HiddenFor(model => model.IndividualRIN, htmlAttributes: new { @value = Model.IndividualRIN })
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", htmlAttributes: new { @tabindex = "2", @class = "form-control bs-select", @id = "cboTaxPayerTypeID", @disabled = "true" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.GenderID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.GenderID, (SelectList)ViewBag.GenderList, "Select Gender", htmlAttributes: new { @tabindex = "3", @id = "cboGender", @class = "form-control bs-select" })
+                        @Html.ValidationMessageFor(model => model.GenderID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TitleID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.TitleID, (SelectList)ViewBag.TitleList, "Select Title", htmlAttributes: new { @tabindex = "4", @id = "cboTitle", @class = "form-control bs-select" })
+                        @Html.ValidationMessageFor(model => model.TitleID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.FirstName, htmlAttributes: new { @class = "form-control", @tabindex = "5", @placeholder = "Enter Individual's first name" })
+                        @Html.ValidationMessageFor(model => model.FirstName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.LastName, htmlAttributes: new { @class = "form-control", @tabindex = "6", @placeholder = "Enter Individual's last name" })
+                        @Html.ValidationMessageFor(model => model.LastName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.MiddleName, htmlAttributes: new { @class = "form-control", @tabindex = "7", @placeholder = "Enter Individual's middle name" })
+                        @Html.ValidationMessageFor(model => model.MiddleName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.DOB, htmlAttributes: new
+                        {
+                            @tabindex = "8",
+                            @data_mask = "99/99/9999",
+                            @data_mask_placeholder = "DD/MM/YYYY",
+                            @placeholder = "DD/MM/YYYY",
+                            @class = "form-control"
+                        })
+                        @Html.ValidationMessageFor(model => model.DOB, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TIN, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.TIN, htmlAttributes: new { @class = "form-control", @tabindex = "9", @placeholder = "Enter individuals’ tax identification number from JTB if available" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MobileNumber1, htmlAttributes: new { @class = "control-label required-star" })
+                        <div class="input-group">
+                            <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                            @Html.TextBoxFor(model => model.MobileNumber1, htmlAttributes: new { @class = "form-control", @tabindex = "10", @placeholder = "Enter mobile phone number of individual", @readonly = "readonly" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.MobileNumber1, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MobileNumber2, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group">
+                            <span class="input-group-addon"> ( 234 - 0 - ) </span>
+                            @Html.TextBoxFor(model => model.MobileNumber2, htmlAttributes: new { @class = "form-control", @tabindex = "11", @placeholder = "Enter alternative mobile phone number of individual" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.MobileNumber2, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmailAddress1, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.EmailAddress1, htmlAttributes: new { @class = "form-control", @tabindex = "12", @placeholder = "Enter individual email address" })
+                        @Html.ValidationMessageFor(model => model.EmailAddress1, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmailAddress2, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.EmailAddress2, htmlAttributes: new { @class = "form-control", @tabindex = "13", @placeholder = "Enter individual alternative email address" })
+                        @Html.ValidationMessageFor(model => model.EmailAddress2, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BiometricDetails, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.BiometricDetails, htmlAttributes: new { @class = "form-control", @tabindex = "14", @placeholder = "Enter Biometric Details" })
+                        @Html.ValidationMessageFor(model => model.BiometricDetails, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TaxOfficeID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.TaxOfficeID, (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", htmlAttributes: new { @tabindex = "15", @id = "cboTaxOffice", @class = "form-control bs-select", @width = "100%" })
+                        @Html.ValidationMessageFor(model => model.TaxOfficeID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MaritalStatusID, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.MaritalStatusID, (SelectList)ViewBag.MaritalStatusList, "Select Marital Status", htmlAttributes: new { @tabindex = "16", @id = "cboMaritalStatus", @class = "form-control bs-select", @data_select_width = "100%" })
+                        @Html.ValidationMessageFor(model => model.MaritalStatusID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NationalityID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.NationalityID, (SelectList)ViewBag.NationalityList, "Select Nationality", htmlAttributes: new { @tabindex = "17", @id = "cboNationality", @class = "form-control bs-select", @width = "100%" })
+                        @Html.ValidationMessageFor(model => model.NationalityID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EconomicActivitiesID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.EconomicActivitiesID, (SelectList)ViewBag.EconomicActivitiesList, "Select Economic Activities", htmlAttributes: new { @tabindex = "18", @class = "form-control bs-select", @width = "100%" })
+                        @Html.ValidationMessageFor(model => model.EconomicActivitiesID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NotificationMethodID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.NotificationMethodID, (SelectList)ViewBag.NotificationMethodList, "Select Notification Method", htmlAttributes: new { @tabindex = "19", @class = "form-control bs-select", @width = "100%" })
+                        @Html.ValidationMessageFor(model => model.NotificationMethodID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ContactAddress, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextAreaFor(model => model.ContactAddress, htmlAttributes: new { @class = "form-control", @tabindex = "20", @placeholder = "Enter Contact Address", @Rows = "3" })
+                        @Html.ValidationMessageFor(model => model.ContactAddress, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Notes, htmlAttributes: new { @class = "form-control", @tabindex = "21", @placeholder = "Enter Notes", @Rows = "3" })
+                        @Html.ValidationMessageFor(model => model.Notes, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="portlet-footer text-right">
+
+            <button type="submit" class="btn btn-theme"> Approve </button>
+        </div>
+    </div>
+}
+
+@{ Html.RenderPartial("_BindInternalNotes"); }
+
+@section Footer {
+    <script type="text/javascript" src="/Content/plugins/plupload/js/plupload.full.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jsProcessTCCNotes.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

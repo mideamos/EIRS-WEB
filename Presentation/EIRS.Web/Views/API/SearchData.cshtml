@@ -1,0 +1,47 @@
+﻿@model IList<EIRS.BOL.usp_GetAPIList_Result>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAPI">
+    <thead class="red-th">
+        <tr>
+            <th> API Name </th>
+            <th> Active </th>
+            <th class="action-th all"> Action </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.APIName</td>
+                <td>@item.ActiveText</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="@Url.Action("Edit", "API", new { id = item.APIID, name=item.APIName.ToSeoUrl() })">
+                                    Edit API
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Details","API", new { id = item.APIID, name=item.APIName.ToSeoUrl()})">
+                                    View API
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("UserAccess","API", new { id = item.APIID, name=item.APIName.ToSeoUrl()})">
+                                    Partners Access
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Monthly Summary Report";
+}
+
+<div class="title">
+    <h1>
+        Monthly Summary - Report
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Monthly Summary - Report
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-7">
+                @using (Ajax.BeginForm("MonthlySummary", "Report", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Post", OnSuccess = "jsfn_ShowData", OnBegin = "jsfn_ShowLoading", OnComplete = "jsfn_HideLoading" }, new { @class = "form-horizontal", @id = "frmMonthlySummary" }))
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Report Date</label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("txtReportDate", "", new { @class = "form-control datepicker", @tabindex = "1", @placeholder = "Select Report Date", @id = "txtReportDate" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Reference</label>
+                        <div class="col-sm-9">
+                            @Html.DropDownList("cboReference", (IList<SelectListItem>)ViewBag.ReferenceList, "Select Reference", new { @class = "form-control bs-select", @tabindex = "2", @data_live_search = "true" })
+                        </div>
+                    </div>
+
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch"> Generate Report </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-sm-5">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Monthly Summary - Report - <span id="spnReference"></span> as of <span id="spnReportDate"></span></div>
+        <div class="actions">
+            <a href="@Url.Action("DownloadMonthlySummary","Report")" target="_blank" class="btn btn-theme" id="btnDownload"> View PDF </a>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsMonthlySummaryReport.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

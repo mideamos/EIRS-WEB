@@ -1,0 +1,41 @@
+﻿@model EIRS.BOL.usp_GetProfileList_Result
+@{
+    ViewBag.Title = Model.ProfileDescription + " - Assets";
+}
+
+
+<div class="title">
+    <h1>@Model.ProfileDescription -  Assets</h1>
+    <hr />
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            List of Assets for @Model.ProfileDescription
+        </div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        @Html.Hidden("hdnProfileID", (int)ViewBag.ProfileID)
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblDA_Asset">
+            <thead class="red-th">
+                <tr>
+                    <th>Asset Type</th>
+                    <th>Asset Name</th>
+                    <th>RIN</th>
+                    <th>Tax Payer Count</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@{Html.RenderPartial("_ProfileDetailPopup"); }
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsDAAssetList.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

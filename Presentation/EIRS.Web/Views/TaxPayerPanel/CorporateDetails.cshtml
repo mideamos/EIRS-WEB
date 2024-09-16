@@ -1,0 +1,434 @@
+﻿@model EIRS.Models.CompanyViewModel
+@using EIRS.Common
+@using EIRS.BOL
+@{
+    Layout = "~/Views/Shared/_TaxPayerLayout.cshtml";
+    ViewBag.Title = "Corporate Details";
+
+    IList<usp_GetTaxPayerAssetList_Result> lstAsset = (IList<usp_GetTaxPayerAssetList_Result>)ViewBag.AssetList;
+    IList<usp_GetAssessmentRuleInformation_Result> lstAssessmentRuleInformation = (IList<usp_GetAssessmentRuleInformation_Result>)ViewBag.AssessmentRuleInformation;
+    IList<usp_GetTaxPayerBill_Result> lstTaxPayerBill = (IList<usp_GetTaxPayerBill_Result>)ViewBag.TaxPayerBill;
+    IList<usp_GetTaxPayerPayment_Result> lstTaxPayerPayment = (IList<usp_GetTaxPayerPayment_Result>)ViewBag.TaxPayerPayment;
+    IList<usp_GetTaxPayerMDAService_Result> lstMDAService = (IList<usp_GetTaxPayerMDAService_Result>)ViewBag.MDAService;
+}
+
+<div class="title">
+    <h1>
+        Corporate Tax Payer
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Corporate Tax Payer Information
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript:jsfn_CompanyInformation(@Model.CompanyID)">View Details</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Edit","CaptureCorporate", new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })">Edit Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Type: </label>
+                <div class="form-control-static">
+                    @Model.TaxPayerTypeName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer TIN: </label>
+                <div class="form-control-static">
+                    @Model.TIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @Model.MobileNumber1
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @Model.CompanyName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer RIN: </label>
+                <div class="form-control-static">
+                    @Model.CompanyRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Contact  Address: </label>
+                <div class="form-control-static">
+                    @Model.ContactAddress
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Assets</div>
+        <div class="actions">
+            <div class="btn-group">
+                @*<button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New <span class="caret"></span>
+                </button>*@
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="@Url.Action("SearchBusiness","CaptureCorporate",new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })" )">Business</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchBuilding","CaptureCorporate",new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })" )">Building</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchLand","CaptureCorporate",new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })" )">Land</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("SearchVehicle","CaptureCorporate",new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })" )">Vehicles</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAssetList">
+            <thead class="red-th">
+                <tr>
+                    <th>Asset Type</th>
+                    <th>Asset Name</th>
+                    <th>Tax Payer Role</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vAsset in lstAsset)
+                {
+                    <tr>
+                        <td>@vAsset.AssetTypeName</td>
+                        <td>@vAsset.AssetName</td>
+                        <td>@vAsset.TaxPayerRoleName</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_ShowAssetDetails(@vAsset.TPAID)">Quick View</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Bills</div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="@Url.Action("GenerateAssessment","CaptureCorporate",new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })" )">Assessment Bill</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("GenerateServiceBill","CaptureCorporate",new { id=Model.CompanyID, name =Model.CompanyRIN.ToSeoUrl() })" )">MDA Service Bill</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBillList">
+            <thead class="red-th">
+                <tr>
+                    <th>Date</th>
+                    <th>Bill Type</th>
+                    <th class="desktop">Bill ID</th>
+                    <th>Bill Amount</th>
+                    <th class="desktop">Bill Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vBillItem in lstTaxPayerBill)
+                {
+                    <tr>
+                        <td>@CommUtil.GetFormatedDate(vBillItem.BillDate)</td>
+                        <td>@vBillItem.BillTypeName</td>
+                        <td>@vBillItem.BillRefNo</td>
+                        <td>@CommUtil.GetFormatedCurrency(vBillItem.BillAmount)</td>
+                        <td>@vBillItem.SettlementStatusName</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_BillDetails(@vBillItem.BillID, @vBillItem.BillTypeID)">Quick View</a>
+                                    </li>
+                                    @if (vBillItem.SettlementStatusID < 3)
+                                    {
+                                        <li>
+                                            @if (vBillItem.BillTypeID == 1)
+                                            {
+                                                <a href="@Url.Action("EditAssessment", "CaptureCorporate", new { id = Model.CompanyID, name = Model.CompanyRIN.ToSeoUrl(), aid = vBillItem.BillID })">
+                                                    Edit Bill
+                                                </a>
+                                            }
+                                            else if (vBillItem.BillTypeID == 2)
+                                            {
+                                                <a href="@Url.Action("EditServiceBill", "CaptureCorporate", new { id = Model.CompanyID, name = Model.CompanyRIN.ToSeoUrl(), sbid = vBillItem.BillID })">
+                                                    Edit Bill
+                                                </a>
+                                            }
+                                        </li>
+                                    }
+                                    <li>
+                                        <a href="@Url.Action("BillDetail", "CaptureCorporate", new { id = Model.CompanyID, name = Model.CompanyRIN.ToSeoUrl(), billid = vBillItem.BillID, billrefno = vBillItem.BillRefNo })">
+                                            View Bill
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="@Url.Action("GenerateBill", "CaptureCorporate", new { id = Model.CompanyID, name = Model.CompanyRIN.ToSeoUrl(), billid = vBillItem.BillID, billrefno = vBillItem.BillRefNo })">
+                                            Generate PDF
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a onclick="javascript:jsfn_BillPaymentDetails(@vBillItem.BillID, @vBillItem.BillTypeID)">View Payments </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Rules</div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Tax Year <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript: jsfn_FilterAssessmentRuleTable(2017);">2017</a>
+                    </li>
+                    <li>
+                        <a onclick="javascript: jsfn_FilterAssessmentRuleTable(2018);">2018</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAssessmentRules">
+            <thead class="red-th">
+                <tr>
+                    <th>Rule Year</th>
+                    <th>Rule Name</th>
+                    <th>Rule Amount</th>
+                    <th>Billed Amount</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vRule in lstAssessmentRuleInformation)
+                {
+                    <tr>
+                        <td>@vRule.TaxYear</td>
+                        <td>@vRule.AssessmentRuleName</td>
+                        <td>@CommUtil.GetFormatedCurrency(vRule.AssessmentAmount)</td>
+                        <td>@CommUtil.GetFormatedCurrency(vRule.BilledAmount)</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_AssessmentRuleDetails(@vRule.AssessmentRuleID)">Quick View</a>
+                                    </li>
+                                    <li>
+                                        <a onclick="javascript:jsfn_AssessmentRuleItemList(@vRule.AssessmentRuleID)">View Items </a>
+                                    </li>
+                                    <li>
+                                        <a onclick="javascript:jsfn_ProfileDetails(@vRule.ProfileID)">View Profiles </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Associated MDA Services
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Tax Year <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a onclick="javascript: jsfn_FilterMDAServiceTable(2017);">2017</a>
+                    </li>
+                    <li>
+                        <a onclick="javascript: jsfn_FilterMDAServiceTable(2018);">2018</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblMDAServiceList">
+            <thead class="red-th">
+                <tr>
+                    <th>Service Year</th>
+                    <th>Service Name</th>
+                    <th>Service Amount</th>
+                    <th>Billed Amount</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vMDAService in lstMDAService)
+                {
+                    <tr>
+                        <td>@vMDAService.TaxYear</td>
+                        <td>@vMDAService.MDAServiceName</td>
+                        <td>@CommUtil.GetFormatedCurrency(vMDAService.ServiceAmount)</td>
+                        <td>@CommUtil.GetFormatedCurrency(vMDAService.BilledAmount)</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_MDAServiceDetails(@vMDAService.MDAServiceID)">Quick View</a>
+                                    </li>
+                                    <li>
+                                        <a onclick="javascript:jsfn_MDAServiceItemList(@vMDAService.MDAServiceID)">View Items </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Payments</div>
+        <div class="actions">
+            <div class="btn-group">
+
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPaymentList">
+            <thead class="red-th">
+                <tr>
+                    <th>Date</th>
+                    <th>Bill Type</th>
+                    <th class="desktop">Bill ID</th>
+                    <th>Bill Amount</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vPaymentItem in lstTaxPayerPayment)
+                {
+                    <tr>
+                        <td>@CommUtil.GetFormatedDate(vPaymentItem.PaymentDate)</td>
+                        <td>@vPaymentItem.PaymentTypeName</td>
+                        <td>@vPaymentItem.PaymentRefNo</td>
+                        <td>@CommUtil.GetFormatedCurrency(vPaymentItem.Amount)</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_PaymentDetails(@vPaymentItem.PaymentID, @vPaymentItem.PaymentTypeID)">Quick View</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("_CompanyDetailPopup");
+    Html.RenderPartial("_BuildingDetailPopup");
+    Html.RenderPartial("_VehicleDetailPopup");
+    Html.RenderPartial("_BusinessDetailPopup");
+    Html.RenderPartial("_LandDetailPopup");
+    Html.RenderPartial("_AssessmentRuleDetailPopup");
+    Html.RenderPartial("_ProfileDetailPopup");
+    Html.RenderPartial("_AssessmentRuleItemPopup");
+    Html.RenderPartial("_MDAServiceDetailPopup");
+    Html.RenderPartial("_MDAServiceItemPopup");
+    Html.RenderPartial("_ServiceBillDetailPopup");
+    Html.RenderPartial("_AssessmentDetailPopup");
+    Html.RenderPartial("_BillPaymentPopup");
+    Html.RenderPartial("_SettlementDetailPopup");
+    Html.RenderPartial("_PaymentAccountDetailPopup");
+
+
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsCorporateDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+

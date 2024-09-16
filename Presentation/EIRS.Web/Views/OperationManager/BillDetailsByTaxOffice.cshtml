@@ -1,0 +1,48 @@
+﻿@model IList<EIRS.BOL.usp_GetBillDetailByTaxOffice_Result>
+@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manger - Assessment Transactions List";
+}
+
+<input type="hidden" value="@ViewBag.FromDate" id="hdnFromDate" />
+<input type="hidden" value="@ViewBag.ToDate" id="hdnToDate" />
+<input type="hidden" value="@ViewBag.BillType" id="hdnBillType" />
+<input type="hidden" value="@ViewBag.BillStatus" id="hdnBillStatus" />
+<input type="hidden" value="@ViewBag.TaxOffice" id="hdnTaxOffice" />
+
+<div class="title">
+    <h1>
+        Operation Manager - Manage Assessments By Tax Office
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Assessment Transactions List
+        </div>
+        <div class="form-actions text-right">
+            <a href="@Url.Action("BillByTaxOffice","OperationManager")" class="btn btn-redtheme">Cancel</a>
+            <a href="@Url.Action("BillDetailsByTaxOfficeExportToExcel","OperationManager",new { intTaxOfficeID=ViewBag.TaxOffice,FromDate= ViewBag.FromDate,ToDate=ViewBag.ToDate,intBillTypeID= ViewBag.BillType,IntBillStatusID= ViewBag.BillStatus})" class="btn btn-theme">Export Excel</a>
+        </div>
+    </div>
+    <div class="portlet-body">
+
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBillDetailsByTaxOffice">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer</th>
+                    <th>Payment Ref</th>
+                    <th>Payment Date</th>
+                    <th>Amount</th>
+                    <th>Bill Status</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsBillDetailsByTaxOffice.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

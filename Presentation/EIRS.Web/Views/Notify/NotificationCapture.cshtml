@@ -1,0 +1,78 @@
+﻿@model EIRS.Models.NotificationViewModel
+@{
+    ViewBag.Title = "NotificationCapture";
+}
+@section Header{
+    <link rel="stylesheet" type="text/css" href="/Content/Plugins/typeahead/typeahead.css" />
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-search"></i> Search Filters
+                    </div>
+                    <div class="tools">
+                        <a class="collapse"></a>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    @using (Html.BeginForm("NotificationCapture", "Notify"))
+                    {
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TaxPayerTypeID, htmlAttributes: new { @class = "control-label required-star col-md-4" })
+                                        @Html.DropDownListFor(m => m.TaxPayerTypeID, (SelectList)ViewBag.TaxPayerTypeList, "Select Tax Payer Type", new { @class = "form-control bs-select", @tabindex = "1", @data_live_search = "true", @id = "cboTaxPayerType" })
+                                        @Html.ValidationMessageFor(model => model.TaxPayerTypeID, "", htmlAttributes: new { @class = "help-block" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TaxPayerName, htmlAttributes: new { @class = "control-label required-star col-md-4" })
+                                        @Html.HiddenFor(model => model.TaxPayerID, new { @id = "hdnTaxPayerID" })
+                                        @Html.TextBoxFor(model => model.TaxPayerName, "", new { @class = "form-control", @id = "txtTaxPayer", @autocomplete = "off", @placeholder = "Enter Tax Payer Name" })
+                                        @Html.ValidationMessageFor(model => model.TaxPayerName, "", htmlAttributes: new { @class = "help-block" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.NotificationMethodId, htmlAttributes: new { @class = "control-label required-star col-md-4" })
+                                        @Html.DropDownListFor(m => m.NotificationMethodId, (SelectList)ViewBag.NotificationMethodList, new { @class = "form-control bs-select", @tabindex = "2", @data_live_search = "true", @multiple = "multiple", @data_initvalue = (Model != null && Model.NotificationModeID != null ? string.Join(",", Model.NotificationModeID) : "") })
+                                        @Html.ValidationMessageFor(model => model.NotificationMethodId, "", htmlAttributes: new { @class = "help-block" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.NotificationTypeID, htmlAttributes: new { @class = "control-label required-star col-md-4" })
+                                        @Html.DropDownListFor(m => m.NotificationTypeID, (SelectList)ViewBag.NotificationTypeList, "Select Notification Type", new { @class = "form-control bs-select", @tabindex = "3", @data_live_search = "true"})
+                                        @Html.ValidationMessageFor(model => model.NotificationTypeID, "", htmlAttributes: new { @class = "help-block" })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions right">
+                            <input type="submit" value="Add" tabindex="4" class="btn btn-theme" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Footer {
+        <script src="~/Content/Plugins/typeahead/handlebars.min.js"></script>
+        <script src="~/Content/Plugins/typeahead/typeahead.bundle.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/jsNotificationCapture.js"></script>
+    }

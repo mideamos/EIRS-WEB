@@ -1,0 +1,130 @@
+﻿@model usp_GetUserList_Result
+@using EIRS.BOL
+@{
+    ViewBag.Title = "User Details";
+}
+
+<div class="title">
+    <h1>
+        Manage Users : User Details
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            User Details
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","User")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">User Type: </label>
+                    <div class="form-control-static">
+                        @Model.UserTypeName
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">User Name: </label>
+                    <div class="form-control-static">
+                        @Model.UserName
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Contact Name: </label>
+                    <div class="form-control-static">
+                        @Model.ContactName
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Email Address: </label>
+                    <div class="form-control-static">
+                        @Model.EmailAddress
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Password: </label>
+                    <div class="form-control-static">
+                        @Model.Password
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Contact Number: </label>
+                    <div class="form-control-static">
+                        @Model.ContactNumber
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Status: </label>
+                    <div class="form-control-static">
+                        @Model.ActiveText
+                    </div>
+                </div>
+            </div>
+            @if (Model.UserTypeID == 2)
+            {
+                <div class="form-group">
+                    <label class="control-label bold">Is Manager: </label>
+                    <div class="form-control-static">
+                        @Model.IsTOManagerText
+                    </div>
+                </div>
+            }
+        </div>
+        @if (Model.UserTypeID == 2)
+        {
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label bold">Tax Office: </label>
+                        <div class="form-control-static">
+                            @Model.TaxOfficeName
+                        </div>
+                    </div>
+                </div>
+                @if (Model.IsTOManager == false)
+                {
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label bold">Manager: </label>
+                            <div class="form-control-static">
+                                @Model.TOManagerName
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label bold">Signature: </label>
+                        <div class="form-control-static">
+                            <img src="~/Document/@Model.SignaturePath" alt="Signature" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

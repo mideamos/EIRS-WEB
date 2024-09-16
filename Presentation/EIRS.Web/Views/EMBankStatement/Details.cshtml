@@ -1,0 +1,112 @@
+﻿@model EM_BankStatement
+@using EIRS.Common
+
+@{
+    ViewBag.Title = "ERAS Manual - Bank Statement - Entry Details";
+}
+
+<div class="title">
+    <h1>
+        ERAS Manual - Bank Statement - Entry Details
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Entry Details
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","EMBankStatement")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Tax Year: </label>
+                    <div class="form-control-static">
+                        @Model.TaxYear
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Tax Month: </label>
+                    <div class="form-control-static">
+                        @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.TaxMonth.GetValueOrDefault())
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Payment Ref Number: </label>
+                    <div class="form-control-static">
+                        @Model.PaymentRefNumber
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Payment Date Time: </label>
+                    <div class="form-control-static">
+                        @Model.PaymentDateTime
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Customer Name: </label>
+                    <div class="form-control-static">
+                        @Model.CustomerName
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Category: </label>
+                    <div class="form-control-static">
+                        @Model.Category
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Revenue Head: </label>
+                    <div class="form-control-static">
+                        @Model.RevenueHead
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Amount: </label>
+                    <div class="form-control-static">
+                        @CommUtil.GetFormatedCurrency(Model.Amount)
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Bank: </label>
+                    <div class="form-control-static">
+                        @Model.Bank
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

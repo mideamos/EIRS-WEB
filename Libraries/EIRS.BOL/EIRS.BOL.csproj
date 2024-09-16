@@ -1,0 +1,2062 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5569601A-967B-4823-A3C4-F564DE25C72E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EIRS.BOL</RootNamespace>
+    <AssemblyName>EIRS.BOL</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Address_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Agency.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Agency_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AL_Screen.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApproverType.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Assessment.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Assessment_Group.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Assessment_Items.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Assessment_Item_Category.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Assessment_Item_SubCategory.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Assessment_Rules.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Assessment_SubGroup.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Asset_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Audit_Log.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Building.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Building_Completion.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Building_Ownership.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Building_Purpose.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Building_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Building_Unit.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Business.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BusinessName.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Business_Category.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Business_Operation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Business_Sector.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Business_Structure.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Business_SubSector.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Business_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Certificate.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Certificate_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Company.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAInput.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAOutput.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DA_And_PAYE_TCC_Details.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dealer_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DirectAssessmentIncomeStreams_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Directorate.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Economic_Activities.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EIRSModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EIRSModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EIRSModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EIRSModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EIRSModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EIRSModel1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EIRSModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ELMAH_Error.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_Bank.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_BankStatement.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_Category.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_DataSource.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_IGRClassification.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_ImportLog.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_MAP_IGRClassification_Entry.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_PD_Main_Authorized.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_PD_Main_Pending.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_PD_MVA_Authorized.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_PD_MVA_Pending.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EM_RevenueHead.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ERASDWModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERASDWModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ERASDWModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ERASDWModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERASDWModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ERASModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERASModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ERASModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ERASModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERASModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Exception_Type.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Gender.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetEmployerLiability_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Government.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Government_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Individual.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JTB_Individual.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JTB_NonIndividual.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Land.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Land_Development.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Land_Function.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Land_Ownership.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Land_Purpose.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Land_StreetCondition.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Late_Charges.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LGA.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LGAClass.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MapAssessmentDisapprove_.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_API_Users_Rights.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_AssessmentRule_AssessmentItem.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_AssessmentRule_SettlementMethod.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Assessment_Adjustment.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Assessment_AssessmentItem.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Assessment_AssessmentRule.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Assessment_LateCharge.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Building_BuildingUnit.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Building_Land.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Business_Building.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_CentralMenu_Screen.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_CertificateType_Field.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_CertificateType_Items.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_CustomField.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_Generate.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_Generate_Field.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_Issue.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_Revoke.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_Seal.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_SignDigital.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_SignVisible.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_Stages.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Certificate_Validate.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Company_AddressInformation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Directorates_RevenueStream.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Government_AddressInformation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Individual_AddressInformation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_MDAService_MDAServiceItem.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_MDAService_SettlementMethod.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_PaymentAccount_Operation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_ServiceBill_Adjustment.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_ServiceBill_LateCharge.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_ServiceBill_MDAService.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_ServiceBill_MDAServiceItem.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Settlement_SettlementItem.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_Special_AddressInformation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TaxOfficer_Target.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TaxOffice_Target.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TaxPayer_Asset.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TaxPayer_Asset_Profile.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TaxPayer_Document.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TaxPayer_Message.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TaxPayer_Message_Document.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TaxPayer_Review.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Generate.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_GenerateTCCDetail.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Generate_Field.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_IncomeStream.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Issue.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Notes.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Notes_Document.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_PrepareTCCDraft.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Revoke.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Seal.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_SignDigital.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_SignVisible.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Stages.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_Validate.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_ValidateTaxPayerIncome.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TCCRequest_ValidateTaxPayerInformation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_TreasuryReceipt_Settlement.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MAP_User_Screen.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MaritalStatu.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MDA_Services.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MDA_Service_Items.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_API.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_AwarenessCategory.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_Business.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_CentralMenu.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_CertificateStage.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_CertificateStatus.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_Computation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_FAQ.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_FieldType.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_LastNumber.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_Menu.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_Pages.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_PaymentStatus.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_RegisterationStatus.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_RuleRun.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_Screen.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_TCCRequestStatus.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_TCCStage.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_TCCStatus.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_Users.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_UserToken.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MST_UserType.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Nationality.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NatureOfBusiness.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NewERASTccHolder.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NewTCCDetailsHold.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Notification.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Notification_Method.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Notification_Mode.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Notification_Type.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Operation_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayDirect_Notifications.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PAYEInput.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PAYEOutput.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayeTccHolder.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Payment_Account.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Payment_Frequency.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Payment_Options.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Profile.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileAttribute.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileGroup.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileSector.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileSectorElement.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileSectorSubElement.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileSubAttribute.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileSubGroup.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileSubSector.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileTaxPayerRole.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileTaxPayerType.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Profile_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyLayer\Agencies.cs" />
+    <Compile Include="PropertyLayer\Assessment_Group.cs" />
+    <Compile Include="PropertyLayer\Assessment_Item_Category.cs" />
+    <Compile Include="PropertyLayer\Assessment_Item_SubCategory.cs" />
+    <Compile Include="PropertyLayer\Assessment_SubGroup.cs" />
+    <Compile Include="PropertyLayer\Business_Category.cs" />
+    <Compile Include="PropertyLayer\Business_Operation.cs" />
+    <Compile Include="PropertyLayer\Business_Sector.cs" />
+    <Compile Include="PropertyLayer\Business_Structure.cs" />
+    <Compile Include="PropertyLayer\Business_SubSector.cs" />
+    <Compile Include="PropertyLayer\Business_Types.cs" />
+    <Compile Include="PropertyLayer\Directorates.cs" />
+    <Compile Include="PropertyLayer\Economic_Activities.cs" />
+    <Compile Include="PropertyLayer\EmailInfo.cs" />
+    <Compile Include="PropertyLayer\SFTP_DataSubmissionType.cs" />
+    <Compile Include="PropertyLayer\ExternalProperty.cs" />
+    <Compile Include="PropertyLayer\Payment_Account.cs" />
+    <Compile Include="PropertyLayer\EM_Category.cs" />
+    <Compile Include="PropertyLayer\Revenue_Stream.cs" />
+    <Compile Include="PropertyLayer\EM_RevenueHead.cs" />
+    <Compile Include="PropertyLayer\Revenue_SubStream.cs" />
+    <Compile Include="PropertyLayer\Settlement_Method.cs" />
+    <Compile Include="PropertyLayer\TaxPayer_Roles.cs" />
+    <Compile Include="PropertyLayer\Titles.cs" />
+    <Compile Include="PropertyLayer\Vehicle_Function.cs" />
+    <Compile Include="PropertyLayer\Vehicle_Ownership.cs" />
+    <Compile Include="PropertyLayer\Vehicle_Purpose.cs" />
+    <Compile Include="PropertyLayer\Vehicle_SubTypes.cs" />
+    <Compile Include="PropertyLayer\Vehicle_Types.cs" />
+    <Compile Include="Receipt_Status.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Revenue_Stream.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Revenue_SubStream.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Review_Status.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScratchCard_PurchaseRequest.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Scratch_Card_Dealers.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Scratch_Card_Printer.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceBill.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Settlement.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Settlement_Method.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Settlement_Status.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SFTP_DataSubmission.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SFTP_DataSubmissionType.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SFTP_DataSubmitter.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SFTP_MAP_DataSubmitter_DataSubmissionType.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Size.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Special.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spZoneDetailNew_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spZoneDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SystemRole.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SystemUser.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaxClearanceCertificate.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaxPayerPayment.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaxPayer_Roles.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaxPayer_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tax_Offices.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TCCDetail.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TccRefHolder.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TCC_Request.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Title.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Town.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Treasury_Receipt.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Unit_Function.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Unit_Occupancy.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Unit_Purpose.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_DC_GetAssessmentItemWithoutRule_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_DC_GetCompanyWithoutAssessment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_DC_GetIndividualWithoutAssessment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_DC_GetProfileWithoutRule_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_DC_GetTaxPayerWithoutAsset_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_EM_GetBankList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_EM_GetCategoryList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_EM_GetClassificationDataSourceList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_EM_GetDataSourceList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_EM_GetIGRClassificationList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_EM_GetRevenueHeadList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAddressTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAdminCertificateStageList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAdminRequestStageList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAgencyList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAgencyTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAPIList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAPIUserRightList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentAdjustmentList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentDataForPT_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentGroupList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentItemBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentItemCategoryList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentItemList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentItemSubCategoryList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentLateChargeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleBasedOnProfileForSupplierNew_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleBasedSettlement_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleForAssessment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleInformationForCertificate_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleInformationForTCC_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleInformation_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleItemDetails_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleItemListForLateCharges_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleItemList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentRuleList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessmentSubGroupList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssessment_AssessmentRuleList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssetBasedOnTaxOfficeForExport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAssetTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAuditLog_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAwarenessCategoryList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillAgingByRevenueStream_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillAgingByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillAgingChart_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillAgingDetailByRevenueStream_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillAgingDetailByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillByRevenueStreamDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillByRevenueStream_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillByTaxOfficeDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillChart_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBillDetailByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingChart_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingCompletionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingLandList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingOwnershipList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingPurposeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingUnitList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBuildingUnitNumberList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessBuildingList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessCategoryList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessChart_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessListNewTy_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessOperationList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessSectorList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessStructureList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessSubSectorList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetBusinessTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCentralMenuList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCentralMenuUserBased_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCertificateDetailForGenerate_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCertificateDetails_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCertificateFieldList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCertificateItemList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCertificateTypeFieldList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCertificateTypeItemList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCertificateTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetClaimBusinessList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCompanyAddressInformation_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCompanyList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetCompanyPAYEAsset_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetDailySummaryReport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetDAInputList_Result.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetDAOutputList_Result.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetDemandNoticeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetDirectorateList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetEconomicActivitiesList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetEdoGISMDAServiceForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetEdoGISMDAServiceItemForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetExceptionTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetFAQList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetGovernmentAddressInformation_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetGovernmentList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetGovernmentTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetIndividualAddressInformation_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetIndividualLiabilityDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetIndividualList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLandBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLandChart_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLandDevelopmentList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLandFunctionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLandList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLandOwnershipList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLandPurposeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLandStreetConditionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLateChargeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetLGAList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMASPriceSheet_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMDAServiceBasedSettlement_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMDAServiceForServiceBill_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMDAServiceItemList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMDAServiceList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMenuList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMonthlySummaryReport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetNotificationList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetNotificationMethodList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetNotificationTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPageList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPAYEAssessmentBill_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPAYEAssessmentRuleInformation_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPAYEEmployerStaff_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPAYEInputList_Result.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GETPAYEOutput_Result.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPAYEPayment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPAYEProfileInformation_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPAYERevenueStreamBillByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPAYERevenueStreamBillDetailByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPaymentAccountList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPaymentByRevenueStreamDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPaymentByRevenueStream_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPaymentByTaxOfficeDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPaymentByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPaymentChargeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPaymentFrequencyList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPaymentOptionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetPOATaxPayerWithoutAsset_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetProfileAssetData_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetProfileData_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetProfileDropDownForCertificate_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetProfileInformation_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetProfileList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetProfileTaxPayerData_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetRequestIncomeStreamList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetRequestNotesList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetRevenueStreamBasedReport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetRevenueStreamBillByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetRevenueStreamBillDetailByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetRevenueStreamList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetRevenueSubStreamList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetScratchCardDealerList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetScratchCardPrinterList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetScreenList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetScreenMenuList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetScreenUserList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSearchLandForEdoGIS_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetServiceBillAdjustmentList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetServiceBillItemDetails_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetServiceBillItemListForLateCharges_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetServiceBillItemList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetServiceBillLateChargeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetServiceBillList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetServiceBill_MDAServiceList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSettlementItemDetails_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSettlementItemList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSettlementList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSettlementMethodList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSettlementStatusList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSettlementWithoutReceipt_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSettleTransactionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSizeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSpecialAddressInformation_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSpecialList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetSystemUserList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxClearanceCertificateDetails_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxOfficeListNew_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxOfficeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxOfficerTargetList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxOfficeTargetList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerAssetForTCC_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerAssetList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerAssetProfileBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerBasedOnTaxOfficeForExport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerBillChart_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerBillForTCC_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerBill_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerBuildingList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerBusinessList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerDetails_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerDocumentList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerforTaxOfficeManager_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerforTaxOfficer_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerLandList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerLiabilityByTaxYear_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerLiabilityForTCC_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerMDAService_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerMessageList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerPaymentForTCCNEW_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerPaymentForTCC_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerPayment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerProfileForExport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerProfileInformationForTCC_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerProfileTypeForExport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerReviewNotes_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerRoleList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerSettlementChart_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTaxPayerVehicleList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTCCDetailForGenerate_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTCCDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTccDownloadByYear_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTCCRequestDetails_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTCCRequestList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTitleList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTownList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTreasuryReceiptByRevenueStreamDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTreasuryReceiptByRevenueStream_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTreasuryReceiptByTaxOfficeDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTreasuryReceiptByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetTreasuryReceiptList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetUnitFunctionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetUnitOccupancyList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetUnitPurposeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetUserList_Result.cs">
+      <DependentUpon>ERASModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleBasedOnProfileForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleChart_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleFunctionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleInsuranceList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleInsuranceVerificationMDAServiceForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleInsuranceVerificationMDAServiceItemForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleInsuranceVerificationServiceBillForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleLicenseList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleLicenseMDAServiceForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleLicenseMDAServiceItemForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleLicenseServiceBillForSupplier_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleOwnershipList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehiclePurposeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleSubTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleTaxPayerList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetVehicleTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetWardList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_BusinessSectorAssessmentDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_BusinessSectorAssessmentSummary_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_EmployerLiability_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_EmployerPAYELiability_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetAllocatedTaxPayerList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetAssetDetailByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetAssetTypeByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetAssetTypeReport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetDashboardReport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetDirectorateReport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetPaymentChannelByRevenueStream_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetPaymentDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetRevenueStreamByPaymentChannel_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetRevenueStreamByTaxOfficerTargetDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetRevenueStreamReport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetTaxPayerMonthlyPaymentDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetTaxPayerMonthlyPayment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetTaxPayerReport_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetTaxPayerStatusManager_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetTaxPayerStatusManager_TaxPayerList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetTaxPayerTypeByTaxOffice_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_GetUnallocatedTaxPayerList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_InvidualLiabilityStatus_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_ManagerReviewStatusSummary_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_MonthlyTaxOfficeTarget_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_MonthlyTCCCommissionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_MonthlyTCCRevokeDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_MonthlyTCCRevokeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_MonthlyTCCSummaryDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_MonthlyTCCSummary_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_PAYEOutputAggregationList_Result.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_PAYEOutputAggregationSummary_Result.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_RevenueStreamByTaxOfficerTarget_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_RevenueStreamByTaxOfficeTarget_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_ReviewStatusSummary_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_ReviseBill_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_StaffReviewStatusSummary_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficeAssessmentDetail_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficeAssessmentSummary_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficeByRevenueStreamTarget_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficeManagerStatus_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficeManagerSummary_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficerByRevenueStreamTarget_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficerMonthlyPayment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficerStatus_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxOfficerSummary_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxPayerCaptureAnalysis_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxPayerLiabilityStatus_Bills_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxPayerLiabilityStatus_Payment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RPT_TaxPayerLiabilityStatus_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchAssessmentForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchAssessmentItemForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchAssessmentItem_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchAssessmentRuleForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchAssessmentRulesForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchAssessmentRules_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchAssessment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchBuildingForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchBuildingForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchBuildingUnitForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchBuildingUnit_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchBuilding_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchBusinessForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchBusinessForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchBusiness_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchCertificate_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchCompanyForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchCompanyForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchCompany_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchGovernmentForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchGovernmentForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchGovernment_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchIndividualForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchIndividualForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchIndividual_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchLandForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchLandForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchLand_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchMDAServiceForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchMDAServiceForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchMDAServiceItemForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchMDAServiceItem_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchMDAService_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchNotification_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchPaymentAccount_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchProfileForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchServiceBillForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchServiceBill_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchSettlement_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchSpecialForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchSpecial_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchTaxClearanceCertificate_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchTaxPayer_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchTCCDetails_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchTCCRequest_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchTreasuryReceipt_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchVehicleByRegNumber_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchVehicleForRDMLoad_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchVehicleForSideMenu_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SearchVehicle_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SFTP_GetDataSubmissionList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SFTP_GetDataSubmissionTypeList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_SFTP_GetDataSubmitterList_Result.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ValidateTcc.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicle.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicle_Function.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicle_Insurance.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicle_Licenses.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicle_Ownership.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicle_Purpose.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicle_SubTypes.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicle_Types.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_AssessmentBill.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_AssessmentRule.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_BillForPoASettlement.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Building.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Business.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_CertificateList.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Company.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_DAInputList.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_DAOutputList.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_EM_BankStatement.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_EM_PD_Main_Authorized.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_EM_PD_Main_Pending.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_EM_PD_MVA_Authorized.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_EM_PD_MVA_Pending.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Government.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Individual.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Land.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_MDAServices.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Notifications.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_PAYEInputList.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_PAYEOutput.cs">
+      <DependentUpon>ERASDWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_PaymentAccount.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_PaymentAccountOperation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_ServiceBillNew.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Special.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_TCCRequestList.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_Vehicle.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ward.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Zone.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZoneLGA.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EntityDeploy Include="EIRSModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EIRSModel1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="EIRSModel.edmx.diagram">
+      <DependentUpon>EIRSModel.edmx</DependentUpon>
+    </None>
+    <EntityDeploy Include="ERASModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ERASModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="ERASDWModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ERASDWModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="ERASDWModel.edmx.diagram">
+      <DependentUpon>ERASDWModel.edmx</DependentUpon>
+    </None>
+    <None Include="ERASModel.edmx.diagram">
+      <DependentUpon>ERASModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EIRSModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EIRSModel.edmx</DependentUpon>
+      <LastGenOutput>EIRSModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="EIRSModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EIRSModel.edmx</DependentUpon>
+      <LastGenOutput>EIRSModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="ERASDWModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ERASDWModel.edmx</DependentUpon>
+      <LastGenOutput>ERASDWModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ERASDWModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ERASDWModel.edmx</DependentUpon>
+      <LastGenOutput>ERASDWModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="ERASModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ERASModel.edmx</DependentUpon>
+      <LastGenOutput>ERASModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ERASModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ERASModel.edmx</DependentUpon>
+      <LastGenOutput>ERASModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EIRS.Common\EIRS.Common.csproj">
+      <Project>{b0f1f33b-6b48-434c-ae15-ebce1c1d9135}</Project>
+      <Name>EIRS.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props'))" />
+  </Target>
+  <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>

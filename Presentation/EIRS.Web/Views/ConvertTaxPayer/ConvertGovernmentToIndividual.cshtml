@@ -1,0 +1,231 @@
+﻿@model EIRS.Models.IndividualViewModel
+
+@{
+    ViewBag.Title = "Edit Government Tax Payer";
+    IList<AssetDetails> lstAsset = (IList<AssetDetails>)ViewBag.AssetList;
+}
+
+<div class="title">
+    <h1>
+        Convert to Individual
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Convert Government
+        </div>
+        <div class="actions">
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div id="dvMessage"></div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Edit", "CaptureGovernment", FormMethod.Post, htmlAttributes: new { @id = "frmAddGovernment" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.IndividualRIN, htmlAttributes: new { @value = Model.IndividualRIN })
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+            <div id="dvStep1">
+                @{Html.RenderPartial("_BindIndividualForm", Model);}
+                <div class="row">
+                    <div class="text-right col-sm-12">
+                        <div class="form-group">
+                            <button class="btn-theme btn" id="btnStep1next">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="dvStep2" style="display: none;">
+                @Html.Hidden("hdnRowID")
+
+                <div id="dvBindData">
+                    @{Html.RenderPartial("_BindAssetTable", lstAsset);}
+                </div>
+                <div class="row">
+                    <div class="text-right col-sm-12">
+                        <div class="form-group">
+                            <button class="btn-theme btn" id="btnStep2Next">Next</button>
+                            <button class="btn-theme btn" id="btnStep2Prev">Previous</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="dvStep3" style="display:none">
+
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Individual Tax Payer Information
+                        </div>
+                    </div>
+                    <div class="row view-form">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label bold">Gender: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtGender"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Title: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtTitle"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">First Name: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtFirstName"></span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label bold">Middle Name: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtMiddleName"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Last Name: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtLastName"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Date Of Birth: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtDOB"></span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label bold">TIN: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtTIN"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Mobile Number 1: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtMobile1"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Mobile Number 2: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtMobile2"></span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label bold">Email Address 1: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtEmail1"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Email Address 2: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtEmail2"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Biometric Details: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtBiometric"></span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label bold">Tax officce: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtTaxOfficeName"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Marital Status: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtMaritalStatus"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Nationality: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtNationality"></span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label bold">Economic Activities: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtEconomicActivities"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Notification Method: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtNotificationMethod"></span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label bold">Contact Address: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtContactAddress"></span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label bold">Tax Payer Type: </label>
+                                <div class="form-control-static">
+                                    <label><span id="txtPayerType"></span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dvBindDetailData">
+                    @{Html.RenderPartial("_BindAssetDetails", lstAsset);}
+                </div>
+
+                <div class="row">
+                    <div class="text-right col-sm-12">
+                        <div class="form-group">
+                            <button class="btn-theme btn" id="btnStep3Next">Submit</button>
+                            <button class="btn-theme btn" id="btnStep3Prev">Previous</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@{
+    Html.RenderPartial("_CompanyDetailPopup");
+    Html.RenderPartial("_BuildingDetailPopup");
+    Html.RenderPartial("_VehicleDetailPopup");
+    Html.RenderPartial("_BusinessDetailPopup");
+    Html.RenderPartial("_LandDetailPopup");
+    Html.RenderPartial("_BindLinkAssetPopup");
+}
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsGovernmentToIndivivdualDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

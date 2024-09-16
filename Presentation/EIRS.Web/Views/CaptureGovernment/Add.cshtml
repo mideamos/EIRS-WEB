@@ -1,0 +1,47 @@
+﻿@model EIRS.Models.GovernmentViewModel
+
+@{
+    ViewBag.Title = "Add Government Tax Payer";
+}
+
+<div class="title">
+    <h1>
+        Government Tax Payer
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add New Government
+        </div>
+        <div class="actions">
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Add", "CaptureGovernment", FormMethod.Post, htmlAttributes: new { @id = "frmAddGovernment" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            Html.RenderPartial("_BindGovernmentForm", Model);
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="20" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

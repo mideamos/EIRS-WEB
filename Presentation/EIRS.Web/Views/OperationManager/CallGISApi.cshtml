@@ -1,0 +1,63 @@
+﻿@using EIRS.Web.GISModels
+@model  List<ReturnObject>
+@using EIRS.Common
+@using EIRS.BOL
+@{
+    ViewBag.Title = "CallGISApi";
+    IList<ReturnObject> lstAsset = (IList<ReturnObject>)ViewBag.gisFile;
+
+    string kk = ViewBag.kk;
+}
+
+
+<div class="title">
+    <h1>
+        GIS DATA
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">GIS DATA FOR PAGE @ViewBag.kk </div>
+    </div>
+    <div class="portlet-body">
+        <table class="table table-striped table-bordered table-hover order-column" width="100%">
+
+            <tr>
+                <th>File Number</th>
+                <th>Owner Full Name</th>
+                <th>Owner Phone Number</th>
+                <th>Assessment Amount</th>
+                <th>Action</th>
+            </tr>
+            @foreach (var item in lstAsset)
+            {
+                <tr>
+                    <td>@item.FileNumber</td>
+                    <td>@item.OwnerFullName</td>
+                    <td>@item.OwnerPhoneNumber</td>
+                    <td>@item.AssessmentAmount</td>
+                    <td>
+                       
+                        <div class="dropdown">
+                            <a class="btn btn-primary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Actions
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="@Url.Action("GISDetails","OperationManager", new {newId = item.FileNumber, id = item.PageNo })">Details</a>
+                                </li>
+                             
+                            </ul>
+                           
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+
+

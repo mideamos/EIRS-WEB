@@ -1,0 +1,45 @@
+﻿@model IList<Request_TCCDetail>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTCCDetail">
+    <thead class="red-th">
+        <tr>
+            <th> Tax Year </th>
+            <th data-hide="phone,tablet"> Total Income </th>
+            <th data-hide="phone,tablet"> Total Assessed </th>
+            <th data-hide="phone,tablet"> Total Tax Paid </th>
+            <th data-hide="phone,tablet"> Balance </th>
+            <th> Treasury Receipt No. </th>
+            <th> RevenueType </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TaxYear</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.AssessableIncome)</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.ERASAssessed)</td>
+                    <td>@CommUtil.GetFormatedCurrency(item.ERASTaxPaid)</td>
+                    <td>@CommUtil.GetFormatedCurrency((item.ERASAssessed) - (item.ERASTaxPaid))</td>
+                    <td>@item.Tax_receipt</td>
+                    <td>@item.RevenueType</td>
+                   
+                </tr>
+            }
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>

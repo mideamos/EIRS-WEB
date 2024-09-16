@@ -1,0 +1,111 @@
+﻿@using EIRS.Common;
+@{
+    ViewBag.Title = "Operation Manger - Tax Officer Status";
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Tax Officer Status
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Search Filters
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form id="frmTaxOfficerStatus" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tax Office:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("TaxOffice", (SelectList)ViewBag.TaxOfficeList, "Select Tax Office", new { @class = "form-control bs-select", @id = "cboTaxOffice" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tax Payer Type:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("TaxPayerType", (SelectList)ViewBag.TaxPayerTypeList, "All Tax Payer Type", new { @class = "form-control bs-select", @id = "cboTaxPayerType" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Review Status:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("ReviewStatus", (SelectList)ViewBag.ReviewStatusList, "All Review Status", new { @class = "form-control bs-select", @id = "cboReviewStatus" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tax Officer:</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("TaxOfficer", Enumerable.Empty<SelectListItem>(), "All Tax Officer", new { @class = "form-control bs-select", @id = "cboTaxOfficer" })
+                        </div>
+                    </div>
+
+                    <div class="form-group text-right row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-theme btn-block" id="btnSearch" type="button" tabindex="4"> Search </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="portlet light" id="dvSearchData">
+    <div class="portlet-title">
+        <div class="caption">Tax Payer List</div>
+        <div class="form-actions text-right">
+            <button type="button" id="btnExportToExcel" class="btn btn-theme">Export To Excel</button>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvData">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxPayer">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Payer RIN</th>
+                    <th class="none">Tax Payer Name</th>
+                    <th>Tax Payer Type </th>
+                    <th>Assessment</th>
+                    <th>Payment</th>
+                    <th>Outstanding</th>
+                    <th class="none">Review Status</th>
+                    <th class="none">Tax Officer</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th id="thAssessmentTotal"></th>
+                    <th id="thPaymentTotal"></th>
+                    <th id="thOutstandingTotal"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxOfficerStatus.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}
+
+
+
+

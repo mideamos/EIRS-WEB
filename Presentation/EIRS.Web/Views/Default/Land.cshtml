@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Tax Assets - Lands";
+    ViewBag.MetaTitle = "Tax Assets - Lands";
+    ViewBag.MetaKeywords = "Tax Assets, Lands";
+    ViewBag.MetaDescription = "Land within the state, whether developed or undeveloped or just used for an economic activity like farming.";
+    ViewBag.MenuID = 3;
+}
+
+<section class="alternate">
+    <div class="container">
+
+        <div class="title">
+            <h1>
+                Welcome to Tax Payers Section
+            </h1>
+            <hr>
+            <p>
+                This section covers information relating to tax assets, different types and importance
+            </p>
+        </div>
+
+        <div class="row custom-tabs">
+            <div class="col-sm-3">
+                <div class="portlet light compressed-menu">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Tax Assets
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <ul class="nav">
+                            <li>
+                                <a href="@Url.Action("Business","Default")"><i class="fa fa-angle-right"></i> Businesses</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Building","Default")"><i class="fa fa-angle-right"></i> Buildings </a>
+                            </li>
+                            <li class="active">
+                                <a href="@Url.Action("Land","Default")"><i class="fa fa-angle-right"></i> Lands </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Vehicle","Default")"><i class="fa fa-angle-right"></i> Vehicles </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Tax Assets - Lands
+                        </div>
+                    </div>
+                    <div class="portlet-body text-justify">
+                        <p>
+                            Land within the state, whether developed or undeveloped or just used for an economic activity like farming.
+                        </p>
+
+                        <div class="btn-custom-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <a class="btn btn-theme btn-block btn-outline" href="@Url.Action("LandUseCharge","Default")"> LAND USE CHARGE <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a class="btn btn-theme btn-block btn-outline" href="@Url.Action("CapitalGains","Default")"> CAPITAL GAINS TAX <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-custom-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <a class="btn btn-theme btn-block"> LANDS CAPTURE <i class="icon-arrow-right"></i> </a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a class="btn btn-theme btn-block"> LANDS PROFILES <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a class="btn btn-theme btn-block"> TAX CLEARANCE CERTIFICATE <i class="icon-arrow-right"></i>  </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

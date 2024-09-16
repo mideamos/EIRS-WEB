@@ -1,0 +1,62 @@
+﻿@model EIRS.Models.EMRevenueHeadViewModel
+
+@{
+    ViewBag.Title = "Add Classification Revenue Head";
+}
+
+<div class="title">
+    <h1>
+        Classification Revenue Heads
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Add New Revenue Head
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","EMRevenueHead")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Html.BeginForm("Add", "EMRevenueHead", FormMethod.Post, htmlAttributes: new { @id = "frmAddRevenueHead" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryID, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.DropDownListFor(model => model.CategoryID, (SelectList)ViewBag.CategoryList, "Select Category", htmlAttributes: new { @class = "form-control bs-select", @tabindex = "1", @placeholder = "Select Category" })
+                        @Html.ValidationMessageFor(model => model.CategoryID, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RevenueHeadName, htmlAttributes: new { @class = "control-label required-star" })
+                        @Html.TextBoxFor(model => model.RevenueHeadName, htmlAttributes: new { @class = "form-control", @tabindex = "2", @placeholder = "Enter Revenue Head" })
+                        @Html.ValidationMessageFor(model => model.RevenueHeadName, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="text-right col-sm-12">
+                    <div class="form-group">
+                        <input type="submit" class="btn-theme btn" value="Save" tabindex="3" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

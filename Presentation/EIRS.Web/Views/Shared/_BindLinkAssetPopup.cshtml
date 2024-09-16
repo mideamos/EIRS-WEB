@@ -1,0 +1,31 @@
+﻿<div class="modal fade" id="dvLinkAssetModal" tabindex="-1" role="dialog" aria-labelledby="dvLinkAssetModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="dvLinkAssetModalLabel">Link Tax Payer To Asset</h4>
+            </div>
+            <div class="modal-body">
+                <div id="dvLAMessage"></div>
+                <input type="hidden" id="hdnTaxPayerID" value="0" />
+                <input type="hidden" id="hdnTaxPayerTypeID" value="0" />
+                <input type="hidden" id="hdnAssetTypeID" value="0" />
+                <input type="hidden" id="hdnAssetID" value="0" />
+
+                <div class="form-group">
+                    <label class="control-label required-star">Select Tax Payer Role</label>
+                    @Html.DropDownList("cboTaxPayerRole", Enumerable.Empty<SelectListItem>(), "Select Tax Payer Role", new { @class = "form-control bs-select", @id="cboTaxPayerRole" })
+                </div>
+                <div class="form-group" id="dvBuildingUnit">
+                    <label class="control-label required-star">Select Building Unit</label>
+                    @Html.DropDownList("cboBuildingUnit", Enumerable.Empty<SelectListItem>(), "Select Building Unit", new { @class = "form-control bs-select", @id = "cboBuildingUnit" })
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-theme" id="btnSaveLinkAsset">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

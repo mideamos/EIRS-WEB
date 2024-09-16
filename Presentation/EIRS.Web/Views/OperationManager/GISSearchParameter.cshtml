@@ -1,0 +1,162 @@
+﻿@using EIRS.Web.GISModels
+@model  List<ReturnObject>
+@using EIRS.Common
+@using EIRS.BOL
+@{
+    ViewBag.Title = "CallGISApi";
+    IList<ReturnObject> lstAsset = (IList<ReturnObject>)ViewBag.gisFile;
+
+    string kk = ViewBag.kk;
+}
+
+
+<div class="title">
+    <h1>
+        GIS DATA
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="horizontalToolbarSeparator">
+            <div class="caption">GIS DATA 
+            <span class="caption"> <a href="@Url.Action("newCallGISApi","OperationManager")">Sync Data</a>  </span>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblAssessmentRules">
+            <thead class="red-th">
+                <tr>
+                    <th>File Number</th>
+
+                    <th>Owner Full Name</th>
+                    <th>Owner Phone Number</th>
+
+                    <th>Assessment Amount</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in lstAsset)
+                {
+                    <tr>
+                        <td>@item.FileNumber</td>
+                        <td>@item.OwnerFullName</td>
+                        <td>@item.OwnerPhoneNumber</td>
+                        <td align="right">@CommUtil.GetFormatedCurrency(@item.AssessmentAmountII)</td>
+
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="@Url.Action("GISDetails","OperationManager", new {newId = item.FileNumber, id = item.PageNo })">Details</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    @*<div class="portlet-body">
+            <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblDocumentList">
+                <thead class="red-th">
+                    <tr>
+                        <th>File Number</th>
+
+                        <th>Owner Full Name</th>
+                        <th>Owner Phone Number</th>
+
+                        <th>Assessment Amount</th>
+                        <th class="action-th all">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbAssetList">
+                    @{Html.RenderPartial("_BindGisParameter", lstDocument);}
+                </tbody>
+            </table>
+        </div>*@
+</div>
+
+@*@{
+        ViewBag.Title = "GISSearchParameter";
+    }
+
+    <div class="title">
+        <h1>
+            Operation Manager - GIS Search Parameter
+        </h1>
+        <hr>
+    </div>*@
+
+@*<div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">
+                Search Filters
+            </div>
+        </div>
+        <div class="portlet-body">
+            <form id="frmRevenueStreamAssessmentsbyTaxOffice" class="form-horizontal">
+                <div class="row">
+                    <div class="col-sm-7">
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">From Date:</label>
+                            <div class="col-md-8">
+                                @Html.TextBox("ClientID", "", new { @class = "form-control", @id = "ClientID", @autocomplete = "off", tabindex = "2", @placeholder = "Enter Your ClientID" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">From Date:</label>
+                            <div class="col-md-8">
+                                @Html.TextBox("txtFromDate", "", new { @class = "form-control", @id = "txtFromDate", @autocomplete = "off", tabindex = "2", @placeholder = "Enter From Date" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">To Date:</label>
+                            <div class="col-md-8">
+                                @Html.TextBox("txtToDate", "", new { @class = "form-control", @id = "txtToDate", @autocomplete = "off", tabindex = "3", @placeholder = "Enter To Date" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Page No:</label>
+                            <div class="col-md-8">
+                                @Html.TextBox("pageNo", "", new { @class = "form-control", @id = "pageNo", @autocomplete = "off", tabindex = "3", @placeholder = "Enter Page No" })
+                            </div>
+                        </div>
+                        <div class="form-group text-right row">
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-theme btn-block" id="btnSearchNowNow" type="button" tabindex="4"> SEARCH </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    @section Footer {
+        <script type="text/javascript" src="~/Scripts/jsGISSearchParameter.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    }*@
+@section Footer {
+    <script type="text/javascript" src="/Content/plugins/plupload/js/plupload.full.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jsGISSearchParameter.js"></script>
+}
+@*@section Footer {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                jsfn_ConvertToDatableWithCustomSort($('#tblGISManager'), [{ "orderable": true }, { "orderable": true }, { "orderable": true }, { "orderable": false }], 'No Record Found');
+            });
+        </script>
+
+    }*@

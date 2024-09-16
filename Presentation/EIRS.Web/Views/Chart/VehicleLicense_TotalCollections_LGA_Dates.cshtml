@@ -1,0 +1,77 @@
+
+@{
+    ViewBag.Title = "Vehicle License - Total Collections - LGA";
+}
+
+@section header {
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="~/Content/Plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Plugins/jquery-sumoselect/css/sumoselect.min.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="title">
+    <h1>
+        Vehicle License - Total Collections - LGA
+    </h1>
+    <hr>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    Chart : Vehicle License - Total Collections - LGA
+                </div>
+                <div class="actions">
+                    <a href="@Url.Action("List","Chart")" class="btn default"> Back </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="controller-wrapper">
+                    @Html.DropDownList("cboLGA", (SelectList)ViewBag.LGAList, new { @id = "cboLGA", @class = "form-control sumo-select", @multiple = "multiple", @data_selected_text_format = "count" })
+                    <div id="dvReportRange" class="btn default">
+                        <i class="fa fa-calendar"></i> &nbsp;
+                        <span> </span>
+                        <b class="fa fa-angle-down"></b>
+                    </div>
+                    <input type="checkbox" id="chkTAC" data-toggle="toggle" data-on="Amount" data-off="Count" checked data-size="small" data-onstyle="theme">
+                    <a id="btnReload" class="btn btn-icon-only btn-reload btn-redtheme pull-right">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                </div>
+
+                <hr />
+                <div id="chrtVehicleLicense_TotalCollections_LGA_Dates" style="height: 300px; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    Table : Vehicle License - Total Collections - LGA
+                </div>
+                <div class="actions">
+                    <select id="cboSeries" name="cboSeries" class="form-control bs-select" multiple data-selected-text-format="count">
+                    </select>
+                    <a id="btnDowload" class="btn btn-theme">Download</a>
+                </div>
+            </div>
+            <div class="portlet-body" id="dvVehicleLicense_TotalCollections_LGA_Dates_Table">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer {
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/Content/Plugins/apexcharts/apexcharts.min.js"></script>
+    <script src="~/Content/Plugins/bootstrap-daterangepicker/daterangepicker.min.js" type="text/javascript"></script>
+    <script src="~/Content/Plugins/jquery-sumoselect/js/jquery.sumoselect.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/Scripts/Charts/jsVehicleLicense_TotalCollections_LGA_Dates.js?v=@GlobalDefaultValues.VersionNumber"></script>
+}

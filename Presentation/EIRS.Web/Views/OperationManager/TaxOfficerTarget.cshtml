@@ -1,0 +1,83 @@
+﻿@model IList<EIRS.BOL.usp_GetUserList_Result>
+@using EIRS.Common
+@using EIRS.BOL
+@{
+    usp_GetTaxOfficeList_Result mObjTaxOfficeData = (usp_GetTaxOfficeList_Result)ViewBag.TaxOfficeData;
+    ViewBag.Title = "Operation Manger - Set Tax Officer Target" + mObjTaxOfficeData.TaxOfficeName;
+}
+
+<div class="title">
+    <h1>
+        Operation Manger - Set Tax Officer Target - @mObjTaxOfficeData.TaxOfficeName
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Tax Officer List</div>
+        <div class="form-actions text-right">
+            <a href="@Url.Action("TaxOfficeTarget","OperationManager")" class="btn btn-redtheme" id="btnCancel"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblTaxOffice">
+            <thead class="red-th">
+                <tr>
+                    <th>Tax Officer</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ContactName</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-theme btn-xs md-skip dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_SelectTaxYear(@item.UserID, @mObjTaxOfficeData.TaxOfficeID)">Set Tax Officer Target</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="dvTaxYear" tabindex="-1" role="dialog" aria-labelledby="dvTaxYearLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="dvTaxYearLabel">Set Tax Office Target</h4>
+            </div>
+            <div class="modal-body">
+                <div id="dvMessage"></div>
+                <input type="hidden" id="hdnTaxOfficeID" value="0" />
+                <input type="hidden" id="hdnUserID" value="0" />
+
+                <div class="form-group">
+                    <label class="control-label required-star">Select Tax Year</label>
+                    @Html.DropDownList("cboTaxYear", (SelectList)ViewBag.YearList, "Select Tax Year", new { @class = "form-control bs-select", @id = "cboTaxYear" })
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-theme" id="btnSetTaxOfficeTarget">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsTaxOfficerTarget.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

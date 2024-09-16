@@ -1,0 +1,24 @@
+﻿@model IList<EIRS.BOL.usp_GetCentralMenuUserBased_Result>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div class="portlet light compressed-menu">
+        <div class="portlet-title">
+            <div class="caption">
+                @Model.FirstOrDefault().ParentMenuName
+            </div>
+        </div>
+        <div class="portlet-body">
+            <ul class="nav">
+                @foreach (var item in Model)
+                {
+                    <li>
+                        <a href="@Url.Action(item.ActionName,item.ControllerName)"> <i class="fa fa-angle-right"></i> @item.CentralMenuName</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+

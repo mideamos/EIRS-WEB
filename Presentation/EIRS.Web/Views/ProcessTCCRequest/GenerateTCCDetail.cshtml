@@ -1,0 +1,200 @@
+﻿@model EIRS.Web.Models.GenerateTCCDetailViewModel
+@using EIRS.Common
+
+@{
+    ViewBag.Title = "Generate TCC Details";
+    usp_GetTCCRequestDetails_Result mObjRequestData = (usp_GetTCCRequestDetails_Result)ViewBag.RequestData;
+    IList<usp_GetTCCDetail_Result> lstTCCDetail = (IList<usp_GetTCCDetail_Result>)ViewBag.TCCDetailList;
+}
+
+<input type="hidden" id="hdnStageID" value="@((int)EnumList.TCCRequestStage.Generate_TCC_Detail)" />
+
+<div class="title">
+    <h1>
+        TCC Request - Generate TCC Details
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Request Information
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Details","ProcessTCCRequest", new { reqId = Model.RequestID })" class="btn btn-theme btn-outline">
+                Cancel
+            </a>
+        </div>
+    </div>
+    <div class="row view-form">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Request Ref No: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.RequestRefNo
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Request Date: </label>
+                <div class="form-control-static">
+                    @CommUtil.GetFormatedDate(mObjRequestData.RequestDate)
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Year: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.TaxYear
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer Name: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.FirstName @mObjRequestData.LastName
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Tax Payer EIN: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.IndividualRIN
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label bold">Mobile Number: </label>
+                <div class="form-control-static">
+                    @mObjRequestData.MobileNumber1
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">TCC Details</div>
+        <div class="actions">
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" id="tblTCCDetails">
+            @*<thead class="purple-th">
+                <tr>
+                    <th> Tax Year </th>
+                    <th> TCC Assessable Income </th>
+                    <th> TCC Tax Paid </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var vRule in lstTCCDetail)
+                {
+                    <tr>
+                        <td>@vRule.TaxYear</td>
+                        <td>@vRule.AssessableIncome</td>
+                        <td>@vRule.TCCTaxPaid</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="@Url.Action("GenerateTCCDetail","ProcessTCCRequest", new { reqid = vRule.TCCDetailID })">View Details</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>*@
+            <thead class="purple-th">
+                <tr>
+                    <th> Tax Year </th>
+                    <th> TCC Assessable Income </th>
+                    <th> TCC Tax Paid </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@(mObjRequestData.TaxYear - 2)</td>
+                    <td>@CommUtil.GetFormatedCurrency(lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).Select(t => t.AssessableIncome).FirstOrDefault()) </td>
+                    <td>@CommUtil.GetFormatedCurrency(lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 2)).Select(t => t.TCCTaxPaid).FirstOrDefault())</td>
+                </tr>
+                <tr>
+                    <td>@(mObjRequestData.TaxYear - 1)</td>
+                    <td>@CommUtil.GetFormatedCurrency(lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).Select(t => t.AssessableIncome).FirstOrDefault()) </td>
+                    <td>@CommUtil.GetFormatedCurrency(lstTCCDetail.Where(t => t.TaxYear == (mObjRequestData.TaxYear - 1)).Select(t => t.TCCTaxPaid).FirstOrDefault())</td>
+                </tr>
+                <tr>
+                    <td>@mObjRequestData.TaxYear</td>
+                    <td>@CommUtil.GetFormatedCurrency(lstTCCDetail.Where(t => t.TaxYear == mObjRequestData.TaxYear).Select(t => t.AssessableIncome).FirstOrDefault()) </td>
+                    <td>@CommUtil.GetFormatedCurrency(lstTCCDetail.Where(t => t.TaxYear == mObjRequestData.TaxYear).Select(t => t.TCCTaxPaid).FirstOrDefault())</td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@using (Html.BeginForm("GenerateTCCDetail", "ProcessTCCRequest", FormMethod.Post, htmlAttributes: new { @id = "frmGenerateTCCDetails" }))
+{
+    <div class="portlet light">
+        <div class="portlet-title">
+            <div class="caption">Generate TCC Details</div>
+            <div class="actions">
+
+            </div>
+        </div>
+        <div class="portlet-body">
+
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.GTCCDetailID, htmlAttributes: new { @value = Model.GTCCDetailID })
+            @Html.HiddenFor(model => model.RequestID, htmlAttributes: new { @value = Model.RequestID, @id = "hdnRequestID" })
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Notes, htmlAttributes: new { @class = "form-control", @tabindex = "21", @placeholder = "Enter Notes", @Rows = "3" })
+                        @Html.ValidationMessageFor(model => model.Notes, "", htmlAttributes: new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="portlet-footer text-right">
+            @if (lstTCCDetail.Count > 0 && lstTCCDetail.Where(t => t.TCCTaxPaid > 0).Any())
+            {
+                <button type="submit" class="btn btn-theme"> Save </button>
+            }
+            else
+            {
+                <a class="btn btn-theme" disabled="disabled">Save</a>
+            }
+        </div>
+    </div>
+}
+
+@{ Html.RenderPartial("_BindInternalNotes"); }
+
+@section Footer {
+    <script type="text/javascript" src="/Content/plugins/plupload/js/plupload.full.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jsfn_ConvertToDatableWithCustomSort($("#tblTCCDetails"), [{}, {}, {}], 'No Records Founds');
+        });
+    </script>
+    <script type="text/javascript" src="~/Scripts/jsProcessTCCNotes.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

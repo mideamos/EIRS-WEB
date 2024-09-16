@@ -1,0 +1,48 @@
+﻿@model IList<EIRS.BOL.usp_GetBuildingList_Result>
+@using EIRS.Common
+
+<table class="dt-responsive table table-bordered v-middle" width="100%" id="tblBuilding">
+    <thead class="red-th">
+        <tr>
+            <th>RIN</th>
+            <th>Building Name</th>
+            <th class="desktop">Street Address</th>
+            <th>Building Purpose</th>
+            <th class="action-th all">Action</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Count > 0)
+    {
+        <tbody>
+            @foreach (var vBuilding in Model)
+            {
+            <tr>
+                <td>@vBuilding.BuildingRIN</td>
+                <td>@vBuilding.BuildingName</td>
+                <td>@vBuilding.StreetName</td>
+                <td>@vBuilding.BuildingPurposeName</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-theme dropdown-toggle md-skip btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a onclick="javascript:jsfn_BuildingInformation(@vBuilding.BuildingID)">
+                                    Quick View
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Details", "ProfileBuilding", new { id = vBuilding.BuildingID, name=vBuilding.BuildingRIN.ToSeoUrl() })">
+                                    Asset Details
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    }
+</table>
+

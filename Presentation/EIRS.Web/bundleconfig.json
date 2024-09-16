@@ -1,0 +1,38 @@
+[
+  {
+    "outputFileName": "Scripts/jsCommon.min.js",
+    "inputFiles": [
+      "Scripts/jsCommon.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/Plugins/jquery-sumoselect/js/jquery.sumoselect.min.js",
+    "inputFiles": [
+      "Content/Plugins/jquery-sumoselect/js/jquery.sumoselect.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/Plugins/bootstrap-toggle/css/bootstrap-toggle.min.css",
+    "inputFiles": [
+      "Content/Plugins/bootstrap-toggle/css/bootstrap-toggle.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/Plugins/bootstrap-toggle/css/bootstrap2-toggle.min.css",
+    "inputFiles": [
+      "Content/Plugins/bootstrap-toggle/css/bootstrap2-toggle.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/Plugins/bootstrap-toggle/js/bootstrap-toggle.min.js",
+    "inputFiles": [
+      "Content/Plugins/bootstrap-toggle/js/bootstrap-toggle.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/Plugins/bootstrap-toggle/js/bootstrap2-toggle.min.js",
+    "inputFiles": [
+      "Content/Plugins/bootstrap-toggle/js/bootstrap2-toggle.js"
+    ]
+  }
+]

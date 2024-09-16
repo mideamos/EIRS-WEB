@@ -1,0 +1,80 @@
+﻿@model EIRS.Models.CentralMenuViewModel
+@using EIRS.BOL
+@{
+    ViewBag.Title = "Screen List";
+    IList<usp_GetScreenMenuList_Result> lstScreen = (IList<usp_GetScreenMenuList_Result>)ViewBag.ScreenList;
+}
+
+<div class="title">
+    <h1>
+        Manage Central Menus : Screen List
+    </h1>
+    <hr>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">
+            Central Menu Details
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("List","CentralMenu")" class="btn btn-redtheme"> Cancel </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Parent Menu: </label>
+                    <div class="form-control-static">
+                        @Model.ParentCentralMenuName
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Menu Name: </label>
+                    <div class="form-control-static">
+                        @Model.CentralMenuName
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Sort Order: </label>
+                    <div class="form-control-static">
+                        @Model.SortOrder
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label bold">Status: </label>
+                    <div class="form-control-static">
+                        @Model.ActiveText
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Screens</div>
+        <div class="actions">
+            <a href="@Url.Action("AddScreen","CentralMenu", new { id= Model.CentralMenuID, name=Model.CentralMenuName })" class="btn btn-redtheme">
+                Add New
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body" id="dvScreenData">
+        @{ Html.RenderPartial("_ScreenTable", lstScreen); }
+    </div>
+</div>
+
+@section Footer {
+    <script type="text/javascript" src="~/Scripts/jsCentralMenuDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+}

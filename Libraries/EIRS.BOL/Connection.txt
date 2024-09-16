@@ -1,0 +1,1 @@
+﻿"Data Source=92.205.57.77;Initial Catalog=EIRS;user id=Admin;password=K5?wh7l4##"

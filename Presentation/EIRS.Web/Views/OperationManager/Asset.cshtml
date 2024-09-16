@@ -1,0 +1,321 @@
+﻿@model IEnumerable<EIRS.Web.GISModels.GISFileAsset>
+
+@{
+    ViewBag.Title = "Asset";
+}
+
+<h2>GIS FILE Asset</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FileId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PageNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetSubType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetLGA)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetDistrict)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetWard)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetBillingZone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetSubzone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetUse)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetPurpose)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetRoadName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetOffStreet)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HoldingType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetCofO)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TitleDocument)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SupportingDocument)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PartyID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OccupierStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AnyOccupants)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OccupancyType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetModifiedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetFootprintPresent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetAge)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetCompletionYear)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetFurnished)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetSize)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetPerimeter)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfFloors)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetLatitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetLongitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StateOfRepair)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LevelOfCompletion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HasGenerator)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HasSwimmingPool)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HasFence)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HasBuildings)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfBldgs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WallMaterial)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoofMaterial)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SewageAccess)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ElectricConnection)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WaterConnectionType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SolidWasteCollectionType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateSaved)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FileId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PageNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetSubType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetLGA)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetDistrict)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetWard)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetBillingZone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetSubzone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetUse)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetPurpose)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetRoadName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetOffStreet)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HoldingType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetCofO)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TitleDocument)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SupportingDocument)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PartyID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OccupierStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AnyOccupants)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OccupancyType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetModifiedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetFootprintPresent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetAge)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetCompletionYear)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetFurnished)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetSize)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetPerimeter)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfFloors)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetLatitude)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssetLongitude)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StateOfRepair)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LevelOfCompletion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HasGenerator)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HasSwimmingPool)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HasFence)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HasBuildings)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfBldgs)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WallMaterial)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoofMaterial)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SewageAccess)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ElectricConnection)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WaterConnectionType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SolidWasteCollectionType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateSaved)
+        </td>
+        <td>
+            <div class="dropdown">
+                <a class="btn btn-primary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Actions
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="@Url.Action("GetAsset","OperationManager", new {id=@item.Id })">View</a>
+                    </li>
+
+                </ul>
+
+            </div>
+        </td>
+    </tr>
+}
+
+</table>

@@ -31,7 +31,8 @@ namespace EIRS.API.Controllers
             APIResponse mObjAPIResponse = new APIResponse();
             List<object> results = new List<object>();
             BLTCC mObjBLTCC = new BLTCC();
-            bool allSuccess = true;
+            // bool allSuccess = true;
+            bool atLeastOneSuccess = false;
 
             try
             {
@@ -64,6 +65,7 @@ namespace EIRS.API.Controllers
 
                         if (mObjReqResponse.Success)
                         {
+                            atLeastOneSuccess = true;
                             mObjRequest = new TCC_Request()
                             {
                                 TCCRequestID = mObjReqResponse.AdditionalData.TCCRequestID,
@@ -88,14 +90,16 @@ namespace EIRS.API.Controllers
                         }
                         else
                         {
-                            allSuccess = false;
-                            mObjAPIResponse.Message = $"Request failed for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}. Error: {mObjReqResponse.Message}";
+                            // allSuccess = false;
+                            // mObjAPIResponse.Message = $"Request failed for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}. Error: {mObjReqResponse.Message}";
+                            mObjAPIResponse.Message += $"Request failed for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}. Error: {mObjReqResponse.Message}\n";
                         }
                     }
                     else
                     {
-                        allSuccess = false;
-                        mObjAPIResponse.Message = $"Request already exists for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}.";
+                        // allSuccess = false;
+                        // mObjAPIResponse.Message = $"Request already exists for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}.";
+                        mObjAPIResponse.Message += $"Request already exists for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}.\n";
                     }
                     // }
                     // else
@@ -105,7 +109,8 @@ namespace EIRS.API.Controllers
                     // }
                 }
 
-                mObjAPIResponse.Success = allSuccess;
+                // mObjAPIResponse.Success = allSuccess;
+                mObjAPIResponse.Success = atLeastOneSuccess;
                 mObjAPIResponse.Result = results;
             }
 

@@ -82,6 +82,7 @@ namespace EIRS.API.Controllers
                                 RequestRefNo = mObjReqResponse.AdditionalData.RequestRefNo,
                                 TaxYear = request.TaxYear.ToString(),
                                 RequestDate = CommUtil.GetCurrentDateTime().ToString("dd-MMM-yyyy"),
+                                TaxOfficeId = userDet != null ? userDet.TaxOfficeID : 0,
                                 // RequestStatus = "Paid"
                             });
                         }

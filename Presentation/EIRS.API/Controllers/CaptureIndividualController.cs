@@ -75,13 +75,20 @@ namespace EIRS.API.Controllers
 
                             new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
 
+                            //RequestRefNo: we could use the mObjReqResponse.AdditionalData.TCCRequestID, TaxPayerID, TaxYear fields to get the TCCRequest->RequestRefNo
+                            var fetchedRequest = _db.TCC_Request
+                                           .Where(r => r.TCCRequestID == mObjRequest.TCCRequestID)
+                                           .Select(r => new { r.RequestRefNo })
+                                           .FirstOrDefault();
+
 
                             results.Add(new
                             {
                                 TaxPayerID = request.TaxPayerID,
                                 TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
                                 TaxPayerRIN = userDet != null ? userDet.IndividualRIN : "",
-                                RequestRefNo = mObjReqResponse.AdditionalData.RequestRefNo,
+                                // RequestRefNo = mObjReqResponse.AdditionalData.RequestRefNo,
+                                RequestRefNo = fetchedRequest != null ? fetchedRequest.RequestRefNo : null,
                                 TaxYear = request.TaxYear.ToString(),
                                 RequestDate = CommUtil.GetCurrentDateTime().ToString("dd-MMM-yyyy"),
                                 TaxOfficeId = userDet != null ? userDet.TaxOfficeID : 0,
@@ -110,6 +117,7 @@ namespace EIRS.API.Controllers
                 }
 
                 // mObjAPIResponse.Success = allSuccess;
+                mObjAPIResponse.Message = atLeastOneSuccess && mObjAPIResponse.Message == null ? "Success" : mObjAPIResponse.Message;
                 mObjAPIResponse.Success = atLeastOneSuccess;
                 mObjAPIResponse.Result = results;
             }

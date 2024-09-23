@@ -1464,6 +1464,27 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="ModifiedDate" Type="int" />
           <Property Name="TransactionRefNo" Type="varchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="Map_PoA_Transfer_Operation">
+          <Key>
+            <PropertyRef Name="POATID" />
+          </Key>
+          <Property Name="POATID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="POATRefNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="From_PoaTransactionRefNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="From_Taxpayer_POAID" Type="int" />
+          <Property Name="From_TaxpayerID" Type="int" />
+          <Property Name="From_TaxpayerTypeID" Type="int" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="To_TaxpayerID" Type="int" />
+          <Property Name="To_TaxpayerTypeID" Type="int" />
+          <Property Name="To_Taxpayer_POAID" Type="int" />
+          <Property Name="To_TransactionRefNo" Type="varchar" MaxLength="50" />
+          <Property Name="Settlement_MethodID" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="MAP_ServiceBill_Adjustment">
           <Key>
             <PropertyRef Name="SADID" />
@@ -2101,7 +2122,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="TCCRequestID" Type="bigint" />
           <Property Name="Tax_receipt" Type="nvarchar" MaxLength="100" />
           <Property Name="IndividualRIN" Type="nvarchar" MaxLength="50" />
-          <Property Name="ReveuneType" Type="varchar" MaxLength="11" />
+          <Property Name="ReveuneType" Type="nvarchar" MaxLength="11" />
         </EntityType>
         <EntityType Name="Notification_Method">
           <Key>
@@ -7227,7 +7248,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
         <Function Name="usp_InsertProfileInformation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TPAID" Type="bigint" Mode="In" />
         </Function>
-        
         <Function Name="usp_RPT_BusinessSectorAssessmentDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaxYear" Type="int" Mode="In" />
           <Parameter Name="BusinessSectorID" Type="int" Mode="In" />
@@ -7379,8 +7399,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="TaxOfficerID" Type="int" Mode="In" />
           <Parameter Name="ReviewStatusID" Type="int" Mode="In" />
         </Function>
-        
-        
         <Function Name="usp_RPT_TaxOfficeAssessmentDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaxOfficeID" Type="int" Mode="In" />
           <Parameter Name="TaxYear" Type="int" Mode="In" />
@@ -8290,6 +8308,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="MAP_MDAService_MDAServiceItem" EntityType="Self.MAP_MDAService_MDAServiceItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_MDAService_SettlementMethod" EntityType="Self.MAP_MDAService_SettlementMethod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_PaymentAccount_Operation" EntityType="Self.MAP_PaymentAccount_Operation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Map_PoA_Transfer_Operation" EntityType="Self.Map_PoA_Transfer_Operation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_ServiceBill_Adjustment" EntityType="Self.MAP_ServiceBill_Adjustment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_ServiceBill_LateCharge" EntityType="Self.MAP_ServiceBill_LateCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_ServiceBill_MDAService" EntityType="Self.MAP_ServiceBill_MDAService" Schema="dbo" store:Type="Tables" />
@@ -12964,6 +12983,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
             <End Role="TCC_Request1" EntitySet="TCC_Request" />
           </AssociationSet>
           <EntitySet Name="ApproverTypes" EntityType="EIRSModel.ApproverType" />
+          <EntitySet Name="Map_PoA_Transfer_Operation" EntityType="EIRSModel.Map_PoA_Transfer_Operation" />
           <!--<EntitySet Name="TestingNEWTAB" EntityType="EIRSModel.TestingNEWTAB" />
           <EntitySet Name="vw_ServiceBillNew" EntityType="EIRSModel.vw_ServiceBillNew" />-->
           </EntityContainer>
@@ -24071,7 +24091,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="Tax_receipt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IndividualRIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TCCRequestID" Type="Int64" />
-          <Property Name="ReveuneType" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="ReveuneType" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="BusinessName">
           <Key>
@@ -24111,6 +24131,27 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           </Key>
           <Property Name="ApproverTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ApproverTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Map_PoA_Transfer_Operation">
+          <Key>
+            <PropertyRef Name="POATID" />
+          </Key>
+          <Property Name="POATID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="POATRefNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="From_PoaTransactionRefNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="From_Taxpayer_POAID" Type="Int32" />
+          <Property Name="From_TaxpayerID" Type="Int32" />
+          <Property Name="From_TaxpayerTypeID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="To_TaxpayerID" Type="Int32" />
+          <Property Name="To_TaxpayerTypeID" Type="Int32" />
+          <Property Name="To_Taxpayer_POAID" Type="Int32" />
+          <Property Name="To_TransactionRefNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Settlement_MethodID" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
         </EntityType>
        
         </Schema>
@@ -33761,6 +33802,28 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
               <MappingFragment StoreEntitySet="ApproverType">
                 <ScalarProperty Name="ApproverTypeName" ColumnName="ApproverTypeName" />
                 <ScalarProperty Name="ApproverTypeId" ColumnName="ApproverTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Map_PoA_Transfer_Operation">
+            <EntityTypeMapping TypeName="EIRSModel.Map_PoA_Transfer_Operation">
+              <MappingFragment StoreEntitySet="Map_PoA_Transfer_Operation">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Settlement_MethodID" ColumnName="Settlement_MethodID" />
+                <ScalarProperty Name="To_TransactionRefNo" ColumnName="To_TransactionRefNo" />
+                <ScalarProperty Name="To_Taxpayer_POAID" ColumnName="To_Taxpayer_POAID" />
+                <ScalarProperty Name="To_TaxpayerTypeID" ColumnName="To_TaxpayerTypeID" />
+                <ScalarProperty Name="To_TaxpayerID" ColumnName="To_TaxpayerID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="From_TaxpayerTypeID" ColumnName="From_TaxpayerTypeID" />
+                <ScalarProperty Name="From_TaxpayerID" ColumnName="From_TaxpayerID" />
+                <ScalarProperty Name="From_Taxpayer_POAID" ColumnName="From_Taxpayer_POAID" />
+                <ScalarProperty Name="From_PoaTransactionRefNo" ColumnName="From_PoaTransactionRefNo" />
+                <ScalarProperty Name="POATRefNo" ColumnName="POATRefNo" />
+                <ScalarProperty Name="POATID" ColumnName="POATID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

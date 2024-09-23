@@ -413,6 +413,9 @@
     <Compile Include="MAP_PaymentAccount_Operation.cs">
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Map_PoA_Transfer_Operation.cs">
+      <DependentUpon>EIRSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MAP_ServiceBill_Adjustment.cs">
       <DependentUpon>EIRSModel.tt</DependentUpon>
     </Compile>

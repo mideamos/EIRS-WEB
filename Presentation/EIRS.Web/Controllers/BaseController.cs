@@ -2224,6 +2224,44 @@ namespace EIRS.Web.Controllers
 
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetPoATransferDetails(int POATID)
+        {
+
+            IDictionary<string, object> dcResponse = new Dictionary<string, object>();
+
+            // Start query the Map_PoA_Transfer_Operation
+            var poaTransferOperation = _db.Map_PoA_Transfer_Operation.FirstOrDefault(o => o.POATID == POATID);
+            if (poaTransferOperation == null)
+            {
+                dcResponse["success"] = false;
+                dcResponse["Message"] = "PoA Transfer Operation not found.";
+                return Json(dcResponse, JsonRequestBehavior.AllowGet);
+            }
+
+            int PaymentAccountID = poaTransferOperation.To_Taxpayer_POAID ?? 0;
+            // End query the Map_PoA_Transfer_Operation
+            if (PaymentAccountID == 0)
+            {
+                dcResponse["success"] = false;
+                dcResponse["Message"] = "Invalid Payment Account ID.";
+                return Json(dcResponse, JsonRequestBehavior.AllowGet);
+            }
+
+            usp_GetPaymentAccountList_Result mObjPaymentData = new BLPaymentAccount().BL_GetPaymentAccountDetails(new Payment_Account() { PaymentAccountID = PaymentAccountID });
+
+            if (mObjPaymentData != null)
+            {
+                dcResponse["success"] = true;
+                dcResponse["PaymentAccountDetails"] = mObjPaymentData;
+            }
+            else
+            {
+                dcResponse["success"] = false;
+                dcResponse["Message"] = "Invalid Request";
+            }
+
+            return Json(dcResponse, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetAssetDetails(int TPAID)
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -2931,7 +2969,7 @@ namespace EIRS.Web.Controllers
             return Json(lstDataSubmissionType, JsonRequestBehavior.AllowGet);
         }
 
-        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, bool blnShowTotal, string[] strTotalColumns = null, string AppendExcelName="")
+        public FileResult ExportToExcel<T>(IList<T> lstData, RouteData routeData, string[] lstColumns, bool blnShowTotal, string[] strTotalColumns = null, string AppendExcelName = "")
         {
             var vMemberInfoData = typeof(T)
                     .GetProperties()

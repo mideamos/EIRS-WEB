@@ -412,7 +412,7 @@ namespace EIRS.Repository
         SELECT
             pa.PaymentAccountid  AS PaymentID,
             pa.CreatedDate AS PaymentDate,
-            pa.SettlementMethodID AS PaymentTypeID,
+            2 AS PaymentTypeID,
             'Payment on Acccount' AS PaymentTypeName,
             pa.PaymentRefNo, 
             COALESCE(pa.Amount, 0) AS Amount,
@@ -426,7 +426,7 @@ namespace EIRS.Repository
         SELECT
               map.POATID AS PaymentID,
             map.CreatedDate AS PaymentDate,
-            map.Settlement_MethodID AS PaymentTypeID,
+            10 AS PaymentTypeID,
             'PoA Transfer' AS PaymentTypeName,
             map.POATRefNo AS PaymentRefNo,
             COALESCE(map.Amount, 0) AS Amount,

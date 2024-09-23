@@ -10,10 +10,11 @@
 namespace EIRS.BOL
 {
     using System;
-    
+
     public partial class usp_GetTaxPayerPayment_Result
     {
-        public Nullable<int> PaymentID { get; set; }
+        // public Nullable<int> PaymentID { get; set; }//Commented by TIM on 21-09-2024 due to the addition of Payment_Account->PaymentAccountid table in the SettlementRepository->REP_GetTaxPayerPayment query
+        public Nullable<long> PaymentID { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<int> PaymentTypeID { get; set; }
         public string PaymentTypeName { get; set; }

@@ -571,8 +571,10 @@ namespace EIRS.Web.Controllers
                                 Map_PoA_Transfer_Operation poaTransferOperation = new Map_PoA_Transfer_Operation
                                 {
                                     POATRefNo = nextPOATRefNo,
+
                                     From_PoaTransactionRefNo = fromPaymentAccount.TransactionRefNo,
                                     From_Taxpayer_POAID = Convert.ToInt32(fromPaymentAccount.PaymentAccountID),
+
                                     From_TaxpayerID = fromPaymentAccount.TaxPayerID,
                                     From_TaxpayerTypeID = fromPaymentAccount.TaxPayerTypeID,
                                     Amount = (decimal)pobjPaymentViewModel.Amount,
@@ -1445,6 +1447,54 @@ namespace EIRS.Web.Controllers
                     }
                     else
                     {
+                        //START NEW POA SETTLEMENT UPDATES - AVAILABLE BALANCE CHECK
+                        // Get all Payment_Account records for the given TaxPayerTypeID and TaxPayerID
+                        var paymentAccounts = _db.Payment_Account
+                            .Where(pa => pa.TaxPayerTypeID == pObjSettlementModel.TaxPayerTypeID && pa.TaxPayerID == pObjSettlementModel.TaxPayerID)
+                            .ToList();
+
+                        // Get all TransactionRefNo values from Payment_Account
+                        var transactionRefNos = paymentAccounts.Select(pa => pa.TransactionRefNo).ToList();
+
+                        // Fetch all relevant Map_PoA_Transfer_Operation records in a single query
+                        var poaTransferOperations = _db.Map_PoA_Transfer_Operation
+                            .Where(mpo => transactionRefNos.Contains(mpo.From_PoaTransactionRefNo))
+                            .GroupBy(mpo => mpo.From_PoaTransactionRefNo)
+                            .Select(g => new
+                            {
+                                From_PoaTransactionRefNo = g.Key,
+                                TotalAmountTransferred = g.Sum(mpo => mpo.Amount)
+                            })
+                            .ToDictionary(x => x.From_PoaTransactionRefNo, x => x.TotalAmountTransferred);
+
+                        // Calculate available balance for each TransactionRefNo in Payment_Account
+                        var paymentAccountBalances = paymentAccounts.Select(pa =>
+                        {
+                            decimal amountTransferred = poaTransferOperations.ContainsKey(pa.TransactionRefNo) ? poaTransferOperations[pa.TransactionRefNo] : 0;
+
+                            return new
+                            {
+                                pa.TransactionRefNo,
+                                pa.Amount,
+                                AmountTransferred = amountTransferred,
+                                AvailableBalance = pa.Amount - amountTransferred
+                            };
+                        }).ToList();
+
+                        // Check if total available balance covers the amount to be paid
+                        decimal amountToPay = (decimal)newSettleAmount;
+                        if (paymentAccountBalances.Sum(pab => pab.AvailableBalance) < amountToPay)
+                        {
+                            // Not enough balance
+                            ViewBag.PoABalance = dcBalance;
+                            ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                            ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                            ViewBag.Message = "Insufficient PoA balance!";
+                            return View(pObjSettlementModel);
+                        }
+
+
+                        //END NEW POA SETTLEMENT UPDATES - AVAILABLE BALANCE CHECK
 
                         BLSettlement mObjBLSettlement = new BLSettlement();
 
@@ -1469,6 +1519,44 @@ namespace EIRS.Web.Controllers
 
                             if (mObjSettlementResponse.Success)
                             {
+
+                                //START NEW POA SETTLEMENT UPDATES - COMPUTE & SAVE DATA
+                                foreach (var pab in paymentAccountBalances)
+                                {
+                                    if (amountToPay <= 0) break;
+
+                                    if (pab.AvailableBalance > 0)
+                                    {
+                                        var deductionAmount = Math.Min((decimal)pab.AvailableBalance, amountToPay);
+
+                                        // Insert into Map_PoA_Transfer_Operation
+                                        string nextPOATRefNo = "POAT" + (_db.Map_PoA_Transfer_Operation.Max(o => (int?)o.POATID) ?? 0 + 1).ToString("D6");
+                                        var poaTransferOperation = new Map_PoA_Transfer_Operation
+                                        {
+                                            POATRefNo = nextPOATRefNo,
+                                            From_PoaTransactionRefNo = pab.TransactionRefNo,
+                                            From_Taxpayer_POAID = Convert.ToInt32(paymentAccounts.First(pa => pa.TransactionRefNo == pab.TransactionRefNo).PaymentAccountID),
+                                            From_TaxpayerID = pObjSettlementModel.TaxPayerID,
+                                            From_TaxpayerTypeID = pObjSettlementModel.TaxPayerTypeID,
+                                            Amount = deductionAmount,
+                                            To_TaxpayerID = pObjSettlementModel.TaxPayerID,
+                                            To_TaxpayerTypeID = pObjSettlementModel.TaxPayerTypeID,
+                                            To_Taxpayer_POAID = mObjSettlementResponse.AdditionalData.SettlementID,
+                                            To_TransactionRefNo = mObjSettlementResponse.AdditionalData.TransactionRefNo,
+                                            Settlement_MethodID = 7,
+                                            CreatedBy = SessionManager.UserID,
+                                            CreatedDate = CommUtil.GetCurrentDateTime()
+                                        };
+
+                                        _db.Map_PoA_Transfer_Operation.Add(poaTransferOperation);
+                                        _db.SaveChanges();
+
+                                        amountToPay -= deductionAmount;
+                                    }
+                                }
+                                //END NEW POA SETTLEMENT UPDATES - COMPUTE & SAVE DATA
+
+
                                 if (mObjSettlementResponse.AdditionalData != null && GlobalDefaultValues.SendNotification)
                                 {
                                     //Send Notification

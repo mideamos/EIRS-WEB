@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Http;
 
@@ -119,9 +120,27 @@ namespace EIRS.API.Controllers
             NewErrorLog.WriteFormModel("I got here in the controller 1", "SettlementResponse");
             APIResponse mObjAPIResponse = new APIResponse();
             NewErrorLog.WriteFormModel("I got here in the controller 1a", "SettlementResponse");
+            // Check if the Authorization header is present
+            if (Request.Headers.Authorization == null)
+            {
+                mObjAPIResponse.Success = false;
+                mObjAPIResponse.Message = "Authorization header is missing.";
+                return Content(HttpStatusCode.Unauthorized, mObjAPIResponse);
+            }
             String token = Request.Headers.Authorization.Parameter;
             NewErrorLog.WriteFormModel("I got here in the controller 1b", "SettlementResponse");
-            int? userId = 0;
+            int? usId = Utilities.GetUserId(token);
+            int? userId = usId.HasValue ? usId : 0;
+            // int? userId = 0;
+            // Validate the token and get the user ID
+            if (userId == null || userId <= 0)
+            {
+                // User ID is not valid or token is missing/invalid
+                mObjAPIResponse.Success = false;
+                mObjAPIResponse.Message = "Unauthorized access. Please provide a valid token.";
+                // return Ok(mObjAPIResponse);
+                return Content(HttpStatusCode.Unauthorized, mObjAPIResponse);
+            }
             NewErrorLog.WriteFormModel("I got here in the controller 1c", "SettlementResponse");
 
             if (!ModelState.IsValid)
@@ -133,6 +152,7 @@ namespace EIRS.API.Controllers
             }
             else
             {
+                //Redundant validation, remove validation in future versions
                 if ((token != null) && (userId == 0))
                 {
                     mObjAPIResponse.Success = false;
@@ -169,7 +189,8 @@ namespace EIRS.API.Controllers
                         NotificationMethodID = pObjIndividualModel.NotificationMethodID,
                         ContactAddress = pObjIndividualModel.ContactAddress,
                         Active = true,
-                        CreatedBy = userId.HasValue ? userId : 22,
+                        // CreatedBy = userId.HasValue ? userId : 22,
+                        CreatedBy = userId,
                         CreatedDate = CommUtil.GetCurrentDateTime()
                     };
 
@@ -195,7 +216,7 @@ namespace EIRS.API.Controllers
                     catch (Exception ex)
                     {
                         mObjAPIResponse.Success = true;
-                        mObjAPIResponse.Message = "Error occurred while saving Individual";
+                        mObjAPIResponse.Message = $"Error occurred while saving Individual - {ex.Message}";
                     }
                 }
             }

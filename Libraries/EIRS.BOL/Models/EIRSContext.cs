@@ -16,7 +16,7 @@ namespace EIRS.BOL.Models
         public EIRSContext()
         {
         }
-        
+
         public EIRSContext(DbContextOptions<EIRSContext> options)
             : base(options)
         {
@@ -30,7 +30,7 @@ namespace EIRS.BOL.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=92.205.57.77;Initial Catalog=EIRS;user id=Admin;password=K5?wh7l4##");
+                optionsBuilder.UseSqlServer("Data Source=92.205.57.77;Initial Catalog=EIRS;user id=Admin;password=phA5H0BRzr#B");
             }
         }
 

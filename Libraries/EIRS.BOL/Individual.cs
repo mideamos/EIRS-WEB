@@ -94,10 +94,10 @@ public partial class Individual
     public Nullable<long> DSRefID { get; set; }
 
     public string NIN { get; set; }
+    public Nullable<int> NINStatus { get; set; }
 
 
-
-    public virtual Economic_Activities Economic_Activities { get; set; }
+        public virtual Economic_Activities Economic_Activities { get; set; }
 
     public virtual Gender Gender { get; set; }
 

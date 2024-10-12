@@ -88,7 +88,9 @@ public partial class usp_GetIndividualList_Result
     public Nullable<int> TaxOfficerID { get; set; }
 
     public string TaxOfficerName { get; set; }
+    public Nullable<int> NINStatus { get; set; }
+    public string NIN { get; set; }
 
-}
+    }
 
 }

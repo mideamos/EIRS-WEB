@@ -714,6 +714,8 @@ namespace EIRS.Web.Controllers
 
                 usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(mObjIndividual);
 
+               
+
                 if (mObjIndividualData != null)
                 {
                     IList<usp_GetTaxPayerBill_Result> lstTaxPayerBill = new BLAssessment().BL_GetTaxPayerBill(id.GetValueOrDefault(), (int)EnumList.TaxPayerType.Individual, 0);
@@ -815,6 +817,8 @@ namespace EIRS.Web.Controllers
                     IList<DropDownListResult> lstYearForDropDown = new List<DropDownListResult>();
                     lstYearForDropDown.Add(new DropDownListResult() { id = DateTime.Now.Year - 1, text = (DateTime.Now.Year - 1).ToString() });
                     ViewBag.YearListlstYearForDropDown = new SelectList(lstYearForDropDown, "id", "text");
+                    var nimc = _db.Individuals.Where(x => x.IndividualID == mObjIndividual.IndividualID).FirstOrDefault();
+                    ViewBag.Nimc = nimc;
 
                     return View(mObjIndividualData);
                 }

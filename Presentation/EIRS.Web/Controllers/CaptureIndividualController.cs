@@ -714,7 +714,7 @@ namespace EIRS.Web.Controllers
 
                 usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(mObjIndividual);
 
-               
+
 
                 if (mObjIndividualData != null)
                 {
@@ -819,6 +819,24 @@ namespace EIRS.Web.Controllers
                     ViewBag.YearListlstYearForDropDown = new SelectList(lstYearForDropDown, "id", "text");
                     var nimc = _db.Individuals.Where(x => x.IndividualID == mObjIndividual.IndividualID).FirstOrDefault();
                     ViewBag.Nimc = nimc;
+
+                    var nimcdets = _db.NINDetails.Where(x => x.NIN == nimc.NIN).FirstOrDefault();
+                    ViewBag.NimcDet = nimcdets;
+
+                    //// The Base64 image string from the database
+                    //string base64Image = nimcdets.Photo;
+
+                    //// Construct the full image data URL
+                    //string imageSrc = $"data:image/png;base64,{base64Image}";
+
+                    // The Base64 image string from the database
+                    string base64Image = nimcdets?.Photo;  // Make sure Photo exists
+                    if (!string.IsNullOrEmpty(base64Image))
+                    {
+                        // Construct the full image data URL
+                        ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
+                    }
+
 
                     return View(mObjIndividualData);
                 }
@@ -2524,7 +2542,7 @@ namespace EIRS.Web.Controllers
 
                                     if (mObjARResponse.Success)
                                     {
-                                        
+
                                         IList<MAP_Assessment_AssessmentItem> lstInsertAssessmentDetail = new List<MAP_Assessment_AssessmentItem>();
                                         if (lstAssessmentRules.Count > 1)
                                         {

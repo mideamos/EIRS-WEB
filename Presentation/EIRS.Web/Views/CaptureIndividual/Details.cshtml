@@ -12,7 +12,7 @@
     IList<usp_GetTaxPayerMDAService_Result> lstMDAService = (IList<usp_GetTaxPayerMDAService_Result>)ViewBag.MDAService;
     IList<usp_GetTCCRequestList_Result> lstTCCRequest = (IList<usp_GetTCCRequestList_Result>)ViewBag.TCCRequestList;
     IList<usp_GetTaxPayerDocumentList_Result> lstDocument = (IList<usp_GetTaxPayerDocumentList_Result>)ViewBag.DocumentList;
-    Individual nimc  = (Individual)ViewBag.Nimc;
+    Individual nimc = (Individual)ViewBag.Nimc;
 }
 
 <input type="hidden" id="hdnTaxPayerID" value="@Model.IndividualID" />
@@ -30,11 +30,7 @@
         <div class="caption">
             Individual Tax Payer Information
         </div>
-        <div class="clearfix" style="width: 60%; margin: 0 auto; align-content:flex-end;">
-            <div class="half-width">
-                <img src="@ViewBag.ImageSrc" class="passport">
-            </div>
-        </div>
+
         <div class="actions">
             <div class="btn-group">
                 <button type="button" class="btn btn-redtheme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,6 +52,7 @@
         </div>
     </div>
     <div class="row view-form">
+        <!-- Column 1 -->
         <div class="col-sm-4">
             <div class="form-group">
                 <label class="control-label bold">Tax Payer Type: </label>
@@ -88,7 +85,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
+
+        <!-- Column 2 -->
+        <div class="col-sm-4">
             <div class="form-group">
                 <label class="control-label bold">Tax Payer Name: </label>
                 <div class="form-control-static">
@@ -102,7 +101,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label bold">Contact  Address: </label>
+                <label class="control-label bold">Contact Address: </label>
                 <div class="form-control-static">
                     @Model.ContactAddress
                 </div>
@@ -115,12 +114,39 @@
             </div>
             <div class="form-group">
                 <label class="control-label bold">NIN Status: </label>
-                <div class="form-control-static">
+                <div class="form-control-static" id="nin-status">
                     @nimc.NINStatus
+
+                    @if (!string.IsNullOrEmpty(nimc.NINStatus) && nimc.NINStatus == "Valid")
+                    {
+                        <i class="fa fa-square" style="font-size:18px;color:green"></i>
+                    }
+                    else if (!string.IsNullOrEmpty(nimc.NINStatus) && nimc.NINStatus == "Invalid")
+                    {
+                        <i class="fa fa-square" style="font-size:18px;color:red"></i>
+                    }
+                    else if (!string.IsNullOrEmpty(nimc.NINStatus) && nimc.NINStatus == "Not verified")
+                    {
+                        <i class="fa fa-square" style="font-size: 18px; color: yellow"></i>
+                    }
+                    else
+                    {
+                        <span>No NIN</span>
+                        <i class="fa fa-square" style="font-size: 18px; color: gray"></i>
+
+                    }
                 </div>
-            </div> 
+            </div>
+        </div>
+
+        <!-- Column 3 - Image -->
+        <div class="col-sm-4" style="text-align: right;">
+            <img src="@ViewBag.ImageSrc" class="passport" style="width: 100%; height: auto; max-width: 51mm; max-height: 51mm;">
         </div>
     </div>
+
+
+
 </div>
 
 <div class="portlet light">
@@ -572,4 +598,41 @@
     <script type="text/javascript" src="/Content/plugins/plupload/js/plupload.full.min.js"></script>
     <script type="text/javascript" src="~/Scripts/jsIndividualDetails.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
     <script src="~/Scripts/jsTaxPayerMessage.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber" type="text/javascript"></script>
+
+    <script>
+        // Function to check NIN validation
+        function checkNINStatus(nin) {
+            // Perform an AJAX call to get the NIN details from the server
+            $.ajax({
+                url: '@Url.Action("CheckActiveNIN", "OperationManager")',
+                type: 'GET',
+                data: { nin: nin },
+                success: function (response) {
+                    // Assuming the response contains a property 'isValid' that tells us if the NIN is valid
+                    if (response.isValid) {
+                        // Make the circle green if valid
+                        $('#nin-status-icon')
+                            .css('color', 'green')
+                            .show();
+                    } else {
+                        // Make the circle red if invalid
+                        $('#nin-status-icon')
+                            .css('color', 'red')
+                            .show();
+                    }
+                },
+                error: function () {
+                    console.log("Error fetching NIN details");
+                }
+            });
+        }
+
+        // Call the function when the page is ready or at the right time in your workflow
+        $(document).ready(function () {
+            // Pass the NIN to the function (replace '@nimc.NIN' with actual NIN variable from your model)
+            var nin = '@nimc.NIN';
+            checkNINStatus(nin);
+        });
+    </script>
+
 }

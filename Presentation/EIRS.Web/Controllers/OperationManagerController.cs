@@ -39,6 +39,8 @@ using Vereyon.Web;
 using static EIRS.Web.Controllers.Filters;
 using DocumentFormat.OpenXml.Bibliography;
 using System.Security.Policy;
+using DocumentFormat.OpenXml.Wordprocessing;
+using System.Data.Entity.Migrations;
 
 namespace EIRS.Web.Controllers
 {
@@ -7303,7 +7305,7 @@ namespace EIRS.Web.Controllers
 
         #endregion
 
-
+        #region OMO63 - Tax Offices
         public ActionResult TaxOfficeManagerStatus()
         {
             UI_FillTaxOfficeDropDown();
@@ -8004,6 +8006,9 @@ namespace EIRS.Web.Controllers
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region OMO64 - Payment
         public ActionResult ReviseBill()
         {
             string url = getUrl();
@@ -9233,6 +9238,215 @@ namespace EIRS.Web.Controllers
         {
             return View();
         }
+        #endregion
 
+        #region OMO69 - NIN Validation
+
+        [HttpGet]
+        public ActionResult NinValidation(int pageNumber = 1, int pageSize = 10000)
+        {
+            var res = getNINDetails(pageNumber, pageSize);
+            int totalRecords = getTotalRecordCount(); // Get total number of records
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            // Create the view model
+            var viewModel = new NinValidationViewModel
+            {
+                NINIndividuals = res,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages
+            };
+
+            return View(viewModel);
+        }
+
+        [NonAction]
+        private List<NINIndividual> getNINDetails(int pageNumber, int pageSize)
+        {
+            string con = ConfigurationManager.ConnectionStrings["DbEntities"].ConnectionString;
+            List<NINIndividual> results = new List<NINIndividual>();
+
+            using (SqlConnection connection = new SqlConnection(con))
+            {
+                string rawQuery = @"
+            SELECT 
+                IndividualRIN, 
+                CONCAT(FirstName, ' ', LastName) AS IndividualName, 
+                Tin,
+                NIN,
+                ContactAddress,
+                COALESCE(NINStatus, 'No NIN') AS NINStatus
+            FROM 
+                Individual
+            WHERE 
+                NIN IS NOT NULL AND NIN != 'string'
+            ORDER BY 
+                NINStatus, NIN DESC
+            OFFSET @Offset ROWS 
+            FETCH NEXT @PageSize ROWS ONLY;";
+
+                using (SqlCommand command = new SqlCommand(rawQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@Offset", (pageNumber - 1) * pageSize);
+                    command.Parameters.AddWithValue("@PageSize", pageSize);
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(new NINIndividual
+                            {
+                                IndividualRIN = reader["IndividualRIN"] != DBNull.Value ? reader["IndividualRIN"].ToString() : "",
+                                IndividualName = reader["IndividualName"] != DBNull.Value ? reader["IndividualName"].ToString() : "",
+                                Tin = reader["Tin"] != DBNull.Value ? reader["Tin"].ToString() : "",
+                                NIN = reader["NIN"] != DBNull.Value ? reader["NIN"].ToString() : "",
+                                ContactAddress = reader["ContactAddress"] != DBNull.Value ? reader["ContactAddress"].ToString() : "",
+                                NINStatus = reader["NINStatus"] != DBNull.Value ? reader["NINStatus"].ToString() : "",
+                            });
+                        }
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        [NonAction]
+        private int getTotalRecordCount()
+        {
+            int totalRecords = 0;
+            string con = ConfigurationManager.ConnectionStrings["DbEntities"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(con))
+            {
+                string query = "SELECT COUNT(*) FROM Individual WHERE NIN IS NOT NULL AND NIN != 'string'";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    totalRecords = (int)command.ExecuteScalar();
+                }
+            }
+
+            return totalRecords;
+        }
+
+        [HttpPost]
+
+        public ActionResult getNINLoadData(List<string> selectedIds)
+        {
+            if (selectedIds == null || !selectedIds.Any())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "No NINs were selected.");
+            }
+
+            var errorMessages = new List<string>();
+
+            foreach (var NIN in selectedIds)
+            {
+                if (string.IsNullOrEmpty(NIN))
+                {
+                    errorMessages.Add("One or more NINs are invalid.");
+                    continue; // Skip to the next NIN
+                }
+
+                bool ninExists = getNIN(NIN); // Assuming getNIN returns a boolean
+
+                if (!ninExists)
+                {
+                    errorMessages.Add($"NIN {NIN} not found.");
+                }
+            }
+
+            if (errorMessages.Any())
+            {
+                return Json(new { success = false, message = string.Join(", ", errorMessages) });
+            }
+
+            return Json(new { success = true, message = "Successfully Sent" });
+        }
+
+
+        [NonAction]
+        private bool getNIN(string nin)
+        {
+            bool IsNinValid = false;
+
+            if (nin != null && !string.IsNullOrEmpty(nin))
+            {
+                var CheckNINDetails = _db.NINDetails.FirstOrDefault(x => x.NIN == nin);
+                if (CheckNINDetails != null && !string.IsNullOrEmpty(CheckNINDetails.NIN))
+                {
+                    var existingIndividual = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+                    if (existingIndividual != null && !string.IsNullOrEmpty(existingIndividual.NIN))
+                    {
+                        if (existingIndividual != null)
+                        {
+                            // Update the fields with new data
+                            existingIndividual.FirstName = CheckNINDetails.FirstName;
+                            existingIndividual.LastName = CheckNINDetails.Surname;
+                            existingIndividual.MiddleName = CheckNINDetails.MiddleName;
+                            existingIndividual.NINStatus = CheckNINDetails.status == "successful" ? "Valid" : "Invalid";
+                            existingIndividual.ContactAddress = CheckNINDetails.ResidenceAdressLine1;
+
+                            _db.Entry(existingIndividual).State = EntityState.Modified;
+                            _db.SaveChanges();
+                        }
+                    }
+
+                    return IsNinValid = true;
+                }
+                else
+                {
+                    //NIMC Api will be run here to get the NIN details
+                }
+            }
+
+            return IsNinValid = true;
+        }
+
+        //[HttpGet]
+        //public ActionResult CheckActiveNIN(string nin)
+        //{
+        //    var individual = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+        //    if (individual != null)
+        //    {
+        //        return Json(new { isValid = true });
+        //    }
+        //    else
+        //    {
+        //        return Json(new { isValid = false });
+        //    }
+        //}
+
+        //[HttpPost]
+        //public ActionResult CheckActiveNIN2(string nin)
+        //{
+        //    var individual = _db.Individuals.Find(nin);
+        //    if (individual != null)
+        //    {
+        //        // Render partial view with the model if NIN exists
+        //        var model = new IndividualViewModel
+        //        {
+        //            // Fill in the model as needed, e.g., individual properties
+        //        };
+        //        var partialView = PartialView("_BindIndividualForm", model).ViewBag();
+        //        return Json(new { success = true, partialView });
+        //    }
+        //    else
+        //    {
+        //        return Json(new { success = false });
+        //    }
+        //}
+
+
+
+
+
+        #endregion
     }
 }

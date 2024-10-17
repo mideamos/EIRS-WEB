@@ -5,9 +5,7 @@
 }
 
 <div class="title">
-    <h1>
-        Individual Tax Payer
-    </h1>
+    <h1>Individual Tax Payer</h1>
     <hr>
 </div>
 
@@ -17,7 +15,7 @@
             Add New Individual
         </div>
         <div class="actions">
-            <a href="@Request.UrlReferrer" class="btn btn-redtheme"> Cancel </a>
+            <a href="@Request.UrlReferrer" class="btn btn-redtheme">Cancel</a>
         </div>
     </div>
     <div class="portlet-body">
@@ -26,14 +24,15 @@
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
 
-            if (ViewBag.Message != null)
-            {
-                <div class="alert alert-danger">
-                    @ViewBag.Message
-                </div>
-            }
+            <div id="ninMessage" class="alert" style="display: none;"></div>
 
-            Html.RenderPartial("_BindIndividualForm", Model);
+            <div class="form-group" id="ninGroup">
+                <label for="nin">NIN</label>
+                <input type="text" id="ninInput" class="form-control" placeholder="Enter NIN" value="@Model.NIN" />
+                <button type="button" class="btn btn-primary" id="checkNINButton" onclick="checkNIN()">Check NIN</button>
+            </div>
+
+            @Html.Partial("_BindIndividualForm", Model)
 
             <div class="row">
                 <div class="text-right col-sm-12">
@@ -48,4 +47,63 @@
 
 @section Footer {
     <script type="text/javascript" src="~/Scripts/jsAddEditIndividual.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        // Check if NIN data is already loaded (from the model)
+        if ($('#ninInput').val()) {
+            checkNINOnLoad();
+        }
+    });
+
+    function checkNINOnLoad() {
+        var nin = $('#ninInput').val();
+        if (nin !== "") {
+            // Auto-check NIN when data is available on page load
+            checkNIN();
+        }
+    }
+
+    function checkNIN() {
+        var nin = $('#ninInput').val();
+
+        if (nin === "") {
+            $('#ninMessage').html('NIN is required').addClass('alert-danger').show();
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("CheckActiveNIN", "CaptureIndividual")',
+            type: 'POST',
+            data: { nin: nin },
+            success: function (response) {
+                if (response.success) {
+                    $('#ninMessage').html(response.message).addClass('alert-success').removeClass('alert-danger').hide();
+                    populateForm(response.data);
+                    hideNINButton();
+                } else {
+                    $('#ninMessage').html(response.message).addClass('alert-danger').removeClass('alert-success').show();
+                }
+            },
+            error: function () {
+                $('#ninMessage').html('An error occurred').addClass('alert-danger').show();
+            }
+        });
+    }
+
+    function populateForm(data) {
+        $('#FirstName').val(data.FirstName);
+        $('#LastName').val(data.LastName);
+        $('#MiddleName').val(data.MiddleName);
+        $('#NIN').val(data.NIN);
+        $('#NINStatus').val(data.NINStatus);
+
+
+    }
+
+    function hideNINButton() {
+        // Hide the NIN input field and button after successful NIN retrieval
+        $('#ninGroup').hide();
+    }
+    </script>
+
 }

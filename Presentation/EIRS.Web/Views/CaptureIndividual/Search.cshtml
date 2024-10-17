@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Capture Individual";
 }
 
@@ -8,6 +7,31 @@
         Search Tax Payer - Individual
     </h1>
     <hr>
+</div>
+
+<!-- Modal Structure for Searching NIN -->
+<div class="modal fade" id="individualSearchModal" tabindex="-1" role="dialog" aria-labelledby="individualSearchModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="individualSearchModalLabel">Search Taxpayer - Individual On NIMC</h5>
+                <button type="button" class="close btn-danger border" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="individualSearchForm">
+                    <div class="form-group">
+                        <label for="ninSearch">Individual NIN or vNIN:</label>
+                        <input type="text" class="form-control" id="ninSearch" placeholder="Enter NIN or vNIN" required />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" style="justify-content:right; margin-right:10px;" class="btn btn-primary">Verify</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="portlet light">
@@ -19,7 +43,7 @@
     <div class="portlet-body">
         <div class="row">
             <div class="col-sm-7">
-                @using (Ajax.BeginForm("Search", "CaptureIndividual", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Post", OnSuccess = "jsfn_ShowData", OnBegin = "jsfn_ShowLoading", OnComplete = "jsfn_HideLoading" }, new { @class = "form-horizontal", @id="frmSearchIndividual" }))
+                @using (Ajax.BeginForm("Search", "CaptureIndividual", new AjaxOptions() { UpdateTargetId = "dvData", AllowCache = true, HttpMethod = "Post", OnSuccess = "jsfn_ShowData", OnBegin = "jsfn_ShowLoading", OnComplete = "jsfn_HideLoading" }, new { @class = "form-horizontal", @id = "frmSearchIndividual" }))
                 {
                     <div class="form-group">
                         <label class="control-label col-sm-3">Individual Name</label>
@@ -38,8 +62,7 @@
                         <div class="col-sm-9">
                             @Html.TextBox("txtRIN", "", new { @class = "form-control", @placeholder = "Enter RIN or NIN or TIN", @tabindex = "3" })
                         </div>
-                    </div> 
-                  
+                    </div>
                     <div class="form-group text-right row">
                         <div class="col-sm-6"></div>
                         <div class="col-sm-6">
@@ -50,7 +73,7 @@
             </div>
             <div class="col-sm-5">
                 <p>
-                    Enter name of Individual and click on search below. The five most matches results will be returned where available. Select the one that best matches your Individual name and click on proceed.
+                    Enter the name of Individual and click on search below. The five most matching results will be returned where available. Select the one that best matches your Individual name and click on proceed.
                 </p>
 
                 <p>
@@ -71,7 +94,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="@Url.Action("Add","CaptureIndividual")">Individuals</a>
+                        <a href="#" onclick="openSearchModal()">Individuals</a>
                     </li>
                     <li>
                         <a href="@Url.Action("Add","CaptureCorporate")">Corporates</a>
@@ -95,5 +118,69 @@
 
 @section Footer {
     <script type="text/javascript" src="~/Scripts/jsSearchIndividual.js?v=@EIRS.Common.GlobalDefaultValues.VersionNumber"></script>
-}
+    <script type="text/javascript">
+        function openSearchModal() {
+            $('#individualSearchModal').modal('show');
+        }
 
+        $(document).ready(function () {
+            // Show the modal if the flag is set
+            @if (ViewBag.ShowModal != null && ViewBag.ShowModal)
+            {
+                <text>$('#individualSearchModal').modal('show');</text>
+            }
+
+            $('#individualSearchForm').on('submit', function (e) {
+                e.preventDefault(); // Prevent default form submission
+                var nin = $('#ninSearch').val(); // Get the NIN input value
+
+        // Perform AJAX call to CheckActiveNIN
+        $.ajax({
+            url: '@Url.Action("CheckActiveNIN", "CaptureIndividual")',
+            type: 'POST',
+            data: { nin: nin },
+            success: function (response) {
+                if (response.success) {
+                    $('#ninMessage').html(response.message).addClass('alert-success').removeClass('alert-danger').show();
+                    populateForm(response.data);
+
+                    // Hide modal and redirect to Add action with nin
+                    $('#individualSearchModal').modal('hide');
+                    window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=' + nin;
+                } else {
+                    $('#ninMessage').html('An error occurred').addClass('alert-danger').show();
+                    $('#individualSearchModal .modal-body').html(`
+                        <p>NIN not found. Would you like to continue without NIN?</p>
+                        <button class="btn btn-primary" id="continueWithoutNIN">Continue Without NIN</button>
+                    `);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error occurred:", error);
+            }
+        });
+    });
+
+            // Event listener for "Continue Without NIN" button
+                $(document).on('click', '#continueWithoutNIN', function () {
+                    // Redirect to Add action without NIN
+                    window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=';
+                });
+
+                function populateForm(data) {
+                    $('#FirstName').val(data.FirstName);
+                    $('#LastName').val(data.LastName);
+                    $('#MiddleName').val(data.MiddleName);
+                    $('#NIN').val(data.NIN);
+                    $('#ContactAddress').val(data.ContactAddress);
+                }
+
+
+                @*// Event listener for "Continue Without NIN" button
+                $(document).on('click', '#continueWithoutNIN', function () {
+                    // Redirect to the Add action without NIN
+                    window.location.href = '@Url.Action("Add", "CaptureIndividual")';
+                });*@
+    });
+    </script>
+}

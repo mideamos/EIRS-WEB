@@ -212,18 +212,157 @@ namespace EIRS.Web.Controllers
             UI_FillEconomicActivitiesDropDown(new Economic_Activities() { intStatus = 1, IncludeEconomicActivitiesIds = pObjIndividualViewModel.EconomicActivitiesID.ToString(), TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual });
             UI_FillNotificationMethodDropDown(new Notification_Method() { intStatus = 1, IncludeNotificationMethodIds = pObjIndividualViewModel.NotificationMethodID.ToString() });
         }
-        public ActionResult Add()
+        public ActionResult Add(string nin = "", bool showModal = false)
         {
             string url = getUrl();
             bool itCan = new UtilityController().CheckAccess(url);
-            if (!itCan) { return RedirectToAction("AccessDenied", "Utility"); }
+            if (!itCan)
+            {
+                return RedirectToAction("AccessDenied", "Utility");
+            }
+
             IndividualViewModel ivm = new IndividualViewModel()
             {
-                TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual
+                TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
+                NIN = nin
             };
+
+            if (!string.IsNullOrEmpty(nin))
+            {
+                var individualData = _db.Individuals.Select(i => new IndividualFormModel
+                {
+                    FirstName = i.FirstName,
+                    LastName = i.LastName,
+                    MiddleName = i.MiddleName,
+                    NIN = i.NIN,
+                    NINStatus = i.NINStatus,
+                    ContactAddress = i.ContactAddress
+                }).FirstOrDefault(i => i.NIN == nin);
+
+                if (individualData != null)
+                {
+                    ivm.FirstName = individualData.FirstName;
+                    ivm.LastName = individualData.LastName;
+                    ivm.ContactAddress = individualData.ContactAddress;
+                    var IndNIN = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+                    // Populate the NINStatus in the ViewBag for icon rendering in the view
+                    ViewBag.NINStatus = IndNIN.NINStatus;
+                }
+            }
+
             UI_FillDropDown(ivm);
-            return View();
+            ViewBag.ShowModal = showModal;
+            return View(ivm);
         }
+
+        public ActionResult CheckActiveNIN(string nin)
+        {
+            if (string.IsNullOrEmpty(nin))
+            {
+                return Json(new { success = false, message = "NIN is required." });
+            }
+
+            //Check Individual Table for Taxpayer Existence 
+            var individual = _db.Individuals.Select(i => new IndividualFormModel
+            {
+                FirstName = i.FirstName,
+                LastName = i.LastName,
+                MiddleName = i.MiddleName,
+                NIN = i.NIN,
+                NINStatus = i.NINStatus,
+                ContactAddress = i.ContactAddress
+            }).FirstOrDefault(i => i.NIN == nin);
+
+            if (individual != null && !string.IsNullOrEmpty(individual.NIN))
+            {
+                if(!string.IsNullOrEmpty(individual.NINStatus))
+                {
+                    var IndNIN = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+                    if (IndNIN.NINStatus == "Valid")
+                    {
+                        ViewBag.FillIndividual = individual;
+                    }
+                    else if (IndNIN.NINStatus == "Invalid")
+                    {
+                        ViewBag.FillIndividual = individual;
+                    }
+                    else if (IndNIN.NINStatus == "No NIN")
+                    {
+                        ViewBag.FillIndividual = individual;
+                    }
+                    else if (IndNIN.NINStatus == "Not verified")
+                    {
+                        ViewBag.FillIndividual = individual;
+                    }
+                }
+                else
+                {
+                    var CheckNINDetails = _db.NINDetails.FirstOrDefault(x => x.NIN == nin);
+                    if (CheckNINDetails != null && !string.IsNullOrEmpty(CheckNINDetails.NIN))
+                    {
+                        var existingIndividual = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+                        if (existingIndividual != null && !string.IsNullOrEmpty(existingIndividual.NIN))
+                        {
+                            if (existingIndividual != null)
+                            {
+                                // Update the fields with new data
+                                existingIndividual.FirstName = CheckNINDetails.FirstName;
+                                existingIndividual.LastName = CheckNINDetails.Surname;
+                                existingIndividual.MiddleName = CheckNINDetails.MiddleName;
+                                existingIndividual.NINStatus = CheckNINDetails.status == "successful" ? "Valid" : "Invalid";
+                                existingIndividual.ContactAddress = CheckNINDetails.ResidenceAdressLine1;
+
+                                _db.Entry(existingIndividual).State = EntityState.Modified;
+                                _db.SaveChanges();
+                            }
+                        }
+
+                    }
+                }
+
+
+                return Json(new { success = true, message = "NIN found.", data = individual });
+
+            }
+            else
+            {
+                var CheckNINDetails = _db.NINDetails.FirstOrDefault(x => x.NIN == nin);
+
+                if (CheckNINDetails != null && !string.IsNullOrEmpty(CheckNINDetails.NIN))
+                {
+                    var existingIndividual = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+                    if (existingIndividual != null && !string.IsNullOrEmpty(existingIndividual.NIN))
+                    {
+                        if (existingIndividual != null)
+                        {
+                            // Update the fields with new data
+                            existingIndividual.FirstName = CheckNINDetails.FirstName;
+                            existingIndividual.LastName = CheckNINDetails.Surname;
+                            existingIndividual.MiddleName = CheckNINDetails.MiddleName;
+                            existingIndividual.NINStatus = CheckNINDetails.status == "successful" ? "Valid" : "Invalid";
+                            existingIndividual.ContactAddress = CheckNINDetails.ResidenceAdressLine1;
+
+                            _db.Entry(existingIndividual).State = EntityState.Modified;
+                            _db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        //find with Rin amd save or Update Api response to db
+                    }
+
+                }
+                else
+                {
+                    //NIMC Api will be run here to get the NIN details
+                }
+
+                return Json(new { success = false, message = "NIN not found (Need to Look-Up NIMC)" });
+            }
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
@@ -823,19 +962,14 @@ namespace EIRS.Web.Controllers
                     var nimcdets = _db.NINDetails.Where(x => x.NIN == nimc.NIN).FirstOrDefault();
                     ViewBag.NimcDet = nimcdets;
 
-                    //// The Base64 image string from the database
-                    //string base64Image = nimcdets.Photo;
-
-                    //// Construct the full image data URL
-                    //string imageSrc = $"data:image/png;base64,{base64Image}";
-
                     // The Base64 image string from the database
-                    string base64Image = nimcdets?.Photo;  // Make sure Photo exists
+                    string base64Image = nimcdets?.Photo;  
                     if (!string.IsNullOrEmpty(base64Image))
                     {
                         // Construct the full image data URL
                         ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
                     }
+
 
 
                     return View(mObjIndividualData);

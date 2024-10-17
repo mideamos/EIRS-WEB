@@ -26,7 +26,16 @@
     <div class="col-sm-6">
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label required-star" })
-            @Html.TextBoxFor(model => model.FirstName, htmlAttributes: new { @class = "form-control", @tabindex = "5", @placeholder = "Enter Individual's first name" })
+            @Html.TextBoxFor(model => model.FirstName, htmlAttributes: new
+            {
+                @id = "FirstName",
+                @class = "form-control",
+                @tabindex = "5",
+                @placeholder = "Enter Individual's first name",
+                @value = Model.FirstName ?? ViewBag.NINResult?.FirstName,
+            
+            })
+
             @Html.ValidationMessageFor(model => model.FirstName, "", htmlAttributes: new { @class = "help-block" })
         </div>
     </div>
@@ -35,14 +44,31 @@
     <div class="col-sm-6">
         <div class="form-group">
             @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label required-star" })
-            @Html.TextBoxFor(model => model.LastName, htmlAttributes: new { @class = "form-control", @tabindex = "6", @placeholder = "Enter Individual's last name" })
+            @Html.TextBoxFor(model => model.LastName, htmlAttributes: new
+       {
+           @id = "LastName",
+           @class = "form-control",
+           @tabindex = "6",
+           @placeholder = "Enter Individual's last name",
+           @value = Model.LastName ?? ViewBag.NINResult?.LastName,
+      
+
+            })
             @Html.ValidationMessageFor(model => model.LastName, "", htmlAttributes: new { @class = "help-block" })
         </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group">
             @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "control-label" })
-            @Html.TextBoxFor(model => model.MiddleName, htmlAttributes: new { @class = "form-control", @tabindex = "7", @placeholder = "Enter Individual's middle name" })
+            @Html.TextBoxFor(model => model.MiddleName, htmlAttributes: new
+       {
+           @id = "MiddleName",
+           @class = "form-control",
+           @tabindex = "7",
+           @placeholder = "Enter Individual's middle name",
+           @value = Model.MiddleName ?? ViewBag.NINResult?.MiddleName,
+       
+            })
             @Html.ValidationMessageFor(model => model.MiddleName, "", htmlAttributes: new { @class = "help-block" })
         </div>
     </div>
@@ -110,11 +136,47 @@
 </div>
 <div class="row">
     <div class="col-sm-6">
+        @{
+            // Define isSuccess variable once so it's available throughout the form group.
+            var isSuccess = !string.IsNullOrEmpty(Model.NIN) || !string.IsNullOrEmpty(ViewBag.NINResult?.NIN);
+        }
+
         <div class="form-group">
             @Html.LabelFor(model => model.NIN, htmlAttributes: new { @class = "control-label required-star" })
-            @Html.TextBoxFor(model => model.NIN, htmlAttributes: new { @class = "form-control", @tabindex = "14", @placeholder = "Enter NIN Details" })
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.NIN, htmlAttributes: new
+                {
+                    @id = "NIN",
+                    @class = "form-control",
+                    @tabindex = "14",
+                    @placeholder = "Enter NIN Details",
+                    @value = Model.NIN ?? ViewBag.NINResult?.NIN
+                })
+
+                <span class="input-group-addon">
+                    @if (!string.IsNullOrEmpty(ViewBag.NINStatus) && ViewBag.NINStatus == "Valid")
+                    {
+                        <i class="fa fa-check-square" style="font-size:18px;color:green"></i>
+                    }
+                    else if (ViewBag.NINStatus == "Invalid")
+                    {
+                        <i class="fa fa-close" style="font-size:18px;color:red"></i>
+                    }
+                    else if (ViewBag.NINStatus == "Not verified")
+                    {
+                        <i class="fa fa-square-o" style="font-size: 18px; color: yellow"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-square" style="font-size: 18px; color: gray"></i>
+                    }
+                </span>
+            </div>
             @Html.ValidationMessageFor(model => model.NIN, "", htmlAttributes: new { @class = "help-block" })
         </div>
+
+
+
     </div>
     <div class="col-sm-6">
         <div class="form-group">
@@ -169,11 +231,66 @@
     <div class="col-sm-12">
         <div class="form-group">
             @Html.LabelFor(model => model.ContactAddress, htmlAttributes: new { @class = "control-label required-star" })
-            @Html.TextAreaFor(model => model.ContactAddress, htmlAttributes: new { @class = "form-control", @tabindex = "20", @placeholder = "Enter Contact Address", @Rows = "3" })
+            @Html.TextBoxFor(model => model.ContactAddress, htmlAttributes: new
+               {
+                   @id = "ContactAddress",
+                   @class = "form-control",
+                   @tabindex = "20",
+                   @placeholder = "Enter Contact Address",
+                   @value = Model.ContactAddress ?? ViewBag.NINResult?.ContactAddress,
+
+                   @Rows = "3"
+               })
             @Html.ValidationMessageFor(model => model.ContactAddress, "", htmlAttributes: new { @class = "help-block" })
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Check MiddleName
+            var middleName = "@(Model.MiddleName ?? ViewBag.NINResult?.MiddleName)";
+            if (middleName && middleName.length > 0) {
+                $('#MiddleName').prop('disabled', true);  // Disable if MiddleName has value
+            } else {
+                $('#MiddleName').prop('disabled', false); // Enable if MiddleName is null or empty
+            }
+
+            // Check FirstName
+            var firstName = "@(Model.FirstName ?? ViewBag.NINResult?.FirstName)";
+            if (firstName && firstName.length > 0) {
+                $('#FirstName').prop('disabled', true);  // Disable if FirstName has value
+            } else {
+                $('#FirstName').prop('disabled', false); // Enable if FirstName is null or empty
+            }
+
+            // Check LastName
+            var lastName = "@(Model.LastName ?? ViewBag.NINResult?.LastName)";
+            if (lastName && lastName.length > 0) {
+                $('#LastName').prop('disabled', true);  // Disable if LastName has value
+            } else {
+                $('#LastName').prop('disabled', false); // Enable if LastName is null or empty
+            }
+
+            // Check NIN
+            var nin = "@(Model.NIN ?? ViewBag.NINResult?.NIN)";
+            if (nin && nin.length > 0) {
+                $('#NIN').prop('disabled', true);  // Disable if NIN has value
+            } else {
+                $('#NIN').prop('disabled', false); // Enable if NIN is null or empty
+            }
+
+            // Check ContactAddress
+            var contactAddress = "@(Model.ContactAddress ?? ViewBag.NINResult?.ContactAddress)";
+            if (contactAddress && contactAddress.length > 0) {
+                $('#ContactAddress').prop('disabled', true);  // Disable if ContactAddress has value
+            } else {
+                $('#ContactAddress').prop('disabled', false); // Enable if ContactAddress is null or empty
+            }
+        });
+    </script>
+}
 
 
 

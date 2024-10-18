@@ -54,6 +54,7 @@ namespace EIRS.BOL
         public Nullable<int> DataSourceID { get; set; }
         public Nullable<long> DSRefID { get; set; }
         public string NIN { get; set; }
+        public string NINStatus { get; set; }
     
         public virtual Economic_Activities Economic_Activities { get; set; }
         public virtual Gender Gender { get; set; }

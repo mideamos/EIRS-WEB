@@ -457,6 +457,8 @@
         <AssociationConnector Association="EIRSModel.FK_TCC_Request_Approvaltype" />
         <AssociationConnector Association="EIRSModel.FK_TCC_Request_TCC_Request" />
         <EntityTypeShape EntityType="EIRSModel.ApproverType" Width="1.5" PointX="39.375" PointY="3.75" />
+        <EntityTypeShape EntityType="EIRSModel.Map_PoA_Transfer_Operation" Width="1.5" PointX="39.375" PointY="6.75" />
+        <EntityTypeShape EntityType="EIRSModel.NINDetail" Width="1.5" PointX="39.375" PointY="11.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

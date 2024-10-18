@@ -13,7 +13,7 @@ namespace EIRS.BOL
     
     public partial class usp_GetTaxPayerPayment_Result
     {
-        public Nullable<int> PaymentID { get; set; }
+        public Nullable<long> PaymentID { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<int> PaymentTypeID { get; set; }
         public string PaymentTypeName { get; set; }

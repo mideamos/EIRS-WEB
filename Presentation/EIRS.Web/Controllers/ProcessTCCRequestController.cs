@@ -574,12 +574,77 @@ namespace EIRS.Web.Controllers
                     if (payeTccHolder.Count < 1)
                     {
                         var pai = GetLogRecord(mObjRequestData.IndividualRIN).Result;
-                        pai = pai.Where(t => t.AssessmentYear != currentYear.ToString()).ToList();
-
-                        var lastYearRec = pai.Where(t => t.AssessmentYear == (currentYear - 1).ToString()).FirstOrDefault();
-                        if (lastYearRec == null)
+                        //START
+                        if (pai != null && pai.Count > 0)
                         {
-                            lastYearRec = new PayeApiResponse()
+                            pai = pai.Where(t => t.AssessmentYear != currentYear.ToString()).ToList();
+                            var lastYearRec = pai.Where(t => t.AssessmentYear == (currentYear - 1).ToString()).FirstOrDefault();
+                            if (lastYearRec == null)
+                            {
+                                lastYearRec = new PayeApiResponse()
+                                {
+                                    AnnualGross = 0.0,
+                                    Cra = 0.0,
+                                    ValidatedPension = 0.0,
+                                    ValidatedNhf = 0.0,
+                                    ValidatedNhis = 0.0,
+                                    TaxFreePay = 0.0,
+                                    ChargeableIncome = 0.0,
+                                    AnnualTax = 0.0,
+                                    AnnualTaxII = 0.0,
+                                    MonthlyTax = 0.0
+                                };
+                                lastYearRec.RowID = 3;
+                                lastYearRec.AssessmentYear = (currentYear - 1).ToString();
+                            }
+                            newpai.Add(lastYearRec);
+                            var last2YearRec = pai.Where(t => t.AssessmentYear == (currentYear - 2).ToString()).FirstOrDefault();
+                            if (last2YearRec == null)
+                            {
+                                last2YearRec = new PayeApiResponse()
+                                {
+                                    AnnualGross = 0.0,
+                                    Cra = 0.0,
+                                    ValidatedPension = 0.0,
+                                    ValidatedNhf = 0.0,
+                                    ValidatedNhis = 0.0,
+                                    TaxFreePay = 0.0,
+                                    ChargeableIncome = 0.0,
+                                    AnnualTax = 0.0,
+                                    AnnualTaxII = 0.0,
+                                    MonthlyTax = 0.0
+                                };
+                                last2YearRec.RowID = 2;
+                                last2YearRec.AssessmentYear = (currentYear - 2).ToString();
+                            }
+                            newpai.Add(last2YearRec);
+                            var last3YearRec = pai.Where(t => t.AssessmentYear == (currentYear - 3).ToString()).FirstOrDefault();
+                            if (last3YearRec == null)
+                            {
+                                last3YearRec = new PayeApiResponse()
+                                {
+                                    AnnualGross = 0.0,
+                                    Cra = 0.0,
+                                    ValidatedPension = 0.0,
+                                    ValidatedNhf = 0.0,
+                                    ValidatedNhis = 0.0,
+                                    TaxFreePay = 0.0,
+                                    ChargeableIncome = 0.0,
+                                    AnnualTax = 0.0,
+                                    AnnualTaxII = 0.0,
+                                    MonthlyTax = 0.0
+                                };
+                                last3YearRec.RowID = 1;
+                                last3YearRec.AssessmentYear = (currentYear - 3).ToString();
+                            }
+                            newpai.Add(last3YearRec);
+
+                        }
+                        else
+                        {
+                            // Handle case where 'pai' is null or empty
+                            //lastYear
+                            var lastYearRec = new PayeApiResponse()
                             {
                                 AnnualGross = 0.0,
                                 Cra = 0.0,
@@ -594,12 +659,9 @@ namespace EIRS.Web.Controllers
                             };
                             lastYearRec.RowID = 3;
                             lastYearRec.AssessmentYear = (currentYear - 1).ToString();
-                        }
-                        newpai.Add(lastYearRec);
-                        var last2YearRec = pai.Where(t => t.AssessmentYear == (currentYear - 2).ToString()).FirstOrDefault();
-                        if (last2YearRec == null)
-                        {
-                            last2YearRec = new PayeApiResponse()
+                            newpai.Add(lastYearRec);
+                            //last2Years
+                            var last2YearRec = new PayeApiResponse()
                             {
                                 AnnualGross = 0.0,
                                 Cra = 0.0,
@@ -614,12 +676,9 @@ namespace EIRS.Web.Controllers
                             };
                             last2YearRec.RowID = 2;
                             last2YearRec.AssessmentYear = (currentYear - 2).ToString();
-                        }
-                        newpai.Add(last2YearRec);
-                        var last3YearRec = pai.Where(t => t.AssessmentYear == (currentYear - 3).ToString()).FirstOrDefault();
-                        if (last3YearRec == null)
-                        {
-                            last3YearRec = new PayeApiResponse()
+                            newpai.Add(last2YearRec);
+                            //last3Years
+                            var last3YearRec = new PayeApiResponse()
                             {
                                 AnnualGross = 0.0,
                                 Cra = 0.0,
@@ -634,8 +693,9 @@ namespace EIRS.Web.Controllers
                             };
                             last3YearRec.RowID = 1;
                             last3YearRec.AssessmentYear = (currentYear - 3).ToString();
+                            newpai.Add(last3YearRec);
                         }
-                        newpai.Add(last3YearRec);
+                        //END
                     }
                     else
                     {

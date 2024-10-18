@@ -259,6 +259,8 @@ namespace EIRS.BOL
         public virtual DbSet<NewTCCDetailsHold> NewTCCDetailsHolds { get; set; }
         public virtual DbSet<BusinessName> BusinessNames { get; set; }
         public virtual DbSet<ApproverType> ApproverTypes { get; set; }
+        public virtual DbSet<Map_PoA_Transfer_Operation> Map_PoA_Transfer_Operation { get; set; }
+        public virtual DbSet<NINDetail> NINDetails { get; set; }
     
         public virtual ObjectResult<string> ELMAH_GetErrorsXml(string application, Nullable<int> pageIndex, Nullable<int> pageSize, ObjectParameter totalCount)
         {

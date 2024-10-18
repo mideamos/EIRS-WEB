@@ -320,62 +320,120 @@ namespace EIRS.Repository
         {
             using (_db = new EIRSEntities())
             {
+                //         string sqlQuery = @"
+                //     SELECT
+                //         stmt.SettlementID AS PaymentID,
+                //         stmt.SettlementDate AS PaymentDate,
+                //         1 AS PaymentTypeID,
+                //         'Settlement' AS PaymentTypeName,
+                //         stmt.SettlementRefNo AS PaymentRefNo,
+                //         stmt.SettlementAmount AS Amount,
+                //         stmt.TransactionRefNo AS TransactionRefNo
+                //     FROM Settlement stmt
+                //     INNER JOIN Assessment ast ON stmt.AssessmentID = ast.AssessmentID AND stmt.AssessmentID IS NOT NULL
+                //     WHERE ast.TaxPayerTypeID = COALESCE(NULLIF('" + pIntTaxPayerTypeID + @"', 0), ast.TaxPayerTypeID)
+                //     AND ast.TaxPayerID = COALESCE(NULLIF('" + pIntTaxPayerID + @"', 0), ast.TaxPayerID)
+
+                //     UNION ALL
+
+                //     SELECT
+                //         stmt.SettlementID AS PaymentID,
+                //         stmt.SettlementDate AS PaymentDate,
+                //         1 AS PaymentTypeID,
+                //         'Settlement' AS PaymentTypeName,
+                //         stmt.SettlementRefNo AS PaymentRefNo,
+                //         stmt.SettlementAmount AS Amount,
+                //         stmt.TransactionRefNo AS TransactionRefNo
+                //     FROM Settlement stmt
+                //     INNER JOIN ServiceBill sb ON stmt.ServiceBillID = sb.ServiceBillID AND stmt.ServiceBillID IS NOT NULL
+                //     WHERE sb.TaxPayerTypeID = COALESCE(NULLIF(" + pIntTaxPayerTypeID + @", 0), sb.TaxPayerTypeID)
+                //     AND sb.TaxPayerID = COALESCE(NULLIF('" + pIntTaxPayerID + @"', 0), sb.TaxPayerID)
+
+                //     UNION ALL
+
+                //         SELECT
+                //             map.POAAccountId AS PaymentID,
+                //             map.OperationDate AS PaymentDate,
+                //             2 AS PaymentTypeID,
+                //             'Payment on Account' AS PaymentTypeName,
+                //                   cast(map.POAID as varchar(50)) AS PaymentRefNo,
+                //             COALESCE(map.amount, 0) AS Amount,
+                //             map.TransactionRefNo AS TransactionRefNo
+                //         FROM MAP_PaymentAccount_Operation map
+                //         WHERE map.To_TaxPayerTypeID = CASE WHEN ISNULL(" + pIntTaxPayerTypeID + @", 0) = 0 THEN map.To_TaxPayerTypeID ELSE ISNULL(" + pIntTaxPayerTypeID + @", 0) END
+                //         AND map.To_TaxPayerID = CASE WHEN ISNULL('" + pIntTaxPayerID + @"', 1) = 0 THEN map.To_TaxPayerID ELSE ISNULL('" + pIntTaxPayerID + @"', 1) END
+
+                //     UNION ALL
+
+                //     SELECT
+                //         map.POAAccountId AS PaymentID,
+                //         map.OperationDate AS PaymentDate,
+                //         2 AS PaymentTypeID,
+                //         'Payment on Account' AS PaymentTypeName,
+                //         cast(map.POAID as varchar(50)) AS PaymentRefNo,
+                //         COALESCE(map.amount, 0) AS Amount,
+                //         map.TransactionRefNo AS TransactionRefNo
+                //     FROM MAP_PaymentAccount_Operation map
+                //     WHERE map.From_TaxPayerTypeID = CASE WHEN ISNULL(" + pIntTaxPayerTypeID + @", 0) = 0 THEN map.From_TaxPayerTypeID ELSE ISNULL(" + pIntTaxPayerTypeID + @", 0) END
+                //     AND map.From_TaxPayerID = CASE WHEN ISNULL('" + pIntTaxPayerID + @"', 1) = 0 THEN map.From_TaxPayerID ELSE ISNULL('" + pIntTaxPayerID + @"', 1) END
+                // ";
+
                 string sqlQuery = @"
-            SELECT
-                stmt.SettlementID AS PaymentID,
-                stmt.SettlementDate AS PaymentDate,
-                1 AS PaymentTypeID,
-                'Settlement' AS PaymentTypeName,
-                stmt.SettlementRefNo AS PaymentRefNo,
-                stmt.SettlementAmount AS Amount,
-                stmt.TransactionRefNo AS TransactionRefNo
-            FROM Settlement stmt
-            INNER JOIN Assessment ast ON stmt.AssessmentID = ast.AssessmentID AND stmt.AssessmentID IS NOT NULL
-            WHERE ast.TaxPayerTypeID = COALESCE(NULLIF('" + pIntTaxPayerTypeID + @"', 0), ast.TaxPayerTypeID)
-            AND ast.TaxPayerID = COALESCE(NULLIF('" + pIntTaxPayerID + @"', 0), ast.TaxPayerID)
-
-            UNION ALL
-
-            SELECT
-                stmt.SettlementID AS PaymentID,
-                stmt.SettlementDate AS PaymentDate,
-                1 AS PaymentTypeID,
-                'Settlement' AS PaymentTypeName,
-                stmt.SettlementRefNo AS PaymentRefNo,
-                stmt.SettlementAmount AS Amount,
-                stmt.TransactionRefNo AS TransactionRefNo
-            FROM Settlement stmt
-            INNER JOIN ServiceBill sb ON stmt.ServiceBillID = sb.ServiceBillID AND stmt.ServiceBillID IS NOT NULL
-            WHERE sb.TaxPayerTypeID = COALESCE(NULLIF(" + pIntTaxPayerTypeID + @", 0), sb.TaxPayerTypeID)
-            AND sb.TaxPayerID = COALESCE(NULLIF('" + pIntTaxPayerID + @"', 0), sb.TaxPayerID)
-
-            UNION ALL
-
                 SELECT
-                    map.POAAccountId AS PaymentID,
-                    map.OperationDate AS PaymentDate,
-                    2 AS PaymentTypeID,
-                    'Payment on Account' AS PaymentTypeName,
-                          cast(map.POAID as varchar(50)) AS PaymentRefNo,
-                    COALESCE(map.amount, 0) AS Amount,
-                    map.TransactionRefNo AS TransactionRefNo
-                FROM MAP_PaymentAccount_Operation map
-                WHERE map.To_TaxPayerTypeID = CASE WHEN ISNULL(" + pIntTaxPayerTypeID + @", 0) = 0 THEN map.To_TaxPayerTypeID ELSE ISNULL(" + pIntTaxPayerTypeID + @", 0) END
-                AND map.To_TaxPayerID = CASE WHEN ISNULL('" + pIntTaxPayerID + @"', 1) = 0 THEN map.To_TaxPayerID ELSE ISNULL('" + pIntTaxPayerID + @"', 1) END
+            stmt.SettlementID AS PaymentID,
+            stmt.SettlementDate AS PaymentDate,
+            1 AS PaymentTypeID,
+            'Settlement' AS PaymentTypeName,
+            stmt.SettlementRefNo AS PaymentRefNo,
+            stmt.SettlementAmount AS Amount,
+            stmt.TransactionRefNo AS TransactionRefNo
+        FROM Settlement stmt
+        INNER JOIN Assessment ast ON stmt.AssessmentID = ast.AssessmentID AND stmt.AssessmentID IS NOT NULL
+        WHERE ast.TaxPayerTypeID = COALESCE(NULLIF('" + pIntTaxPayerTypeID + @"', 0), ast.TaxPayerTypeID)
+        AND ast.TaxPayerID = COALESCE(NULLIF('" + pIntTaxPayerID + @"', 0), ast.TaxPayerID)
 
-		    UNION ALL
+        UNION ALL
 
-            SELECT
-                map.POAAccountId AS PaymentID,
-                map.OperationDate AS PaymentDate,
-                2 AS PaymentTypeID,
-                'Payment on Account' AS PaymentTypeName,
-                cast(map.POAID as varchar(50)) AS PaymentRefNo,
-                COALESCE(map.amount, 0) AS Amount,
-                map.TransactionRefNo AS TransactionRefNo
-            FROM MAP_PaymentAccount_Operation map
-            WHERE map.From_TaxPayerTypeID = CASE WHEN ISNULL(" + pIntTaxPayerTypeID + @", 0) = 0 THEN map.From_TaxPayerTypeID ELSE ISNULL(" + pIntTaxPayerTypeID + @", 0) END
-            AND map.From_TaxPayerID = CASE WHEN ISNULL('" + pIntTaxPayerID + @"', 1) = 0 THEN map.From_TaxPayerID ELSE ISNULL('" + pIntTaxPayerID + @"', 1) END
+        SELECT
+            stmt.SettlementID AS PaymentID,
+            stmt.SettlementDate AS PaymentDate,
+            1 AS PaymentTypeID,
+            'Settlement' AS PaymentTypeName,
+            stmt.SettlementRefNo AS PaymentRefNo,
+            stmt.SettlementAmount AS Amount,
+            stmt.TransactionRefNo AS TransactionRefNo
+        FROM Settlement stmt
+        INNER JOIN ServiceBill sb ON stmt.ServiceBillID = sb.ServiceBillID AND stmt.ServiceBillID IS NOT NULL
+        WHERE sb.TaxPayerTypeID = COALESCE(NULLIF(" + pIntTaxPayerTypeID + @", 0), sb.TaxPayerTypeID)
+        AND sb.TaxPayerID = COALESCE(NULLIF('" + pIntTaxPayerID + @"', 0), sb.TaxPayerID)
+
+        UNION ALL
+
+        SELECT
+            pa.PaymentAccountid  AS PaymentID,
+            pa.CreatedDate AS PaymentDate,
+            2 AS PaymentTypeID,
+            'Payment on Acccount' AS PaymentTypeName,
+            pa.PaymentRefNo, 
+            COALESCE(pa.Amount, 0) AS Amount,
+            pa.TransactionRefNo AS TransactionRefNo
+        FROM Payment_Account pa
+        WHERE pa.TaxPayerTypeID = CASE WHEN ISNULL(" + pIntTaxPayerTypeID + @", 0) = 0 THEN pa.TaxPayerTypeID ELSE ISNULL(" + pIntTaxPayerTypeID + @", 0) END
+        AND pa.TaxPayerID = CASE WHEN ISNULL('" + pIntTaxPayerID + @"', 1) = 0 THEN pa.TaxPayerID ELSE ISNULL('" + pIntTaxPayerID + @"', 1) END
+
+        UNION ALL
+
+        SELECT
+              map.POATID AS PaymentID,
+            map.CreatedDate AS PaymentDate,
+            10 AS PaymentTypeID,
+            'PoA Transfer' AS PaymentTypeName,
+            map.POATRefNo AS PaymentRefNo,
+            COALESCE(map.Amount, 0) AS Amount,
+            map.To_TransactionRefNo AS TransactionRefNo
+        FROM  Map_PoA_Transfer_Operation map
+        WHERE map.From_TaxPayerTypeID = CASE WHEN ISNULL(" + pIntTaxPayerTypeID + @", 0) = 0 THEN map.From_TaxPayerTypeID ELSE ISNULL(" + pIntTaxPayerTypeID + @", 0) END
+        AND map.From_TaxPayerID = CASE WHEN ISNULL('" + pIntTaxPayerID + @"', 1) = 0 THEN map.From_TaxPayerID ELSE ISNULL('" + pIntTaxPayerID + @"', 1) END
         ";
 
                 var result = _db.Database.SqlQuery<TaxpayerPayment>(sqlQuery).ToList();
@@ -397,7 +455,7 @@ namespace EIRS.Repository
         internal partial class TaxpayerPayment
         {
 
-            public int PaymentID { get; set; }
+            public long PaymentID { get; set; }
             public DateTime PaymentDate { get; set; }
             public int PaymentTypeID { get; set; }
             public string PaymentTypeName { get; set; }

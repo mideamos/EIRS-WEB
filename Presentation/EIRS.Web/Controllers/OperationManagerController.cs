@@ -39,6 +39,8 @@ using Vereyon.Web;
 using static EIRS.Web.Controllers.Filters;
 using DocumentFormat.OpenXml.Bibliography;
 using System.Security.Policy;
+using DocumentFormat.OpenXml.Wordprocessing;
+using System.Data.Entity.Migrations;
 
 namespace EIRS.Web.Controllers
 {
@@ -107,7 +109,7 @@ namespace EIRS.Web.Controllers
         {
             long curentyear = DateTime.Now.Year - 1;
             // var rawQuery = $"SELECT notf.TCCRequestID ,(nm.FirstName +' '+ nm.LastName) as Fullname ,nm.IndividualRIN ,notf.RequestRefNo,notf.Isdownloaded,  CASE WHEN ISNULL(notf.IsDownloaded, 0) = 0 THEN 'Awaiting Download'       ELSE 'Downloaded'   END as DownloadStatus,notf.RequestDate FROM TCC_Request  notf Left JOIN Individual  nm ON notf.TaxPayerID  = nm.IndividualID WHERE notf.TaxYear  = {curentyear} and notf.StatusID = 14 order by RequestDate desc ";
-        var rawQuery = $@"
+            var rawQuery = $@"
             SELECT 
                 notf.TCCRequestID,
                 (nm.FirstName + ' ' + nm.LastName) AS Fullname,
@@ -129,7 +131,7 @@ namespace EIRS.Web.Controllers
                     WHEN ISNULL(notf.IsDownloaded, 0) = 0 THEN 0 
                     ELSE 1 
                 END ASC, 
-                notf.ModifiedDate DESC"; 
+                notf.ModifiedDate DESC";
             // List to hold the results
             List<usp_GetTccDownloadByYearResult> results = new List<usp_GetTccDownloadByYearResult>();
 
@@ -501,6 +503,13 @@ namespace EIRS.Web.Controllers
         public ActionResult PoATransfer(PaymentTransferViewModel pobjPaymentViewModel)
         {
 
+            if (pobjPaymentViewModel.ToTaxPayerID <= 0)
+            {
+                UI_FillDropDown();
+                ViewBag.Message = "Please select a valid To TaxPayer.";
+                return View(pobjPaymentViewModel);
+            }
+
             if (pobjPaymentViewModel.FromTaxPayerID != pobjPaymentViewModel.ToTaxPayerID)
             {
                 PoaMyClass myClass = SessionManager.poaMyClass ?? new PoaMyClass();
@@ -517,68 +526,146 @@ namespace EIRS.Web.Controllers
                     ViewBag.Message = "Please Enter Amount";
                     return View(pobjPaymentViewModel);
                 }
-                MAP_PaymentAccount_Operation mObjPaymentTransfer = new MAP_PaymentAccount_Operation()
-                {
-                    OperationTypeID = (int)EnumList.OperationType.Transfer,
-                    From_TaxPayerTypeID = pobjPaymentViewModel.FromTaxPayerTypeID,
-                    From_TaxPayerID = pobjPaymentViewModel.FromTaxPayerID,
-                    To_TaxPayerTypeID = pobjPaymentViewModel.ToTaxPayerTypeID,
-                    POAAccountId = Convert.ToInt32(myClass.PaymentAccountID),
-                    To_TaxPayerID = pobjPaymentViewModel.ToTaxPayerID,
-                    TransactionRefNo = myClass.TransactionRefNo,
-                    Amount = pobjPaymentViewModel.Amount,
-                    OperationDate = CommUtil.GetCurrentDateTime(),
-                    CreatedBy = SessionManager.UserID,
-                    CreatedDate = CommUtil.GetCurrentDateTime()
-                };
+
 
                 //decimal Balance = new BLPaymentAccount().BL_GetWalletBalance(pobjPaymentViewModel.FromTaxPayerTypeID, pobjPaymentViewModel.FromTaxPayerID);
-
-                try
+                using (var transaction = _db.Database.BeginTransaction())
                 {
-                    if (myClass.BA >= pobjPaymentViewModel.Amount)
+                    try
                     {
-                        FuncResponse mObjResponse = new BLPaymentAccount().BL_InsertPaymentOperation(mObjPaymentTransfer);
-
-                        if (mObjResponse.Success)
+                        if (myClass.BA >= pobjPaymentViewModel.Amount)
                         {
-                            Audit_Log mObjAuditLog = new Audit_Log()
+                            var fromPaymentAccount = _db.Payment_Account.FirstOrDefault(o => o.PaymentAccountID == myClass.PaymentAccountID);
+                            if (fromPaymentAccount == null)
                             {
-                                LogDate = CommUtil.GetCurrentDateTime(),
-                                ASLID = (int)EnumList.ALScreen.Operation_Manager_PoA_Transfer,
-                                Comment = $"PoA Transfer from {pobjPaymentViewModel.FromTaxPayerName} to {pobjPaymentViewModel.ToTaxPayerName} of Amount {pobjPaymentViewModel.Amount}",
-                                IPAddress = CommUtil.GetIPAddress(),
-                                StaffID = SessionManager.UserID,
+                                ViewBag.Message = "From Payment Account not found.";
+                                return View(pobjPaymentViewModel);
+                            }
+
+                            //START Insert data into the Payment_Account table.
+                            Payment_Account mObjPaymentAccount = new Payment_Account()
+                            {
+                                PaymentAccountID = 0,
+                                // PaymentRefNo = "",//Auto
+                                TaxPayerTypeID = pobjPaymentViewModel.ToTaxPayerTypeID,
+                                TaxPayerID = pobjPaymentViewModel.ToTaxPayerID,
+                                Amount = pobjPaymentViewModel.Amount,
+                                RevenueStreamID = 13,
+                                RevenueSubStreamID = 45,
+                                AgencyID = 8,
+                                TransactionRefNo = $"POAT{CommUtil.GenerateUniqueNumber(10)}",
+                                SettlementMethodID = 10, // POA Transfer is 10 on the settlement method table
+                                SettlementStatusID = (int)EnumList.SettlementStatus.Settled,
+                                PaymentDate = CommUtil.GetCurrentDateTime(),
+                                Notes = $"PoA Transfer from {fromPaymentAccount.TransactionRefNo}",
+                                isManualEntry = false,
+                                Active = true,
+                                CreatedBy = SessionManager.UserID,
+                                CreatedDate = CommUtil.GetCurrentDateTime()
                             };
 
-                            new BLAuditLog().BL_InsertAuditLog(mObjAuditLog);
+                            FuncResponse<Payment_Account> mObjFuncResponse = new BLPaymentAccount().BL_InsertUpdatePaymentAccount(mObjPaymentAccount);
 
-                            UI_FillDropDown();
-                            ModelState.Clear();
-                            ViewBag.Message = "Transaction Done Successful";
-                            Session.Remove("poaMyClass");
-                            return View();
+                            if (mObjFuncResponse.Success)
+                            {
+                                //START Insert into Map_PoA_Transfer_Operation
+                                string nextPOATRefNo = "POAT" + (_db.Map_PoA_Transfer_Operation.Max(o => (int?)o.POATID) ?? 0 + 1).ToString("D6");
+                                Map_PoA_Transfer_Operation poaTransferOperation = new Map_PoA_Transfer_Operation
+                                {
+                                    POATRefNo = nextPOATRefNo,
+
+                                    From_PoaTransactionRefNo = fromPaymentAccount.TransactionRefNo,
+                                    From_Taxpayer_POAID = Convert.ToInt32(fromPaymentAccount.PaymentAccountID),
+
+                                    From_TaxpayerID = fromPaymentAccount.TaxPayerID,
+                                    From_TaxpayerTypeID = fromPaymentAccount.TaxPayerTypeID,
+                                    Amount = (decimal)pobjPaymentViewModel.Amount,
+                                    To_TaxpayerID = pobjPaymentViewModel.ToTaxPayerID,
+                                    To_TaxpayerTypeID = pobjPaymentViewModel.ToTaxPayerTypeID,
+                                    To_Taxpayer_POAID = Convert.ToInt32(mObjFuncResponse.AdditionalData.PaymentAccountID), //pobjPaymentViewModel.ToTaxPayerPOAID,
+                                    To_TransactionRefNo = mObjFuncResponse.AdditionalData.TransactionRefNo,
+                                    Settlement_MethodID = 10, // POA Transfer is 10 on the settlement method table
+                                    CreatedBy = SessionManager.UserID,
+                                    CreatedDate = CommUtil.GetCurrentDateTime(),
+                                };
+
+                                _db.Map_PoA_Transfer_Operation.Add(poaTransferOperation);
+                                _db.SaveChanges();
+                                //END Insert into Map_PoA_Transfer_Operation
+
+                                //Start Insert Existing Table
+                                MAP_PaymentAccount_Operation mObjPaymentTransfer = new MAP_PaymentAccount_Operation()
+                                {
+                                    OperationTypeID = (int)EnumList.OperationType.Transfer,
+                                    From_TaxPayerTypeID = pobjPaymentViewModel.FromTaxPayerTypeID,
+                                    From_TaxPayerID = pobjPaymentViewModel.FromTaxPayerID,
+                                    To_TaxPayerTypeID = pobjPaymentViewModel.ToTaxPayerTypeID,
+                                    POAAccountId = Convert.ToInt32(myClass.PaymentAccountID),
+                                    To_TaxPayerID = pobjPaymentViewModel.ToTaxPayerID,
+                                    TransactionRefNo = myClass.TransactionRefNo,
+                                    Amount = pobjPaymentViewModel.Amount,
+                                    OperationDate = CommUtil.GetCurrentDateTime(),
+                                    CreatedBy = SessionManager.UserID,
+                                    CreatedDate = CommUtil.GetCurrentDateTime()
+                                };
+                                FuncResponse mObjResponse = new BLPaymentAccount().BL_InsertPaymentOperation(mObjPaymentTransfer);
+                                //End
+
+                                if (mObjResponse.Success)
+                                {
+                                    Audit_Log mObjAuditLog = new Audit_Log()
+                                    {
+                                        LogDate = CommUtil.GetCurrentDateTime(),
+                                        ASLID = (int)EnumList.ALScreen.Operation_Manager_PoA_Transfer,
+                                        Comment = $"PoA Transfer from {pobjPaymentViewModel.FromTaxPayerName} to {pobjPaymentViewModel.ToTaxPayerName} of Amount {pobjPaymentViewModel.Amount}",
+                                        IPAddress = CommUtil.GetIPAddress(),
+                                        StaffID = SessionManager.UserID,
+                                    };
+
+                                    new BLAuditLog().BL_InsertAuditLog(mObjAuditLog);
+
+                                    transaction.Commit();
+
+                                    UI_FillDropDown();
+                                    ModelState.Clear();
+                                    ViewBag.Message = "Transaction Done Successful";
+                                    Session.Remove("poaMyClass");
+                                    return View();
+                                }
+                                else
+                                {
+                                    UI_FillDropDown();
+                                    ViewBag.Message = mObjResponse.Message;
+                                    return View(pobjPaymentViewModel);
+                                }
+                            }
+                            else
+                            {
+
+                                ViewBag.Message = "Unable to create payment account.";
+                                return View(pobjPaymentViewModel);
+
+                            }
+                            //END Insert data into the Payment_Account table.
+
                         }
                         else
                         {
                             UI_FillDropDown();
-                            ViewBag.Message = mObjResponse.Message;
+                            ViewBag.Message = "Insufficient Balance";
                             return View(pobjPaymentViewModel);
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
+                        transaction.Rollback();
                         UI_FillDropDown();
-                        ViewBag.Message = "Insufficient Balance";
+                        ViewBag.Message = $"Error occurred while Transfer {ex.Message}";
                         return View(pobjPaymentViewModel);
                     }
+
                 }
-                catch (Exception ex)
-                {
-                    UI_FillDropDown();
-                    ViewBag.Message = "Error occurred while Transfer";
-                    return View(pobjPaymentViewModel);
-                }
+
             }
             else
             {
@@ -587,6 +674,101 @@ namespace EIRS.Web.Controllers
                 return View(pobjPaymentViewModel);
             }
         }
+
+        // [HttpPost]
+        // [ValidateAntiForgeryToken()]
+        // public ActionResult PoATransfer(PaymentTransferViewModel pobjPaymentViewModel)
+        // {
+
+        //     if (pobjPaymentViewModel.FromTaxPayerID != pobjPaymentViewModel.ToTaxPayerID)
+        //     {
+        //         PoaMyClass myClass = SessionManager.poaMyClass ?? new PoaMyClass();
+
+        //         if (myClass.PaymentAccountID <= 0)
+        //         {
+        //             UI_FillDropDown();
+        //             ViewBag.Message = "Please Enter Transaction Ref No";
+        //             return View(pobjPaymentViewModel);
+        //         }
+        //         if (pobjPaymentViewModel.Amount <= 0 || pobjPaymentViewModel.Amount == null)
+        //         {
+        //             UI_FillDropDown();
+        //             ViewBag.Message = "Please Enter Amount";
+        //             return View(pobjPaymentViewModel);
+        //         }
+        //         MAP_PaymentAccount_Operation mObjPaymentTransfer = new MAP_PaymentAccount_Operation()
+        //         {
+        //             OperationTypeID = (int)EnumList.OperationType.Transfer,
+        //             From_TaxPayerTypeID = pobjPaymentViewModel.FromTaxPayerTypeID,
+        //             From_TaxPayerID = pobjPaymentViewModel.FromTaxPayerID,
+        //             To_TaxPayerTypeID = pobjPaymentViewModel.ToTaxPayerTypeID,
+        //             POAAccountId = Convert.ToInt32(myClass.PaymentAccountID),
+        //             To_TaxPayerID = pobjPaymentViewModel.ToTaxPayerID,
+        //             TransactionRefNo = myClass.TransactionRefNo,
+        //             Amount = pobjPaymentViewModel.Amount,
+        //             OperationDate = CommUtil.GetCurrentDateTime(),
+        //             CreatedBy = SessionManager.UserID,
+        //             CreatedDate = CommUtil.GetCurrentDateTime()
+        //         };
+
+        //         //decimal Balance = new BLPaymentAccount().BL_GetWalletBalance(pobjPaymentViewModel.FromTaxPayerTypeID, pobjPaymentViewModel.FromTaxPayerID);
+
+        //         try
+        //         {
+        //             if (myClass.BA >= pobjPaymentViewModel.Amount)
+        //             {
+        //                 //Insert data into the Map_PoA_Transfer_Operation table.
+        //                 //Insert data into the Payment_Account table.
+        //                 //
+        //                 FuncResponse mObjResponse = new BLPaymentAccount().BL_InsertPaymentOperation(mObjPaymentTransfer);
+
+        //                 if (mObjResponse.Success)
+        //                 {
+        //                     Audit_Log mObjAuditLog = new Audit_Log()
+        //                     {
+        //                         LogDate = CommUtil.GetCurrentDateTime(),
+        //                         ASLID = (int)EnumList.ALScreen.Operation_Manager_PoA_Transfer,
+        //                         Comment = $"PoA Transfer from {pobjPaymentViewModel.FromTaxPayerName} to {pobjPaymentViewModel.ToTaxPayerName} of Amount {pobjPaymentViewModel.Amount}",
+        //                         IPAddress = CommUtil.GetIPAddress(),
+        //                         StaffID = SessionManager.UserID,
+        //                     };
+
+        //                     new BLAuditLog().BL_InsertAuditLog(mObjAuditLog);
+
+        //                     UI_FillDropDown();
+        //                     ModelState.Clear();
+        //                     ViewBag.Message = "Transaction Done Successful";
+        //                     Session.Remove("poaMyClass");
+        //                     return View();
+        //                 }
+        //                 else
+        //                 {
+        //                     UI_FillDropDown();
+        //                     ViewBag.Message = mObjResponse.Message;
+        //                     return View(pobjPaymentViewModel);
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 UI_FillDropDown();
+        //                 ViewBag.Message = "Insufficient Balance";
+        //                 return View(pobjPaymentViewModel);
+        //             }
+        //         }
+        //         catch (Exception ex)
+        //         {
+        //             UI_FillDropDown();
+        //             ViewBag.Message = "Error occurred while Transfer";
+        //             return View(pobjPaymentViewModel);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         UI_FillDropDown();
+        //         ViewBag.Message = "Can't send transfer to self";
+        //         return View(pobjPaymentViewModel);
+        //     }
+        // }
         //[HttpPost]
         //[ValidateAntiForgeryToken()]
         //public ActionResult PoATransferValidate(PaymentTransferViewModel pobjPaymentViewModel)
@@ -669,59 +851,142 @@ namespace EIRS.Web.Controllers
         //    }
         //} 
 
-
         public JsonResult PoATransferValidate(string pid, int? pIntTaxPayerTypeID, int? pIntTaxPayerID)
         {
-            decimal? reciedAmount = 0; decimal? sentAmount = 0; decimal? newbalance = 0;
+            decimal? receivedAmount = 0; decimal? sentAmount = 0; decimal? newBalance = 0;
             string noUser = "";
-            List<MAP_PaymentAccount_Operation> lstret = new List<MAP_PaymentAccount_Operation>();
-            MAP_PaymentAccount_Operation ret = new MAP_PaymentAccount_Operation();
+            List<Map_PoA_Transfer_Operation> lstret = new List<Map_PoA_Transfer_Operation>();
+            Map_PoA_Transfer_Operation ret = new Map_PoA_Transfer_Operation();
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(pid))
             {
-                var res = _db.Payment_Account.FirstOrDefault(o => o.TransactionRefNo == pid);
-                if (res != null)
+                if (!pIntTaxPayerTypeID.HasValue || pIntTaxPayerTypeID.Value == 0)
                 {
+                    dcResponse["success"] = false;
+                    dcResponse["noUser"] = "Taxpayer type not valid. Please select a valid type.";
+                    return Json(dcResponse, JsonRequestBehavior.AllowGet);
+                }
+
+                if (!pIntTaxPayerID.HasValue || pIntTaxPayerID.Value == 0)
+                {
+                    pIntTaxPayerID = SessionManager.TaxPayerIDForPoa;
                     if (pIntTaxPayerID.Value == 0)
                     {
-                        pIntTaxPayerID = SessionManager.TaxPayerIDForPoa;
-                        if (pIntTaxPayerID.Value == 0)
-                        {
-                            dcResponse["success"] = false;
-                            dcResponse["noUser"] = "Taxpayer Number not Found. Please Try again";
-                            return Json(dcResponse, JsonRequestBehavior.AllowGet);
-                        }
+                        dcResponse["success"] = false;
+                        dcResponse["noUser"] = "Taxpayer Number not Found. Please Try again";
+                        return Json(dcResponse, JsonRequestBehavior.AllowGet);
                     }
-                    lstret = _db.MAP_PaymentAccount_Operation.Where(o => o.POAAccountId == res.PaymentAccountID).ToList();
+                }
+
+                // var res = _db.Payment_Account.FirstOrDefault(o => o.TransactionRefNo == pid);
+                var res = _db.Payment_Account
+        .FirstOrDefault(o => o.TransactionRefNo == pid
+                          && o.TaxPayerTypeID == pIntTaxPayerTypeID
+                          && o.TaxPayerID == pIntTaxPayerID);
+                if (res != null)
+                {
+                    // if (pIntTaxPayerID.Value == 0)
+                    // {
+                    //     pIntTaxPayerID = SessionManager.TaxPayerIDForPoa;
+                    //     if (pIntTaxPayerID.Value == 0)
+                    //     {
+                    //         dcResponse["success"] = false;
+                    //         dcResponse["noUser"] = "Taxpayer Number not Found. Please Try again";
+                    //         return Json(dcResponse, JsonRequestBehavior.AllowGet);
+                    //     }
+                    // }
+                    // lstret = _db.Map_PoA_Transfer_Operation.Where(o => o.POAAccountId == res.PaymentAccountID).ToList();
+                    lstret = _db.Map_PoA_Transfer_Operation
+                        .Where(o => o.From_PoaTransactionRefNo == res.TransactionRefNo
+                                    && o.From_TaxpayerID == pIntTaxPayerID
+                                    && o.From_TaxpayerTypeID == pIntTaxPayerTypeID)
+                        .ToList();
+
+                    receivedAmount = res.Amount;
                     if (lstret.Count > 0)
                     {
+                        // receivedAmount = lstret.Where(o => o.To_TaxpayerID == pIntTaxPayerID && o.To_TaxpayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
+                        sentAmount = lstret.Where(o => o.From_TaxpayerID == pIntTaxPayerID && o.From_TaxpayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
+                        newBalance = receivedAmount - sentAmount;
 
-                        reciedAmount = lstret.Where(o => o.To_TaxPayerID == pIntTaxPayerID && o.To_TaxPayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
-                        sentAmount = lstret.Where(o => o.From_TaxPayerID == pIntTaxPayerID && o.From_TaxPayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
-                        newbalance = reciedAmount - sentAmount;
-
-                        PoaMyClass myClass = new PoaMyClass() { TransactionRefNo = pid, BA = newbalance.Value, PaymentAccountID = res.PaymentAccountID, SA = sentAmount.Value, RA = reciedAmount.Value };
+                        PoaMyClass myClass = new PoaMyClass() { TransactionRefNo = pid, BA = newBalance.Value, PaymentAccountID = res.PaymentAccountID, SA = sentAmount.Value, RA = receivedAmount.Value };
                         SessionManager.poaMyClass = myClass;
                     }
 
-                    dcResponse["reciedAmount"] = CommUtil.GetFormatedCurrency(reciedAmount);
+                    dcResponse["reciedAmount"] = CommUtil.GetFormatedCurrency(receivedAmount);
                     dcResponse["sentAmount"] = CommUtil.GetFormatedCurrency(sentAmount);
-                    dcResponse["newbalance"] = CommUtil.GetFormatedCurrency(newbalance);
+                    dcResponse["newbalance"] = CommUtil.GetFormatedCurrency(newBalance);
                     dcResponse["success"] = true;
                 }
                 else
                 {
 
                     dcResponse["success"] = false;
-                    dcResponse["noUser"] = "Transaction Doesnt Exist With This Reference Number";
+                    dcResponse["noUser"] = "PoA transfer can not be done for this TaxPayer with this reference number.";
+                    // dcResponse["noUser"] = "Transaction Doesnt Exist With This Reference Number";
                 }
             }
             else
             {
                 dcResponse["success"] = false;
+                dcResponse["noUser"] = "Transaction Reference Number is required.";
+                // dcResponse["message"] = "Transaction Reference Number is required.";
             }
             return Json(dcResponse, JsonRequestBehavior.AllowGet);
         }
+
+        // public JsonResult PoATransferValidate(string pid, int? pIntTaxPayerTypeID, int? pIntTaxPayerID)
+        // {
+        //     decimal? reciedAmount = 0; decimal? sentAmount = 0; decimal? newbalance = 0;
+        //     string noUser = "";
+        //     List<MAP_PaymentAccount_Operation> lstret = new List<MAP_PaymentAccount_Operation>();
+        //     MAP_PaymentAccount_Operation ret = new MAP_PaymentAccount_Operation();
+        //     Dictionary<string, object> dcResponse = new Dictionary<string, object>();
+        //     if (!string.IsNullOrEmpty(pid))
+        //     {
+        //         var res = _db.Payment_Account.FirstOrDefault(o => o.TransactionRefNo == pid);
+        //         if (res != null)
+        //         {
+        //             if (pIntTaxPayerID.Value == 0)
+        //             {
+        //                 pIntTaxPayerID = SessionManager.TaxPayerIDForPoa;
+        //                 if (pIntTaxPayerID.Value == 0)
+        //                 {
+        //                     dcResponse["success"] = false;
+        //                     dcResponse["noUser"] = "Taxpayer Number not Found. Please Try again";
+        //                     return Json(dcResponse, JsonRequestBehavior.AllowGet);
+        //                 }
+        //             }
+        //             lstret = _db.MAP_PaymentAccount_Operation.Where(o => o.POAAccountId == res.PaymentAccountID).ToList();
+        //             if (lstret.Count > 0)
+        //             {
+
+        //                 reciedAmount = lstret.Where(o => o.To_TaxPayerID == pIntTaxPayerID && o.To_TaxPayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
+        //                 sentAmount = lstret.Where(o => o.From_TaxPayerID == pIntTaxPayerID && o.From_TaxPayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
+        //                 newbalance = reciedAmount - sentAmount;
+
+        //                 PoaMyClass myClass = new PoaMyClass() { TransactionRefNo = pid, BA = newbalance.Value, PaymentAccountID = res.PaymentAccountID, SA = sentAmount.Value, RA = reciedAmount.Value };
+        //                 SessionManager.poaMyClass = myClass;
+        //             }
+
+        //             dcResponse["reciedAmount"] = CommUtil.GetFormatedCurrency(reciedAmount);
+        //             dcResponse["sentAmount"] = CommUtil.GetFormatedCurrency(sentAmount);
+        //             dcResponse["newbalance"] = CommUtil.GetFormatedCurrency(newbalance);
+        //             dcResponse["success"] = true;
+        //         }
+        //         else
+        //         {
+
+        //             dcResponse["success"] = false;
+        //             dcResponse["noUser"] = "Transaction Doesnt Exist With This Reference Number";
+        //         }
+        //     }
+        //     else
+        //     {
+        //         dcResponse["success"] = false;
+        //     }
+        //     return Json(dcResponse, JsonRequestBehavior.AllowGet);
+        // }
         public JsonResult GetBalance(int? pIntTaxPayerTypeID, int? pIntTaxPayerID)
         {
             Dictionary<string, object> dcResponse = new Dictionary<string, object>();
@@ -1184,6 +1449,54 @@ namespace EIRS.Web.Controllers
                     }
                     else
                     {
+                        //START NEW POA SETTLEMENT UPDATES - AVAILABLE BALANCE CHECK
+                        // Get all Payment_Account records for the given TaxPayerTypeID and TaxPayerID
+                        var paymentAccounts = _db.Payment_Account
+                            .Where(pa => pa.TaxPayerTypeID == pObjSettlementModel.TaxPayerTypeID && pa.TaxPayerID == pObjSettlementModel.TaxPayerID)
+                            .ToList();
+
+                        // Get all TransactionRefNo values from Payment_Account
+                        var transactionRefNos = paymentAccounts.Select(pa => pa.TransactionRefNo).ToList();
+
+                        // Fetch all relevant Map_PoA_Transfer_Operation records in a single query
+                        var poaTransferOperations = _db.Map_PoA_Transfer_Operation
+                            .Where(mpo => transactionRefNos.Contains(mpo.From_PoaTransactionRefNo))
+                            .GroupBy(mpo => mpo.From_PoaTransactionRefNo)
+                            .Select(g => new
+                            {
+                                From_PoaTransactionRefNo = g.Key,
+                                TotalAmountTransferred = g.Sum(mpo => mpo.Amount)
+                            })
+                            .ToDictionary(x => x.From_PoaTransactionRefNo, x => x.TotalAmountTransferred);
+
+                        // Calculate available balance for each TransactionRefNo in Payment_Account
+                        var paymentAccountBalances = paymentAccounts.Select(pa =>
+                        {
+                            decimal amountTransferred = poaTransferOperations.ContainsKey(pa.TransactionRefNo) ? poaTransferOperations[pa.TransactionRefNo] : 0;
+
+                            return new
+                            {
+                                pa.TransactionRefNo,
+                                pa.Amount,
+                                AmountTransferred = amountTransferred,
+                                AvailableBalance = pa.Amount - amountTransferred
+                            };
+                        }).ToList();
+
+                        // Check if total available balance covers the amount to be paid
+                        decimal amountToPay = (decimal)newSettleAmount;
+                        if (paymentAccountBalances.Sum(pab => pab.AvailableBalance) < amountToPay)
+                        {
+                            // Not enough balance
+                            ViewBag.PoABalance = dcBalance;
+                            ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                            ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                            ViewBag.Message = "Insufficient PoA balance!";
+                            return View(pObjSettlementModel);
+                        }
+
+
+                        //END NEW POA SETTLEMENT UPDATES - AVAILABLE BALANCE CHECK
 
                         BLSettlement mObjBLSettlement = new BLSettlement();
 
@@ -1208,6 +1521,44 @@ namespace EIRS.Web.Controllers
 
                             if (mObjSettlementResponse.Success)
                             {
+
+                                //START NEW POA SETTLEMENT UPDATES - COMPUTE & SAVE DATA
+                                foreach (var pab in paymentAccountBalances)
+                                {
+                                    if (amountToPay <= 0) break;
+
+                                    if (pab.AvailableBalance > 0)
+                                    {
+                                        var deductionAmount = Math.Min((decimal)pab.AvailableBalance, amountToPay);
+
+                                        // Insert into Map_PoA_Transfer_Operation
+                                        string nextPOATRefNo = "POAT" + (_db.Map_PoA_Transfer_Operation.Max(o => (int?)o.POATID) ?? 0 + 1).ToString("D6");
+                                        var poaTransferOperation = new Map_PoA_Transfer_Operation
+                                        {
+                                            POATRefNo = nextPOATRefNo,
+                                            From_PoaTransactionRefNo = pab.TransactionRefNo,
+                                            From_Taxpayer_POAID = Convert.ToInt32(paymentAccounts.First(pa => pa.TransactionRefNo == pab.TransactionRefNo).PaymentAccountID),
+                                            From_TaxpayerID = pObjSettlementModel.TaxPayerID,
+                                            From_TaxpayerTypeID = pObjSettlementModel.TaxPayerTypeID,
+                                            Amount = deductionAmount,
+                                            To_TaxpayerID = pObjSettlementModel.TaxPayerID,
+                                            To_TaxpayerTypeID = pObjSettlementModel.TaxPayerTypeID,
+                                            To_Taxpayer_POAID = mObjSettlementResponse.AdditionalData.SettlementID,
+                                            To_TransactionRefNo = mObjSettlementResponse.AdditionalData.TransactionRefNo,
+                                            Settlement_MethodID = 7,
+                                            CreatedBy = SessionManager.UserID,
+                                            CreatedDate = CommUtil.GetCurrentDateTime()
+                                        };
+
+                                        _db.Map_PoA_Transfer_Operation.Add(poaTransferOperation);
+                                        _db.SaveChanges();
+
+                                        amountToPay -= deductionAmount;
+                                    }
+                                }
+                                //END NEW POA SETTLEMENT UPDATES - COMPUTE & SAVE DATA
+
+
                                 if (mObjSettlementResponse.AdditionalData != null && GlobalDefaultValues.SendNotification)
                                 {
                                     //Send Notification
@@ -3426,8 +3777,8 @@ namespace EIRS.Web.Controllers
         [HttpGet]
         public ActionResult viewRevenue(int TaxYear, DateTime? FromDate, DateTime? ToDate, int? RevenueStreamID, int? TaxOfficeID)
         {
-            var target = 1000; 
-            var totalCollection = 800; 
+            var target = 1000;
+            var totalCollection = 800;
             var differential = totalCollection - target;
             var performance = target > 0 ? (totalCollection / (float)target) * 100 : 0;
 
@@ -4734,9 +5085,9 @@ namespace EIRS.Web.Controllers
                   ).ToList();
             }
 
-            var totalTargetamount = lstSummary.Sum(t => t.Targetamount); 
-            var totalSettlementAmount = lstSummary.Sum(t => t.Settlementamount); 
-            var totaldifferenitial = lstSummary.Sum(t => t.differenitial); 
+            var totalTargetamount = lstSummary.Sum(t => t.Targetamount);
+            var totalSettlementAmount = lstSummary.Sum(t => t.Settlementamount);
+            var totaldifferenitial = lstSummary.Sum(t => t.differenitial);
             double totalPercentage = (double)(totalTargetamount != 0 ? (totalSettlementAmount / totalTargetamount) * 100 : 0m);
 
 
@@ -4865,7 +5216,7 @@ namespace EIRS.Web.Controllers
 
         public ActionResult TaxOfficeTargetByMonthDetails(int? Year, int? Month)
         {
-            string yearr = "0"; 
+            string yearr = "0";
             string monthh = "0";
 
             var url = Request.Url.AbsoluteUri.ToLower();
@@ -6954,7 +7305,7 @@ namespace EIRS.Web.Controllers
 
         #endregion
 
-
+        #region OMO63 - Tax Offices
         public ActionResult TaxOfficeManagerStatus()
         {
             UI_FillTaxOfficeDropDown();
@@ -7655,6 +8006,9 @@ namespace EIRS.Web.Controllers
             return Json(new { draw = vDraw, recordsFiltered = IntTotalRecords, recordsTotal = IntTotalRecords, data = data }, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region OMO64 - Payment
         public ActionResult ReviseBill()
         {
             string url = getUrl();
@@ -8884,6 +9238,215 @@ namespace EIRS.Web.Controllers
         {
             return View();
         }
+        #endregion
 
+        #region OMO69 - NIN Validation
+
+        [HttpGet]
+        public ActionResult NinValidation(int pageNumber = 1, int pageSize = 10000)
+        {
+            var res = getNINDetails(pageNumber, pageSize);
+            int totalRecords = getTotalRecordCount(); // Get total number of records
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            // Create the view model
+            var viewModel = new NinValidationViewModel
+            {
+                NINIndividuals = res,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages
+            };
+
+            return View(viewModel);
+        }
+
+        [NonAction]
+        private List<NINIndividual> getNINDetails(int pageNumber, int pageSize)
+        {
+            string con = ConfigurationManager.ConnectionStrings["DbEntities"].ConnectionString;
+            List<NINIndividual> results = new List<NINIndividual>();
+
+            using (SqlConnection connection = new SqlConnection(con))
+            {
+                string rawQuery = @"
+            SELECT 
+                IndividualRIN, 
+                CONCAT(FirstName, ' ', LastName) AS IndividualName, 
+                Tin,
+                NIN,
+                ContactAddress,
+                COALESCE(NINStatus, 'No NIN') AS NINStatus
+            FROM 
+                Individual
+            WHERE 
+                NIN IS NOT NULL AND NIN != 'string'
+            ORDER BY 
+                NINStatus, NIN DESC
+            OFFSET @Offset ROWS 
+            FETCH NEXT @PageSize ROWS ONLY;";
+
+                using (SqlCommand command = new SqlCommand(rawQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@Offset", (pageNumber - 1) * pageSize);
+                    command.Parameters.AddWithValue("@PageSize", pageSize);
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(new NINIndividual
+                            {
+                                IndividualRIN = reader["IndividualRIN"] != DBNull.Value ? reader["IndividualRIN"].ToString() : "",
+                                IndividualName = reader["IndividualName"] != DBNull.Value ? reader["IndividualName"].ToString() : "",
+                                Tin = reader["Tin"] != DBNull.Value ? reader["Tin"].ToString() : "",
+                                NIN = reader["NIN"] != DBNull.Value ? reader["NIN"].ToString() : "",
+                                ContactAddress = reader["ContactAddress"] != DBNull.Value ? reader["ContactAddress"].ToString() : "",
+                                NINStatus = reader["NINStatus"] != DBNull.Value ? reader["NINStatus"].ToString() : "",
+                            });
+                        }
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        [NonAction]
+        private int getTotalRecordCount()
+        {
+            int totalRecords = 0;
+            string con = ConfigurationManager.ConnectionStrings["DbEntities"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(con))
+            {
+                string query = "SELECT COUNT(*) FROM Individual WHERE NIN IS NOT NULL AND NIN != 'string'";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    totalRecords = (int)command.ExecuteScalar();
+                }
+            }
+
+            return totalRecords;
+        }
+
+        [HttpPost]
+
+        public ActionResult getNINLoadData(List<string> selectedIds)
+        {
+            if (selectedIds == null || !selectedIds.Any())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "No NINs were selected.");
+            }
+
+            var errorMessages = new List<string>();
+
+            foreach (var NIN in selectedIds)
+            {
+                if (string.IsNullOrEmpty(NIN))
+                {
+                    errorMessages.Add("One or more NINs are invalid.");
+                    continue; // Skip to the next NIN
+                }
+
+                bool ninExists = getNIN(NIN); // Assuming getNIN returns a boolean
+
+                if (!ninExists)
+                {
+                    errorMessages.Add($"NIN {NIN} not found.");
+                }
+            }
+
+            if (errorMessages.Any())
+            {
+                return Json(new { success = false, message = string.Join(", ", errorMessages) });
+            }
+
+            return Json(new { success = true, message = "Successfully Sent" });
+        }
+
+
+        [NonAction]
+        private bool getNIN(string nin)
+        {
+            bool IsNinValid = false;
+
+            if (nin != null && !string.IsNullOrEmpty(nin))
+            {
+                var CheckNINDetails = _db.NINDetails.FirstOrDefault(x => x.NIN == nin);
+                if (CheckNINDetails != null && !string.IsNullOrEmpty(CheckNINDetails.NIN))
+                {
+                    var existingIndividual = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+                    if (existingIndividual != null && !string.IsNullOrEmpty(existingIndividual.NIN))
+                    {
+                        if (existingIndividual != null)
+                        {
+                            // Update the fields with new data
+                            existingIndividual.FirstName = CheckNINDetails.FirstName;
+                            existingIndividual.LastName = CheckNINDetails.Surname;
+                            existingIndividual.MiddleName = CheckNINDetails.MiddleName;
+                            existingIndividual.NINStatus = CheckNINDetails.status == "successful" ? "Valid" : "Invalid";
+                            existingIndividual.ContactAddress = CheckNINDetails.ResidenceAdressLine1;
+
+                            _db.Entry(existingIndividual).State = EntityState.Modified;
+                            _db.SaveChanges();
+                        }
+                    }
+
+                    return IsNinValid = true;
+                }
+                else
+                {
+                    //NIMC Api will be run here to get the NIN details
+                }
+            }
+
+            return IsNinValid = true;
+        }
+
+        //[HttpGet]
+        //public ActionResult CheckActiveNIN(string nin)
+        //{
+        //    var individual = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+        //    if (individual != null)
+        //    {
+        //        return Json(new { isValid = true });
+        //    }
+        //    else
+        //    {
+        //        return Json(new { isValid = false });
+        //    }
+        //}
+
+        //[HttpPost]
+        //public ActionResult CheckActiveNIN2(string nin)
+        //{
+        //    var individual = _db.Individuals.Find(nin);
+        //    if (individual != null)
+        //    {
+        //        // Render partial view with the model if NIN exists
+        //        var model = new IndividualViewModel
+        //        {
+        //            // Fill in the model as needed, e.g., individual properties
+        //        };
+        //        var partialView = PartialView("_BindIndividualForm", model).ViewBag();
+        //        return Json(new { success = true, partialView });
+        //    }
+        //    else
+        //    {
+        //        return Json(new { success = false });
+        //    }
+        //}
+
+
+
+
+
+        #endregion
     }
 }

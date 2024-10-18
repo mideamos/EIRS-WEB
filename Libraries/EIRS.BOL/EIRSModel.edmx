@@ -896,6 +896,7 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="DataSourceID" Type="int" />
           <Property Name="DSRefID" Type="bigint" />
           <Property Name="NIN" Type="varchar" MaxLength="15" />
+          <Property Name="NINStatus" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="JTB_Individual">
           <Key>
@@ -1463,6 +1464,27 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="int" />
           <Property Name="TransactionRefNo" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Map_PoA_Transfer_Operation">
+          <Key>
+            <PropertyRef Name="POATID" />
+          </Key>
+          <Property Name="POATID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="POATRefNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="From_PoaTransactionRefNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="From_Taxpayer_POAID" Type="int" />
+          <Property Name="From_TaxpayerID" Type="int" />
+          <Property Name="From_TaxpayerTypeID" Type="int" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="To_TaxpayerID" Type="int" />
+          <Property Name="To_TaxpayerTypeID" Type="int" />
+          <Property Name="To_Taxpayer_POAID" Type="int" />
+          <Property Name="To_TransactionRefNo" Type="varchar" MaxLength="50" />
+          <Property Name="Settlement_MethodID" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="MAP_ServiceBill_Adjustment">
           <Key>
@@ -2101,7 +2123,34 @@ warning 6002: The table/view 'EIRS.dbo.DA_And_PAYE_TCC_Details' does not have a 
           <Property Name="TCCRequestID" Type="bigint" />
           <Property Name="Tax_receipt" Type="nvarchar" MaxLength="100" />
           <Property Name="IndividualRIN" Type="nvarchar" MaxLength="50" />
-          <Property Name="ReveuneType" Type="varchar" MaxLength="11" />
+          <Property Name="ReveuneType" Type="nvarchar" MaxLength="11" />
+        </EntityType>
+        <EntityType Name="NINDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="timestamp" Type="datetime" />
+          <Property Name="Title" Type="varchar" MaxLength="100" />
+          <Property Name="FirstName" Type="varchar" MaxLength="100" />
+          <Property Name="MiddleName" Type="varchar" MaxLength="100" />
+          <Property Name="Surname" Type="varchar" MaxLength="100" />
+          <Property Name="TelephoneNo" Type="varchar" MaxLength="20" />
+          <Property Name="ResidenceAdressLine1" Type="varchar" MaxLength="255" />
+          <Property Name="ResidenceTown" Type="varchar" MaxLength="100" />
+          <Property Name="ResidenceLga" Type="varchar" MaxLength="100" />
+          <Property Name="ResidenceState" Type="varchar" MaxLength="100" />
+          <Property Name="NIN" Type="varchar" MaxLength="20" />
+          <Property Name="Photo" Type="varchar(max)" />
+          <Property Name="Profession" Type="varchar" MaxLength="100" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" />
+          <Property Name="MaritalStatus" Type="varchar" MaxLength="50" />
+          <Property Name="StateOfOrigin" Type="varchar" MaxLength="100" />
+          <Property Name="LgaOrigin" Type="varchar" MaxLength="100" />
+          <Property Name="BirthCountry" Type="varchar" MaxLength="100" />
+          <Property Name="BirthDate" Type="date" />
+          <Property Name="vNIN" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Notification_Method">
           <Key>
@@ -4123,114 +4172,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
             </Principal>
             <Dependent Role="Government">
               <PropertyRef Name="TaxPayerTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_Economic_Activities">
-          <End Role="Economic_Activities" Type="Self.Economic_Activities" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Economic_Activities">
-              <PropertyRef Name="EconomicActivitiesID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="EconomicActivitiesID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_Gender">
-          <End Role="Gender" Type="Self.Gender" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Gender">
-              <PropertyRef Name="GenderID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="GenderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_MaritalStatus">
-          <End Role="MaritalStatus" Type="Self.MaritalStatus" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MaritalStatus">
-              <PropertyRef Name="MaritalStatusID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="MaritalStatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_MST_RegisterationStatus">
-          <End Role="MST_RegisterationStatus" Type="Self.MST_RegisterationStatus" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MST_RegisterationStatus">
-              <PropertyRef Name="RegisterationStatusID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="RegisterationStatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_Nationality">
-          <End Role="Nationality" Type="Self.Nationality" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Nationality">
-              <PropertyRef Name="NationalityID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="NationalityID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_Notification_Method">
-          <End Role="Notification_Method" Type="Self.Notification_Method" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notification_Method">
-              <PropertyRef Name="NotificationMethodID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="NotificationMethodID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_Tax_Offices">
-          <End Role="Tax_Offices" Type="Self.Tax_Offices" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Tax_Offices">
-              <PropertyRef Name="TaxOfficeID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="TaxOfficeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_TaxPayer_Types">
-          <End Role="TaxPayer_Types" Type="Self.TaxPayer_Types" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TaxPayer_Types">
-              <PropertyRef Name="TaxPayerTypeID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="TaxPayerTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Individual_Titles">
-          <End Role="Titles" Type="Self.Titles" Multiplicity="0..1" />
-          <End Role="Individual" Type="Self.Individual" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Titles">
-              <PropertyRef Name="TitleID" />
-            </Principal>
-            <Dependent Role="Individual">
-              <PropertyRef Name="TitleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7227,7 +7168,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
         <Function Name="usp_InsertProfileInformation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TPAID" Type="bigint" Mode="In" />
         </Function>
-        
         <Function Name="usp_RPT_BusinessSectorAssessmentDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaxYear" Type="int" Mode="In" />
           <Parameter Name="BusinessSectorID" Type="int" Mode="In" />
@@ -7379,8 +7319,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Parameter Name="TaxOfficerID" Type="int" Mode="In" />
           <Parameter Name="ReviewStatusID" Type="int" Mode="In" />
         </Function>
-        
-        
         <Function Name="usp_RPT_TaxOfficeAssessmentDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaxOfficeID" Type="int" Mode="In" />
           <Parameter Name="TaxYear" Type="int" Mode="In" />
@@ -8290,6 +8228,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="MAP_MDAService_MDAServiceItem" EntityType="Self.MAP_MDAService_MDAServiceItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_MDAService_SettlementMethod" EntityType="Self.MAP_MDAService_SettlementMethod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_PaymentAccount_Operation" EntityType="Self.MAP_PaymentAccount_Operation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Map_PoA_Transfer_Operation" EntityType="Self.Map_PoA_Transfer_Operation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_ServiceBill_Adjustment" EntityType="Self.MAP_ServiceBill_Adjustment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_ServiceBill_LateCharge" EntityType="Self.MAP_ServiceBill_LateCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAP_ServiceBill_MDAService" EntityType="Self.MAP_ServiceBill_MDAService" Schema="dbo" store:Type="Tables" />
@@ -8340,6 +8279,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySet Name="NatureOfBusiness" EntityType="Self.NatureOfBusiness" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewERASTccHolder" EntityType="Self.NewERASTccHolder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewTCCDetailsHold" EntityType="Self.NewTCCDetailsHold" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NINDetails" EntityType="Self.NINDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification_Method" EntityType="Self.Notification_Method" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification_Mode" EntityType="Self.Notification_Mode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification_Type" EntityType="Self.Notification_Type" Schema="dbo" store:Type="Tables" />
@@ -8947,42 +8887,6 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <AssociationSet Name="FK_Government_TaxPayer_Types" Association="Self.FK_Government_TaxPayer_Types">
             <End Role="TaxPayer_Types" EntitySet="TaxPayer_Types" />
             <End Role="Government" EntitySet="Government" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_Economic_Activities" Association="Self.FK_Individual_Economic_Activities">
-            <End Role="Economic_Activities" EntitySet="Economic_Activities" />
-            <End Role="Individual" EntitySet="Individual" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_Gender" Association="Self.FK_Individual_Gender">
-            <End Role="Gender" EntitySet="Gender" />
-            <End Role="Individual" EntitySet="Individual" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_MaritalStatus" Association="Self.FK_Individual_MaritalStatus">
-            <End Role="MaritalStatus" EntitySet="MaritalStatus" />
-            <End Role="Individual" EntitySet="Individual" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_MST_RegisterationStatus" Association="Self.FK_Individual_MST_RegisterationStatus">
-            <End Role="MST_RegisterationStatus" EntitySet="MST_RegisterationStatus" />
-            <End Role="Individual" EntitySet="Individual" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_Nationality" Association="Self.FK_Individual_Nationality">
-            <End Role="Nationality" EntitySet="Nationality" />
-            <End Role="Individual" EntitySet="Individual" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_Notification_Method" Association="Self.FK_Individual_Notification_Method">
-            <End Role="Notification_Method" EntitySet="Notification_Method" />
-            <End Role="Individual" EntitySet="Individual" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_Tax_Offices" Association="Self.FK_Individual_Tax_Offices">
-            <End Role="Tax_Offices" EntitySet="Tax_Offices" />
-            <End Role="Individual" EntitySet="Individual" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_TaxPayer_Types" Association="Self.FK_Individual_TaxPayer_Types">
-            <End Role="TaxPayer_Types" EntitySet="TaxPayer_Types" />
-            <End Role="Individual" EntitySet="Individual" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Individual_Titles" Association="Self.FK_Individual_Titles">
-            <End Role="Titles" EntitySet="Titles" />
-            <End Role="Individual" EntitySet="Individual" />
           </AssociationSet>
           <AssociationSet Name="FK_Land_Asset_Types" Association="Self.FK_Land_Asset_Types">
             <End Role="Asset_Types" EntitySet="Asset_Types" />
@@ -12964,6 +12868,8 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
             <End Role="TCC_Request1" EntitySet="TCC_Request" />
           </AssociationSet>
           <EntitySet Name="ApproverTypes" EntityType="EIRSModel.ApproverType" />
+          <EntitySet Name="Map_PoA_Transfer_Operation" EntityType="EIRSModel.Map_PoA_Transfer_Operation" />
+          <EntitySet Name="NINDetails" EntityType="EIRSModel.NINDetail" />
           <!--<EntitySet Name="TestingNEWTAB" EntityType="EIRSModel.TestingNEWTAB" />
           <EntitySet Name="vw_ServiceBillNew" EntityType="EIRSModel.vw_ServiceBillNew" />-->
           </EntityContainer>
@@ -13588,6 +13494,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="DataSourceID" Type="Int32" />
           <Property Name="DSRefID" Type="Int64" />
           <Property Name="NIN" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="NINStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Land">
           <Key>
@@ -24071,7 +23978,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <Property Name="Tax_receipt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IndividualRIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TCCRequestID" Type="Int64" />
-          <Property Name="ReveuneType" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="ReveuneType" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="BusinessName">
           <Key>
@@ -24111,6 +24018,54 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           </Key>
           <Property Name="ApproverTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ApproverTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Map_PoA_Transfer_Operation">
+          <Key>
+            <PropertyRef Name="POATID" />
+          </Key>
+          <Property Name="POATID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="POATRefNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="From_PoaTransactionRefNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="From_Taxpayer_POAID" Type="Int32" />
+          <Property Name="From_TaxpayerID" Type="Int32" />
+          <Property Name="From_TaxpayerTypeID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="To_TaxpayerID" Type="Int32" />
+          <Property Name="To_TaxpayerTypeID" Type="Int32" />
+          <Property Name="To_Taxpayer_POAID" Type="Int32" />
+          <Property Name="To_TransactionRefNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Settlement_MethodID" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="NINDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TelephoneNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ResidenceAdressLine1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ResidenceTown" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ResidenceLga" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ResidenceState" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NIN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Profession" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaritalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StateOfOrigin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LgaOrigin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BirthCountry" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BirthDate" Type="DateTime" Precision="0" />
+          <Property Name="vNIN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
        
         </Schema>
@@ -24615,6 +24570,7 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
           <EntitySetMapping Name="Individuals">
             <EntityTypeMapping TypeName="EIRSModel.Individual">
               <MappingFragment StoreEntitySet="Individual">
+                <ScalarProperty Name="NINStatus" ColumnName="NINStatus" />
                 <ScalarProperty Name="NIN" ColumnName="NIN" />
                 <ScalarProperty Name="DSRefID" ColumnName="DSRefID" />
                 <ScalarProperty Name="DataSourceID" ColumnName="DataSourceID" />
@@ -33761,6 +33717,56 @@ warning 6002: The table/view 'EIRS.dbo.vw_Vehicle' does not have a primary key d
               <MappingFragment StoreEntitySet="ApproverType">
                 <ScalarProperty Name="ApproverTypeName" ColumnName="ApproverTypeName" />
                 <ScalarProperty Name="ApproverTypeId" ColumnName="ApproverTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Map_PoA_Transfer_Operation">
+            <EntityTypeMapping TypeName="EIRSModel.Map_PoA_Transfer_Operation">
+              <MappingFragment StoreEntitySet="Map_PoA_Transfer_Operation">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Settlement_MethodID" ColumnName="Settlement_MethodID" />
+                <ScalarProperty Name="To_TransactionRefNo" ColumnName="To_TransactionRefNo" />
+                <ScalarProperty Name="To_Taxpayer_POAID" ColumnName="To_Taxpayer_POAID" />
+                <ScalarProperty Name="To_TaxpayerTypeID" ColumnName="To_TaxpayerTypeID" />
+                <ScalarProperty Name="To_TaxpayerID" ColumnName="To_TaxpayerID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="From_TaxpayerTypeID" ColumnName="From_TaxpayerTypeID" />
+                <ScalarProperty Name="From_TaxpayerID" ColumnName="From_TaxpayerID" />
+                <ScalarProperty Name="From_Taxpayer_POAID" ColumnName="From_Taxpayer_POAID" />
+                <ScalarProperty Name="From_PoaTransactionRefNo" ColumnName="From_PoaTransactionRefNo" />
+                <ScalarProperty Name="POATRefNo" ColumnName="POATRefNo" />
+                <ScalarProperty Name="POATID" ColumnName="POATID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NINDetails">
+            <EntityTypeMapping TypeName="EIRSModel.NINDetail">
+              <MappingFragment StoreEntitySet="NINDetails">
+                <ScalarProperty Name="vNIN" ColumnName="vNIN" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="BirthCountry" ColumnName="BirthCountry" />
+                <ScalarProperty Name="LgaOrigin" ColumnName="LgaOrigin" />
+                <ScalarProperty Name="StateOfOrigin" ColumnName="StateOfOrigin" />
+                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Profession" ColumnName="Profession" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="NIN" ColumnName="NIN" />
+                <ScalarProperty Name="ResidenceState" ColumnName="ResidenceState" />
+                <ScalarProperty Name="ResidenceLga" ColumnName="ResidenceLga" />
+                <ScalarProperty Name="ResidenceTown" ColumnName="ResidenceTown" />
+                <ScalarProperty Name="ResidenceAdressLine1" ColumnName="ResidenceAdressLine1" />
+                <ScalarProperty Name="TelephoneNo" ColumnName="TelephoneNo" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

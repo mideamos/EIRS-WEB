@@ -31,7 +31,8 @@ namespace EIRS.API.Controllers
             APIResponse mObjAPIResponse = new APIResponse();
             List<object> results = new List<object>();
             BLTCC mObjBLTCC = new BLTCC();
-            bool allSuccess = true;
+            // bool allSuccess = true;
+            bool atLeastOneSuccess = false;
 
             try
             {
@@ -64,6 +65,7 @@ namespace EIRS.API.Controllers
 
                         if (mObjReqResponse.Success)
                         {
+                            atLeastOneSuccess = true;
                             mObjRequest = new TCC_Request()
                             {
                                 TCCRequestID = mObjReqResponse.AdditionalData.TCCRequestID,
@@ -73,28 +75,38 @@ namespace EIRS.API.Controllers
 
                             new BLTCC().BL_UpdateServiceBillInRequest(mObjRequest);
 
+                            //RequestRefNo: we could use the mObjReqResponse.AdditionalData.TCCRequestID, TaxPayerID, TaxYear fields to get the TCCRequest->RequestRefNo
+                            var fetchedRequest = _db.TCC_Request
+                                           .Where(r => r.TCCRequestID == mObjRequest.TCCRequestID)
+                                           .Select(r => new { r.RequestRefNo })
+                                           .FirstOrDefault();
+
 
                             results.Add(new
                             {
                                 TaxPayerID = request.TaxPayerID,
                                 TaxPayerTypeID = (int)EnumList.TaxPayerType.Individual,
                                 TaxPayerRIN = userDet != null ? userDet.IndividualRIN : "",
-                                RequestRefNo = mObjReqResponse.AdditionalData.RequestRefNo,
+                                // RequestRefNo = mObjReqResponse.AdditionalData.RequestRefNo,
+                                RequestRefNo = fetchedRequest != null ? fetchedRequest.RequestRefNo : null,
                                 TaxYear = request.TaxYear.ToString(),
                                 RequestDate = CommUtil.GetCurrentDateTime().ToString("dd-MMM-yyyy"),
+                                TaxOfficeId = userDet != null ? userDet.TaxOfficeID : 0,
                                 // RequestStatus = "Paid"
                             });
                         }
                         else
                         {
-                            allSuccess = false;
-                            mObjAPIResponse.Message = $"Request failed for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}. Error: {mObjReqResponse.Message}";
+                            // allSuccess = false;
+                            // mObjAPIResponse.Message = $"Request failed for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}. Error: {mObjReqResponse.Message}";
+                            mObjAPIResponse.Message += $"Request failed for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}. Error: {mObjReqResponse.Message}\n";
                         }
                     }
                     else
                     {
-                        allSuccess = false;
-                        mObjAPIResponse.Message = $"Request already exists for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}.";
+                        // allSuccess = false;
+                        // mObjAPIResponse.Message = $"Request already exists for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}.";
+                        mObjAPIResponse.Message += $"Request already exists for TaxPayerID: {request.TaxPayerID}, TaxYear: {request.TaxYear}.\n";
                     }
                     // }
                     // else
@@ -104,7 +116,9 @@ namespace EIRS.API.Controllers
                     // }
                 }
 
-                mObjAPIResponse.Success = allSuccess;
+                // mObjAPIResponse.Success = allSuccess;
+                mObjAPIResponse.Message = atLeastOneSuccess && mObjAPIResponse.Message == null ? "Success" : mObjAPIResponse.Message;
+                mObjAPIResponse.Success = atLeastOneSuccess;
                 mObjAPIResponse.Result = results;
             }
 

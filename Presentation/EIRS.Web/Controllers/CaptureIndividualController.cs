@@ -275,7 +275,7 @@ namespace EIRS.Web.Controllers
 
             if (individual != null && !string.IsNullOrEmpty(individual.NIN))
             {
-                if(!string.IsNullOrEmpty(individual.NINStatus))
+                if (!string.IsNullOrEmpty(individual.NINStatus))
                 {
                     var IndNIN = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
                     if (IndNIN.NINStatus == "Valid")
@@ -962,15 +962,34 @@ namespace EIRS.Web.Controllers
                     var nimcdets = _db.NINDetails.Where(x => x.NIN == nimc.NIN).FirstOrDefault();
                     ViewBag.NimcDet = nimcdets;
 
-                    // The Base64 image string from the database
-                    string base64Image = nimcdets?.Photo;  
-                    if (!string.IsNullOrEmpty(base64Image))
+                    //// The Base64 image string from the database
+                    //string base64Image = nimcdets?.Photo;
+
+                    //if (!string.IsNullOrEmpty(base64Image))
+                    //{
+                    //    // Construct the full image data URL
+                    //    ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
+                    //}
+                    if (nimcdets.Photo != null && !string.IsNullOrEmpty(nimcdets.Photo))
                     {
-                        // Construct the full image data URL
-                        ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
+                        // Use the image from nimcdets if available
+                        string base64Image = nimcdets?.Photo;
+
+                        if (!string.IsNullOrEmpty(base64Image))
+                        {
+                            ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
+                        }
                     }
+                    else
+                    {
+                        // Fall back to PlainPhoto.Photo if nimcdets.Photo is null or empty
+                        string base64Image = PlainPhoto.Photo;
 
-
+                        if (!string.IsNullOrEmpty(base64Image))
+                        {
+                            ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
+                        }
+                    }
 
                     return View(mObjIndividualData);
                 }

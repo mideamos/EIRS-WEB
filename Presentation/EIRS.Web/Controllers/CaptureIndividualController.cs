@@ -959,35 +959,29 @@ namespace EIRS.Web.Controllers
                     var nimc = _db.Individuals.Where(x => x.IndividualID == mObjIndividual.IndividualID).FirstOrDefault();
                     ViewBag.Nimc = nimc;
 
+
                     var nimcdets = _db.NINDetails.Where(x => x.NIN == nimc.NIN).FirstOrDefault();
-                    ViewBag.NimcDet = nimcdets;
-
-                    //// The Base64 image string from the database
-                    //string base64Image = nimcdets?.Photo;
-
-                    //if (!string.IsNullOrEmpty(base64Image))
-                    //{
-                    //    // Construct the full image data URL
-                    //    ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
-                    //}
-                    if (nimcdets.Photo != null && !string.IsNullOrEmpty(nimcdets.Photo))
+                    if (nimcdets == null)
                     {
-                        // Use the image from nimcdets if available
-                        string base64Image = nimcdets?.Photo;
+                        // Handle the case where no NIN details are found
+                        ViewBag.NimcDet = null;
+                        // Set a default image if needed
+                        ViewBag.ImageSrc = $"data:image/png;base64,{PlainPhoto.Photo}";
+                    }
+                    else
+                    {
+                        ViewBag.NimcDet = nimcdets;
 
+                        // Use nimcdets.Photo if available
+                        string base64Image = nimcdets.Photo;
                         if (!string.IsNullOrEmpty(base64Image))
                         {
                             ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
                         }
-                    }
-                    else
-                    {
-                        // Fall back to PlainPhoto.Photo if nimcdets.Photo is null or empty
-                        string base64Image = PlainPhoto.Photo;
-
-                        if (!string.IsNullOrEmpty(base64Image))
+                        else
                         {
-                            ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
+                            // Fallback to default image
+                            ViewBag.ImageSrc = $"data:image/png;base64,{PlainPhoto.Photo}";
                         }
                     }
 

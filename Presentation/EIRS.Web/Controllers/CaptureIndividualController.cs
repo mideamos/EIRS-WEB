@@ -960,15 +960,30 @@ namespace EIRS.Web.Controllers
                     ViewBag.Nimc = nimc;
 
                     var nimcdets = _db.NINDetails.Where(x => x.NIN == nimc.NIN).FirstOrDefault();
-                    ViewBag.NimcDet = nimcdets;
-
-                    // The Base64 image string from the database
-                    string base64Image = nimcdets?.Photo;  
-                    if (!string.IsNullOrEmpty(base64Image))
+                    if (nimcdets == null)
                     {
-                        // Construct the full image data URL
-                        ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
+                        // Handle the case where no NIN details are found
+                        ViewBag.NimcDet = null;
+                        // Set a default image if needed
+                        ViewBag.ImageSrc = $"data:image/png;base64,{PlainPhoto.Photo}";
                     }
+                    else
+                    {
+                        ViewBag.NimcDet = nimcdets;
+
+                        // Use nimcdets.Photo if available
+                        string base64Image = nimcdets.Photo;
+                        if (!string.IsNullOrEmpty(base64Image))
+                        {
+                            ViewBag.ImageSrc = $"data:image/png;base64,{base64Image}";
+                        }
+                        else
+                        {
+                            // Fallback to default image
+                            ViewBag.ImageSrc = $"data:image/png;base64,{PlainPhoto.Photo}";
+                        }
+                    }
+
 
 
 

@@ -9279,6 +9279,8 @@ namespace EIRS.Web.Controllers
                 COALESCE(NINStatus, 'No NIN') AS NINStatus
             FROM 
                 Individual
+            WHERE 
+                NIN IS NOT NULL AND NIN != 'string'
             ORDER BY 
                 NINStatus, NIN DESC
             OFFSET @Offset ROWS 

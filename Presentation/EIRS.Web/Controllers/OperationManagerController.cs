@@ -9280,7 +9280,7 @@ namespace EIRS.Web.Controllers
             FROM 
                 Individual
             WHERE 
-                NIN IS NOT NULL AND NIN != 'string'
+                NIN IS NOT NULL AND NINStatus = 'Not Verified'
             ORDER BY 
                 NINStatus, NIN DESC
             OFFSET @Offset ROWS 

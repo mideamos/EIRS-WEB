@@ -257,111 +257,73 @@ namespace EIRS.Web.Controllers
 
         public ActionResult CheckActiveNIN(string nin)
         {
+            // Ensure NIN is provided
             if (string.IsNullOrEmpty(nin))
             {
                 return Json(new { success = false, message = "NIN is required." });
             }
 
-            //Check Individual Table for Taxpayer Existence 
-            var individual = _db.Individuals.Select(i => new IndividualFormModel
-            {
-                FirstName = i.FirstName,
-                LastName = i.LastName,
-                MiddleName = i.MiddleName,
-                NIN = i.NIN,
-                NINStatus = i.NINStatus,
-                ContactAddress = i.ContactAddress
-            }).FirstOrDefault(i => i.NIN == nin);
+            // Check if individual exists based on NIN
+            var checker = _db.Individuals.FirstOrDefault(o => o.NIN == nin);
 
-            if (individual != null && !string.IsNullOrEmpty(individual.NIN))
+            if (checker == null)
             {
-                if (!string.IsNullOrEmpty(individual.NINStatus))
+                //If no individual found, create a new IndividualFormModel from available data
+
+               var individual = _db.Individuals.Select(i => new IndividualFormModel
+               {
+                   FirstName = i.FirstName,
+                   LastName = i.LastName,
+                   MiddleName = i.MiddleName,
+                   NIN = i.NIN,
+                   NINStatus = i.NINStatus,
+                   ContactAddress = i.ContactAddress
+               }).FirstOrDefault(i => i.NIN == nin);
+
+                if(individual == null)
                 {
-                    var IndNIN = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
-                    if (IndNIN.NINStatus == "Valid")
-                    {
-                        ViewBag.FillIndividual = individual;
-                    }
-                    else if (IndNIN.NINStatus == "Invalid")
-                    {
-                        ViewBag.FillIndividual = individual;
-                    }
-                    else if (IndNIN.NINStatus == "No NIN")
-                    {
-                        ViewBag.FillIndividual = individual;
-                    }
-                    else if (IndNIN.NINStatus == "Not verified")
-                    {
-                        ViewBag.FillIndividual = individual;
-                    }
+                    return Json(new { success = false, message = "NIN not found." });
                 }
                 else
-                {
-                    var CheckNINDetails = _db.NINDetails.FirstOrDefault(x => x.NIN == nin);
-                    if (CheckNINDetails != null && !string.IsNullOrEmpty(CheckNINDetails.NIN))
+                {   // If individual is found with a specific NIN status Called Nimc Api
+
+                    // Retrieve the NIN status and decide how to fill ViewBag
+                    var IndNIN = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+                    switch (IndNIN?.NINStatus)
                     {
-                        var existingIndividual = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
-
-                        if (existingIndividual != null && !string.IsNullOrEmpty(existingIndividual.NIN))
-                        {
-                            if (existingIndividual != null)
-                            {
-                                // Update the fields with new data
-                                existingIndividual.FirstName = CheckNINDetails.FirstName;
-                                existingIndividual.LastName = CheckNINDetails.Surname;
-                                existingIndividual.MiddleName = CheckNINDetails.MiddleName;
-                                existingIndividual.NINStatus = CheckNINDetails.status == "successful" ? "Valid" : "Invalid";
-                                existingIndividual.ContactAddress = CheckNINDetails.ResidenceAdressLine1;
-
-                                _db.Entry(existingIndividual).State = EntityState.Modified;
-                                _db.SaveChanges();
-                            }
-                        }
-
+                        case "Valid":
+                        case "Invalid":
+                        case "No NIN":
+                        case "Not verified":
+                            ViewBag.FillIndividual = individual;
+                            break;
                     }
+                    // Return successful result
+                    return Json(new { success = true, message = "NIN found." });
                 }
-
-
-                return Json(new { success = true, message = "NIN found.", data = individual });
-
             }
             else
             {
-                var CheckNINDetails = _db.NINDetails.FirstOrDefault(x => x.NIN == nin);
-
-                if (CheckNINDetails != null && !string.IsNullOrEmpty(CheckNINDetails.NIN))
+                // If checker is not null, NIN already exists
+                var individual = _db.Individuals.Select(i => new IndividualFormModel
                 {
-                    var existingIndividual = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+                    Id = i.IndividualID,
+                    FirstName = i.FirstName,
+                    LastName = i.LastName,
+                    MiddleName = i.MiddleName,
+                    NIN = i.NIN,
+                    NINStatus = i.NINStatus,
+                    Rin = i.IndividualRIN,
+                    MobileNumber = i.MobileNumber1,
+                    ContactAddress = i.ContactAddress
+                }).FirstOrDefault(i => i.NIN == nin);
 
-                    if (existingIndividual != null && !string.IsNullOrEmpty(existingIndividual.NIN))
-                    {
-                        if (existingIndividual != null)
-                        {
-                            // Update the fields with new data
-                            existingIndividual.FirstName = CheckNINDetails.FirstName;
-                            existingIndividual.LastName = CheckNINDetails.Surname;
-                            existingIndividual.MiddleName = CheckNINDetails.MiddleName;
-                            existingIndividual.NINStatus = CheckNINDetails.status == "successful" ? "Valid" : "Invalid";
-                            existingIndividual.ContactAddress = CheckNINDetails.ResidenceAdressLine1;
-
-                            _db.Entry(existingIndividual).State = EntityState.Modified;
-                            _db.SaveChanges();
-                        }
-                    }
-                    else
-                    {
-                        //find with Rin amd save or Update Api response to db
-                    }
-
-                }
-                else
-                {
-                    //NIMC Api will be run here to get the NIN details
-                }
-
-                return Json(new { success = false, message = "NIN not found (Need to Look-Up NIMC)" });
+                // Return error that NIN already exists
+                return Json(new { success = true, message = "NIN Already Exists.", data = individual });
             }
         }
+
 
 
         [HttpPost]
@@ -984,6 +946,8 @@ namespace EIRS.Web.Controllers
                             ViewBag.ImageSrc = $"data:image/png;base64,{PlainPhoto.Photo}";
                         }
                     }
+
+
 
                     return View(mObjIndividualData);
                 }

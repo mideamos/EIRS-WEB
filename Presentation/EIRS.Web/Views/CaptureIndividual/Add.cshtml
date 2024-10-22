@@ -52,6 +52,7 @@
         // Check if NIN data is already loaded (from the model)
         if ($('#ninInput').val()) {
             checkNINOnLoad();
+            hideNINButton(); 
         }
     });
 
@@ -62,6 +63,8 @@
             checkNIN();
         }
     }
+        // Hide the NIN button immediately when the check starts
+        hideNINButton();
 
     function checkNIN() {
         var nin = $('#ninInput').val();
@@ -80,12 +83,17 @@
                     $('#ninMessage').html(response.message).addClass('alert-success').removeClass('alert-danger').hide();
                     populateForm(response.data);
                     hideNINButton();
+                    console.log('first choice')
                 } else {
-                    $('#ninMessage').html(response.message).addClass('alert-danger').removeClass('alert-success').show();
+                    $('#ninMessage').html(response.message).addClass('alert-danger').removeClass('alert-success').hide();
+                    hideNINButton();
+                    console.log('seecond choice')
                 }
             },
             error: function () {
-                $('#ninMessage').html('An error occurred').addClass('alert-danger').show();
+                $('#ninMessage').html('An error occurred').addClass('alert-danger').hide();
+                console.log('see error')
+                hideNINButton();
             }
         });
     }

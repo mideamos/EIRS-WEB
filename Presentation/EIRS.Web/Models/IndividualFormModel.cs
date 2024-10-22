@@ -7,6 +7,7 @@ namespace EIRS.Web.Models
 {
     public class IndividualFormModel
     {
+        public int Id { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -16,6 +17,7 @@ namespace EIRS.Web.Models
 
         public string NIN { get; set; }
         public string Rin { get; set; }
+        public string MobileNumber  { get; set; }
         public string NINStatus { get; set; }
 
         public string ContactAddress { get; set; }

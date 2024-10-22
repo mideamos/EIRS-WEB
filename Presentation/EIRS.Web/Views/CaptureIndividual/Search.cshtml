@@ -15,7 +15,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="individualSearchModalLabel">ENTER NIN</h5>
-                <button type="button" style=" font-size: 20px;" class="close btn-danger border border-2 " data-dismiss="modal" aria-label="Close">
+                <button type="button" style=" font-size: 30px;" class="close btn-danger border border-2 " data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -124,129 +124,132 @@
             $('#individualSearchModal').modal('show');
         }
 
-        $(document).ready(function () {
+             $(document).ready(function () {
 
-            // Initially disable the Verify button and make it grey
-            $('#verifyButton').prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary');
+           // Initially disable the Verify button and make it grey
+           $('#verifyButton').prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary');
 
-            $('#ninSearch').on('input', function () {
-                var nin = $(this).val(); // Get the NIN input value
+           $('#ninSearch').on('input', function () {
+               var nin = $(this).val(); // Get the NIN input value
 
-                // If NIN exceeds 13 digits, trim it to 13
-                if (nin.length > 13) {
-                    $(this).val(nin.substring(0, 13)); // Limit input to 13 digits
-                }
+               // If NIN exceeds 13 digits, trim it to 13
+               if (nin.length > 13) {
+                   $(this).val(nin.substring(0, 13)); // Limit input to 13 digits
+               }
 
-                // Check if NIN has a valid length (between 10 and 13 digits)
-                if (nin.length >= 10 && nin.length <= 13) {
-                    $('#verifyButton').prop('disabled', false); // Enable the button
-                    $('#verifyButton').removeClass('btn-secondary').addClass('btn-success'); // Change button color to green
-                } else {
-                    $('#verifyButton').prop('disabled', true); // Disable the button
-                    $('#verifyButton').removeClass('btn-success').addClass('btn-secondary'); // Keep the button grey
-                }
-            });
+               // Check if NIN has a valid length (between 10 and 13 digits)
+               if (nin.length >= 10 && nin.length <= 13) {
+                   $('#verifyButton').prop('disabled', false); // Enable the button
+                   $('#verifyButton').removeClass('btn-secondary').addClass('btn-success'); // Change button color to green
+               } else {
+                   $('#verifyButton').prop('disabled', true); // Disable the button
+                   $('#verifyButton').removeClass('btn-success').addClass('btn-secondary'); // Keep the button grey
+               }
+           });
 
-            // Show the modal if the flag is set
-            @if (ViewBag.ShowModal != null && ViewBag.ShowModal)
-            {
-                <text>$('#individualSearchModal').modal('show');</text>
-            }
+           // Show the modal if the flag is set
+           @if (ViewBag.ShowModal != null && ViewBag.ShowModal)
+           {
+               <text>$('#individualSearchModal').modal('show');</text>
+           }
 
-            $('#individualSearchForm').on('submit', function (e) {
-                e.preventDefault(); // Prevent default form submission
-                var nin = $('#ninSearch').val(); // Get the NIN input value
+           $('#individualSearchForm').on('submit', function (e) {
+               e.preventDefault(); // Prevent default form submission
+               var nin = $('#ninSearch').val(); // Get the NIN input value
 
-                if (nin.length < 10 || nin.length > 13) {
-                    $('#ninError').show(); // Show error message
-                    return; // Stop form submission
-                } else {
-                    $('#ninError').hide(); // Hide error message if validation passed
-                }
+               if (nin.length < 10 || nin.length > 13) {
+                   $('#ninError').show(); // Show error message
+                   return; // Stop form submission
+               } else {
+                   $('#ninError').hide(); // Hide error message if validation passed
+               }
 
-        // Perform AJAX call to CheckActiveNIN
-        $.ajax({
-            url: '@Url.Action("CheckActiveNIN", "CaptureIndividual")',
-            type: 'POST',
-            data: { nin: nin },
-            success: function (response) {
-                if (response.success) {
-                    $('#ninMessage').html(response.message).addClass('alert-success').removeClass('alert-danger').show();
-                    populateForm(response.data);
+       // Perform AJAX call to CheckActiveNIN
+       $.ajax({
+           url: '@Url.Action("CheckActiveNIN", "CaptureIndividual")',
+           type: 'POST',
+           data: { nin: nin },
+           success: function (response) {
+               if (response.success) {
+                   $('#ninMessage').html(response.message).addClass('alert-success').removeClass('alert-danger').show();
+                   populateForm(response.data);
 
-                    // Store the response data globally
-                    taxpayerData = response.data;
+                   // Store the response data globally
+                   taxpayerData = response.data;
 
-                    if (response.data.Id) {
-                        console.log('why here')
-                        $('#individualSearchModal .modal-body').html(`
-                            <p><b>Taxpayer Already Exists</b></p>
-                              <p>NIN: <strong>${response.data.NIN}</strong></p>
-                            <p>Taxpayer Name: <strong>${response.data.FirstName} ${response.data.LastName}</strong></p>
-                            <p>Taxpayer Rin: <strong>${response.data.Rin}</strong></p>
-                            <p>Taxpayer Mobile Number: <strong>${response.data.MobileNumber}</strong></p>
-                           <button class="btn btn-primary" id="continueAsTaxpayers">Continue to Taxpayers Page</button>
-                           <button class="btn btn-danger" id="cancelToNewNIN">Cancel or Enter new NIN/vNIN</button>
-                       `);
-                    } else if (response.data.NIN) {
-                        console.log('get here1')
-                         // Hide modal and redirect to Add action with nin
-                        $('#individualSearchModal').modal('hide');
-                        window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=' + nin;
-                    }
+                   if (response.data.Id) {
+                       console.log('why here')
+                       $('#individualSearchModal .modal-body').html(`
+                           <p><b>Taxpayer Already Exists</b></p>
+                             <p>NIN: <strong>${response.data.NIN}</strong></p>
+                           <p>Taxpayer Name: <strong>${response.data.FirstName} ${response.data.LastName}</strong></p>
+                           <p>Taxpayer Rin: <strong>${response.data.Rin}</strong></p>
+                           <p>Taxpayer Mobile Number: <strong>${response.data.MobileNumber}</strong></p>
+                          <button class="btn btn-primary" id="continueAsTaxpayers">Continue to Taxpayers Page</button>
+                          <button class="btn btn-danger" id="cancelToNewNIN">Cancel or Enter new NIN/vNIN</button>
+                      `);
+                   } else if (response.data.NIN) {
+                       console.log('get here1')
+                        // Hide modal and redirect to Add action with nin
+                       $('#individualSearchModal').modal('hide');
+                       window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=' + nin;
+                   }
 
-                } else {
-                    $('#ninMessage').html('An error occurred').addClass('alert-danger').show();
-                     console.log('get here2')
-                    // Hide modal and redirect to Add action with nin
-                   $('#individualSearchModal').modal('hide');
-                   window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=';
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("Error occurred:", error);
-            }
-        });
-    });
+               } else {
+                   $('#ninMessage').html('An error occurred').addClass('alert-danger').show();
+                    console.log('get here2')
+                   // Hide modal and redirect to Add action with nin
 
-            // Event listener for "Continue Without NIN" button
-                 $(document).on('click', '#continueAsTaxpayers', function () {
-                    if (taxpayerData) {
-                        var redirectUrl = '@Url.Action("Details", "CaptureIndividual")?id=' + taxpayerData.Id;
-                        console.log('Redirecting to: ' + redirectUrl);  // Check the URL in the console
-                        window.location.href = redirectUrl;
-                    } else {
-                        console.error("Taxpayer data is not available.");
-                    }
-                });
+                   $('#individualSearchModal .modal-body').html(`
+                      <p><b>NIN Not Found</b></p>
+                       <button class="btn btn-danger" id="continuewithoutNIN">Continue Without NIN or vNIN</button>
+                  `);
+               }
+           },
+           error: function (xhr, status, error) {
+               console.error("Error occurred:", error);
+           }
+       });
+   });
 
-            // Handle Cancel button to allow entering new NIN
-            $(document).on('click', '#cancelToNewNIN', function () {
-                window.location.reload();
-            });
+           // Event listener for "Continue Without NIN" button
+                $(document).on('click', '#continueAsTaxpayers', function () {
+                   if (taxpayerData) {
+                       var redirectUrl = '@Url.Action("Details", "CaptureIndividual")?id=' + taxpayerData.Id;
+                       console.log('Redirecting to: ' + redirectUrl);  // Check the URL in the console
+                       window.location.href = redirectUrl;
+                   } else {
+                       console.error("Taxpayer data is not available.");
+                   }
+               });
 
-            $(document).on('load', '#', function () {
-                 window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin='
-            })
+           // Handle Cancel button to allow entering new NIN
+           $(document).on('click', '#cancelToNewNIN', function () {
+               window.location.reload();
+           });
 
-            function populateForm(data) {
-                $('#FirstName').val(data.FirstName);
-                $('#LastName').val(data.LastName);
-                $('#MiddleName').val(data.MiddleName);
-                $('#NIN').val(data.NIN);
-                $('#Id').val(data.Id);
-                $('#Rin').val(data.Rin);
-                $('#ContactAddress').val(data.ContactAddress);
-                $('#MobileNumber').val(data.MobileNumber);
-            }
+           $(document).on('click', '#continuewithoutNIN', function () {
+               window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=';
+           })
+
+           function populateForm(data) {
+               $('#FirstName').val(data.FirstName);
+               $('#LastName').val(data.LastName);
+               $('#MiddleName').val(data.MiddleName);
+               $('#NIN').val(data.NIN);
+               $('#Id').val(data.Id);
+               $('#Rin').val(data.Rin);
+               $('#ContactAddress').val(data.ContactAddress);
+               $('#MobileNumber').val(data.MobileNumber);
+           }
 
 
-                @*// Event listener for "Continue Without NIN" button
-                $(document).on('click', '#continueWithoutNIN', function () {
-                    // Redirect to the Add action without NIN
-                    window.location.href = '@Url.Action("Add", "CaptureIndividual")';
-                });*@
-    });
+               @*// Event listener for "Continue Without NIN" button
+               $(document).on('click', '#continueWithoutNIN', function () {
+                   // Redirect to the Add action without NIN
+                   window.location.href = '@Url.Action("Add", "CaptureIndividual")';
+               });*@
+   });
     </script>
 }
 

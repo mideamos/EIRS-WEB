@@ -15,7 +15,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="individualSearchModalLabel">ENTER NIN</h5>
-                <button type="button" style=" font-size: 20px;" class="close btn-danger border border-2 " data-dismiss="modal" aria-label="Close">
+                <button type="button" style=" font-size: 30px;" class="close btn-danger border border-2 " data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -198,9 +198,12 @@
                 } else {
                     $('#ninMessage').html('An error occurred').addClass('alert-danger').show();
                      console.log('get here2')
-                    // Hide modal and redirect to Add action with nin
-                   $('#individualSearchModal').modal('hide');
-                   window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=';
+                    // Hide modal and redirect to Add action with nin                   
+
+                    $('#individualSearchModal .modal-body').html(`
+                       <p><b>NIN Not Found</b></p>
+                        <button class="btn btn-danger" id="continuewithoutNIN">Continue Without NIN or vNIN</button>
+                   `);
                 }
             },
             error: function (xhr, status, error) {
@@ -225,8 +228,8 @@
                 window.location.reload();
             });
 
-            $(document).on('load', '#', function () {
-                 window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin='
+            $(document).on('click', '#continuewithoutNIN', function () {
+                window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=';
             })
 
             function populateForm(data) {

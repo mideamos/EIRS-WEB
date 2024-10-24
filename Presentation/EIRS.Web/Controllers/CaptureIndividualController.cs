@@ -248,6 +248,14 @@ namespace EIRS.Web.Controllers
                     // Populate the NINStatus in the ViewBag for icon rendering in the view
                     ViewBag.NINStatus = IndNIN.NINStatus;
                 }
+                else
+                {
+                    ViewBag.NINStatus = "Invalid";
+                }
+            }
+            else
+            {
+                ViewBag.NINStatus = "Invalid";
             }
 
             UI_FillDropDown(ivm);
@@ -319,11 +327,63 @@ namespace EIRS.Web.Controllers
                     ContactAddress = i.ContactAddress
                 }).FirstOrDefault(i => i.NIN == nin);
 
+                var IndNIN = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+                switch (IndNIN?.NINStatus)
+                {
+                    case "Valid":
+                    case "Invalid":
+                    case "No NIN":
+                    case "Not verified":
+                        ViewBag.FillIndividual = individual;
+                        break;
+                }
                 // Return error that NIN already exists
                 return Json(new { success = true, message = "NIN Already Exists.", data = individual });
             }
         }
 
+        [HttpPost]
+        public JsonResult ValidateNIN(string nin)
+        {
+            var individual = _db.Individuals.Select(i => new IndividualFormModel
+            {
+                Id = i.IndividualID,
+                FirstName = i.FirstName,
+                LastName = i.LastName,
+                MiddleName = i.MiddleName,
+                NIN = i.NIN,
+                NINStatus = i.NINStatus,
+                Rin = i.IndividualRIN,
+                MobileNumber = i.MobileNumber1,
+                ContactAddress = i.ContactAddress
+            }).FirstOrDefault(i => i.NIN == nin);
+
+            if (individual != null)
+            {
+                var IndNIN = _db.Individuals.FirstOrDefault(i => i.NIN == nin);
+
+                switch (IndNIN?.NINStatus)
+                {
+                    case "Valid":
+                    case "Invalid":
+                    case "No NIN":
+                    case "Not verified":
+                        ViewBag.FillIndividual = individual;
+                        break;
+                }
+                // Return error that NIN already exists
+                return Json(new { success = true, message = "NIN Already Exists.", data = individual });
+            }
+            else
+            {
+                var newIndividual = new IndividualFormModel
+                {
+                    NIN = nin // Set the NIN manually
+                };
+                return Json(new { success = true, message = "NIN Does Not Exists.", data = individual });
+            }
+        }
 
 
         [HttpPost]
@@ -568,6 +628,26 @@ namespace EIRS.Web.Controllers
                     IndividualID = id.GetValueOrDefault(),
                     intStatus = 1
                 };
+
+                var checkerNIN = _db.Individuals.FirstOrDefault(x=> x.IndividualID == mObjIndividual.IndividualID);
+
+                if (!string.IsNullOrEmpty(checkerNIN.NIN))
+                {
+                    if (checkerNIN != null)
+                    {
+                        var IndNIN = _db.Individuals.FirstOrDefault(i => i.NIN == checkerNIN.NIN);
+                        // Populate the NINStatus in the ViewBag for icon rendering in the view
+                        ViewBag.NINStatus = IndNIN.NINStatus;
+                    }
+                    else
+                    {
+                        ViewBag.NINStatus = "Invalid";
+                    }
+                }
+                else
+                {
+                    ViewBag.NINStatus = "Invalid";
+                }
 
                 usp_GetIndividualList_Result mObjIndividualData = new BLIndividual().BL_GetIndividualDetails(mObjIndividual);
 

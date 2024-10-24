@@ -145,13 +145,14 @@
             @Html.LabelFor(model => model.NIN, htmlAttributes: new { @class = "control-label required-star" })
             <div class="input-group">
                 @Html.TextBoxFor(model => model.NIN, htmlAttributes: new
-                {
-                    @id = "NIN",
-                    @class = "form-control",
-                    @tabindex = "14",
-                    @placeholder = "Enter NIN Details",
-                    @value = Model.NIN ?? ViewBag.NINResult?.NIN
-                })
+                   {
+                       @id = "NIN",
+                       @class = "form-control",
+                       @tabindex = "14",
+                       @placeholder = "Enter NIN Details",
+                       @value = Model.NIN ?? ViewBag.NINResult?.NIN,
+
+                   })
 
                 <span class="input-group-addon">
                     @if (!string.IsNullOrEmpty(ViewBag.NINStatus) && ViewBag.NINStatus == "Valid")
@@ -162,7 +163,7 @@
                     {
                         <i class="fa fa-close" style="font-size:18px;color:red"></i>
                     }
-                    else if (ViewBag.NINStatus == "Not verified")
+                    else if (ViewBag.NINStatus == "Not Verified")
                     {
                         <i class="fa fa-square-o" style="font-size: 18px; color: yellow"></i>
                     }
@@ -288,8 +289,15 @@
             } else {
                 $('#ContactAddress').prop('disabled', false); // Enable if ContactAddress is null or empty
             }
+
+
         });
+
+
+
+
     </script>
+
 }
 
 

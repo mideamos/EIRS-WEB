@@ -66,6 +66,8 @@ namespace EIRS.Models
         [MaxLength(10, ErrorMessage = "Only 10 numbers allowed.")]
         public string MobileNumber1 { get; set; }
 
+        public string NINStatus { get; set; }
+
         [Display(Name = "Mobile No 2")]
         [RegularExpression(@"^[1-9][0-9]{9}$", ErrorMessage = "Looks like you entered invalid mobile number")]
         [MaxLength(10, ErrorMessage = "Only 10 numbers allowed.")]

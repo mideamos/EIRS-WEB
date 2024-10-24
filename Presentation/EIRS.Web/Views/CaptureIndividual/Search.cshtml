@@ -14,6 +14,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <div id="ninMessage" class="alert" style="display: none;"></div>
                 <h5 class="modal-title" id="individualSearchModalLabel">ENTER NIN</h5>
                 <button type="button" style=" font-size: 30px;" class="close btn-danger border border-2 " data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -124,7 +125,7 @@
             $('#individualSearchModal').modal('show');
         }
 
-             $(document).ready(function () {
+      $(document).ready(function () {
 
            // Initially disable the Verify button and make it grey
            $('#verifyButton').prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary');
@@ -137,8 +138,22 @@
                    $(this).val(nin.substring(0, 13)); // Limit input to 13 digits
                }
 
-               // Check if NIN has a valid length (between 10 and 13 digits)
-               if (nin.length >= 10 && nin.length <= 13) {
+               // Check if the input has exactly 11 or 13 characters
+               if (nin.length === 11) {
+                   $('#ninMessage').html('NIN is valid').removeClass('alert-danger').addClass('alert-success').show();
+               }
+               else if (nin.length === 13) {
+                   $('#ninMessage').html('vNIN is valid').removeClass('alert-danger').addClass('alert-success').show();
+               }
+               else if (nin.length > 0 && (nin.length !== 11 && nin.length !== 13)) {
+                   $('#ninMessage').html('NIN requires 11 digits and vNIN requires 13 digits').removeClass('alert-success').addClass('alert-danger').show();
+               }
+               else {
+                   $('#ninMessage').hide();  // Hide message if input is empty or exactly 11/13 digits
+               }
+
+               // Check if NIN has a valid length (between 11 and 13 digits)
+               if (nin.length >= 11 && nin.length <= 13) {
                    $('#verifyButton').prop('disabled', false); // Enable the button
                    $('#verifyButton').removeClass('btn-secondary').addClass('btn-success'); // Change button color to green
                } else {
@@ -186,7 +201,7 @@
                            <p>Taxpayer Rin: <strong>${response.data.Rin}</strong></p>
                            <p>Taxpayer Mobile Number: <strong>${response.data.MobileNumber}</strong></p>
                           <button class="btn btn-primary" id="continueAsTaxpayers">Continue to Taxpayers Page</button>
-                          <button class="btn btn-danger" id="cancelToNewNIN">Cancel or Enter new NIN/vNIN</button>
+                          <button class="btn btn-danger" id="cancelToNewNIN">Cancel</button>
                       `);
                    } else if (response.data.NIN) {
                        console.log('get here1')
@@ -196,13 +211,14 @@
                    }
 
                } else {
-                   $('#ninMessage').html('An error occurred').addClass('alert-danger').show();
+                   $('#ninMessage').html('NIN or vNIN NOT FOUND!!!').addClass('alert-danger').show();
                     console.log('get here2')
                    // Hide modal and redirect to Add action with nin
 
                    $('#individualSearchModal .modal-body').html(`
                       <p><b>NIN Not Found</b></p>
-                       <button class="btn btn-danger" id="continuewithoutNIN">Continue Without NIN or vNIN</button>
+                       <button class="btn btn-info" id="continuewithoutNIN">Continue Without NIN or vNIN</button>
+                       <button class="btn btn-danger" id="cancelToNewNIN">Cancel</button>
                   `);
                }
            },

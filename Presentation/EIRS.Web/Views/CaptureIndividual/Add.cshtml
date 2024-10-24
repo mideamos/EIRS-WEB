@@ -27,10 +27,13 @@
             <div id="ninMessage" class="alert" style="display: none;"></div>
 
             <div class="form-group" id="ninGroup">
-                <label for="nin">NIN</label>
-                <input type="text" id="ninInput" class="form-control" placeholder="Enter NIN" value="@Model.NIN" />
-                <button type="button" class="btn btn-primary" id="checkNINButton" onclick="checkNIN()">Check NIN</button>
+                <label for="nin">Validate NIN</label>
+                <input type="number" id="ninInput" class="form-control" placeholder="Enter NIN or vNIN" value="@Model.NIN" />
+                <button type="button" class="btn btn-primary" id="checkNINButton" onclick="checkNIN()">Verify</button>
             </div>
+
+            <!-- Add the hidden input field here -->
+            <input type="hidden" id="NINStatusHidden" value="@ViewBag.NINStatus" />
 
             @Html.Partial("_BindIndividualForm", Model)
 
@@ -52,7 +55,7 @@
         // Check if NIN data is already loaded (from the model)
         if ($('#ninInput').val()) {
             checkNINOnLoad();
-            hideNINButton(); 
+         
         }
     });
 
@@ -63,8 +66,41 @@
             checkNIN();
         }
     }
-        // Hide the NIN button immediately when the check starts
-        hideNINButton();
+
+        $('#ninInput').on('input', function () {
+            var nin = $(this).val();
+
+            if (nin > 13) {
+                $(this).val(nin.substring(0, 13));
+            }
+
+
+
+            if (nin.length >= 11 && nin.length <= 13) {
+                $('#checkNINButton').prop('disabled', false); // Enable the button
+                $('#checkNINButton').removeClass('btn-secondary').addClass('btn-success'); // Change button color to green
+            } else {
+                $('#checkNINButton').prop('disabled', true); // Disable the button
+                $('#checkNINButton').removeClass('btn-success').addClass('btn-secondary'); // Keep the button grey
+            }
+
+            // Check if the input has exactly 11 or 13 characters
+                if (nin.length === 11) {
+                    $('#ninMessage').html('NIN is valid').removeClass('alert-danger').addClass('alert-success').show();
+                }
+                else if (nin.length === 13) {
+                    $('#ninMessage').html('vNIN is valid').removeClass('alert-danger').addClass('alert-success').show();
+                }
+                else if (nin.length > 0 && (nin.length !== 11 && nin.length !== 13)) {
+                    $('#ninMessage').html('NIN requires 11 digits and vNIN requires 13 digits').removeClass('alert-success').addClass('alert-danger').show();
+                } else {
+                    $('#ninMessage').hide();  // Hide message if input is empty or exactly 11/13 digits
+                }
+
+
+        });
+
+
 
     function checkNIN() {
         var nin = $('#ninInput').val();
@@ -80,20 +116,25 @@
             data: { nin: nin },
             success: function (response) {
                 if (response.success) {
-                    $('#ninMessage').html(response.message).addClass('alert-success').removeClass('alert-danger').hide();
+                    $('#ninMessage').html(response.message).addClass('alert-success').removeClass('alert-danger').show();
                     populateForm(response.data);
-                    hideNINButton();
+                 
+                    console.log('a1')
+
                     console.log('first choice')
                 } else {
-                    $('#ninMessage').html(response.message).addClass('alert-danger').removeClass('alert-success').hide();
-                    hideNINButton();
-                    console.log('seecond choice')
+                    console.log('a2')
+                    $('#ninMessage').html(response.message).addClass('alert-danger').removeClass('alert-success').show();
+
                 }
             },
             error: function () {
                 $('#ninMessage').html('An error occurred').addClass('alert-danger').hide();
                 console.log('see error')
+                console.log('a3')
+                disableNINInput();
                 hideNINButton();
+
             }
         });
     }
@@ -104,9 +145,22 @@
         $('#MiddleName').val(data.MiddleName);
         $('#NIN').val(data.NIN);
         $('#NINStatus').val(data.NINStatus);
-
-
+        $('#Id').val(data.Id);
+        $('#ContactAddress').val(data.ContactAddress);
     }
+
+
+    function disableNINInput() {
+        // Disable the NIN input field and button after successful NIN retrieval
+        $('#ninInput').prop('disabled', true);
+        $('#checkNINButton').prop('disabled', true);
+    }
+
+    function clearForm() {
+        $('#ninInput').val('');
+    }
+
+
 
     function hideNINButton() {
         // Hide the NIN input field and button after successful NIN retrieval
@@ -114,4 +168,154 @@
     }
     </script>
 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Initial setup for fields
+            setupFields();
+
+            // Validate NIN on input
+            $('#NIN').on('blur', function () {
+                validateNIN($(this).val());
+            });
+
+            // Real-time validation on NIN input
+            $('#ninInput').on('input', function () {
+                var nin = $(this).val();
+
+                if (nin > 13) {
+                    $(this).val(nin.substring(0, 13));
+                }
+
+                if (nin.length > 13) {
+                    $(this).addClass('error-input');
+                } else {
+                    $(this).removeClass('error-input');
+                }
+
+                // Check if the input has exactly 11 or 13 characters
+                if (nin.length === 11) {
+                    $('#ninMessage').html('NIN is valid').removeClass('alert-danger').addClass('alert-success').show();
+                }
+                else if (nin.length === 13) {
+                    $('#ninMessage').html('vNIN is valid').removeClass('alert-danger').addClass('alert-success').show();
+                }
+                else if (nin.length > 0 && (nin.length !== 11 && nin.length !== 13)) {
+                    $('#ninMessage').html('NIN requires 11 digits and vNIN requires 13 digits').removeClass('alert-success').addClass('alert-danger').show();
+                } else {
+                    $('#ninMessage').hide();  // Hide message if input is empty or exactly 11/13 digits
+                }
+
+                validateNIN(nin);
+            });
+
+
+        });
+
+        function validateNIN(nin) {
+            console.log("Validating NIN:", nin);
+            if (nin.length === 0) {
+                updateNINStatusIcon("Not verified");
+                $('#ninMessage').hide(); // Hide message if NIN is empty
+                return;
+            }
+
+            // Validate NIN format
+            if (nin.length !== 11 && nin.length !== 13) {
+                $('#ninMessage').html('NIN requires 11 digits and vNIN requires 13 digits')
+                    .removeClass('alert-success').addClass('alert-danger').show();
+                updateNINStatusIcon("Not verified");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("ValidateNIN", "CaptureIndividual")',
+                type: 'POST',
+                data: { nin: nin },
+                success: function (response) {
+                    console.log('response:', response); // Log response for debugging
+                    if (response && response.success) {
+                        const taxpayerData = response.data || {}; // Use empty object as fallback
+                        var ninn = $('#NIN').val();
+                        if (taxpayerData.Id) {
+                            console.log('1')
+                            $('#NIN').prop('disabled', true); // Disable input if valid
+                            updateNINStatusIcon("Valid");
+                            $('#ninMessage').html('NIN is valid').removeClass('alert-danger').addClass('alert-success').show();
+                            window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=' + taxpayerData.NIN;
+                        }
+                        else
+                        {
+                            console.log('2')
+                            updateNINStatusIcon("Invalid");
+                            $('#ninMessage').html(response.message).removeClass('alert-success').addClass('alert-danger').show();
+                              window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=' + encodeURIComponent(ninn);
+
+                        }
+                    }
+                    else
+                    {
+                        console.log('3')
+                        $('#NIN').prop('disabled', false); // Enable input if invalid
+                        updateNINStatusIcon("Invalid");
+                        $('#ninMessage').html(response.message).removeClass('alert-success').addClass('alert-danger').show();
+                    }
+                },
+                error: function () {
+                    alert("There was an error validating the NIN.");
+                    console.log('4')
+                }
+            });
+        }
+
+        function updateNINStatusIcon(status) {
+            var icon = "";
+            switch (status) {
+                case "Valid":
+                    icon = "<i class='fa fa-check-square' style='font-size:18px;color:green'></i>";
+                    break;
+                case "Invalid":
+                    icon = "<i class='fa fa-close' style='font-size:18px;color:red'></i>";
+                    break;
+                case "Not verified":
+                default:
+                    icon = "<i class='fa fa-square' style='font-size:18px;color:gray'></i>";
+                    break;
+            }
+            $('#NINStatus').html(icon); // Update the icon display for NIN status
+        }
+
+        function setupFields() {
+
+            var ninStatus = $('#NINStatusHidden').val();
+
+            if (ninStatus === "Valid" || ninStatus === "Not Verified")
+            {
+                $('#NIN').prop('disabled', true);
+                $('input[type="submit"]').prop('disabled', true);
+            }
+            // Function to check and disable fields based on initial values
+            var middleName = "@(Model.MiddleName ?? ViewBag.NINResult?.MiddleName)";
+            $('#MiddleName').prop('disabled', middleName && middleName.length > 0);
+
+            var firstName = "@(Model.FirstName ?? ViewBag.NINResult?.FirstName)";
+            $('#FirstName').prop('disabled', firstName && firstName.length > 0);
+
+            var lastName = "@(Model.LastName ?? ViewBag.NINResult?.LastName)";
+            $('#LastName').prop('disabled', lastName && lastName.length > 0);
+
+
+            var contactAddress = "@(Model.ContactAddress ?? ViewBag.NINResult?.ContactAddress)";
+            $('#ContactAddress').prop('disabled', contactAddress && contactAddress.length > 0);
+
+
+        }
+    </script>
+
 }
+
+<style>
+    .error-input {
+        border: 2px solid red;
+    }
+</style>
+

@@ -244,9 +244,10 @@
                window.location.reload();
            });
 
-            $(document).on('load', '#', function () {
-                 window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin='
-            })
+           //dis did not go why git
+           $(document).on('click', '#continuewithoutNIN', function () {
+               window.location.href = '@Url.Action("Add", "CaptureIndividual")?nin=';
+           })
 
            function populateForm(data) {
                $('#FirstName').val(data.FirstName);

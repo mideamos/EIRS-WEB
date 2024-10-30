@@ -880,6 +880,7 @@ namespace EIRS.Repository
                 //delete from the table the formal tokens
                 //_db.MST_UserToken.re
                 _db.MST_UserToken.Add(mLoginToken);
+                _db.Database.CommandTimeout = 200;
                 _db.SaveChanges();
             }
         }
@@ -1039,7 +1040,7 @@ namespace EIRS.Repository
                                        id = usrs.UserID,
                                        text = usrs.ContactName
                                    }).ToList();
-                        break;   
+                        break;
                     case "2":
                         vResult = (from usrs in _db.MST_Users
                                    where usrs.Active == true && usrs.UserTypeID == pObjUser.UserTypeID && usrs.IsDirector == true
@@ -1052,7 +1053,7 @@ namespace EIRS.Repository
                     default:
                         break;
                 }
-                
+
 
                 return vResult;
             }

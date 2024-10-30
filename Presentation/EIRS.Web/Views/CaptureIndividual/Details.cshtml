@@ -125,9 +125,13 @@
                     {
                         <i class="fa fa-square" style="font-size:18px;color:red"></i>
                     }
-                    else if (!string.IsNullOrEmpty(nimc.NINStatus) && nimc.NINStatus == "Not verified")
+                    else if (!string.IsNullOrEmpty(nimc.NINStatus) && nimc.NINStatus == "Not Verified")
                     {
                         <i class="fa fa-square" style="font-size: 18px; color: yellow"></i>
+                    }
+                    else if (!string.IsNullOrEmpty(nimc.NINStatus) && nimc.NINStatus == "No NIN")
+                    {
+                        <i class="fa fa-square" style="font-size: 18px; color: gray"></i>
                     }
                     else
                     {

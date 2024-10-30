@@ -89,7 +89,7 @@ namespace EIRS.API.Controllers
             return Ok(mObjAPIResponse);
         } 
         [HttpPost]
-        [Route("PaginatedList")]
+        [Route("PaginatedListWith")]
         public IHttpActionResult PaginatedListWith([FromBody] NewModel pobjPagingModel)
         {
 

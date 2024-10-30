@@ -1490,7 +1490,12 @@ namespace EIRS.Web.Controllers
                             // Not enough balance
                             ViewBag.PoABalance = dcBalance;
                             ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                            //ViewBag.AssessmentRuleList = (SessionManager.lstAssessmentRule ?? new List<Assessment_AssessmentRule>())
+                            //                            .Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
                             ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                            //ViewBag.AmountToPay = (SessionManager.lstAssessmentRule ?? new List<Assessment_AssessmentRule>())
+                            //                        .Where(t => t.intTrack != EnumList.Track.DELETE)
+                            //                        .Sum(t => t.ToSettleAmount);
                             ViewBag.Message = "Insufficient PoA balance!";
                             return View(pObjSettlementModel);
                         }

@@ -123,6 +123,7 @@ namespace EIRS.BLL
             return _AssessmentRepository.REP_GetTaxPayerBill(pIntTaxPayerID, pIntTaxPayerTypeID, pIntStatusID);
         }
 
+
         public IList<vw_BillForPoASettlement> BL_GetBillForPoASettlementList()
         {
             return _AssessmentRepository.REP_GetBillForPoASettlementList();

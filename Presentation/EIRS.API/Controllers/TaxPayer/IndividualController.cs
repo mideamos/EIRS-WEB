@@ -129,18 +129,18 @@ namespace EIRS.API.Controllers
             }
             String token = Request.Headers.Authorization.Parameter;
             NewErrorLog.WriteFormModel("I got here in the controller 1b", "SettlementResponse");
-            int? usId = Utilities.GetUserId(token);
-            int? userId = usId.HasValue ? usId : 0;
-            // int? userId = 0;
-            // Validate the token and get the user ID
-            if (userId == null || userId <= 0)
-            {
-                // User ID is not valid or token is missing/invalid
-                mObjAPIResponse.Success = false;
-                mObjAPIResponse.Message = "Unauthorized access. Please provide a valid token.";
-                // return Ok(mObjAPIResponse);
-                return Content(HttpStatusCode.Unauthorized, mObjAPIResponse);
-            }
+            //int? usId = Utilities.GetUserId(token);
+            //int? userId = usId.HasValue ? usId : 0;
+            //// int? userId = 0;
+            //// Validate the token and get the user ID
+            //if (userId == null || userId <= 0)
+            //{
+            //    // User ID is not valid or token is missing/invalid
+            //    mObjAPIResponse.Success = false;
+            //    mObjAPIResponse.Message = "Unauthorized access. Please provide a valid token.";
+            //    // return Ok(mObjAPIResponse);
+            //    return Content(HttpStatusCode.Unauthorized, mObjAPIResponse);
+            //}
             NewErrorLog.WriteFormModel("I got here in the controller 1c", "SettlementResponse");
 
             if (!ModelState.IsValid)
@@ -153,7 +153,7 @@ namespace EIRS.API.Controllers
             else
             {
                 //Redundant validation, remove validation in future versions
-                if ((token != null) && (userId == 0))
+                if ((token != null) /*&& (userId == 0)*/)
                 {
                     mObjAPIResponse.Success = false;
                     mObjAPIResponse.Message = "Kindly Enter A Valid Token";
@@ -190,7 +190,7 @@ namespace EIRS.API.Controllers
                         ContactAddress = pObjIndividualModel.ContactAddress,
                         Active = true,
                         // CreatedBy = userId.HasValue ? userId : 22,
-                        CreatedBy = userId,
+                        CreatedBy = 22 /*userId*/,
                         CreatedDate = CommUtil.GetCurrentDateTime()
                     };
 

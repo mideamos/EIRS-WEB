@@ -51,5 +51,6 @@ namespace EIRS.Repository
         IDictionary<string, object> REP_SearchAssessmentForSideMenu(Assessment pObjAssessment);
 
         IList<usp_GetPAYEAssessmentBill_Result> REP_GetPAYEAssessmentBill(int pIntTaxPayerID, int pIntTaxPayerTypeID);
+        IList<usp_GetTaxPayerBill_Result> REP_GetTaxPayerId(int pIntTaxPayerID, int pIntTaxPayerTypeID);
     }
 }

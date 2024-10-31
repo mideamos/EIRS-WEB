@@ -114,7 +114,8 @@ namespace EIRS.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Insert")]
-        public IHttpActionResult Insert(IndividualViewModel pObjIndividualModel)
+        // public IHttpActionResult Insert(IndividualViewModel pObjIndividualModel)
+        public IHttpActionResult Insert(IndividualInsertViewModel pObjIndividualModel)
         {
 
             NewErrorLog.WriteFormModel("I got here in the controller 1", "SettlementResponse");
@@ -142,17 +143,6 @@ namespace EIRS.API.Controllers
                 return Content(HttpStatusCode.Unauthorized, mObjAPIResponse);
             }
             NewErrorLog.WriteFormModel("I got here in the controller 1c", "SettlementResponse");
-
-           // Set default values for PresentTaxOfficeID and NewTaxOfficeID if they are not provided
-            if (pObjIndividualModel.PresentTaxOfficeID == null)
-            {
-                pObjIndividualModel.PresentTaxOfficeID = 34;
-            }
-
-            if (pObjIndividualModel.NewTaxOfficeID == null)
-            {
-                pObjIndividualModel.NewTaxOfficeID = pObjIndividualModel.TaxOfficeID;
-            }
 
 
             if (!ModelState.IsValid)

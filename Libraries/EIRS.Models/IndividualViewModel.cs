@@ -140,6 +140,25 @@ namespace EIRS.Models
         public string ActiveText { get; set; }
     }
 
+    public class IndividualInsertViewModel : IndividualViewModel
+    {
+        //lets set a default value for the following fields since they are not used in the code.
+        [Display(Name = "Present Tax Office")]
+        public new int? PresentTaxOfficeID { get; set; } = 34;  // Default to 34 if not provided
+
+        [Display(Name = "New Tax Office")]
+        public new int? NewTaxOfficeID { get; set; } = 34; // Default to 34 if not provided
+
+        // public IndividualInsertViewModel()
+        // {
+        //     //defaults to TaxOfficeID if not set
+        //     if (NewTaxOfficeID == null)
+        //     {
+        //         NewTaxOfficeID = TaxOfficeID;
+        //     }
+        // }
+    }
+
     public sealed class TPIndividualViewModel : IndividualViewModel
     {
         [Display(Name = "Tax Payer Role")]

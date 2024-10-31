@@ -143,9 +143,16 @@ namespace EIRS.API.Controllers
             }
             NewErrorLog.WriteFormModel("I got here in the controller 1c", "SettlementResponse");
 
-            // Set default values for PresentTaxOfficeID and NewTaxOfficeID if they are not provided
-            pObjIndividualModel.PresentTaxOfficeID ??= 34;
-            pObjIndividualModel.NewTaxOfficeID ??= pObjIndividualModel.TaxOfficeID;
+           // Set default values for PresentTaxOfficeID and NewTaxOfficeID if they are not provided
+            if (pObjIndividualModel.PresentTaxOfficeID == null)
+            {
+                pObjIndividualModel.PresentTaxOfficeID = 34;
+            }
+
+            if (pObjIndividualModel.NewTaxOfficeID == null)
+            {
+                pObjIndividualModel.NewTaxOfficeID = pObjIndividualModel.TaxOfficeID;
+            }
 
 
             if (!ModelState.IsValid)

@@ -1420,8 +1420,11 @@ namespace EIRS.Web.Controllers
             {
 
                 ViewBag.PoABalance = dcBalance;
-                ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                // ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                //  ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                ViewBag.AssessmentRuleList = lstAssessmentRule;
+                ViewBag.AmountToPay = tt;
+                ViewBag.lstAssessmentItem = lstAssessmentItems;
                 return View(pObjSettlementModel);
             }
             else
@@ -1433,8 +1436,11 @@ namespace EIRS.Web.Controllers
                     if (lstAssessmentRule.Sum(t => t.AssessmentRuleAmount) == 0)
                     {
                         ViewBag.PoABalance = dcBalance;
-                        ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                        ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                        // ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                        // ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                        ViewBag.AssessmentRuleList = lstAssessmentRule;
+                        ViewBag.AmountToPay = tt;
+                        ViewBag.lstAssessmentItem = lstAssessmentItems;
                         ViewBag.Message = "Settlement Amount Cannot be zero";
                         return View(pObjSettlementModel);
                     }
@@ -1442,8 +1448,11 @@ namespace EIRS.Web.Controllers
                     //else if ((tt - (lstAssessmentRule.Sum(t => t.SettledAmount)) > dcBalance))
                     {
                         ViewBag.PoABalance = dcBalance;
-                        ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                        ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                        // ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                        // ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                        ViewBag.AssessmentRuleList = lstAssessmentRule;
+                        ViewBag.AmountToPay = tt;
+                        ViewBag.lstAssessmentItem = lstAssessmentItems;
                         ViewBag.Message = "Insufficent PoA balance";
                         return View(pObjSettlementModel);
                     }
@@ -1485,12 +1494,16 @@ namespace EIRS.Web.Controllers
 
                         // Check if total available balance covers the amount to be paid
                         decimal amountToPay = (decimal)newSettleAmount;
-                        if (paymentAccountBalances.Sum(pab => pab.AvailableBalance) < amountToPay)
+                        var sumOfPaymentAccountBalances = paymentAccountBalances.Sum(pab => pab.AvailableBalance);
+                        if (sumOfPaymentAccountBalances < amountToPay)
                         {
                             // Not enough balance
                             ViewBag.PoABalance = dcBalance;
-                            ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                            ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                            // ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                            // ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                            ViewBag.AssessmentRuleList = lstAssessmentRule;
+                            ViewBag.AmountToPay = tt;
+                            ViewBag.lstAssessmentItem = lstAssessmentItems;
                             ViewBag.Message = "Insufficient PoA balance!";
                             return View(pObjSettlementModel);
                         }
@@ -1700,8 +1713,11 @@ namespace EIRS.Web.Controllers
                             else
                             {
                                 ViewBag.PoABalance = dcBalance;
-                                ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                                ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                                // ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                                // ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                                ViewBag.AssessmentRuleList = lstAssessmentRule;
+                                ViewBag.AmountToPay = tt;
+                                ViewBag.lstAssessmentItem = lstAssessmentItems;
                                 ViewBag.Message = mObjSettlementResponse.Message;
                                 Transaction.Current.Rollback();
                                 return View(pObjSettlementModel);
@@ -1711,8 +1727,11 @@ namespace EIRS.Web.Controllers
                         {
                             ErrorSignal.FromCurrentContext().Raise(ex);
                             ViewBag.PoABalance = dcBalance;
-                            ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
-                            ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                            // ViewBag.AssessmentRuleList = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).ToList();
+                            // ViewBag.AmountToPay = SessionManager.lstAssessmentRule.Where(t => t.intTrack != EnumList.Track.DELETE).Sum(t => t.ToSettleAmount);
+                            ViewBag.AssessmentRuleList = lstAssessmentRule;
+                            ViewBag.AmountToPay = tt;
+                            ViewBag.lstAssessmentItem = lstAssessmentItems;
                             ViewBag.Message = "Error occurred while saving settlement";
                             Transaction.Current.Rollback();
                             return View(pObjSettlementModel);

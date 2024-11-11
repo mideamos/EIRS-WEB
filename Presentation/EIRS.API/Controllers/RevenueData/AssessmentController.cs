@@ -13,6 +13,8 @@ using System.Web.Http;
 
 namespace EIRS.API.Controllers
 {
+
+
     /// <summary>
     /// Assessment Operations
     /// </summary>
@@ -20,6 +22,7 @@ namespace EIRS.API.Controllers
 
     public class AssessmentController : BaseController
     {
+        EIRSEntities _db = new EIRSEntities();
 
         IAssessmentRepository _AssessmentRepository;
 
@@ -312,6 +315,7 @@ namespace EIRS.API.Controllers
             return Ok(mObjAPIResponse);
         }
 
+
         [HttpGet]
         [Route("TaxPayerBill")]
         public IHttpActionResult TaxPayerBill(int TaxPayerTypeID, int TaxPayerID)
@@ -320,10 +324,35 @@ namespace EIRS.API.Controllers
 
             try
             {
-
-                Assessment mObjAssessment = new Assessment() { IntStatus = 1 };
-
                 IList<usp_GetTaxPayerBill_Result> lstTaxPayerBill = new BLAssessment().BL_GetTaxPayerBill(TaxPayerID, TaxPayerTypeID, 0);
+
+                foreach (var item in lstTaxPayerBill)
+                {
+                    string email = null;
+
+                    switch (TaxPayerTypeID)
+                    {
+                        case 1:
+                            var individual = _db.Individuals.FirstOrDefault(x => x.IndividualID == TaxPayerID && x.TaxPayerTypeID == TaxPayerTypeID);
+                            email = individual?.EmailAddress1;
+                            break;
+                        case 2:
+                            var company = _db.Companies.FirstOrDefault(x => x.CompanyID == TaxPayerID && x.TaxPayerTypeID == TaxPayerTypeID);
+                            email = company?.EmailAddress1;
+                            break;
+                        case 3:
+                            var special = _db.Specials.FirstOrDefault(x => x.SpecialID == TaxPayerID && x.TaxPayerTypeID == TaxPayerTypeID);
+                            email = special?.ContactEmail;
+                            break;
+                        case 4:
+                            var government = _db.Governments.FirstOrDefault(x => x.GovernmentID == TaxPayerID && x.TaxPayerTypeID == TaxPayerTypeID);
+                            email = government?.ContactEmail;
+                            break;
+                        default:
+                            throw new ArgumentException("Invalid TaxPayerTypeID");
+                    }
+                    item.Email = email;
+                }
 
                 mObjAPIResponse.Success = true;
                 mObjAPIResponse.Result = lstTaxPayerBill;
@@ -336,6 +365,8 @@ namespace EIRS.API.Controllers
 
             return Ok(mObjAPIResponse);
         }
+
+
 
         [HttpPost]
         [Route("Insert")]

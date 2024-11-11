@@ -23,5 +23,6 @@ namespace EIRS.BOL
         public Nullable<int> SettlementStatusID { get; set; }
         public string SettlementStatusName { get; set; }
         public Nullable<decimal> SettlementAmount { get; set; }
+        public string Email { get; set; }
     }
 }

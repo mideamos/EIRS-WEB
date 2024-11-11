@@ -61,6 +61,94 @@ namespace EIRS.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// 
+
+        [HttpPost]
+        [Route("InsertMinimal")]
+        public IHttpActionResult InsertMinimal(IndividualMinimalModel model)
+        {
+            APIResponse response = new APIResponse();
+
+            // Check if the Authorization header is present
+            if (Request.Headers.Authorization == null)
+            {
+                response.Success = false;
+                response.Message = "Authorization header is missing.";
+                return Content(HttpStatusCode.Unauthorized, response);
+            }
+
+            // Validate the token
+            String token = Request.Headers.Authorization.Parameter;
+            if (token == null)
+            {
+                response.Success = false;
+                response.Message = "Invalid token.";
+                return Content(HttpStatusCode.Unauthorized, response);
+            }
+
+            // Check for required fields
+            if (model == null || model.GenderID == null || model.TitleID == null || string.IsNullOrEmpty(model.FirstName)
+                || string.IsNullOrEmpty(model.LastName) || model.TaxOfficeID == null || model.NationalityID == null
+                || model.EconomicActivitiesID == null || model.NotificationMethodID == null || string.IsNullOrEmpty(model.ContactAddress))
+            {
+                response.Success = false;
+                response.Message = "One or more required fields are missing.";
+                return Content(HttpStatusCode.BadRequest, response);
+            }
+
+            // Populate the Individual entity
+            Individual individual = new Individual
+            {
+                GenderID = model.GenderID.Value,
+                TitleID = model.TitleID.Value,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                MiddleName = model.MiddleName,
+                DOB = TrynParse.parseDatetime(model.DOB),
+                TIN = model.TIN,
+                NIN = model.NIN,
+                MobileNumber1 = model.MobileNumber1,
+                MobileNumber2 = model.MobileNumber2,
+                EmailAddress1 = model.EmailAddress1,
+                EmailAddress2 = model.EmailAddress2,
+                BiometricDetails = model.BiometricDetails,
+                TaxOfficeID = model.TaxOfficeID.Value,
+                MaritalStatusID = model.MaritalStatusID,
+                NationalityID = model.NationalityID.Value,
+                EconomicActivitiesID = model.EconomicActivitiesID.Value,
+                NotificationMethodID = model.NotificationMethodID.Value,
+                ContactAddress = model.ContactAddress,
+                Active = true,
+                CreatedBy = 22, // Replace with dynamic user ID if available
+                CreatedDate = CommUtil.GetCurrentDateTime()
+            };
+
+            // Call business logic layer to save
+            try
+            {
+                FuncResponse<Individual> funcResponse = new BLIndividual().BL_InsertUpdateIndividual(individual);
+
+                if (funcResponse.Success)
+                {
+                    response.Success = true;
+                    response.Message = funcResponse.Message;
+                    response.Result = funcResponse.AdditionalData;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = funcResponse.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Error occurred while saving Individual - {ex.Message}";
+            }
+
+            return Ok(response);
+        }
+
         [HttpGet]
         [Route("Details/{id}")]
         public IHttpActionResult Details(int? id)

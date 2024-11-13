@@ -16,15 +16,16 @@
             }
             else
             {
-        <ul>
-            <li><a href="@Url.Action("SignUp", "Default")">Sign Up</a></li>
-            <li><a href="@Url.Action("Individual", "Login")">Login</a></li>
+                <ul>
+                    <li><a href="@Url.Action("SignUp", "Default")">Sign Up</a></li>
+                    <li><a href="@Url.Action("Individual", "Login")">Login</a></li>
 
-            @*<li><a href="@Url.Action("About", "Default")">Test</a></li>*@
+                    @*<li><a href="@Url.Action("About", "Default")">Test</a></li>*@
 
-        </ul>
+                </ul>
             }
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navMainMenu" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navMainMenu"
+                aria-expanded="false">
                 <i class="fa fa-bars"></i>
             </button>
         </div>
@@ -53,15 +54,25 @@
                             </a>
                         }
                     </li>
-                    <li class="@(ViewBag.MenuID == 1 ? "active" : "")"><a href="@Url.Action("About","Default")">About</a></li>
-                    <li class="@(ViewBag.MenuID == 6 ? "active" : "")"><a href="@Url.Action("Awareness","Default")">Awareness</a></li>
-                    <li class="@(ViewBag.MenuID == 2 ? "active" : "")"><a href="@Url.Action("TaxPayer","Default")">Tax Payers</a></li>
-                    <li class="@(ViewBag.MenuID == 3 ? "active" : "")"><a href="@Url.Action("TaxAsset","Default")">Tax Assets</a></li>
-                    <li class="@(ViewBag.MenuID == 8 ? "active" : "")"><a href="@Url.Action("TaxType","Default")">Tax Types</a></li>
-                    <li class="@(ViewBag.MenuID == 7 ? "active" : "")"><a href="@Url.Action("PayTaxes","CBS")">Services</a></li>
-                    <li class="@(ViewBag.MenuID == 4 ? "active" : "")"><a href="@Url.Action("Partnership","Default")">Partnership</a></li>
-                    <li class="@(ViewBag.MenuID == 9 ? "active" : "")"><a href="@Url.Action("Support","Default")">Support</a></li>
-                    <li class="@(ViewBag.MenuID == 10 ? "active" : "")"><a href="@Url.Action("DataSubmitter","Login")">Submit Data</a></li>
+                    <li class="@(ViewBag.MenuID == 1 ? "active" : "")"><a
+                            href="@Url.Action("About","Default")">About</a></li>
+                    <li class="@(ViewBag.MenuID == 6 ? "active" : "")"><a
+                            href="@Url.Action("Awareness","Default")">Awareness</a></li>
+                    <li class="@(ViewBag.MenuID == 2 ? "active" : "")"><a href="@Url.Action("TaxPayer","Default")">Tax
+                            Payers</a></li>
+                    <li class="@(ViewBag.MenuID == 3 ? "active" : "")"><a href="@Url.Action("TaxAsset","Default")">Tax
+                            Assets</a></li>
+                    <li class="@(ViewBag.MenuID == 8 ? "active" : "")"><a href="@Url.Action("TaxType","Default")">Tax
+                            Types</a></li>
+                    <li class="@(ViewBag.MenuID == 7 ? "active" : "")"><a
+                            href="@Url.Action("PayTaxes","CBS")">Services</a></li>
+                    <li class="@(ViewBag.MenuID == 4 ? "active" : "")"><a
+                            href="@Url.Action("Partnership","Default")">Partnership</a></li>
+                    <li class="@(ViewBag.MenuID == 9 ? "active" : "")"><a
+                            href="@Url.Action("Support","Default")">Support</a></li>
+                    <li class="@(ViewBag.MenuID == 10 ? "active" : "")"><a
+                            href="@Url.Action("DataSubmitter","Login")">Submit Data</a></li>
+                    <li class=""><a href="https://pinscher.eirs.gov.ng/spike/PAYE/">Manage PAYE</a></li>
                 </ul>
             </div>
         </div>

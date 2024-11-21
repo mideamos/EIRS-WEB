@@ -20,7 +20,6 @@ using System.Text;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Excel = Microsoft.Office.Interop.Excel;
-using LicenseContext = OfficeOpenXml.LicenseContext;
 
 
 namespace EIRS.Common
@@ -318,7 +317,7 @@ namespace EIRS.Common
         }
         public static byte[] ConvertDataTableToExcel(DataTable dataTable)
         {
-            ExcelPackage.LicenseContext = LicenseContext.Commercial;
+          
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("Sheet1");
@@ -340,7 +339,7 @@ namespace EIRS.Common
         }
         public static byte[] ToExcel<T>(IEnumerable<T> data, string sheetName = "Sheet1")
         {
-            ExcelPackage.LicenseContext = 0;
+          
             using (var pck = new ExcelPackage())
             {
                 var excelWorkSheet = pck.Workbook.Worksheets.Add(sheetName);

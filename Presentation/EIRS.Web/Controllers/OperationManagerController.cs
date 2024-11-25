@@ -903,6 +903,7 @@ namespace EIRS.Web.Controllers
                         .ToList();
 
                     receivedAmount = res.Amount;
+                    newBalance = receivedAmount;
                     if (lstret.Count > 0)
                     {
                         // receivedAmount = lstret.Where(o => o.To_TaxpayerID == pIntTaxPayerID && o.To_TaxpayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);

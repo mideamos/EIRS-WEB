@@ -1,5 +1,9 @@
 ﻿//using EIRS.Models;
+using EIRS.API.Controllers;
 using EIRS.API.Models;
+using EIRS.BLL;
+using EIRS.BOL;
+using EIRS.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +14,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Http;
 
 namespace EIRS.API.Utility
 {
@@ -71,6 +76,8 @@ namespace EIRS.API.Utility
             
             return userId;
         }
+
     }
 
 }
+

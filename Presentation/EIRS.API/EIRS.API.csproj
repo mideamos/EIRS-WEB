@@ -252,7 +252,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Account\AccountController.cs" />
     <Compile Include="Controllers\Account\PayeUserController.cs" />
-    <Compile Include="Controllers\UtilitiesController.cs" />
     <Compile Include="Controllers\Assets\BuildingUnitController.cs" />
     <Compile Include="Controllers\Assets\BusinessController.cs" />
     <Compile Include="Controllers\Assets\BuildingController.cs" />

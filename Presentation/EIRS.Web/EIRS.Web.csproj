@@ -1,15 +1,15 @@
 ﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="..\..\packages\Microsoft.EntityFrameworkCore.Design.3.1.13\build\net461\Microsoft.EntityFrameworkCore.Design.props" Condition="Exists('..\..\packages\Microsoft.EntityFrameworkCore.Design.3.1.13\build\net461\Microsoft.EntityFrameworkCore.Design.props')" />
-  <Import Project="..\..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props" Condition="Exists('..\..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" />
   <Import Project="..\..\packages\IronPdf.Slim.2023.10.3\build\IronPdf.Slim.props" Condition="Exists('..\..\packages\IronPdf.Slim.2023.10.3\build\IronPdf.Slim.props')" />
-  <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props')" />
+  <Import Project="..\..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props" Condition="Exists('..\..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" />
   <Import Project="..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\build\Microsoft.NetFramework.Analyzers.props" Condition="Exists('..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\build\Microsoft.NetFramework.Analyzers.props')" />
   <Import Project="..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\build\Microsoft.NetCore.Analyzers.props" Condition="Exists('..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\build\Microsoft.NetCore.Analyzers.props')" />
-  <Import Project="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\build\Microsoft.CodeQuality.Analyzers.props" Condition="Exists('..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\build\Microsoft.CodeQuality.Analyzers.props')" />
-  <Import Project="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props" Condition="Exists('..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" />
   <Import Project="..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\build\Microsoft.CodeQuality.Analyzers.props" Condition="Exists('..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\build\Microsoft.CodeQuality.Analyzers.props')" />
+  <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props" Condition="Exists('..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" />
+  <Import Project="..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props')" />
+  <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -66,16 +66,12 @@
     </Reference>
     <Reference Include="Aspose.PDF, Version=22.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Aspose.PDF.22.4.0\lib\net4.0\Aspose.PDF.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
     </Reference>
     <Reference Include="BitMiracle.LibTiff.NET, Version=2.4.649.0, Culture=neutral, PublicKeyToken=53879b3e20e7a7d6, processorArchitecture=MSIL">
       <HintPath>..\..\packages\BitMiracle.LibTiff.NET.2.4.649\lib\net40\BitMiracle.LibTiff.NET.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Portable.BouncyCastle.1.8.9\lib\net40\BouncyCastle.Crypto.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>..\..\packages\BouncyCastle.Cryptography.2.3.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
@@ -109,14 +105,12 @@
     </Reference>
     <Reference Include="EntityFrameworkCore.SqlServer.HierarchyId, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0c30ba8633cb7b1e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\lib\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFrameworkCore.SqlServer.HierarchyId.Abstractions, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0c30ba8633cb7b1e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.Abstractions.1.2.0\lib\net461\EntityFrameworkCore.SqlServer.HierarchyId.Abstractions.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="EPPlus">
-      <HintPath>..\..\..\..\EIRS\Libraries\EIRS.Common\bin\Debug\EPPlus.dll</HintPath>
+    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus.Interfaces, Version=7.5.0.0, Culture=neutral, PublicKeyToken=a694d7f3b0907a61, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EPPlus.Interfaces.7.5.0\lib\net462\EPPlus.Interfaces.dll</HintPath>
@@ -138,18 +132,15 @@
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.23.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Google.Protobuf.3.23.0\lib\net45\Google.Protobuf.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Grpc.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d754f35622e28bad, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Grpc.Core.2.46.6\lib\net45\Grpc.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Grpc.Core.Api, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d754f35622e28bad, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Grpc.Core.Api.2.46.6\lib\net45\Grpc.Core.Api.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="HarfBuzzSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\HarfBuzzSharp.7.3.0\lib\net462\HarfBuzzSharp.dll</HintPath>
+      <HintPath>..\..\packages\HarfBuzzSharp.7.3.0.3\lib\net462\HarfBuzzSharp.dll</HintPath>
     </Reference>
     <Reference Include="IronBarCode, Version=2022.8.0.8024, Culture=neutral, PublicKeyToken=b971bb3971bdf306, processorArchitecture=MSIL">
       <HintPath>..\..\packages\BarCode.2022.8.8024\lib\net40\IronBarCode.dll</HintPath>
@@ -159,22 +150,18 @@
     </Reference>
     <Reference Include="IronPdf.Extensions.ASPX, Version=2023.9.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\IronPdf.Extensions.ASPX.2023.9.5\lib\net462\IronPdf.Extensions.ASPX.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IronSoftware.Abstractions, Version=2023.9.0.6, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\IronSoftware.Common.2023.9.6\lib\netstandard2.0\IronSoftware.Abstractions.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IronSoftware.Drawing.Common, Version=2023.9.2.0, Culture=neutral, PublicKeyToken=8d7e55c97b3e9835, processorArchitecture=MSIL">
       <HintPath>..\..\packages\IronSoftware.System.Drawing.2023.9.2\lib\netstandard2.0\IronSoftware.Drawing.Common.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IronSoftware.Logger, Version=2023.9.0.6, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\IronSoftware.Common.2023.9.6\lib\netstandard2.0\IronSoftware.Logger.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.13.3, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iTextSharp.5.5.13.3\lib\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.4.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -218,7 +205,6 @@
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.Design, Version=3.1.13.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.EntityFrameworkCore.Design.3.1.13\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Design.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=3.1.13.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.EntityFrameworkCore.Relational.3.1.13\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
@@ -228,7 +214,6 @@
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.SqlServer, Version=3.1.7.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.EntityFrameworkCore.SqlServer.3.1.7\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=3.1.13.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Extensions.Caching.Abstractions.3.1.13\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
@@ -268,27 +253,21 @@
     </Reference>
     <Reference Include="Microsoft.Identity.Client, Version=4.21.1.0, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Identity.Client.4.21.1\lib\net461\Microsoft.Identity.Client.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.IdentityModel.JsonWebTokens.6.8.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Logging, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.IdentityModel.Logging.6.8.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Protocols, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.IdentityModel.Protocols.6.8.0\lib\net461\Microsoft.IdentityModel.Protocols.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.IdentityModel.Protocols.OpenIdConnect.6.8.0\lib\net461\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.IdentityModel.Tokens.6.8.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.IO.RecyclableMemoryStream.3.0.1\lib\netstandard2.0\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
@@ -338,7 +317,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -369,15 +347,12 @@
     </Reference>
     <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SixLabors.ImageSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SixLabors.ImageSharp.2.1.5\lib\net472\SixLabors.ImageSharp.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SixLabors.ImageSharp.Drawing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SixLabors.ImageSharp.Drawing.1.0.0\lib\net472\SixLabors.ImageSharp.Drawing.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SkiaSharp, Version=2.80.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SkiaSharp.2.80.0\lib\net462\SkiaSharp.dll</HintPath>
@@ -409,7 +384,6 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Configuration.ConfigurationManager.6.0.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.Common, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Data.Common.4.3.0\lib\net451\System.Data.Common.dll</HintPath>
@@ -474,8 +448,9 @@
     <Reference Include="System.Reflection.Metadata, Version=6.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reflection.Metadata.6.0.1\lib\net461\System.Reflection.Metadata.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
@@ -1614,6 +1589,7 @@
     <Content Include="Content\Plugins\apexcharts\locales\ua.json" />
     <Content Include="Content\Plugins\apexcharts\locales\zh-cn.json" />
     <Content Include="Content\Plugins\bootstrap-daterangepicker\README.md" />
+    <None Include="packages.config" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -2306,7 +2282,6 @@
     <Content Include="Dataset\dsRDLCTable.xss">
       <DependentUpon>dsRDLCTable.xsd</DependentUpon>
     </Content>
-    <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\eras-v2.eirsautomation.xyz - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="RDLC\Bill.rdlc" />
@@ -3282,27 +3257,19 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\analyzers\dotnet\cs\Humanizer.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\analyzers\dotnet\cs\Humanizer.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.NetCore.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.NetCore.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.NetCore.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.NetCore.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -3344,47 +3311,47 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\build\Microsoft.CodeQuality.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\build\Microsoft.CodeQuality.Analyzers.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\build\Microsoft.NetCore.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\build\Microsoft.NetCore.Analyzers.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\build\Microsoft.NetFramework.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\build\Microsoft.NetFramework.Analyzers.props'))" />
-    <!--<Error Condition="!Exists('..\..\packages\System.Text.Json.6.0.5\build\System.Text.Json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\System.Text.Json.6.0.5\build\System.Text.Json.targets'))" />-->
-    <Error Condition="!Exists('..\..\packages\Microsoft.Data.SqlClient.SNI.2.1.1\build\net46\Microsoft.Data.SqlClient.SNI.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Data.SqlClient.SNI.2.1.1\build\net46\Microsoft.Data.SqlClient.SNI.targets'))" />
-    <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets'))" />
-    <Error Condition="!Exists('..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\build\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\build\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets'))" />
-    <Error Condition="!Exists('..\..\packages\IronPdf.Slim.2023.10.3\build\IronPdf.Slim.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\IronPdf.Slim.2023.10.3\build\IronPdf.Slim.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.EntityFrameworkCore.Design.3.1.13\build\net461\Microsoft.EntityFrameworkCore.Design.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.EntityFrameworkCore.Design.3.1.13\build\net461\Microsoft.EntityFrameworkCore.Design.props'))" />
     <Error Condition="!Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('..\..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets'))" />
-    <Error Condition="!Exists('..\..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets'))" />
+    <Error Condition="!Exists('..\..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets'))" />
+    <Error Condition="!Exists('..\..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets'))" />
+    <Error Condition="!Exists('..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\build\Microsoft.CodeQuality.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.6\build\Microsoft.CodeQuality.Analyzers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.Data.SqlClient.SNI.2.1.1\build\net46\Microsoft.Data.SqlClient.SNI.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Data.SqlClient.SNI.2.1.1\build\net46\Microsoft.Data.SqlClient.SNI.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\build\Microsoft.NetCore.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NetCore.Analyzers.2.9.6\build\Microsoft.NetCore.Analyzers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\build\Microsoft.NetFramework.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NetFramework.Analyzers.2.9.6\build\Microsoft.NetFramework.Analyzers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props'))" />
     <Error Condition="!Exists('..\..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets'))" />
     <Error Condition="!Exists('..\..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets'))" />
+    <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets'))" />
     <Error Condition="!Exists('..\..\packages\SkiaSharp.2.80.0\build\net462\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SkiaSharp.2.80.0\build\net462\SkiaSharp.targets'))" />
+    <Error Condition="!Exists('..\..\packages\IronPdf.Slim.2023.10.3\build\IronPdf.Slim.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\IronPdf.Slim.2023.10.3\build\IronPdf.Slim.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.EntityFrameworkCore.Design.3.1.13\build\net461\Microsoft.EntityFrameworkCore.Design.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.EntityFrameworkCore.Design.3.1.13\build\net461\Microsoft.EntityFrameworkCore.Design.props'))" />
+    <Error Condition="!Exists('..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\build\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\build\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.targets'))" />
+    <!--<Error Condition="!Exists('..\..\packages\System.Text.Json.6.0.5\build\System.Text.Json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\System.Text.Json.6.0.5\build\System.Text.Json.targets'))" />-->
   </Target>
   <!--<Import Project="..\..\packages\System.Text.Json.6.0.5\build\System.Text.Json.targets" Condition="Exists('..\..\packages\System.Text.Json.6.0.5\build\System.Text.Json.targets')" />-->
-  <Import Project="..\..\packages\Microsoft.Data.SqlClient.SNI.2.1.1\build\net46\Microsoft.Data.SqlClient.SNI.targets" Condition="Exists('..\..\packages\Microsoft.Data.SqlClient.SNI.2.1.1\build\net46\Microsoft.Data.SqlClient.SNI.targets')" />
-  <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />
-  <Import Project="..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\build\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.targets" Condition="Exists('..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\build\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.targets')" />
-  <Import Project="..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets" Condition="Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets')" />
   <Import Project="..\..\packages\IronPdf.Native.Chrome.Windows.2023.9.19098\build\net\IronPdf.Native.Chrome.Windows.targets" Condition="Exists('..\..\packages\IronPdf.Native.Chrome.Windows.2023.9.19098\build\net\IronPdf.Native.Chrome.Windows.targets')" />
-  <Import Project="..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets" Condition="Exists('..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets')" />
-  <Import Project="..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets" Condition="Exists('..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets')" />
-  <Import Project="..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets" Condition="Exists('..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" />
   <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
-  <Import Project="..\..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets" Condition="Exists('..\..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets')" />
-  <Import Project="..\..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets" Condition="Exists('..\..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets')" />
+  <Import Project="..\..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets" Condition="Exists('..\..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets')" />
+  <Import Project="..\..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets" Condition="Exists('..\..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets')" />
+  <Import Project="..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets" Condition="Exists('..\..\packages\IronSoftware.Native.PdfModel.2023.9.18743\build\net\IronSoftware.Native.PdfModel.targets')" />
+  <Import Project="..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets" Condition="Exists('..\..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.3\build\Microsoft.CodeAnalysis.Analyzers.targets')" />
+  <Import Project="..\..\packages\Microsoft.Data.SqlClient.SNI.2.1.1\build\net46\Microsoft.Data.SqlClient.SNI.targets" Condition="Exists('..\..\packages\Microsoft.Data.SqlClient.SNI.2.1.1\build\net46\Microsoft.Data.SqlClient.SNI.targets')" />
   <Import Project="..\..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />
   <Import Project="..\..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets" Condition="Exists('..\..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets')" />
+  <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />
+  <Import Project="..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets" Condition="Exists('..\..\packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets')" />
+  <Import Project="..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets" Condition="Exists('..\..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" />
   <Import Project="..\..\packages\SkiaSharp.2.80.0\build\net462\SkiaSharp.targets" Condition="Exists('..\..\packages\SkiaSharp.2.80.0\build\net462\SkiaSharp.targets')" />
+  <Import Project="..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\build\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.targets" Condition="Exists('..\..\packages\EntityFrameworkCore.SqlServer.HierarchyId.1.2.0\build\netstandard2.0\EntityFrameworkCore.SqlServer.HierarchyId.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

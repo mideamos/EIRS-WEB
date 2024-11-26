@@ -903,15 +903,22 @@ namespace EIRS.Web.Controllers
                         .ToList();
 
                     receivedAmount = res.Amount;
+                    newBalance = receivedAmount;
+                    sentAmount = 0;
                     if (lstret.Count > 0)
                     {
                         // receivedAmount = lstret.Where(o => o.To_TaxpayerID == pIntTaxPayerID && o.To_TaxpayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
                         sentAmount = lstret.Where(o => o.From_TaxpayerID == pIntTaxPayerID && o.From_TaxpayerTypeID == pIntTaxPayerTypeID).Sum(o => o.Amount);
                         newBalance = receivedAmount - sentAmount;
 
-                        PoaMyClass myClass = new PoaMyClass() { TransactionRefNo = pid, BA = newBalance.Value, PaymentAccountID = res.PaymentAccountID, SA = sentAmount.Value, RA = receivedAmount.Value };
-                        SessionManager.poaMyClass = myClass;
+                        //TIM: commented out because of the following: - It cause an Insufficient Balance error on the PoATransfer action when this condition did not run
+                        // The fix is to move the code outside  if (lstret.Count > 0) condition
+                        // PoaMyClass myClass = new PoaMyClass() { TransactionRefNo = pid, BA = newBalance.Value, PaymentAccountID = res.PaymentAccountID, SA = sentAmount.Value, RA = receivedAmount.Value };
+                        // SessionManager.poaMyClass = myClass;
                     }
+
+                    PoaMyClass myClass = new PoaMyClass() { TransactionRefNo = pid, BA = newBalance.Value, PaymentAccountID = res.PaymentAccountID, SA = sentAmount.Value, RA = receivedAmount.Value };
+                    SessionManager.poaMyClass = myClass;
 
                     dcResponse["reciedAmount"] = CommUtil.GetFormatedCurrency(receivedAmount);
                     dcResponse["sentAmount"] = CommUtil.GetFormatedCurrency(sentAmount);

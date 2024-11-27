@@ -20,14 +20,14 @@ namespace EIRS.API.Controllers
     /// </summary>
     [RoutePrefix("RevenueData/Assessment")]
 
-    public class UtilitiesController : BaseController
+    public class AssessmentController : BaseController
     {
         EIRSEntities _db = new EIRSEntities();
 
         IAssessmentRepository _AssessmentRepository;
 
 
-        public UtilitiesController()
+        public AssessmentController()
         {
             _AssessmentRepository = new AssessmentRepository();
         }

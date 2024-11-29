@@ -140,6 +140,103 @@ namespace EIRS.API.Controllers.User
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("GetAssessentRules")]
+        public IHttpActionResult GetAssessentRules()
+        {
+            var response = new APIResponse();
+
+            try
+            {
+                using (var context = new EIRSEntities())
+                {
+                    var GetAssessentRules = context.Assessment_Rules
+                        .Where(ar => ar.ProfileID == 1277)
+                         .OrderBy(ar => ar.TaxYear)
+                         .ThenBy(ar => ar.TaxMonth)
+                        .Select(AssRule => new
+                        {
+                            AssessmentRuleID = AssRule.AssessmentRuleID,
+                            AssessmentRuleCode = AssRule.AssessmentRuleCode,
+                            ProfileID = AssRule.ProfileID,
+                            AssessmentRuleName = AssRule.AssessmentRuleName,
+                            RuleRunID = AssRule.RuleRunID,
+                            PaymentFrequencyID = AssRule.PaymentFrequencyID,
+                            AssessmentAmount = AssRule.AssessmentAmount,
+                            TaxYear = AssRule.TaxYear,
+                            PaymentOptionID = AssRule.PaymentOptionID,
+                            Active = AssRule.Active,
+                            CreatedBy = AssRule.CreatedBy,
+                            CreatedDate = AssRule.CreatedDate,
+                            TaxMonth = AssRule.TaxMonth
+
+
+                        })
+                        .ToList();
+
+                    response.Success = true;
+                    response.Message = "Success";
+                    response.Result = GetAssessentRules;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("GetAssessentItems")]
+        public IHttpActionResult GetAssessentItems()
+        {
+            var response = new APIResponse();
+
+            try
+            {
+                using (var context = new EIRSEntities())
+                {
+                    var GetAssessentItems = context.Assessment_Items
+                        .Where(ar => ar.RevenueStreamID == 8)
+                        .Select(AssItem => new
+                        {
+                            AssessmentItemID = AssItem.AssessmentItemID,
+                            AssessmentItemReferenceNo = AssItem.AssessmentItemReferenceNo,
+                            AssetTypeID = AssItem.AssetTypeID,
+                            AssessmentGroupID = AssItem.AssessmentGroupID,
+                            AssessmentSubGroupID = AssItem.AssessmentSubGroupID,
+                            RevenueStreamID = AssItem.RevenueStreamID,
+                            RevenueSubStreamID = AssItem.RevenueSubStreamID,
+                            AssessmentItemCategoryID = AssItem.AssessmentItemCategoryID,
+                            AssessmentItemSubCategoryID = AssItem.AssessmentItemSubCategoryID,
+                            AgencyID = AssItem.AgencyID,
+                            AssessmentItemName = AssItem.AssessmentItemName,
+                            ComputationID = AssItem.ComputationID,
+                            TaxBaseAmount = AssItem.TaxBaseAmount,
+                            Percentage = AssItem.Percentage,
+                            TaxAmount = AssItem.TaxAmount,
+                            Active = AssItem.Active,
+                            CreatedBy = AssItem.CreatedBy,
+                            CreatedDate = AssItem.CreatedDate,
+                        })
+                        .ToList();
+
+                    response.Success = true;
+                    response.Message = "Success";
+                    response.Result = GetAssessentItems;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
 
     }
 }

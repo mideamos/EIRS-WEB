@@ -3,6 +3,7 @@ using EIRS.BOL;
 using EIRS.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 
 namespace EIRS.API.Controllers.User
@@ -11,6 +12,7 @@ namespace EIRS.API.Controllers.User
 
     public class UserController : BaseController
     {
+        EIRSEntities _db;
 
         [HttpGet]
         [Route("TaxOffices")]
@@ -60,6 +62,84 @@ namespace EIRS.API.Controllers.User
 
             return Ok(mObjAPIResponse);
         }
+
+        [HttpGet]
+        [Route("LGAs")]
+        public IHttpActionResult GetLGAs()
+        {
+            var response = new APIResponse();
+
+            try
+            {
+                using (var dbContext = new EIRSEntities())
+                {
+                    // Option 1: Explicitly load the required properties
+                    var localGovernmentAreas = dbContext.LGAs
+                        .Select(lga => new  // Project to anonymous type with only needed properties
+                        {
+                            lga.LGAID,
+                            lga.LGAName
+                            // Add other specific properties you need
+                        })
+                        .ToList();
+
+                    response.Success = true;
+                    response.Message = "Success";
+                    response.Result = localGovernmentAreas;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+
+        [HttpGet]
+        [Route("BusinessSectors")]
+        public IHttpActionResult GetBusinessSectors()
+        {
+            var response = new APIResponse();
+
+            try
+            {
+                using (var context = new EIRSEntities())
+                {
+                    var businessSectors = context.Business_Sector
+                        .Select(sector => new
+                        {
+                            Id = sector.BusinessSectorID,
+                            Name = sector.BusinessSectorName,
+                            CategoryId = sector.BusinessCategoryID,
+                            TypeId = sector.BusinessTypeID,
+                            CreatedDate = sector.CreatedDate,
+                            CreatedBy = sector.CreatedBy,
+                            LastModifiedDate = sector.ModifiedDate,
+                            LastModifiedBy = sector.ModifiedBy,
+                            IsActive = sector.Active,
+                            CategoryName = sector.Business_Category != null ? sector.Business_Category.BusinessCategoryName : null, // Flatten Category
+                            SubSectorNames = sector.Business_SubSector.Select(sub => sub.BusinessSubSectorName).ToList(), // Flatten SubSector collection
+                            TypeName = sector.Business_Types != null ? sector.Business_Types.BusinessTypeName : null // Flatten Type
+                        })
+                        .ToList();
+
+                    response.Success = true;
+                    response.Message = "Success";
+                    response.Result = businessSectors;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
 
     }
 }

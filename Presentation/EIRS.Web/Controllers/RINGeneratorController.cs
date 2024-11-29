@@ -3,6 +3,7 @@ using EIRS.BOL;
 using EIRS.Common;
 using EIRS.Web.Models;
 using EIRS.Web.Utility;
+// using GemBox.Spreadsheet;
 using OfficeOpenXml;
 using OfficeOpenXml.DataValidation;
 using OfficeOpenXml.Style;
@@ -13,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using ExcelWorksheet = OfficeOpenXml.ExcelWorksheet;
 
 namespace EIRS.Web.Controllers
 {
@@ -210,7 +212,7 @@ namespace EIRS.Web.Controllers
                             dtCompanyDetails.Columns.Remove("TaxOfficeID");
                             dtCompanyDetails.Columns.Remove("EconomicActivitiesID");
                             dtCompanyDetails.Columns.Remove("NotificationMethodID");
-                            ExcelWorksheet ObjExcelWorksheet = mObjExcelPackage.Workbook.Worksheets.Add("Company");
+                            OfficeOpenXml.ExcelWorksheet ObjExcelWorksheet = mObjExcelPackage.Workbook.Worksheets.Add("Company");
                             ObjExcelWorksheet.Cells["A1"].LoadFromDataTable(dtCompanyDetails, true);
 
                             var vPHeaderRow = ObjExcelWorksheet.Row(1);
@@ -408,7 +410,7 @@ namespace EIRS.Web.Controllers
             return lstExcelFormula;
         }
 
-        public void AddCompanyScheme(ExcelWorksheet pObjExcelWorksheet)
+        public void AddCompanyScheme(OfficeOpenXml.ExcelWorksheet pObjExcelWorksheet)
         {
             var vPHeaderRow = pObjExcelWorksheet.Row(1);
 

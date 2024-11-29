@@ -404,6 +404,8 @@
     </div>
 </div>
 
+
+
 <div class="portlet light">
     <div class="portlet-title">
         <div class="caption">Associated Payments</div>
@@ -452,6 +454,55 @@
         </table>
     </div>
 </div>
+
+@* <div class="portlet light">
+    <div class="portlet-title">
+        <div class="caption">Associated Payments</div>
+        <div class="actions">
+            <div class="btn-group">
+                <span>PoA Balance : </span> @CommUtil.GetFormatedCurrency(ViewBag.PoABalance)
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="dt-responsive table table-bordered v-middle" width="100%" id="tblPaymentList">
+            <thead class="red-th">
+                <tr>
+                    <th>Date</th>
+                    <th>Bill Type</th>
+                    <th class="desktop">Bill ID</th>
+                    <th>Bill Amount</th>
+                    <th>Bill Transaction Ref</th>
+                    <th class="action-th all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vPaymentItem in lstTaxPayerPayment)
+                {
+                    <tr>
+                        <td>@CommUtil.GetFormatedDate(vPaymentItem.PaymentDate)</td>
+                        <td>@vPaymentItem.PaymentTypeName</td>
+                        <td>@vPaymentItem.PaymentRefNo</td>
+                        <td>@CommUtil.GetFormatedCurrency(vPaymentItem.Amount)</td>
+                        <td>@vPaymentItem.TransactionRefNo</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs md-skip btn-theme dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="javascript:jsfn_PaymentDetails(@vPaymentItem.PaymentID, @vPaymentItem.PaymentTypeID)">Quick View</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> *@
 
 <div class="portlet light">
     <div class="portlet-title">

@@ -599,14 +599,15 @@ namespace EIRS.Web.Controllers
                                     OperationTypeID = (int)EnumList.OperationType.Transfer,
                                     From_TaxPayerTypeID = pobjPaymentViewModel.FromTaxPayerTypeID,
                                     From_TaxPayerID = pobjPaymentViewModel.FromTaxPayerID,
-                                    To_TaxPayerTypeID = pobjPaymentViewModel.ToTaxPayerTypeID,
+                                    // To_TaxPayerTypeID = pobjPaymentViewModel.ToTaxPayerTypeID, // commented out to resolve the issue of duplicate amounts in the POA Balance after each POA Transfer.
                                     POAAccountId = Convert.ToInt32(myClass.PaymentAccountID),
-                                    To_TaxPayerID = pobjPaymentViewModel.ToTaxPayerID,
+                                    // To_TaxPayerID = pobjPaymentViewModel.ToTaxPayerID, // commented out to resolve the issue of duplicate amounts in the POA Balance after each POA Transfer.
                                     TransactionRefNo = myClass.TransactionRefNo,
                                     Amount = pobjPaymentViewModel.Amount,
                                     OperationDate = CommUtil.GetCurrentDateTime(),
                                     CreatedBy = SessionManager.UserID,
-                                    CreatedDate = CommUtil.GetCurrentDateTime()
+                                    CreatedDate = CommUtil.GetCurrentDateTime(),
+                                    Active = true
                                 };
                                 FuncResponse mObjResponse = new BLPaymentAccount().BL_InsertPaymentOperation(mObjPaymentTransfer);
                                 //End

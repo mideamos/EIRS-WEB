@@ -289,17 +289,17 @@ namespace EIRS.Web.Controllers
             {
                 //If no individual found, create a new IndividualFormModel from available data
 
-               var individual = _db.Individuals.Select(i => new IndividualFormModel
-               {
-                   FirstName = i.FirstName,
-                   LastName = i.LastName,
-                   MiddleName = i.MiddleName,
-                   NIN = i.NIN,
-                   NINStatus = i.NINStatus,
-                   ContactAddress = i.ContactAddress
-               }).FirstOrDefault(i => i.NIN == nin);
+                var individual = _db.Individuals.Select(i => new IndividualFormModel
+                {
+                    FirstName = i.FirstName,
+                    LastName = i.LastName,
+                    MiddleName = i.MiddleName,
+                    NIN = i.NIN,
+                    NINStatus = i.NINStatus,
+                    ContactAddress = i.ContactAddress
+                }).FirstOrDefault(i => i.NIN == nin);
 
-                if(individual == null)
+                if (individual == null)
                 {
                     return Json(new { success = false, message = "NIN not found." });
                 }
@@ -640,7 +640,7 @@ namespace EIRS.Web.Controllers
                     intStatus = 1
                 };
 
-                var checkerNIN = _db.Individuals.FirstOrDefault(x=> x.IndividualID == mObjIndividual.IndividualID);
+                var checkerNIN = _db.Individuals.FirstOrDefault(x => x.IndividualID == mObjIndividual.IndividualID);
 
                 if (!string.IsNullOrEmpty(checkerNIN.NIN))
                 {

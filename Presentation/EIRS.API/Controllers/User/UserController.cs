@@ -131,7 +131,7 @@ namespace EIRS.API.Controllers.User
                     var totalRecords = context.Business_Sector.Count();
 
                     var businessSectors = context.Business_Sector
-                        .OrderBy(sector => sector.BusinessSectorName) 
+                        .OrderBy(sector => sector.BusinessSectorName)
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)
                         .Select(sector => new
@@ -240,76 +240,6 @@ namespace EIRS.API.Controllers.User
 
             return Ok(response);
         }
-
-
-        [HttpGet]
-        [Route("GetAssessentItems")]
-        public IHttpActionResult GetAssessentItems(int pageNumber = 1, int pageSize = 10)
-        {
-            var response = new APIResponse();
-
-            try
-            {
-                using (var context = new EIRSEntities())
-                {
-                    var totalRecords = context.Assessment_Items
-                        .Count(ar => ar.RevenueStreamID == 8);
-
-                    var GetAssessentItems = context.Assessment_Items
-                        .Where(ar => ar.RevenueStreamID == 8)
-                        .OrderBy(AssItem => AssItem.AssessmentItemID) 
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .Select(AssItem => new
-                        {
-                            AssessmentItemID = AssItem.AssessmentItemID,
-                            AssessmentItemReferenceNo = AssItem.AssessmentItemReferenceNo,
-                            AssetTypeID = AssItem.AssetTypeID,
-                            AssessmentGroupID = AssItem.AssessmentGroupID,
-                            AssessmentSubGroupID = AssItem.AssessmentSubGroupID,
-                            RevenueStreamID = AssItem.RevenueStreamID,
-                            RevenueSubStreamID = AssItem.RevenueSubStreamID,
-                            AssessmentItemCategoryID = AssItem.AssessmentItemCategoryID,
-                            AssessmentItemSubCategoryID = AssItem.AssessmentItemSubCategoryID,
-                            AgencyID = AssItem.AgencyID,
-                            AssessmentItemName = AssItem.AssessmentItemName,
-                            ComputationID = AssItem.ComputationID,
-                            TaxBaseAmount = AssItem.TaxBaseAmount,
-                            Percentage = AssItem.Percentage,
-                            TaxAmount = AssItem.TaxAmount,
-                            Active = AssItem.Active,
-                            CreatedBy = AssItem.CreatedBy,
-                            CreatedDate = AssItem.CreatedDate,
-                        })
-                        .ToList();
-
-                    var paginationMetadata = new
-                    {
-                        TotalRecords = totalRecords,
-                        PageSize = pageSize,
-                        CurrentPage = pageNumber,
-                        TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
-                    };
-
-                    response.Success = true;
-                    response.Message = "Success";
-                    response.Result = new
-                    {
-                        Data = GetAssessentItems,
-                        Pagination = paginationMetadata
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-
 
     }
 }

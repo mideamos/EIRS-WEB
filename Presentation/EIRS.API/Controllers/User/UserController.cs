@@ -16,7 +16,7 @@ namespace EIRS.API.Controllers.User
 
         [HttpGet]
         [Route("TaxOffices")]
-        public IHttpActionResult TaxOffices()
+        public IHttpActionResult TaxOffices(int pageNumber = 1, int pageSize = 10)
         {
             APIResponse mObjAPIResponse = new APIResponse();
 
@@ -25,9 +25,28 @@ namespace EIRS.API.Controllers.User
 
                 IList<usp_GetTaxOfficeList_Result> lstTaxOffices = new BLTaxOffice().BL_GetTaxOfficeList(new Tax_Offices() { intStatus = 1 });
 
+                int totalRecords = lstTaxOffices.Count;
+
+                var paginatedResult = lstTaxOffices
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                var paginationMetadata = new
+                {
+                    TotalRecords = totalRecords,
+                    PageSize = pageSize,
+                    CurrentPage = pageNumber,
+                    TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
+                };
+
                 mObjAPIResponse.Success = true;
                 mObjAPIResponse.Message = "Success";
-                mObjAPIResponse.Result = lstTaxOffices;
+                mObjAPIResponse.Result = new
+                {
+                    Data = paginatedResult,
+                    Pagination = paginationMetadata
+                };
             }
             catch (Exception Ex)
             {
@@ -37,6 +56,7 @@ namespace EIRS.API.Controllers.User
 
             return Ok(mObjAPIResponse);
         }
+
 
         [HttpGet]
         [Route("TaxOfficer")]
@@ -100,7 +120,7 @@ namespace EIRS.API.Controllers.User
 
         [HttpGet]
         [Route("BusinessSectors")]
-        public IHttpActionResult GetBusinessSectors()
+        public IHttpActionResult GetBusinessSectors(int pageNumber = 1, int pageSize = 10)
         {
             var response = new APIResponse();
 
@@ -108,7 +128,12 @@ namespace EIRS.API.Controllers.User
             {
                 using (var context = new EIRSEntities())
                 {
+                    var totalRecords = context.Business_Sector.Count();
+
                     var businessSectors = context.Business_Sector
+                        .OrderBy(sector => sector.BusinessSectorName) 
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
                         .Select(sector => new
                         {
                             Id = sector.BusinessSectorID,
@@ -120,15 +145,27 @@ namespace EIRS.API.Controllers.User
                             LastModifiedDate = sector.ModifiedDate,
                             LastModifiedBy = sector.ModifiedBy,
                             IsActive = sector.Active,
-                            CategoryName = sector.Business_Category != null ? sector.Business_Category.BusinessCategoryName : null, // Flatten Category
-                            SubSectorNames = sector.Business_SubSector.Select(sub => sub.BusinessSubSectorName).ToList(), // Flatten SubSector collection
-                            TypeName = sector.Business_Types != null ? sector.Business_Types.BusinessTypeName : null // Flatten Type
+                            CategoryName = sector.Business_Category != null ? sector.Business_Category.BusinessCategoryName : null,
+                            SubSectorNames = sector.Business_SubSector.Select(sub => sub.BusinessSubSectorName).ToList(),
+                            TypeName = sector.Business_Types != null ? sector.Business_Types.BusinessTypeName : null
                         })
                         .ToList();
 
+                    var paginationMetadata = new
+                    {
+                        TotalRecords = totalRecords,
+                        PageSize = pageSize,
+                        CurrentPage = pageNumber,
+                        TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize)
+                    };
+
                     response.Success = true;
                     response.Message = "Success";
-                    response.Result = businessSectors;
+                    response.Result = new
+                    {
+                        Data = businessSectors,
+                        Pagination = paginationMetadata
+                    };
                 }
             }
             catch (Exception ex)
@@ -140,9 +177,10 @@ namespace EIRS.API.Controllers.User
             return Ok(response);
         }
 
+
         [HttpGet]
         [Route("GetAssessentRules")]
-        public IHttpActionResult GetAssessentRules()
+        public IHttpActionResult GetAssessentRules(int pageNumber = 1, int pageSize = 10)
         {
             var response = new APIResponse();
 
@@ -150,10 +188,15 @@ namespace EIRS.API.Controllers.User
             {
                 using (var context = new EIRSEntities())
                 {
+                    var totalRecords = context.Assessment_Rules
+                        .Count(ar => ar.ProfileID == 1277);
+
                     var GetAssessentRules = context.Assessment_Rules
                         .Where(ar => ar.ProfileID == 1277)
-                         .OrderBy(ar => ar.TaxYear)
-                         .ThenBy(ar => ar.TaxMonth)
+                        .OrderBy(ar => ar.TaxYear)
+                        .ThenBy(ar => ar.TaxMonth)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
                         .Select(AssRule => new
                         {
                             AssessmentRuleID = AssRule.AssessmentRuleID,
@@ -169,14 +212,24 @@ namespace EIRS.API.Controllers.User
                             CreatedBy = AssRule.CreatedBy,
                             CreatedDate = AssRule.CreatedDate,
                             TaxMonth = AssRule.TaxMonth
-
-
                         })
                         .ToList();
 
+                    var paginationMetadata = new
+                    {
+                        TotalRecords = totalRecords,
+                        PageSize = pageSize,
+                        CurrentPage = pageNumber,
+                        TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
+                    };
+
                     response.Success = true;
                     response.Message = "Success";
-                    response.Result = GetAssessentRules;
+                    response.Result = new
+                    {
+                        Data = GetAssessentRules,
+                        Pagination = paginationMetadata
+                    };
                 }
             }
             catch (Exception ex)
@@ -188,9 +241,10 @@ namespace EIRS.API.Controllers.User
             return Ok(response);
         }
 
+
         [HttpGet]
         [Route("GetAssessentItems")]
-        public IHttpActionResult GetAssessentItems()
+        public IHttpActionResult GetAssessentItems(int pageNumber = 1, int pageSize = 10)
         {
             var response = new APIResponse();
 
@@ -198,8 +252,14 @@ namespace EIRS.API.Controllers.User
             {
                 using (var context = new EIRSEntities())
                 {
+                    var totalRecords = context.Assessment_Items
+                        .Count(ar => ar.RevenueStreamID == 8);
+
                     var GetAssessentItems = context.Assessment_Items
                         .Where(ar => ar.RevenueStreamID == 8)
+                        .OrderBy(AssItem => AssItem.AssessmentItemID) 
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
                         .Select(AssItem => new
                         {
                             AssessmentItemID = AssItem.AssessmentItemID,
@@ -223,9 +283,21 @@ namespace EIRS.API.Controllers.User
                         })
                         .ToList();
 
+                    var paginationMetadata = new
+                    {
+                        TotalRecords = totalRecords,
+                        PageSize = pageSize,
+                        CurrentPage = pageNumber,
+                        TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
+                    };
+
                     response.Success = true;
                     response.Message = "Success";
-                    response.Result = GetAssessentItems;
+                    response.Result = new
+                    {
+                        Data = GetAssessentItems,
+                        Pagination = paginationMetadata
+                    };
                 }
             }
             catch (Exception ex)
@@ -236,6 +308,7 @@ namespace EIRS.API.Controllers.User
 
             return Ok(response);
         }
+
 
 
     }

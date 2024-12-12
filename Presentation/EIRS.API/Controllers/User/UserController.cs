@@ -255,7 +255,7 @@ namespace EIRS.API.Controllers.User
                         .Count(ar => ar.RevenueStreamID == RevId);
 
                     var GetAssessentItems = context.Assessment_Items
-                        .Where(ar => ar.RevenueStreamID == RevId)
+                        .Where(ar => ar.RevenueStreamID == 8)
                         .OrderBy(AssItem => AssItem.AssessmentItemID)
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)

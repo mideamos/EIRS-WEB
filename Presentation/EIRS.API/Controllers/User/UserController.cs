@@ -251,11 +251,35 @@ namespace EIRS.API.Controllers.User
             {
                 using (var context = new EIRSEntities())
                 {
+                    // Count total records
                     var totalRecords = context.Assessment_Items
                         .Count(ar => ar.RevenueStreamID == RevId);
 
+                    // Calculate total pages
+                    var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+                    // Validate page number
+                    if (pageNumber > totalPages || pageNumber < 1)
+                    {
+                        response.Success = true;
+                        response.Message = "Invalid page number.";
+                        response.Result = new
+                        {
+                            Data = new List<object>(), // Empty list for invalid page
+                            Pagination = new
+                            {
+                                TotalRecords = totalRecords,
+                                PageSize = pageSize,
+                                CurrentPage = pageNumber,
+                                TotalPages = totalPages,
+                            }
+                        };
+                        return Ok(response);
+                    }
+
+                    // Fetch paginated data
                     var GetAssessentItems = context.Assessment_Items
-                        .Where(ar => ar.RevenueStreamID == 8)
+                        .Where(ar => ar.RevenueStreamID == RevId)
                         .OrderBy(AssItem => AssItem.AssessmentItemID)
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)
@@ -276,20 +300,21 @@ namespace EIRS.API.Controllers.User
                             TaxBaseAmount = AssItem.TaxBaseAmount,
                             Percentage = AssItem.Percentage,
                             TaxAmount = AssItem.TaxAmount,
-                            Active = AssItem.Active,
-                            CreatedBy = AssItem.CreatedBy,
-                            CreatedDate = AssItem.CreatedDate,
+                            Active = AssItem.Active
+                        
                         })
                         .ToList();
 
+                    // Pagination metadata
                     var paginationMetadata = new
                     {
                         TotalRecords = totalRecords,
                         PageSize = pageSize,
                         CurrentPage = pageNumber,
-                        TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
+                        TotalPages = totalPages,
                     };
 
+                    // Set response
                     response.Success = true;
                     response.Message = "Success";
                     response.Result = new
@@ -307,6 +332,7 @@ namespace EIRS.API.Controllers.User
 
             return Ok(response);
         }
+
 
 
     }
